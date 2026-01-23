@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.core;
 
-import dev.animedia.contentservice.bookchapter.BookChapter;
+import dev.animedia.contentservice.bookchapter.core.BookChapter;
 import dev.animedia.contentservice.comicchapter.core.ComicChapter;
 import dev.animedia.contentservice.contentstatus.core.ContentStatus;
 import dev.animedia.contentservice.genre.core.Genre;
@@ -8,8 +8,6 @@ import dev.animedia.contentservice.language.Language;
 import dev.animedia.contentservice.movie.Movie;
 import dev.animedia.contentservice.series.core.Series;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -24,9 +22,8 @@ import java.util.UUID;
 @Entity
 @Table(
     indexes = {
-        @Index(name = "idx_content_alias", columnList = "alias"),
-        @Index(name = "idx_content_type", columnList = "type"),
         @Index(name = "idx_content_alias_type", columnList = "alias,type"),
+        @Index(name = "idx_content_type", columnList = "type"),
         @Index(name = "idx_content_release_date", columnList = "release_date"),
     },
     check = @CheckConstraint(
@@ -76,12 +73,14 @@ public class Content {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "content_languages",
-        joinColumns = @JoinColumn(name = "content_id"),
+        joinColumns = @JoinColumn(name = "content_uuid"),
         inverseJoinColumns = @JoinColumn(name = "language_code"),
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uidx_content_languages_content_uuid_genre_id", columnNames = {"content_uuid", "language_code"})
+        },
         indexes = {
-            @Index(name = "idx_content_languages_content_id", columnList = "content_id"),
-            @Index(name = "idx_content_languages_language_code", columnList = "language_code"),
-            @Index(name = "idx_content_languages_content_id_language_code", columnList = "content_id,language_code")
+            @Index(name = "idx_content_languages_content_uuid_language_code", columnList = "content_uuid,language_code"),
+            @Index(name = "idx_content_languages_language_code", columnList = "language_code")
         }
     )
     private Set<Language> languages = new HashSet<>();
@@ -89,12 +88,14 @@ public class Content {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "content_genres",
-        joinColumns = @JoinColumn(name = "content_id"),
+        joinColumns = @JoinColumn(name = "content_uuid"),
         inverseJoinColumns = @JoinColumn(name = "genre_id"),
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uidx_content_genres_content_uuid_genre_id", columnNames = {"content_uuid", "genre_id"})
+        },
         indexes = {
-            @Index(name = "idx_content_languages_content_id", columnList = "content_id"),
-            @Index(name = "idx_content_languages_genre_id", columnList = "genre_id"),
-            @Index(name = "idx_content_languages_content_id_genre_id", columnList = "content_id,genre_id")
+            @Index(name = "idx_content_languages_content_uuid_genre_id", columnList = "content_uuid,genre_id"),
+            @Index(name = "idx_content_languages_genre_id", columnList = "genre_id")
         }
     )
     private Set<Genre> genres = new HashSet<>();

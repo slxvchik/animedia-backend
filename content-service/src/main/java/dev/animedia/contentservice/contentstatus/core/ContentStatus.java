@@ -1,13 +1,14 @@
 package dev.animedia.contentservice.contentstatus.core;
 
-import dev.animedia.contentservice.contentstatus.translation.ContentStatusTranslation;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "content_status")
+@Table(
+    name = "content_status",
+    indexes = {
+        @Index(name = "idx_content_status_alias", columnList = "alias")
+    }
+)
 public class ContentStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,9 +16,6 @@ public class ContentStatus {
 
     @Column(length = 512, unique = true, nullable = false)
     private String alias;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ContentStatusTranslation> translations = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -33,13 +31,5 @@ public class ContentStatus {
 
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    public Set<ContentStatusTranslation> getTranslations() {
-        return translations;
-    }
-
-    public void setTranslations(Set<ContentStatusTranslation> translations) {
-        this.translations = translations;
     }
 }

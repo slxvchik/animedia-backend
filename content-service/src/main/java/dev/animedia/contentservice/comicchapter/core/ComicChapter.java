@@ -2,17 +2,16 @@ package dev.animedia.contentservice.comicchapter.core;
 
 import dev.animedia.contentservice.content.core.Content;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Getter
-@Setter
 @Entity
 @Table(
     name = "comic_chapter",
+    indexes = {
+        @Index(name = "idx_comic_chapter_content_uuid", columnList = "content_uuid")
+    },
     check = {
         @CheckConstraint(
             name = "comic_chapter_pages_positive",
@@ -30,7 +29,7 @@ public class ComicChapter {
     private UUID uuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id")
+    @JoinColumn(name = "content_uuid", nullable = false)
     private Content content;
 
     @Column(nullable = false)
@@ -39,9 +38,57 @@ public class ComicChapter {
     @Column(nullable = false)
     private Integer episode;
 
-    @Column
+    @Column(nullable = false)
     private boolean active = true;
 
     @Column
     private LocalDate releaseDate;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public Content getContent() {
+        return content;
+    }
+
+    public void setContent(Content content) {
+        this.content = content;
+    }
+
+    public Integer getPages() {
+        return pages;
+    }
+
+    public void setPages(Integer pages) {
+        this.pages = pages;
+    }
+
+    public Integer getEpisode() {
+        return episode;
+    }
+
+    public void setEpisode(Integer episode) {
+        this.episode = episode;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 }

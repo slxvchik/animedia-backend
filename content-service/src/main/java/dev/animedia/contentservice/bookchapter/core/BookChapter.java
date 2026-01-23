@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.series.core;
+package dev.animedia.contentservice.bookchapter.core;
 
 import dev.animedia.contentservice.content.core.Content;
 import jakarta.persistence.*;
@@ -8,21 +8,16 @@ import java.util.UUID;
 
 @Entity
 @Table(
+    name = "book_chapter",
     indexes = {
-        @Index(name = "idx_series_content_uuid", columnList = "content_uuid")
+        @Index(name = "idx_book_chapter_content_uuid", columnList = "content_uuid")
     },
-    check = {
-        @CheckConstraint(
-            name = "series_duration_positive",
-            constraint = "duration > 0"
-        ),
-        @CheckConstraint(
-            name = "series_episode_positive",
-            constraint = "episode > 0"
-        )
-    }
+    check = @CheckConstraint(
+        name = "book_episode_positive",
+        constraint = "episode > 0"
+    )
 )
-public class Series {
+public class BookChapter {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
@@ -32,19 +27,13 @@ public class Series {
     private Content content;
 
     @Column(nullable = false)
-    private boolean active = true;
-
-    @Column
-    private Integer duration;
+    private Boolean active = true;
 
     @Column(nullable = false)
     private Integer episode;
 
-    @Column
+    @Column(name = "release_date")
     private LocalDate releaseDate;
-
-    @Column(length = 512, nullable = false)
-    private String videoUrl;
 
     public UUID getUuid() {
         return uuid;
@@ -62,20 +51,12 @@ public class Series {
         this.content = content;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
     }
 
     public Integer getEpisode() {
@@ -92,13 +73,5 @@ public class Series {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
     }
 }

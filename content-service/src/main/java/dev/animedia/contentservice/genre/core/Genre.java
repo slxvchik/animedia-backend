@@ -1,17 +1,34 @@
 package dev.animedia.contentservice.genre.core;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
-@Table
+@Table(
+    indexes = {
+        @Index(name = "idx_genre_alias", columnList = "alias")
+    }
+)
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 100, nullable = false, unique = true)
+
+    @Column(length = 128, nullable = false, unique = true)
     private String alias;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
 }

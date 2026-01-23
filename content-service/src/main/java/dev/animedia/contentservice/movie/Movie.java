@@ -1,12 +1,12 @@
 package dev.animedia.contentservice.movie;
 
-import dev.animedia.contentservice.content.core.Content;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.HashSet;
+import java.util.Set;
 
-@Getter
-@Setter
+import dev.animedia.contentservice.content.core.Content;
+import dev.animedia.contentservice.language.Language;
+import jakarta.persistence.*;
+
 @Entity
 @Table(
     check = @CheckConstraint(
@@ -17,7 +17,7 @@ import lombok.Setter;
 public class Movie {
     @Id
     @OneToOne
-    @JoinColumn(name = "content_id", nullable = false, unique = true)
+    @JoinColumn(name = "content_uuid", nullable = false, unique = true)
     private Content content;
 
     @Column(name = "video_url", nullable = false, unique = true)
@@ -25,4 +25,28 @@ public class Movie {
 
     @Column
     private Integer duration;
+
+    public Content getContent() {
+        return content;
+    }
+
+    public void setContent(Content content) {
+        this.content = content;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 }

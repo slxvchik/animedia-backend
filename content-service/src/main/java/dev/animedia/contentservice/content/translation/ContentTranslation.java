@@ -10,11 +10,12 @@ import java.util.UUID;
 @Table(
     name = "content_translation",
     indexes = {
-        @Index(name = "idx_content_translation_content_uuid_language_code", columnList = "content_uuid,language_code")
+        @Index(name = "idx_content_translation_content_uuid_language_code", columnList = "content_uuid,language_code"),
+        @Index(name = "idx_content_translation_language_code", columnList = "language_code")
     },
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "unique_content_translation_content_uuid_language_code",
+            name = "uidx_content_translation_content_uuid_language_code",
             columnNames = {"content_uuid", "language_code"}
         )
     }

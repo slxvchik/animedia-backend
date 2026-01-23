@@ -3,18 +3,15 @@ package dev.animedia.contentservice.genre.translation;
 import dev.animedia.contentservice.genre.core.Genre;
 import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 @Table(
     indexes = {
-        @Index(name = "idx_genre_translation_lookup", columnList = "genre_id,language_code")
+        @Index(name = "idx_genre_translation_genre_id_language_code", columnList = "genre_id,language_code"),
+        @Index(name = "idx_genre_translation_language_code", columnList = "language_code")
     },
     uniqueConstraints = {
-        @UniqueConstraint(name = "unique_genre_translation_genre_id_language_code", columnNames = {"genre_id", "language_code"})
+        @UniqueConstraint(name = "uidx_genre_translation_genre_id_language_code", columnNames = {"genre_id", "language_code"})
     }
 )
 public class GenreTranslation {
@@ -23,15 +20,56 @@ public class GenreTranslation {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genre_id")
+    @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code")
+    @JoinColumn(name = "language_code", nullable = false)
     private Language language;
 
-    @Column(length = 200, nullable = false)
+    @Column(length = 256, nullable = false)
     private String name;
+
     @Column(length = 512)
     private String description;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

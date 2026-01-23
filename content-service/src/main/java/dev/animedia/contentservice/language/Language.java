@@ -11,7 +11,8 @@ public class Language {
     @Id
     @Column(columnDefinition = "CHAR(2)", unique = true, nullable = false)
     private Character code;
-    @Column(length = 40, unique = true, nullable = false)
+    
+    @Column(length = 128, unique = true, nullable = false)
     private String name;
 
     public Character getCode() {
