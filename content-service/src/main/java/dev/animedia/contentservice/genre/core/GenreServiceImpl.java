@@ -23,23 +23,13 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<Genre> getGenresByIds(Pageable pageable, List<Long> ids) {
+    public List<Genre> getGenresByIds(Pageable pageable, List<String> ids) {
         return List.of();
     }
 
     @Override
     public List<Genre> getGenresByAliases(Pageable pageable, List<String> aliases) {
         return List.of();
-    }
-
-    @Override
-    public Genre getGenreById(Long id) {
-        return null;
-    }
-
-    @Override
-    public Genre getGenreByAlias(String alias) {
-        return null;
     }
 
     @Override

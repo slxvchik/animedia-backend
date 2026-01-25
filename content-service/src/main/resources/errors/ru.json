@@ -7,5 +7,7 @@
   "GENRE_ALIAS_EMPTY": "Алиас жанра не может быть пустым",
   "GENRE_ALIAS_INVALID_CHARS": "Алиас должен быть в нижнем регистре и дефисы",
   "GENRE_NAME_EXISTS": "Жанр с именем \"{name}\" уже существует",
-  "GENRE_NAME_EMPTY": "Имя жанра не может быть пустым"
+  "GENRE_NAME_EMPTY": "Имя жанра не может быть пустым",
+
+  "GENRE_INVALID_SEARCH_TYPE": "Неверный тип запроса"
 }
