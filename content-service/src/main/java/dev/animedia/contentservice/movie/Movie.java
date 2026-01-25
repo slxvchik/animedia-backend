@@ -1,10 +1,6 @@
 package dev.animedia.contentservice.movie;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import dev.animedia.contentservice.content.core.Content;
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 @Entity

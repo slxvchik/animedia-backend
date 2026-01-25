@@ -1,7 +1,20 @@
 package dev.animedia.contentservice.genre.core;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class GenreService {
+public interface GenreService {
+    List<Genre> getAllGenres(Pageable pageable);
+    List<Genre> getGenresByIds(Pageable pageable, List<Long> ids);
+    List<Genre> getGenresByAliases(Pageable pageable, List<String> aliases);
+
+    Genre getGenreById(Long id);
+    Genre getGenreByAlias(String alias);
+
+    Genre saveGenre(Genre genre);
+    Genre updateGenre(Genre genre);
+    void deleteGenre(Long id);
 }

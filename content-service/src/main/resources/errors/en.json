@@ -1,0 +1,11 @@
+{
+    "GENRE_ID_NOT_FOUND": "Genre with id \"{id}\" not found",
+    "GENRE_IDS_NOT_FOUND": "Genres with the following ids not found: \"{ids}\"",
+    "GENRES_ALIAS_NOT_FOUND": "Genre with alias \"{alias}\" not found",
+    "GENRES_ALIASES_NOT_FOUND": "Genre with aliases \"{aliases}\" not found",
+    "GENRE_ALIAS_EXISTS": "Genre with alias \"{alias}\" already exists",
+    "GENRE_ALIAS_EMPTY": "Genre alias cannot be empty",
+    "GENRE_ALIAS_INVALID_CHARS": "Alias must be in lowercase and contain hyphens only",
+    "GENRE_NAME_EXISTS": "Genre with name \"{name}\" already exists",
+    "GENRE_NAME_EMPTY": "Genre name cannot be empty"
+}
