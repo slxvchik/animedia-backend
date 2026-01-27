@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import dev.animedia.contentservice.app.context.LanguageLocaleContext;
 import jakarta.servlet.http.Cookie;
