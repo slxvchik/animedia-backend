@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import dev.animedia.contentservice.app.context.LanguageLocaleContext;
+import dev.animedia.contentservice.app.context.LocaleLanguageContext;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ public class LanguageInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
             @Nullable Exception ex) throws Exception {
-        LanguageLocaleContext.clear();
+        LocaleLanguageContext.clear();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class LanguageInterceptor implements HandlerInterceptor {
             .map(Cookie::getValue)
             .orElse(null);
             
-        LanguageLocaleContext.setLanguageLocale(languageCode);
+        LocaleLanguageContext.setLocaleLanguage(languageCode);
         return true;
     }
     

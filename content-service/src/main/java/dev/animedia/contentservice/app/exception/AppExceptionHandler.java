@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import dev.animedia.contentservice.app.context.LanguageLocaleContext;
+import dev.animedia.contentservice.app.context.LocaleLanguageContext;
 import dev.animedia.contentservice.app.dto.AppResponseDto;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<AppResponseDto<Object>> handleAppError(AppException e) throws IOException {
-        String languageCode = LanguageLocaleContext.getLanguageLocaleCode();
+        String languageCode = LocaleLanguageContext.getLocaleLanguageCode();
         
         String errorMessage = appExceptionMessageService.getExceptionMessage(e.getCode(), languageCode, e.getParams());
         
@@ -36,7 +36,7 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(ErrorLocaleException.class)
     public ResponseEntity<AppResponseDto<Object>> handleLocaleError(ErrorLocaleException e) {
-        String languageCode = LanguageLocaleContext.getLanguageLocaleCode();
+        String languageCode = LocaleLanguageContext.getLocaleLanguageCode();
 
         AppResponseDto<Object> response = AppResponseDto.error(e.getMessage(languageCode));
 

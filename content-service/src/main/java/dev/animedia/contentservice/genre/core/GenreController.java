@@ -1,10 +1,13 @@
 package dev.animedia.contentservice.genre.core;
 
-import dev.animedia.contentservice.genre.core.dto.GenreSearchType;
+import dev.animedia.contentservice.genre.core.dto.GenreResponseDto;
 import dev.animedia.contentservice.genre.exception.InvalidGenreSearchTypeException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,21 +17,28 @@ import java.util.List;
 public class GenreController {
     private final GenreService genreService;
 
+    private enum GenreSearchType {
+        ID,
+        ALIAS
+    }
+
     @Autowired
     public GenreController(GenreService genreService) {
         this.genreService = genreService;
     }
 
     @GetMapping("/all")
-    public List<Genre> getAll(
-            @PageableDefault Pageable pageable
+    public ResponseEntity<Page<GenreResponseDto>> getAll(
+        @PageableDefault(sort = {"sort"})
+        Pageable pageable
     ) {
         return null;
     }
 
     @GetMapping("/search")
-    public Genre search(
-        @PageableDefault Pageable pageable,
+    public ResponseEntity<Page<GenreResponseDto>> search(
+        @PageableDefault(sort = {"sort"})
+        Pageable pageable,
         @RequestParam GenreSearchType type,
         @RequestParam String values
     ) {

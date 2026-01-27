@@ -2,11 +2,11 @@ package dev.animedia.contentservice.app.context;
 
 import java.util.Locale;
 
-public class LanguageLocaleContext {
+public class LocaleLanguageContext {
     private static final ThreadLocal<Locale> LANGUAGE_HOLDER = new ThreadLocal<>();
     private static final Locale DEFAULT_LANGUAGE = Locale.of("en");
     
-    public static void setLanguageLocale(String languageCode) {
+    public static void setLocaleLanguage(String languageCode) {
         if (languageCode == null || languageCode.isBlank()) {
             LANGUAGE_HOLDER.set(DEFAULT_LANGUAGE);
         } else {
@@ -20,7 +20,7 @@ public class LanguageLocaleContext {
         }
     }
         
-    public static Locale getLanguageLocale() {
+    public static Locale getLocaleLanguage() {
         Locale language = LANGUAGE_HOLDER.get();
         if (language == null) {
             LANGUAGE_HOLDER.set(DEFAULT_LANGUAGE);
@@ -29,8 +29,8 @@ public class LanguageLocaleContext {
         return language;
     }
 
-    public static String getLanguageLocaleCode() {
-        return getLanguageLocale().getLanguage();
+    public static String getLocaleLanguageCode() {
+        return getLocaleLanguage().getLanguage();
     }
 
     public static void clear() {

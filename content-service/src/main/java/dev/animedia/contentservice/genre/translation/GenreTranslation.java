@@ -17,7 +17,7 @@ import jakarta.persistence.*;
 public class GenreTranslation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false)
@@ -33,11 +33,11 @@ public class GenreTranslation {
     @Column(length = 512)
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
