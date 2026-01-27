@@ -1,15 +1,12 @@
 package dev.animedia.contentservice.genre.core;
 
 import dev.animedia.contentservice.genre.core.dto.GenreSearchType;
-import dev.animedia.contentservice.genre.exception.GenreIdNotFoundException;
 import dev.animedia.contentservice.genre.exception.InvalidGenreSearchTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController

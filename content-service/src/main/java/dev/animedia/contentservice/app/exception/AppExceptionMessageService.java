@@ -26,7 +26,7 @@ public class AppExceptionMessageService {
         Resource resource = new ClassPathResource(filePath);
 
         if (!resource.exists()) {
-            throw new ErrorLocaleException("Locale file not found: " + filePath);
+            throw new ErrorLocaleException("Locale file not found: " + filePath + "; Exception code: " + exceptionCode);
         }
 
         Map<String, String> errorMessages;
@@ -39,7 +39,7 @@ public class AppExceptionMessageService {
 
         String errorMessage = errorMessages.get(exceptionCode);
         if (errorMessage == null || errorMessage.isEmpty()) {
-            throw new ErrorLocaleException("Translate for error not found");
+            throw new ErrorLocaleException("Translate for error not found; Exception code: " + exceptionCode);
         }
 
         for (Map.Entry<String, String> param : params.entrySet()) {

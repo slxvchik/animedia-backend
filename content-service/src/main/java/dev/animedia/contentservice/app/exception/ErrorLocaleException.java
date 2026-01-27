@@ -1,11 +1,18 @@
 package dev.animedia.contentservice.app.exception;
 
-import org.springframework.http.HttpStatus;
-
 public class ErrorLocaleException extends RuntimeException {
-    private final HttpStatus status = HttpStatus.BAD_REQUEST;
-    private final String error = "Bad request";
     public ErrorLocaleException(String message) {
         super(message);
+    }
+
+    public String getMessage(String lang) {
+        switch (lang) {
+            case "ru" -> {
+                return "Произошла внутрення ошибка при переводе!";
+            }
+            default -> {
+                return "An internal error occurred during the translation!";
+            }
+        }
     }
 }

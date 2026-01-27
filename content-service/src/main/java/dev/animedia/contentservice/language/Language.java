@@ -9,17 +9,17 @@ import jakarta.persistence.Table;
 @Table
 public class Language {
     @Id
-    @Column(columnDefinition = "CHAR(2)", unique = true, nullable = false)
-    private Character code;
-    
+    @Column(columnDefinition = "VARCHAR(2)", unique = true, nullable = false)
+    private String code;
+
     @Column(length = 128, unique = true, nullable = false)
     private String name;
 
-    public Character getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Character code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
