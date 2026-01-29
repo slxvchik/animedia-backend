@@ -32,6 +32,8 @@ public class GenreTranslation {
     @Column(length = 512)
     private String description;
 
+    public GenreTranslation() {}
+
     public Long getId() {
         return id;
     }

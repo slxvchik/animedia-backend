@@ -4,5 +4,5 @@ public record CreateGenreTranslationRequestDto(
     Long genreId,
     String languageCode,
     String name,
-    String desrciption
+    String description
 ) {}
