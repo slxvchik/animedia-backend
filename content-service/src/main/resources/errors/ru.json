@@ -1,13 +1,14 @@
 {
   "GENRE_ID_NOT_FOUND": "Жанр с id \"{id}\" не найден",
   "GENRE_IDS_NOT_FOUND": "Жанры со следующими id не найдены: \"{ids}\"",
-  "GENRES_ALIAS_NOT_FOUND": "Жанр с алиасом \"{alias}\" не найден",
-  "GENRES_ALIASES_NOT_FOUND": "Жанр с алиасами \"{aliases}\" не найден",
-  "GENRE_ALIAS_EXISTS": "Жанр с алиасом \"{alias}\" уже существует",
+  "GENRES_ALIAS_NOT_FOUND": "Жанр с таким алиасом не найден",
+  "GENRES_ALIASES_NOT_FOUND": "Некоторые жанры с указанными алиасами не найдены",
+  "GENRE_ALIAS_EXISTS": "Жанр с таким алиасом уже существует",
   "GENRE_ALIAS_EMPTY": "Алиас жанра не может быть пустым",
   "GENRE_ALIAS_INVALID_CHARS": "Алиас должен быть в нижнем регистре и дефисы",
-  "GENRE_NAME_EXISTS": "Жанр с именем \"{name}\" уже существует",
+  "GENRE_NAME_EXISTS": "Жанр с таким именем уже существует",
   "GENRE_NAME_EMPTY": "Имя жанра не может быть пустым",
-
+  "GENRE_TRANSLATION_NOT_FOUND": "Перевод для жанра не найден",
+  "GENRE_TRANSLATIONS_NOT_FOUND": "Переводы для жанров не найдены",
   "GENRE_INVALID_SEARCH_TYPE": "Неверный тип запроса"
 }

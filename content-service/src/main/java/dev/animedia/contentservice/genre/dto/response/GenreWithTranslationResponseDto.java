@@ -1,6 +1,6 @@
-package dev.animedia.contentservice.genre.core.dto;
+package dev.animedia.contentservice.genre.dto.response;
 
-public record GenreResponseDto(
+public record GenreWithTranslationResponseDto(
     Long id,
     String alias,
     Long sort,

@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.genre.core;
+package dev.animedia.contentservice.genre.model;
 
 import jakarta.persistence.*;
 

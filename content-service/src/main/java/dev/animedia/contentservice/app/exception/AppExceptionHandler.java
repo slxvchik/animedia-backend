@@ -25,7 +25,7 @@ public class AppExceptionHandler {
     public ResponseEntity<AppResponseDto<Object>> handleAppError(AppException e) throws IOException {
         String languageCode = LocaleLanguageContext.getLocaleLanguageCode();
         
-        String errorMessage = appExceptionMessageService.getExceptionMessage(e.getCode(), languageCode, e.getParams());
+        String errorMessage = appExceptionMessageService.getExceptionMessage(e.getCode(), languageCode);
         
         AppResponseDto<Object> response = AppResponseDto.error(errorMessage);
 

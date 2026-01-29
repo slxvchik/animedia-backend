@@ -1,7 +1,9 @@
-package dev.animedia.contentservice.genre.core;
+package dev.animedia.contentservice.genre;
 
-import dev.animedia.contentservice.genre.core.dto.GenreResponseDto;
+import dev.animedia.contentservice.genre.model.Genre;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.exception.InvalidGenreSearchTypeException;
+import dev.animedia.contentservice.genre.service.GenreQueryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,20 +17,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/genre")
 public class GenreController {
-    private final GenreService genreService;
 
     private enum GenreSearchType {
         ID,
         ALIAS
     }
 
+    private final GenreQueryService genreService;
+
     @Autowired
-    public GenreController(GenreService genreService) {
+    public GenreController(GenreQueryService genreService) {
         this.genreService = genreService;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<GenreResponseDto>> getAll(
+    public ResponseEntity<Page<GenreWithTranslationResponseDto>> getAll(
         @PageableDefault(sort = {"sort"})
         Pageable pageable
     ) {
@@ -36,7 +39,7 @@ public class GenreController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<GenreResponseDto>> search(
+    public ResponseEntity<Page<GenreWithTranslationResponseDto>> search(
         @PageableDefault(sort = {"sort"})
         Pageable pageable,
         @RequestParam GenreSearchType type,

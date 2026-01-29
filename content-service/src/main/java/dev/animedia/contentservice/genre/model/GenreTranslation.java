@@ -1,6 +1,5 @@
-package dev.animedia.contentservice.genre.translation;
+package dev.animedia.contentservice.genre.model;
 
-import dev.animedia.contentservice.genre.core.Genre;
 import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 

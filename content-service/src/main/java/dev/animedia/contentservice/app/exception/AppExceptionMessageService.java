@@ -19,7 +19,7 @@ public class AppExceptionMessageService {
     @Value("${application.exception.locale.path}")
     private String exceptionLocalePath;
 
-    public String getExceptionMessage(String exceptionCode, String languageCode, Map<String, String> params) throws IOException {
+    public String getExceptionMessage(String exceptionCode, String languageCode) throws IOException {
 
         String filePath = exceptionLocalePath + languageCode + ".json";
 
@@ -40,13 +40,6 @@ public class AppExceptionMessageService {
         String errorMessage = errorMessages.get(exceptionCode);
         if (errorMessage == null || errorMessage.isEmpty()) {
             throw new ErrorLocaleException("Translate for error not found; Exception code: " + exceptionCode);
-        }
-
-        for (Map.Entry<String, String> param : params.entrySet()) {
-            errorMessage = errorMessage.replace(
-                    "{" + param.getKey() + "}",
-                    param.getValue()
-            );
         }
 
         return errorMessage;
