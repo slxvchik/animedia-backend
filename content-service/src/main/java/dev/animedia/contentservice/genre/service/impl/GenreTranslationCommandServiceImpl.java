@@ -1,12 +1,10 @@
 package dev.animedia.contentservice.genre.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import dev.animedia.contentservice.app.exception.common.BadRequestException;
 import dev.animedia.contentservice.genre.dto.GenreLanguagePair;
 import dev.animedia.contentservice.genre.exception.*;
-import dev.animedia.contentservice.genre.model.GenreTranslation;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
 import dev.animedia.contentservice.language.service.LanguageQueryService;
@@ -84,20 +82,27 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
 
         if (createGenreTranslationsRequestDto.isEmpty()) throw new BadRequestException();
 
-        // TODO: distinct request
-        // TODO: add NULL check
-
+        List<CreateGenreTranslationRequestDto> uniqueCreateGenreTranslationsRequestDto = new ArrayList<>();
+        Set<GenreLanguagePair> uniqueGenreLanguagePairs = new HashSet<>();
         List<GenreLanguagePair> genreLanguagePairs = new ArrayList<>();
         List<Long> genreIds = new ArrayList<>();
         List<String> languageCodes = new ArrayList<>();
 
         for (var createGenreTranslationDto : createGenreTranslationsRequestDto) {
-            genreLanguagePairs.add(
-                new GenreLanguagePair(
-                    createGenreTranslationDto.genreId(),
-                    createGenreTranslationDto.languageCode()
-                )
+
+            if (createGenreTranslationDto.name() == null) throw new GenreTranslationsNameEmptyException();
+
+            var genreLanguagePair = new GenreLanguagePair(
+                createGenreTranslationDto.genreId(),
+                createGenreTranslationDto.languageCode()
             );
+
+            if (!uniqueGenreLanguagePairs.add(genreLanguagePair)) continue;
+
+            uniqueCreateGenreTranslationsRequestDto.add(createGenreTranslationDto);
+
+            uniqueGenreLanguagePairs.add(genreLanguagePair);
+            genreLanguagePairs.add(genreLanguagePair);
             genreIds.add(createGenreTranslationDto.genreId());
             languageCodes.add(createGenreTranslationDto.languageCode());
         }
@@ -111,7 +116,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         var allLanguageCodesExists = languageQueryService.existsAllByCodes(languageCodes);
         if (!allLanguageCodesExists) throw new LanguageCodeNotFoundException();
 
-        var genreTranslations = genreTranslationMapper.toGenreTranslationsFromCreate(createGenreTranslationsRequestDto);
+        var genreTranslations = genreTranslationMapper.toGenreTranslationsFromCreate(uniqueCreateGenreTranslationsRequestDto);
 
         var savedGenreTranslations = genreTranslationRepository.saveAll(genreTranslations);
 
