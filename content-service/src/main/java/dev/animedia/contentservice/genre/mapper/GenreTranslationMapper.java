@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import dev.animedia.contentservice.genre.dto.request.CreateGenreTranslationRequestDto;
@@ -21,6 +22,10 @@ public class GenreTranslationMapper {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public Page<GenreTranslationResponseDto> toPageGenreTranslationResponseDto(Page<GenreTranslation> pageGenreTranslation) {
+        return null;
+    }
 
     public GenreTranslationResponseDto toGenreTranslationResponseDto(GenreTranslation genreTranslation) {
         return new GenreTranslationResponseDto(
