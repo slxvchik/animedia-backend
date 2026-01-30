@@ -2,7 +2,7 @@ package dev.animedia.contentservice.genre.service.impl;
 
 import java.util.*;
 
-import dev.animedia.contentservice.app.exception.common.BadRequestException;
+import dev.animedia.contentservice.app.exception.common.EmptyRequestException;
 import dev.animedia.contentservice.genre.dto.GenreLanguagePair;
 import dev.animedia.contentservice.genre.exception.*;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
@@ -50,9 +50,9 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     @Override
     public GenreTranslationResponseDto createTranslation(CreateGenreTranslationRequestDto createGenreTranslationDto) {
         
-        if (createGenreTranslationDto == null) throw new BadRequestException();
+        if (createGenreTranslationDto == null) throw new EmptyRequestException();
 
-        // TODO: add NULL check
+        if (createGenreTranslationDto.name() == null || createGenreTranslationDto.name().isBlank()) throw new GenreTranslationsNameEmptyException();
 
         var genreExists = genreQueryService.existsById(
             createGenreTranslationDto.genreId()
@@ -80,7 +80,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     @Override
     public List<GenreTranslationResponseDto> createTranslations(List<CreateGenreTranslationRequestDto> createGenreTranslationsRequestDto) {
 
-        if (createGenreTranslationsRequestDto.isEmpty()) throw new BadRequestException();
+        if (createGenreTranslationsRequestDto.isEmpty()) throw new EmptyRequestException();
 
         List<CreateGenreTranslationRequestDto> uniqueCreateGenreTranslationsRequestDto = new ArrayList<>();
         Set<GenreLanguagePair> uniqueGenreLanguagePairs = new HashSet<>();
@@ -90,7 +90,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
 
         for (var createGenreTranslationDto : createGenreTranslationsRequestDto) {
 
-            if (createGenreTranslationDto.name() == null) throw new GenreTranslationsNameEmptyException();
+            if (createGenreTranslationDto.name() == null || createGenreTranslationDto.name().isBlank()) throw new GenreTranslationsNameEmptyException();
 
             var genreLanguagePair = new GenreLanguagePair(
                 createGenreTranslationDto.genreId(),
@@ -126,6 +126,8 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     @Override
     public void deleteTranslation(Long genreTranslationId) {
 
+        if (genreTranslationId == null) throw new EmptyRequestException();
+
         var genreTranslationExists = genreTranslationQueryService.existsById(genreTranslationId);
         if (!genreTranslationExists) throw new GenreTranslationNotFoundException();
 
@@ -135,7 +137,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     @Override
     public void deleteTranslations(List<Long> genreTranslationIds) {
 
-        if (genreTranslationIds.isEmpty()) throw new BadRequestException();
+        if (genreTranslationIds.isEmpty()) throw new EmptyRequestException();
 
         var allGenreTranslationsExists = genreTranslationQueryService.existsAllByIds(genreTranslationIds);
         if (!allGenreTranslationsExists) throw new GenreTranslationsNotFoundException();
@@ -146,7 +148,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     @Override
     public GenreTranslationResponseDto updateTranslation(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
 
-        if (updateGenreTranslationDto == null) throw new BadRequestException();
+        if (updateGenreTranslationDto == null) throw new EmptyRequestException();
 
         if (updateGenreTranslationDto.name() == null || updateGenreTranslationDto.name().isBlank()) {
             throw new GenreTranslationNameEmptyException();

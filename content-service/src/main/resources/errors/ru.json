@@ -1,5 +1,5 @@
 {
-  "BAD_REQUEST": "Неверный запрос",
+  "EMPTY_REQUEST": "Запрос не может быть пустым",
 
   "LANGUAGE_CODE_NOT_FOUND": "Такого языка у нас еще нет",
   "LANGUAGE_CODES_NOT_FOUND": "Некоторые языки не были найдены",
@@ -18,7 +18,9 @@
   "GENRE_TRANSLATIONS_NOT_FOUND": "Переводы для жанров не найдены",
   "GENRE_TRANSLATION_ALREADY_EXISTS" : "Такой перевод жанра уже существует",
   "GENRE_TRANSLATIONS_ALREADY_EXISTS" : "Некоторые переводы жанров уже существуют",
-  "GENRE_TRANSLATIONS_NAME_EMPTY" : "Перевод названия жанра не может быть пустым",
+
+  "GENRE_TRANSLATION_NAME_EMPTY" : "Перевод названия жанра не может быть пустым",
+  "GENRE_TRANSLATIONS_NAME_EMPTY" : "Некоторые переводы жанров пустые",
 
   "GENRE_INVALID_SEARCH_TYPE": "Неверный тип запроса для поиска жанров"
 }

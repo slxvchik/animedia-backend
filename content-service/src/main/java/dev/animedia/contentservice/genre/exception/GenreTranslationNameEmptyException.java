@@ -5,6 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public class GenreTranslationNameEmptyException extends AppException {
     public GenreTranslationNameEmptyException() {
-        super(HttpStatus.BAD_REQUEST, "GENRE_TRANSLATIONS_NAME_EMPTY");
+        super(HttpStatus.BAD_REQUEST, "GENRE_TRANSLATION_NAME_EMPTY");
     }
 }
