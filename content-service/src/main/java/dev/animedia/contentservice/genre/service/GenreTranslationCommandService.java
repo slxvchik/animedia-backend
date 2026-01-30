@@ -7,9 +7,12 @@ import dev.animedia.contentservice.genre.dto.request.UpdateGenreTranslationReque
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 
 public interface GenreTranslationCommandService {
-    GenreTranslationResponseDto addTranslation(CreateGenreTranslationRequestDto genreTranslation);
-    List<GenreTranslationResponseDto> addTranslations(List<CreateGenreTranslationRequestDto> genreTranslations);
-    GenreTranslationResponseDto updateTranslation(UpdateGenreTranslationRequestDto genreTranslation);
-    void removeTranslation(Long genreTranslation);
-    void removeTranslations(List<Long> genreTranslations);
+
+    GenreTranslationResponseDto createTranslation(CreateGenreTranslationRequestDto createGenreTranslationDto);
+    List<GenreTranslationResponseDto> createTranslations(List<CreateGenreTranslationRequestDto> createGenreTranslationsDto);
+
+    GenreTranslationResponseDto updateTranslation(UpdateGenreTranslationRequestDto updateGenreTranslationDto);
+
+    void deleteTranslation(Long genreTranslationId);
+    void deleteTranslations(List<Long> genreTranslationIds);
 }

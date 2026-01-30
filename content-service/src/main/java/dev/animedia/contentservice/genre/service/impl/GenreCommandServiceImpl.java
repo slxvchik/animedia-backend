@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.genre.service.impl;
 
+import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,15 @@ import dev.animedia.contentservice.genre.service.GenreCommandService;
 public class GenreCommandServiceImpl implements GenreCommandService {
 
     private final GenreRepository genreRepository;
-    private final GenreTranslationRepository genreTranslationRepository;
+    private final GenreTranslationQueryService genreTranslationQueryService;
 
     @Autowired
-    public GenreCommandServiceImpl(GenreRepository genreRepository,
-            GenreTranslationRepository genreTranslationRepository) {
+    public GenreCommandServiceImpl(
+        GenreRepository genreRepository,
+        GenreTranslationQueryService genreTranslationQueryService
+    ) {
         this.genreRepository = genreRepository;
-        this.genreTranslationRepository = genreTranslationRepository;
+        this.genreTranslationQueryService = genreTranslationQueryService;
     }
 
     @Override

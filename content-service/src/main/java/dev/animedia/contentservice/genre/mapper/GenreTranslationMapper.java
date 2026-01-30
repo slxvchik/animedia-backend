@@ -31,12 +31,14 @@ public class GenreTranslationMapper {
         );
     }
 
+    public List<GenreTranslationResponseDto> toGenreTranslationsResponseDto(List<GenreTranslation> genreTranslation) {
+        return genreTranslation.stream()
+            .map(this::toGenreTranslationResponseDto)
+            .toList();
+    }
+
     public GenreTranslation toGenreTranslation(CreateGenreTranslationRequestDto requestDto) {
 
-        if (requestDto == null) {
-            return null;
-        }
-        
         Genre genreRef = entityManager.getReference(Genre.class, requestDto.genreId());
         Language languageRef = entityManager.getReference(Language.class, requestDto.languageCode());
         
@@ -50,10 +52,6 @@ public class GenreTranslationMapper {
     }
 
     public GenreTranslation toGenreTranslation(UpdateGenreTranslationRequestDto requestDto) {
-
-        if (requestDto == null) {
-            return null;
-        }
 
         GenreTranslation genreTranslation = new GenreTranslation();
         genreTranslation.setId(requestDto.id());
@@ -77,6 +75,6 @@ public class GenreTranslationMapper {
     ) {
         return requestsDto.stream().map(mapper)
             .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            .toList();
     }
 }

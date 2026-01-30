@@ -2,7 +2,7 @@ package dev.animedia.contentservice.genre;
 
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.exception.InvalidGenreSearchTypeException;
+import dev.animedia.contentservice.genre.exception.GenreInvalidSearchTypeException;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class GenreController {
             case ALIAS -> {
                 genres = genreService.getGenresByAliases(pageable, valuesRequest);
             }
-            default -> throw new InvalidGenreSearchTypeException();
+            default -> throw new GenreInvalidSearchTypeException();
         }
         return null;
     }

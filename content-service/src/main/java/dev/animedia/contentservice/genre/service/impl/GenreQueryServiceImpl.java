@@ -17,47 +17,70 @@ import java.util.List;
 public class GenreQueryServiceImpl implements GenreQueryService {
 
     private final GenreRepository genreRepository;
-    private final GenreTranslationRepository genreTranslationRepository;
 
     @Autowired
-    public GenreQueryServiceImpl(GenreRepository genreRepository, GenreTranslationRepository genreTranslationRepository) {
+    public GenreQueryServiceImpl(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
-        this.genreTranslationRepository = genreTranslationRepository;
-    }
-
-    @Override
-    public Page<GenreWithTranslationResponseDto> findAll(Pageable pageable, String languageCode) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
     public Page<GenreWithTranslationsResponseDto> findAll(Pageable pageable) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<GenreWithTranslationResponseDto> findByAliases(List<String> aliases, String languageCode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<GenreWithTranslationResponseDto> findByIds(List<Long> ids, String languageCode) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<GenreWithTranslationsResponseDto> findByIds(List<Long> ids) {
-        // TODO Auto-generated method stub
+        return List.of();
+    }
+
+    @Override
+    public List<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases) {
+        return List.of();
+    }
+
+    @Override
+    public Page<GenreWithTranslationResponseDto> findAllByLanguage(Pageable pageable, String languageCode) {
         return null;
     }
+
+    @Override
+    public List<GenreWithTranslationResponseDto> findByIdsAndLanguage(List<Long> ids, String languageCode) {
+        return List.of();
+    }
+
+    @Override
+    public List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode) {
+        return List.of();
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return false;
+    }
+
+    @Override
+    public boolean existsAnyByIds(List<Long> ids) {
+        return false;
+    }
+
+    @Override
+    public boolean existsAllByIds(List<Long> ids) {
+        return false;
+    }
+
+    @Override
+    public boolean existsByAlias(String alias) {
+        return false;
+    }
+
+    @Override
+    public boolean existsAnyByAliases(List<String> aliases) {
+        return false;
+    }
+
+    @Override
+    public boolean existsAllByAliases(List<String> aliases) {
+        return false;
+    }
+
 }

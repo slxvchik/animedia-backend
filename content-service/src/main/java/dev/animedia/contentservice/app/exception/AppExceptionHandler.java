@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.app.exception;
 
+import dev.animedia.contentservice.app.exception.common.AppErrorTranslationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,8 @@ public class AppExceptionHandler {
             .body(response);
     }
 
-    @ExceptionHandler(ErrorLocaleException.class)
-    public ResponseEntity<AppResponseDto<Object>> handleLocaleError(ErrorLocaleException e) {
+    @ExceptionHandler(AppErrorTranslationException.class)
+    public ResponseEntity<AppResponseDto<Object>> handleLocaleError(AppErrorTranslationException e) {
         String languageCode = LocaleLanguageContext.getLocaleLanguageCode();
 
         AppResponseDto<Object> response = AppResponseDto.error(e.getMessage(languageCode));

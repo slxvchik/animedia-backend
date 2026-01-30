@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.app.exception;
 
+import dev.animedia.contentservice.app.exception.common.AppErrorTranslationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -26,20 +27,20 @@ public class AppExceptionMessageService {
         Resource resource = new ClassPathResource(filePath);
 
         if (!resource.exists()) {
-            throw new ErrorLocaleException("Locale file not found: " + filePath + "; Exception code: " + exceptionCode);
+            throw new AppErrorTranslationException("Locale file not found: " + filePath + "; Exception code: " + exceptionCode);
         }
 
         Map<String, String> errorMessages;
         try (InputStream inputStream = resource.getInputStream()) {
             errorMessages = objectMapper.readValue(
-                    inputStream,
-                    new TypeReference<Map<String, String>>() {}
+                inputStream,
+                new TypeReference<>() {}
             );
         }
 
         String errorMessage = errorMessages.get(exceptionCode);
         if (errorMessage == null || errorMessage.isEmpty()) {
-            throw new ErrorLocaleException("Translate for error not found; Exception code: " + exceptionCode);
+            throw new AppErrorTranslationException("Translate for error not found; Exception code: " + exceptionCode);
         }
 
         return errorMessage;

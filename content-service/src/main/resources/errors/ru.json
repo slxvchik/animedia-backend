@@ -1,8 +1,11 @@
 {
+  "BAD_REQUEST": "Неверный запрос",
+
   "LANGUAGE_CODE_NOT_FOUND": "Такого языка у нас еще нет",
+  "LANGUAGE_CODES_NOT_FOUND": "Некоторые языки не были найдены",
 
   "GENRE_NOT_FOUND": "Жанр не найден",
-  "GENRES_NOT_FOUND": "Жанры не найдены",
+  "GENRES_NOT_FOUND": "Некоторые жанры не были найдены",
 
   "GENRE_ALIAS_EXISTS": "Жанр с таким алиасом уже существует",
   "GENRE_ALIAS_EMPTY": "Алиас жанра не может быть пустым",
@@ -12,9 +15,10 @@
   "GENRE_NAME_EMPTY": "Имя жанра не может быть пустым",
 
   "GENRE_TRANSLATION_NOT_FOUND": "Перевод для жанра не найден",
-  "GENRE_TRANSLATION_ALREADY_EXISTS" : "Такой перевод жанра уже существует",
   "GENRE_TRANSLATIONS_NOT_FOUND": "Переводы для жанров не найдены",
-  "GENRE_TRANSLATIONS_INVALID_FIELDS": "Некоторые поля некорректны",
+  "GENRE_TRANSLATION_ALREADY_EXISTS" : "Такой перевод жанра уже существует",
+  "GENRE_TRANSLATIONS_ALREADY_EXISTS" : "Некоторые переводы жанров уже существуют",
+  "GENRE_TRANSLATIONS_NAME_EMPTY" : "Перевод названия жанра не может быть пустым",
 
   "GENRE_INVALID_SEARCH_TYPE": "Неверный тип запроса для поиска жанров"
 }

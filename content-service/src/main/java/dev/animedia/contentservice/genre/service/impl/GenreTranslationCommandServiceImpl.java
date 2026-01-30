@@ -1,113 +1,161 @@
 package dev.animedia.contentservice.genre.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import dev.animedia.contentservice.genre.exception.GenreTranslationAlreadyExists;
-import dev.animedia.contentservice.genre.model.Genre;
+import dev.animedia.contentservice.app.exception.common.BadRequestException;
+import dev.animedia.contentservice.genre.dto.GenreLanguagePair;
+import dev.animedia.contentservice.genre.exception.*;
 import dev.animedia.contentservice.genre.model.GenreTranslation;
-import dev.animedia.contentservice.language.Language;
+import dev.animedia.contentservice.genre.service.GenreQueryService;
+import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
+import dev.animedia.contentservice.language.service.LanguageQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.animedia.contentservice.genre.dto.request.CreateGenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.request.UpdateGenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
-import dev.animedia.contentservice.genre.exception.GenreNotFoundException;
-import dev.animedia.contentservice.genre.exception.GenreTranslationInvalidFields;
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
-import dev.animedia.contentservice.genre.repository.GenreRepository;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
-import dev.animedia.contentservice.language.LanguageRepository;
 import dev.animedia.contentservice.language.exception.LanguageCodeNotFoundException;
-import org.yaml.snakeyaml.util.Tuple;
 
 @Service
 public class GenreTranslationCommandServiceImpl implements GenreTranslationCommandService {
 
-    private GenreTranslationMapper genreTranslationMapper;
+    private final GenreTranslationMapper genreTranslationMapper;
 
-    private GenreTranslationRepository genreTranslationRepository;
-    private GenreRepository genreRepository;
-    private LanguageRepository languageRepository;
+    private final GenreTranslationRepository genreTranslationRepository;
+
+    private final GenreQueryService genreQueryService;
+    private final LanguageQueryService languageQueryService;
+    private final GenreTranslationQueryService genreTranslationQueryService;
 
     @Autowired
     public GenreTranslationCommandServiceImpl(
         GenreTranslationMapper genreTranslationMapper,
         GenreTranslationRepository genreTranslationRepository,
-        GenreRepository genreRepository,
-        LanguageRepository languageRepository
+        GenreQueryService genreQueryService,
+        LanguageQueryService languageQueryService,
+        GenreTranslationQueryService genreTranslationQueryService
     ) {
         this.genreTranslationMapper = genreTranslationMapper;
+
         this.genreTranslationRepository = genreTranslationRepository;
-        this.genreRepository = genreRepository;
-        this.languageRepository = languageRepository;
+
+        this.genreQueryService = genreQueryService;
+        this.languageQueryService = languageQueryService;
+        this.genreTranslationQueryService = genreTranslationQueryService;
     }
 
     @Override
-    public GenreTranslationResponseDto addTranslation(CreateGenreTranslationRequestDto genreTranslationDto) {
+    public GenreTranslationResponseDto createTranslation(CreateGenreTranslationRequestDto createGenreTranslationDto) {
         
-        if (genreTranslationDto == null) {
-            throw new GenreTranslationInvalidFields();
-        }
-        
-        var genreExists = genreRepository.existsById(genreTranslationDto.genreId());
-        if (!genreExists) {
-            throw new GenreNotFoundException();
-        }
+        if (createGenreTranslationDto == null) throw new BadRequestException();
 
-        var languageExists = languageRepository.existsById(genreTranslationDto.languageCode());
-        if (!languageExists) {
-            throw new LanguageCodeNotFoundException();
-        }
+        // TODO: add NULL check
 
-        var genreTranslationExists = genreTranslationRepository.existsByGenreIdAndLanguageCode(
-                genreTranslationDto.genreId(),
-                genreTranslationDto.languageCode()
+        var genreExists = genreQueryService.existsById(
+            createGenreTranslationDto.genreId()
         );
+        if (genreExists) throw new GenreNotFoundException();
 
-        if (genreTranslationExists) {
-            throw new GenreTranslationAlreadyExists();
+        var languageExists = languageQueryService.existsByCode(
+            createGenreTranslationDto.languageCode()
+        );
+        if (languageExists) throw new LanguageCodeNotFoundException();
+
+        var genreTranslationExists = genreTranslationQueryService.existsByGenreIdAndLanguageCode(
+            createGenreTranslationDto.genreId(),
+            createGenreTranslationDto.languageCode()
+        );
+        if (genreTranslationExists) throw new GenreTranslationAlreadyExistsException();
+
+        var genreTranslation = genreTranslationMapper.toGenreTranslation(createGenreTranslationDto);
+
+        var savedGenreTranslation = genreTranslationRepository.save(genreTranslation);
+
+        return genreTranslationMapper.toGenreTranslationResponseDto(savedGenreTranslation);
+    }
+
+    @Override
+    public List<GenreTranslationResponseDto> createTranslations(List<CreateGenreTranslationRequestDto> createGenreTranslationsRequestDto) {
+
+        if (createGenreTranslationsRequestDto.isEmpty()) throw new BadRequestException();
+
+        // TODO: distinct request
+        // TODO: add NULL check
+
+        List<GenreLanguagePair> genreLanguagePairs = new ArrayList<>();
+        List<Long> genreIds = new ArrayList<>();
+        List<String> languageCodes = new ArrayList<>();
+
+        for (var createGenreTranslationDto : createGenreTranslationsRequestDto) {
+            genreLanguagePairs.add(
+                new GenreLanguagePair(
+                    createGenreTranslationDto.genreId(),
+                    createGenreTranslationDto.languageCode()
+                )
+            );
+            genreIds.add(createGenreTranslationDto.genreId());
+            languageCodes.add(createGenreTranslationDto.languageCode());
         }
 
-        var genreTranslation = genreTranslationMapper.toGenreTranslation(genreTranslationDto);
+        var anyGenreTranslationExists = genreTranslationQueryService.existsAnyByGenreIdsAndLanguageCodes(genreLanguagePairs);
+        if (anyGenreTranslationExists) throw new GenreTranslationsAlreadyExistsException();
 
-        genreTranslation = genreTranslationRepository.save(genreTranslation);
+        var allGenresExists = genreQueryService.existsAllByIds(genreIds);
+        if (!allGenresExists) throw new GenresNotFoundException();
 
-        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslation);
+        var allLanguageCodesExists = languageQueryService.existsAllByCodes(languageCodes);
+        if (!allLanguageCodesExists) throw new LanguageCodeNotFoundException();
+
+        var genreTranslations = genreTranslationMapper.toGenreTranslationsFromCreate(createGenreTranslationsRequestDto);
+
+        var savedGenreTranslations = genreTranslationRepository.saveAll(genreTranslations);
+
+        return genreTranslationMapper.toGenreTranslationsResponseDto(savedGenreTranslations);
     }
 
     @Override
-    public List<GenreTranslationResponseDto> addTranslations(List<CreateGenreTranslationRequestDto> genreTranslationsDto) {
+    public void deleteTranslation(Long genreTranslationId) {
 
-        List<GenreTranslation> genreTranslations = genreTranslationMapper.toGenreTranslationsFromCreate(genreTranslationsDto);
+        var genreTranslationExists = genreTranslationQueryService.existsById(genreTranslationId);
+        if (!genreTranslationExists) throw new GenreTranslationNotFoundException();
 
-        List<Tuple<Genre, Language>> genreTranslationsTuples = genreTranslations.stream()
-                .map(gt -> new Tuple<>(gt.getGenre(), gt.getLanguage()))
-                .collect(Collectors.toUnmodifiableList());
-
-        genreTranslationRepository.existsByGenreIdAndLanguageCodePairs(null);
-
-        return null;
+        genreTranslationRepository.deleteById(genreTranslationId);
     }
 
     @Override
-    public void removeTranslation(Long genreTranslation) {
-        // TODO Auto-generated method stub
-        
+    public void deleteTranslations(List<Long> genreTranslationIds) {
+
+        if (genreTranslationIds.isEmpty()) throw new BadRequestException();
+
+        var allGenreTranslationsExists = genreTranslationQueryService.existsAllByIds(genreTranslationIds);
+        if (!allGenreTranslationsExists) throw new GenreTranslationsNotFoundException();
+
+        genreTranslationRepository.deleteAllById(genreTranslationIds);
     }
 
     @Override
-    public void removeTranslations(List<Long> genreTranslations) {
-        // TODO Auto-generated method stub
-        
-    }
+    public GenreTranslationResponseDto updateTranslation(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
 
-    @Override
-    public GenreTranslationResponseDto updateTranslation(UpdateGenreTranslationRequestDto genreTranslationDto) {
-        // TODO Auto-generated method stub
-        return null;
+        if (updateGenreTranslationDto == null) throw new BadRequestException();
+
+        if (updateGenreTranslationDto.name() == null || updateGenreTranslationDto.name().isBlank()) {
+            throw new GenreTranslationNameEmptyException();
+        }
+
+        var genreTranslationDb = genreTranslationRepository.findById(updateGenreTranslationDto.id())
+            .orElseThrow(GenreTranslationNotFoundException::new);
+
+        genreTranslationDb.setName(updateGenreTranslationDto.name());
+        genreTranslationDb.setDescription(updateGenreTranslationDto.description());
+
+        var savedGenreTranslation = genreTranslationRepository.save(genreTranslationDb);
+
+        return genreTranslationMapper.toGenreTranslationResponseDto(savedGenreTranslation);
     }
 
 }

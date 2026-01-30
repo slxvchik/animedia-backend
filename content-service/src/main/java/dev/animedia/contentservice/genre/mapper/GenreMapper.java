@@ -12,12 +12,10 @@ import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.model.GenreTranslation;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.exception.GenreTranslationIdNotFoundException;
+import dev.animedia.contentservice.genre.exception.GenreTranslationNotFoundException;
 
 @Component
 public class GenreMapper {
-
-    public GenreMapper() {}
 
     public GenreWithTranslationResponseDto toGenreResponseDto(Genre genre, GenreTranslation genreTranslation) {
         return new GenreWithTranslationResponseDto(
@@ -54,7 +52,7 @@ public class GenreMapper {
 
             var genreTranslation = Optional.of(genreTranslationMap)
                 .map(gtMap -> gtMap.get(genre.getId()))
-                .orElseThrow(() -> new GenreTranslationIdNotFoundException());
+                .orElseThrow(GenreTranslationNotFoundException::new);
 
             var genreResponseDto = this.toGenreResponseDto(
                 genre,
