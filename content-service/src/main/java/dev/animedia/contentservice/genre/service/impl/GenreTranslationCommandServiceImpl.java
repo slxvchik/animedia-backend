@@ -48,7 +48,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public GenreTranslationResponseDto createTranslation(CreateGenreTranslationRequestDto createGenreTranslationDto) {
+    public GenreTranslationResponseDto create(CreateGenreTranslationRequestDto createGenreTranslationDto) {
         
         if (createGenreTranslationDto == null) throw new EmptyRequestException();
 
@@ -78,12 +78,13 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public List<GenreTranslationResponseDto> createTranslations(List<CreateGenreTranslationRequestDto> createGenreTranslationsRequestDto) {
+    public List<GenreTranslationResponseDto> create(List<CreateGenreTranslationRequestDto> createGenreTranslationsRequestDto) {
 
         if (createGenreTranslationsRequestDto.isEmpty()) throw new EmptyRequestException();
 
         List<CreateGenreTranslationRequestDto> uniqueCreateGenreTranslationsRequestDto = new ArrayList<>();
         Set<GenreLanguagePair> uniqueGenreLanguagePairs = new HashSet<>();
+
         List<GenreLanguagePair> genreLanguagePairs = new ArrayList<>();
         List<Long> genreIds = new ArrayList<>();
         List<String> languageCodes = new ArrayList<>();
@@ -101,7 +102,6 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
 
             uniqueCreateGenreTranslationsRequestDto.add(createGenreTranslationDto);
 
-            uniqueGenreLanguagePairs.add(genreLanguagePair);
             genreLanguagePairs.add(genreLanguagePair);
             genreIds.add(createGenreTranslationDto.genreId());
             languageCodes.add(createGenreTranslationDto.languageCode());
@@ -124,7 +124,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public void deleteTranslation(Long genreTranslationId) {
+    public void delete(Long genreTranslationId) {
 
         if (genreTranslationId == null) throw new EmptyRequestException();
 
@@ -135,7 +135,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public void deleteTranslations(List<Long> genreTranslationIds) {
+    public void delete(List<Long> genreTranslationIds) {
 
         if (genreTranslationIds.isEmpty()) throw new EmptyRequestException();
 
@@ -146,7 +146,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public GenreTranslationResponseDto updateTranslation(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
+    public GenreTranslationResponseDto update(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
 
         if (updateGenreTranslationDto == null) throw new EmptyRequestException();
 

@@ -11,6 +11,8 @@ import dev.animedia.contentservice.genre.repository.GenreRepository;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreCommandService;
 
+import java.util.List;
+
 @Service
 public class GenreCommandServiceImpl implements GenreCommandService {
 
@@ -28,20 +30,26 @@ public class GenreCommandServiceImpl implements GenreCommandService {
 
     @Override
     public GenreResponseDto create(CreateGenreRequestDto genre) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<GenreResponseDto> create(List<CreateGenreRequestDto> genre) {
+        return List.of();
+    }
+
+    @Override
+    public GenreResponseDto update(UpdateGenreRequestDto genre) {
         return null;
     }
 
     @Override
     public void delete(Long id) {
-        // TODO Auto-generated method stub
-        
+
     }
 
     @Override
-    public GenreResponseDto update(UpdateGenreRequestDto genre) {
-        // TODO Auto-generated method stub
-        return null;
+    public void delete(List<Long> id) {
+
     }
-    
 }

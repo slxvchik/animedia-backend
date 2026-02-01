@@ -23,10 +23,6 @@ public class GenreTranslationMapper {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<GenreTranslationResponseDto> toPageGenreTranslationResponseDto(Page<GenreTranslation> pageGenreTranslation) {
-        return null;
-    }
-
     public GenreTranslationResponseDto toGenreTranslationResponseDto(GenreTranslation genreTranslation) {
         return new GenreTranslationResponseDto(
             genreTranslation.getId(),
@@ -40,6 +36,10 @@ public class GenreTranslationMapper {
         return genreTranslation.stream()
             .map(this::toGenreTranslationResponseDto)
             .toList();
+    }
+
+    public Page<GenreTranslationResponseDto> toPageGenreTranslationResponseDto(Page<GenreTranslation> genreTranslations) {
+        return genreTranslations.map(this::toGenreTranslationResponseDto);
     }
 
     public GenreTranslation toGenreTranslation(CreateGenreTranslationRequestDto requestDto) {
