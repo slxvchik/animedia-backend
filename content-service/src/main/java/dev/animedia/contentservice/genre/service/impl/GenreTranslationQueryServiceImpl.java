@@ -137,31 +137,62 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
 
     @Override
     public boolean existsById(Long id) {
-        return false;
+        return genreTranslationRepository.existsById(id);
     }
 
     @Override
     public boolean existsAnyByIds(List<Long> ids) {
-        return false;
+
+        if (ids == null) throw new EmptyRequestException();
+
+        return genreTranslationRepository.existsByIdIn(ids);
     }
 
     @Override
     public boolean existsAllByIds(List<Long> ids) {
-        return false;
+
+        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
+
+        var uniqueIds = ids.stream().distinct().toList();
+
+        var genreTranslations = genreTranslationRepository.findByIdIn(uniqueIds);
+
+        return uniqueIds.size() == genreTranslations.size();
     }
 
     @Override
-    public boolean existsByGenreIdAndLanguageCode(Long id, String languageCode) {
-        return false;
+    public boolean existsByGenreIdAndLanguageCode(Long genreId, String languageCode) {
+
+        if (genreId == null || languageCode == null) throw new EmptyRequestException();
+
+        return genreTranslationRepository.existsByGenreIdAndLanguageCode(genreId, languageCode);
     }
 
     @Override
     public boolean existsAnyByGenreIdsAndLanguageCodes(List<GenreLanguagePair> genreIdsLanguageCodes) {
-        return false;
+
+        if (genreIdsLanguageCodes == null || genreIdsLanguageCodes.isEmpty()) throw new EmptyRequestException();
+
+        List<Object[]> genreIdsLanguageCodesTuple = genreIdsLanguageCodes.stream()
+            .map(gl -> new Object[] { gl.genreId(), gl.languageCode() })
+            .toList();
+
+        return genreTranslationRepository.existsByGenreIdAndLanguageCodePairs(genreIdsLanguageCodesTuple);
     }
 
     @Override
     public boolean existsAllByGenreIdsAndLanguageCodes(List<GenreLanguagePair> genreIdsLanguageCodes) {
-        return false;
+
+        if (genreIdsLanguageCodes == null || genreIdsLanguageCodes.isEmpty()) throw new EmptyRequestException();
+
+        var uniqueGenreIdsLanguageCodes = genreIdsLanguageCodes.stream().distinct().toList();
+
+        List<Object[]> genreIdsLanguageCodesTuple = uniqueGenreIdsLanguageCodes.stream()
+            .map(gl -> new Object[] { gl.genreId(), gl.languageCode() })
+            .toList();
+
+        var genreTranslations = genreTranslationRepository.findByGenreIdsAndLanguageCodes(genreIdsLanguageCodesTuple);
+
+        return uniqueGenreIdsLanguageCodes.size() == genreTranslations.size();
     }
 }
