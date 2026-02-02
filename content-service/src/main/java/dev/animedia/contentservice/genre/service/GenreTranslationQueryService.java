@@ -15,13 +15,11 @@ public interface GenreTranslationQueryService {
     Page<GenreTranslationResponseDto> findByIds(List<Long> ids, Pageable pageable);
 
     Page<GenreTranslationResponseDto> findByGenreId(Long genreId, Pageable pageable);
+
     Page<GenreTranslationResponseDto> findByGenreIds(List<Long> genreIds, Pageable pageable);
+    Page<GenreTranslationResponseDto> findByGenreIdsAndLanguageCode(List<Long> genreIds, String languageCode, Pageable pageable);
 
     Page<GenreTranslationResponseDto> findByLanguageCode(String languageCode, Pageable pageable);
-    Page<GenreTranslationResponseDto> findByLanguageCodes(List<String> languageCodes, Pageable pageable);
-
-    GenreTranslationResponseDto findByGenreIdAndLanguageCode(GenreLanguagePair genreLanguagePair);
-    Page<GenreTranslationResponseDto> findByGenreIdsAndLanguageCodes(List<GenreLanguagePair> genreIdsLanguageCodes, Pageable pageable);
 
     boolean existsById(Long id);
     boolean existsAnyByIds(List<Long> ids);

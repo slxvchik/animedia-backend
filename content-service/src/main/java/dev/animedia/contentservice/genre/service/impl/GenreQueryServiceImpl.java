@@ -1,86 +1,259 @@
 package dev.animedia.contentservice.genre.service.impl;
 
+import dev.animedia.contentservice.app.exception.common.EmptyRequestException;
+import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
+import dev.animedia.contentservice.genre.mapper.GenreMapper;
+import dev.animedia.contentservice.genre.model.Genre;
+import dev.animedia.contentservice.genre.model.GenreTranslation;
+import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 import dev.animedia.contentservice.genre.repository.GenreRepository;
-import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class GenreQueryServiceImpl implements GenreQueryService {
 
     private final GenreRepository genreRepository;
 
+    private final GenreTranslationQueryService genreTranslationQueryService;
+    private final GenreMapper genreMapper;
+    private final GenreQueryService genreQueryService;
+
     @Autowired
-    public GenreQueryServiceImpl(GenreRepository genreRepository) {
+    public GenreQueryServiceImpl(
+        GenreRepository genreRepository,
+        GenreTranslationQueryService genreTranslationQueryService,
+        GenreMapper genreMapper,
+        GenreQueryService genreQueryService) {
         this.genreRepository = genreRepository;
+        this.genreTranslationQueryService = genreTranslationQueryService;
+        this.genreMapper = genreMapper;
+        this.genreQueryService = genreQueryService;
     }
 
     @Override
     public Page<GenreWithTranslationsResponseDto> findAll(Pageable pageable) {
-        return null;
+
+        var genres = genreRepository.findAll(Pageable.unpaged());
+
+        var genreIds = genres.stream()
+            .map(Genre::getId)
+            .toList();
+
+        var genreTranslations = genreTranslationQueryService.findByGenreIds(genreIds, pageable);
+
+        List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationsResponseDto(
+            genres.getContent(),
+            genreTranslations.getContent()
+        );
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genreTranslations::getTotalElements
+        );
     }
 
     @Override
-    public List<GenreWithTranslationsResponseDto> findByIds(List<Long> ids) {
-        return List.of();
+    public Page<GenreWithTranslationsResponseDto> findByIds(List<Long> ids, Pageable pageable) {
+
+        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
+
+        Set<Long> uniqueIds = new HashSet<>(ids);
+
+        var genres = genreRepository.findByIdIn(List.copyOf(uniqueIds), Pageable.unpaged());
+
+        var genreIds = genres.stream()
+            .map(Genre::getId)
+            .toList();
+
+        var genreTranslations = genreTranslationQueryService.findByGenreIds(genreIds, pageable);
+
+        List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationsResponseDto(
+            genres.getContent(),
+            genreTranslations.getContent()
+        );
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genreTranslations::getTotalElements
+        );
     }
 
     @Override
-    public List<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases) {
-        return List.of();
+    public Page<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases, Pageable pageable) {
+
+        if (aliases == null || aliases.isEmpty()) throw new EmptyRequestException();
+
+        Set<String> uniqueAliases = new HashSet<>(aliases);
+
+        var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases), Pageable.unpaged());
+
+        var genreIds = genres.stream()
+            .map(Genre::getId)
+            .toList();
+
+        var genreTranslations = genreTranslationQueryService.findByGenreIds(genreIds, pageable);
+
+        List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationsResponseDto(
+            genres.getContent(),
+            genreTranslations.getContent()
+        );
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genreTranslations::getTotalElements
+        );
     }
 
     @Override
-    public Page<GenreWithTranslationResponseDto> findAllByLanguage(Pageable pageable, String languageCode) {
-        return null;
+    public Page<GenreWithTranslationResponseDto> findByLanguage(String languageCode, Pageable pageable) {
+
+        if (languageCode == null) throw new EmptyRequestException();
+
+        Page<GenreTranslationResponseDto> genreTranslations = genreTranslationQueryService.findByLanguageCode(languageCode, pageable);
+
+        var genreIds = genreTranslations.stream()
+            .map(GenreTranslationResponseDto::genreId)
+            .distinct()
+            .toList();
+
+        var genres = genreRepository.findByIdIn(genreIds, Pageable.unpaged());
+
+        List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto = genreMapper.toGenresWithTranslationResponseDto(
+            genres.getContent(),
+            genreTranslations.getContent()
+        );
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationResponseDto,
+            pageable,
+            genreTranslations::getTotalElements
+        );
     }
 
     @Override
-    public List<GenreWithTranslationResponseDto> findByIdsAndLanguage(List<Long> ids, String languageCode) {
-        return List.of();
+    public Page<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode, Pageable pageable) {
+
+        if (ids == null || ids.isEmpty() || languageCode == null) throw new EmptyRequestException();
+
+        Page<GenreTranslationResponseDto> genresTranslation = genreTranslationQueryService.findByGenreIdsAndLanguageCode(ids, languageCode, pageable);
+
+        var genreIds = genresTranslation.stream()
+            .map(GenreTranslationResponseDto::genreId)
+            .distinct()
+            .toList();
+
+        var genres = genreRepository.findByIdIn(genreIds, Pageable.unpaged());
+
+        List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto = genreMapper.toGenresWithTranslationResponseDto(
+            genres.getContent(),
+            genresTranslation.getContent()
+        );
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationResponseDto,
+            pageable,
+            genresTranslation::getTotalElements
+        );
     }
 
     @Override
-    public List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode) {
-        return List.of();
+    public Page<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode, Pageable pageable) {
+
+        if (aliases == null || aliases.isEmpty() || languageCode == null) throw new EmptyRequestException();
+
+        Set<String> uniqueAliases = new HashSet<>(aliases);
+
+        var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases), Pageable.unpaged());
+
+        var genreIds = genres.stream()
+            .map(Genre::getId)
+            .distinct()
+            .toList();
+
+        Page<GenreTranslationResponseDto> genresTranslation = genreTranslationQueryService.findByGenreIdsAndLanguageCode(genreIds, languageCode, pageable);
+
+        List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto = genreMapper.toGenresWithTranslationResponseDto(
+            genres.getContent(),
+            genresTranslation.getContent()
+        );
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationResponseDto,
+            pageable,
+            genresTranslation::getTotalElements
+        );
     }
 
     @Override
     public boolean existsById(Long id) {
-        return false;
+
+        if (id == null) throw new EmptyRequestException();
+        return genreRepository.existsById(id);
     }
 
     @Override
     public boolean existsAnyByIds(List<Long> ids) {
-        return false;
+
+        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
+
+        return genreRepository.existsByIdIn(ids);
     }
 
     @Override
     public boolean existsAllByIds(List<Long> ids) {
-        return false;
+
+        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
+
+        Set<Long> uniqueIds = new HashSet<>(ids);
+
+        var genres = genreRepository.findAllById(uniqueIds);
+
+        return uniqueIds.size() == genres.size();
     }
 
     @Override
     public boolean existsByAlias(String alias) {
-        return false;
+
+        if (alias == null) throw new EmptyRequestException();
+
+        return genreRepository.existsByAlias(alias);
     }
 
     @Override
     public boolean existsAnyByAliases(List<String> aliases) {
-        return false;
+
+        if (aliases == null || aliases.isEmpty()) throw new EmptyRequestException();
+
+        return genreRepository.existsByAliasIn(aliases);
     }
 
     @Override
     public boolean existsAllByAliases(List<String> aliases) {
-        return false;
+
+        if (aliases == null || aliases.isEmpty()) throw new EmptyRequestException();
+
+        Set<String> uniqueAliases = new HashSet<>(aliases);
+
+        var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
+
+        return uniqueAliases.size() == genres.size();
     }
 
 }

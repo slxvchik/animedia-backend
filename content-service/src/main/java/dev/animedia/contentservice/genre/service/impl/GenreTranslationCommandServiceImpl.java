@@ -83,9 +83,8 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         if (createGenreTranslationsRequestDto.isEmpty()) throw new EmptyRequestException();
 
         List<CreateGenreTranslationRequestDto> uniqueCreateGenreTranslationsRequestDto = new ArrayList<>();
-        Set<GenreLanguagePair> uniqueGenreLanguagePairs = new HashSet<>();
 
-        List<GenreLanguagePair> genreLanguagePairs = new ArrayList<>();
+        Set<GenreLanguagePair> genreLanguagePairs = new HashSet<>();
         List<Long> genreIds = new ArrayList<>();
         List<String> languageCodes = new ArrayList<>();
 
@@ -98,16 +97,15 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
                 createGenreTranslationDto.languageCode()
             );
 
-            if (!uniqueGenreLanguagePairs.add(genreLanguagePair)) continue;
+            if (!genreLanguagePairs.add(genreLanguagePair)) continue;
 
             uniqueCreateGenreTranslationsRequestDto.add(createGenreTranslationDto);
 
-            genreLanguagePairs.add(genreLanguagePair);
             genreIds.add(createGenreTranslationDto.genreId());
             languageCodes.add(createGenreTranslationDto.languageCode());
         }
 
-        var anyGenreTranslationExists = genreTranslationQueryService.existsAnyByGenreIdsAndLanguageCodes(genreLanguagePairs);
+        var anyGenreTranslationExists = genreTranslationQueryService.existsAnyByGenreIdsAndLanguageCodes(List.copyOf(genreLanguagePairs));
         if (anyGenreTranslationExists) throw new GenreTranslationsAlreadyExistsException();
 
         var allGenresExists = genreQueryService.existsAllByIds(genreIds);
@@ -121,6 +119,26 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         var savedGenreTranslations = genreTranslationRepository.saveAll(genreTranslations);
 
         return genreTranslationMapper.toGenreTranslationsResponseDto(savedGenreTranslations);
+    }
+
+    @Override
+    public GenreTranslationResponseDto update(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
+
+        if (updateGenreTranslationDto == null) throw new EmptyRequestException();
+
+        if (updateGenreTranslationDto.name() == null || updateGenreTranslationDto.name().isBlank()) {
+            throw new GenreTranslationNameEmptyException();
+        }
+
+        var genreTranslationDb = genreTranslationRepository.findById(updateGenreTranslationDto.id())
+                .orElseThrow(GenreTranslationNotFoundException::new);
+
+        genreTranslationDb.setName(updateGenreTranslationDto.name());
+        genreTranslationDb.setDescription(updateGenreTranslationDto.description());
+
+        var savedGenreTranslation = genreTranslationRepository.save(genreTranslationDb);
+
+        return genreTranslationMapper.toGenreTranslationResponseDto(savedGenreTranslation);
     }
 
     @Override
@@ -143,26 +161,6 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         if (!allGenreTranslationsExists) throw new GenreTranslationsNotFoundException();
 
         genreTranslationRepository.deleteAllById(genreTranslationIds);
-    }
-
-    @Override
-    public GenreTranslationResponseDto update(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
-
-        if (updateGenreTranslationDto == null) throw new EmptyRequestException();
-
-        if (updateGenreTranslationDto.name() == null || updateGenreTranslationDto.name().isBlank()) {
-            throw new GenreTranslationNameEmptyException();
-        }
-
-        var genreTranslationDb = genreTranslationRepository.findById(updateGenreTranslationDto.id())
-            .orElseThrow(GenreTranslationNotFoundException::new);
-
-        genreTranslationDb.setName(updateGenreTranslationDto.name());
-        genreTranslationDb.setDescription(updateGenreTranslationDto.description());
-
-        var savedGenreTranslation = genreTranslationRepository.save(genreTranslationDb);
-
-        return genreTranslationMapper.toGenreTranslationResponseDto(savedGenreTranslation);
     }
 
 }

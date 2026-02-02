@@ -13,10 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class GenreTranslationQueryServiceImpl implements GenreTranslationQueryService {
@@ -60,7 +57,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
 
         Set<Long> uniqueIds = new HashSet<>(ids);
 
-        var genreTranslations = genreTranslationRepository.findByIdIn(new ArrayList<>(uniqueIds), pageable);
+        var genreTranslations = genreTranslationRepository.findByIdIn(List.copyOf(uniqueIds), pageable);
         if (genreTranslations.getTotalElements() != uniqueIds.size()) throw new GenreTranslationsNotFoundException();
 
         return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
@@ -89,6 +86,19 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
+    public Page<GenreTranslationResponseDto> findByGenreIdsAndLanguageCode(List<Long> genreIds, String languageCode, Pageable pageable) {
+
+        if (genreIds == null || genreIds.isEmpty() || languageCode == null) throw new EmptyRequestException();
+
+        Set<Long> uniqueGenreIds = new HashSet<>(genreIds);
+
+        var genreTranslations = genreTranslationRepository.findByGenreIdInAndLanguageCode(List.copyOf(uniqueGenreIds), languageCode, pageable);
+        if (genreTranslations.getTotalElements() != uniqueGenreIds.size()) throw new GenreTranslationsNotFoundException();
+
+        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
+    }
+
+    @Override
     public Page<GenreTranslationResponseDto> findByLanguageCode(String languageCode, Pageable pageable) {
 
         if (languageCode == null) throw new EmptyRequestException();
@@ -100,43 +110,10 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
-    public Page<GenreTranslationResponseDto> findByLanguageCodes(List<String> languageCodes, Pageable pageable) {
-
-        if (languageCodes == null || languageCodes.isEmpty()) throw new EmptyRequestException();
-
-        var genreTranslations = genreTranslationRepository.findByLanguageCodeIn(languageCodes, pageable);
-        if (genreTranslations.getTotalElements() == 0) throw new GenreTranslationsNotFoundException();
-
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
-    }
-
-    @Override
-    public GenreTranslationResponseDto findByGenreIdAndLanguageCode(GenreLanguagePair genreLanguagePair) {
-
-        if (genreLanguagePair == null) throw new EmptyRequestException();
-
-        var genreTranslations = genreTranslationRepository.findByGenreIdAndLanguageCode(genreLanguagePair.genreId(), genreLanguagePair.languageCode());
-        if (genreTranslations.isEmpty()) throw new GenreTranslationNotFoundException();
-
-        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations.get());
-    }
-
-    @Override
-    public Page<GenreTranslationResponseDto> findByGenreIdsAndLanguageCodes(List<GenreLanguagePair> genreIdsLanguageCodes, Pageable pageable) {
-
-        if (genreIdsLanguageCodes == null || genreIdsLanguageCodes.isEmpty()) throw new EmptyRequestException();
-
-        List<Object[]> genreIdsLanguageCodesTuple = genreIdsLanguageCodes.stream()
-            .map(gl -> new Object[] { gl.genreId(), gl.languageCode() })
-            .toList();
-
-        var genreTranslations = genreTranslationRepository.findByGenreIdsAndLanguageCodes(genreIdsLanguageCodesTuple, pageable);
-
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
-    }
-
-    @Override
     public boolean existsById(Long id) {
+
+        if (id == null) throw new EmptyRequestException();
+
         return genreTranslationRepository.existsById(id);
     }
 
@@ -153,9 +130,9 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
 
         if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
 
-        var uniqueIds = ids.stream().distinct().toList();
+        Set<Long> uniqueIds = new HashSet<>(ids);
 
-        var genreTranslations = genreTranslationRepository.findByIdIn(uniqueIds);
+        var genreTranslations = genreTranslationRepository.findByIdIn(List.copyOf(uniqueIds));
 
         return uniqueIds.size() == genreTranslations.size();
     }
@@ -185,7 +162,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
 
         if (genreIdsLanguageCodes == null || genreIdsLanguageCodes.isEmpty()) throw new EmptyRequestException();
 
-        var uniqueGenreIdsLanguageCodes = genreIdsLanguageCodes.stream().distinct().toList();
+        Set<GenreLanguagePair> uniqueGenreIdsLanguageCodes = new HashSet<>(genreIdsLanguageCodes);
 
         List<Object[]> genreIdsLanguageCodesTuple = uniqueGenreIdsLanguageCodes.stream()
             .map(gl -> new Object[] { gl.genreId(), gl.languageCode() })

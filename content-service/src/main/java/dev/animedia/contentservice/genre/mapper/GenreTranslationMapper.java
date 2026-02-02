@@ -1,15 +1,11 @@
 package dev.animedia.contentservice.genre.mapper;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import dev.animedia.contentservice.genre.dto.request.CreateGenreTranslationRequestDto;
-import dev.animedia.contentservice.genre.dto.request.UpdateGenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.model.GenreTranslation;
@@ -26,6 +22,7 @@ public class GenreTranslationMapper {
     public GenreTranslationResponseDto toGenreTranslationResponseDto(GenreTranslation genreTranslation) {
         return new GenreTranslationResponseDto(
             genreTranslation.getId(),
+            genreTranslation.getGenre().getId(),
             genreTranslation.getLanguage().getCode(),
             genreTranslation.getName(),
             genreTranslation.getDescription()
@@ -56,30 +53,9 @@ public class GenreTranslationMapper {
         return genreTranslation;
     }
 
-    public GenreTranslation toGenreTranslation(UpdateGenreTranslationRequestDto requestDto) {
-
-        GenreTranslation genreTranslation = new GenreTranslation();
-        genreTranslation.setId(requestDto.id());
-        genreTranslation.setName(requestDto.name());
-        genreTranslation.setDescription(requestDto.description());
-
-        return genreTranslation;
-    }
-
     public List<GenreTranslation> toGenreTranslationsFromCreate(List<CreateGenreTranslationRequestDto> requestsDto) {
-        return toGenreTranslations(requestsDto, this::toGenreTranslation);
-    }
-
-    public List<GenreTranslation> toGenreTranslationsFromUpdate(List<UpdateGenreTranslationRequestDto> requestsDto) {
-        return toGenreTranslations(requestsDto, this::toGenreTranslation);
-    }
-
-    private <T> List<GenreTranslation> toGenreTranslations(
-        List<T> requestsDto,
-        Function<T, GenreTranslation> mapper
-    ) {
-        return requestsDto.stream().map(mapper)
-            .filter(Objects::nonNull)
+        return requestsDto.stream()
+            .map(this::toGenreTranslation)
             .toList();
     }
 }
