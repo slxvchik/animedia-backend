@@ -4,9 +4,7 @@ import dev.animedia.contentservice.app.exception.common.EmptyRequestException;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;
-import dev.animedia.contentservice.genre.model.GenreTranslation;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,6 @@ import dev.animedia.contentservice.genre.service.GenreQueryService;
 
 import java.util.List;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,18 +27,16 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
     private final GenreTranslationQueryService genreTranslationQueryService;
     private final GenreMapper genreMapper;
-    private final GenreQueryService genreQueryService;
 
     @Autowired
     public GenreQueryServiceImpl(
         GenreRepository genreRepository,
         GenreTranslationQueryService genreTranslationQueryService,
-        GenreMapper genreMapper,
-        GenreQueryService genreQueryService) {
+        GenreMapper genreMapper
+    ) {
         this.genreRepository = genreRepository;
         this.genreTranslationQueryService = genreTranslationQueryService;
         this.genreMapper = genreMapper;
-        this.genreQueryService = genreQueryService;
     }
 
     @Override
@@ -205,6 +200,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
     public boolean existsById(Long id) {
 
         if (id == null) throw new EmptyRequestException();
+
         return genreRepository.existsById(id);
     }
 

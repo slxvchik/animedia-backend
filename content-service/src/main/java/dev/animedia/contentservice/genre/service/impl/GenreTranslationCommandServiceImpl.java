@@ -160,7 +160,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         var allGenreTranslationsExists = genreTranslationQueryService.existsAllByIds(genreTranslationIds);
         if (!allGenreTranslationsExists) throw new GenreTranslationsNotFoundException();
 
-        genreTranslationRepository.deleteAllById(genreTranslationIds);
+        genreTranslationRepository.deleteAllByIdInBatch(genreTranslationIds);
     }
 
 }

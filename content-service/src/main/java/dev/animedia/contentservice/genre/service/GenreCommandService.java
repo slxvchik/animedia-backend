@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface GenreCommandService {
 
-    GenreResponseDto create(CreateGenreRequestDto genre);
-    List<GenreResponseDto> create(List<CreateGenreRequestDto> genre);
+    GenreResponseDto create(CreateGenreRequestDto createGenreRequestDto);
+    List<GenreResponseDto> create(List<CreateGenreRequestDto> createGenresRequestDto);
 
-    GenreResponseDto update(UpdateGenreRequestDto genre);
+    GenreResponseDto update(UpdateGenreRequestDto updateGenreRequestDto);
     
     void delete(Long id);
     void delete(List<Long> id);
