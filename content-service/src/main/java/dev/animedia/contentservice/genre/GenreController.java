@@ -1,14 +1,21 @@
 package dev.animedia.contentservice.genre;
 
+import dev.animedia.contentservice.app.dto.AppResponseDto;
+import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
+import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.exception.GenreInvalidSearchTypeException;
+import dev.animedia.contentservice.genre.service.GenreCommandService;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 
+import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +30,16 @@ public class GenreController {
         ALIAS
     }
 
-    private final GenreQueryService genreService;
+    private final GenreQueryService genreQueryService;
+    private final GenreCommandService genreCommandService;
 
     @Autowired
-    public GenreController(GenreQueryService genreService) {
-        this.genreService = genreService;
+    public GenreController(
+        GenreQueryService genreQueryService,
+        GenreCommandService genreCommandService
+    ) {
+        this.genreQueryService = genreQueryService;
+        this.genreCommandService = genreCommandService;
     }
 
     @GetMapping("/all")
@@ -39,7 +51,7 @@ public class GenreController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<GenreWithTranslationResponseDto>> search(
+    public ResponseEntity<AppResponseDto<Page<GenreWithTranslationsResponseDto>>> search(
         @PageableDefault(sort = {"sort"})
         Pageable pageable,
         @RequestParam GenreSearchType type,
@@ -47,31 +59,37 @@ public class GenreController {
     ) {
 
         List<String> valuesRequest = List.of(values.split(","));
-        List<Genre> genres;
+        Page<GenreWithTranslationsResponseDto> genres;
         switch (type) {
             case ID -> {
-                genres = genreService.getGenresByIds(pageable, valuesRequest);
+
+                var genreIds = valuesRequest.stream().map(Long::parseLong).toList();
+
+                genres = genreQueryService.findByIds(genreIds, pageable);
             }
-            case ALIAS -> {
-                genres = genreService.getGenresByAliases(pageable, valuesRequest);
-            }
+            case ALIAS -> genres = genreQueryService.findByAliases(valuesRequest, pageable);
             default -> throw new GenreInvalidSearchTypeException();
         }
-        return null;
+        return ResponseEntity.ok(AppResponseDto.success(genres));
     }
 
     @PostMapping
-    public Genre create(@RequestBody Genre genre) {
-        return null;
+    public ResponseEntity<AppResponseDto<GenreResponseDto>> create(@RequestBody CreateGenreRequestDto createGenreRequestDto) {
+
+        var createdGenre = genreCommandService.create(createGenreRequestDto);
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(AppResponseDto.success(createdGenre));
     }
 
     @PutMapping("/{id}")
-    public Genre update(@PathVariable Long id, @RequestBody Genre genre) {
+    public ResponseEntity<AppResponseDto<Page<GenreWithTranslationResponseDto>>> update(@PathVariable Long id, @RequestBody Genre genre) {
         return null;
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-
+    public ResponseEntity<AppResponseDto<Void>> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(AppResponseDto.success(null));
     }
 }

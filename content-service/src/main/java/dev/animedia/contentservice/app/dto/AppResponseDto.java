@@ -16,11 +16,11 @@ public class AppResponseDto<T> {
     }
 
     public static <T> AppResponseDto<T> success(T data) {
-        return new AppResponseDto<T>(ResponseStatus.SUCCESS, data, null);
+        return new AppResponseDto<>(ResponseStatus.SUCCESS, data, null);
     }
 
     public static <T> AppResponseDto<T> error(String error) {
-        return new AppResponseDto<T>(ResponseStatus.ERROR, null, error);
+        return new AppResponseDto<>(ResponseStatus.ERROR, null, error);
     }
 
     public ResponseStatus getStatus() {

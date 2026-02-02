@@ -5,7 +5,6 @@ import dev.animedia.contentservice.genre.exception.*;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
-import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,6 @@ import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
 import dev.animedia.contentservice.genre.dto.request.UpdateGenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.repository.GenreRepository;
-import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreCommandService;
 
 import java.util.*;
@@ -25,7 +23,6 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     private final GenreRepository genreRepository;
 
     private final GenreQueryService genreQueryService;
-    private final GenreTranslationQueryService genreTranslationQueryService;
 
     private final GenreMapper genreMapper;
 
@@ -35,12 +32,10 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     public GenreCommandServiceImpl(
         GenreRepository genreRepository,
         GenreQueryService genreQueryService,
-        GenreTranslationQueryService genreTranslationQueryService,
         GenreMapper genreMapper
     ) {
         this.genreRepository = genreRepository;
         this.genreQueryService = genreQueryService;
-        this.genreTranslationQueryService = genreTranslationQueryService;
         this.genreMapper = genreMapper;
     }
 

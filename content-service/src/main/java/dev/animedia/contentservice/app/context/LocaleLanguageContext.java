@@ -1,20 +1,26 @@
 package dev.animedia.contentservice.app.context;
 
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LocaleLanguageContext {
     private static final ThreadLocal<Locale> LANGUAGE_HOLDER = new ThreadLocal<>();
     private static final Locale DEFAULT_LANGUAGE = Locale.of("en");
+    private static final Logger LOGGER = Logger.getLogger(LocaleLanguageContext.class.getName());
+
+    private LocaleLanguageContext() {}
     
     public static void setLocaleLanguage(String languageCode) {
         if (languageCode == null || languageCode.isBlank()) {
             LANGUAGE_HOLDER.set(DEFAULT_LANGUAGE);
         } else {
             try {
-                String normilizedLanguageCode = languageCode.trim().toLowerCase().substring(0, 2);
-                Locale languageLocale = Locale.of(normilizedLanguageCode);
+                String normalizedLanguageCode = languageCode.trim().toLowerCase().substring(0, 2);
+                Locale languageLocale = Locale.of(normalizedLanguageCode);
                 LANGUAGE_HOLDER.set(languageLocale);
-            } catch (Exception e) {
+            } catch (Exception exception) {
+                LOGGER.log(Level.SEVERE, "Дocale installation error: {0}", exception.getMessage());
                 LANGUAGE_HOLDER.set(DEFAULT_LANGUAGE);
             }
         }
