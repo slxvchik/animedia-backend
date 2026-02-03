@@ -1,10 +1,11 @@
 package dev.animedia.contentservice.genre.exception;
 
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.genre.GenreConstants;
 import org.springframework.http.HttpStatus;
 
 public class GenreTranslationAlreadyExistsException extends AppException {
     public GenreTranslationAlreadyExistsException() {
-        super(HttpStatus.CONFLICT, "GENRE_TRANSLATION_ALREADY_EXISTS");
+        super(HttpStatus.CONFLICT, GenreConstants.GENRE_TRANSLATION_EXISTS_MESSAGE);
     }
 }
