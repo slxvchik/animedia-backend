@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface GenreQueryService {
 
-    List<GenreResponseDto> findAll();
+    GenreResponseDto findById(Long id);
     List<GenreResponseDto> findByIds(List<Long> ids);
     List<GenreResponseDto> findByAliases(List<String> aliases);
 
-    List<GenreWithTranslationResponseDto> findByLanguage(String languageCode);
     List<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode);
+    List<GenreWithTranslationResponseDto> findByAliasAndLanguage(String alias, String languageCode);
     List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode);
 
     boolean existsById(Long id);

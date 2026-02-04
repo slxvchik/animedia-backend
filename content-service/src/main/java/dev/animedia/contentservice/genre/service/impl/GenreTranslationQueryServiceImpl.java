@@ -32,14 +32,6 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
-    public List<GenreTranslationResponseDto> findAll() {
-
-        var genreTranslations = genreTranslationRepository.findAll();
-
-        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations);
-    }
-
-    @Override
     public GenreTranslationResponseDto findById(Long id) {
 
         var genreTranslation = genreTranslationRepository.findById(id)
@@ -60,12 +52,22 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
+    public List<GenreTranslationResponseDto> findByLanguageCode(String languageCode) {
+        return null;
+    }
+
+    @Override
     public List<GenreTranslationResponseDto> findByGenreId(Long genreId) {
 
         var genreTranslations = genreTranslationRepository.findByGenreId(genreId);
         if (genreTranslations.isEmpty()) throw new GenreTranslationsNotFoundException();
         
         return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations);
+    }
+
+    @Override
+    public List<GenreTranslationResponseDto> findByGenreIds(List<Long> genreIds) {
+        return null;
     }
 
     @Override

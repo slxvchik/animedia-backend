@@ -7,14 +7,12 @@ import java.util.List;
 
 public interface GenreTranslationQueryService {
 
-
-    List<GenreTranslationResponseDto> findAll();
-
     GenreTranslationResponseDto findById(Long id);
     List<GenreTranslationResponseDto> findByIds(List<Long> ids);
 
     List<GenreTranslationResponseDto> findByLanguageCode(String languageCode);
     List<GenreTranslationResponseDto> findByGenreId(Long genreId);
+    List<GenreTranslationResponseDto> findByGenreIds(List<Long> genreIds);
     List<GenreTranslationResponseDto> findByGenreIdsAndLanguageCode(List<Long> genreIds, String languageCode);
 
     boolean existsById(Long id);

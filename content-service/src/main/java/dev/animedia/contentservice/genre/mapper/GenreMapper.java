@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -74,4 +75,42 @@ public class GenreMapper {
 	public Page<GenreResponseDto> toPageGenreResponseDto(Page<Genre> genres) {
         return genres.map(this::toGenreResponseDto);
 	}
+
+    public GenreWithTranslationsResponseDto toGenreWithTranslationsResponseDto(
+        GenreResponseDto genreResponseDto,
+        List<GenreTranslationResponseDto> genreTranslationsResponseDto
+    ) {
+        return new GenreWithTranslationsResponseDto(
+            genreResponseDto.id(),
+            genreResponseDto.alias(),
+            genreResponseDto.sort(),
+            genreTranslationsResponseDto
+        );
+    }
+
+    public List<GenreWithTranslationsResponseDto> toGenresWithTranslationsResponseDto(
+        List<GenreResponseDto> genresResponseDto,
+        List<GenreTranslationResponseDto> genresTranslationsResponseDto
+    ) {
+        // GenreId, GenreTranslationResponseDto
+        Map<Long, List<GenreTranslationResponseDto>> genreTranslationsMap = new HashMap<>();
+
+        for (var genreTranslationResponseDto : genresTranslationsResponseDto) {
+            if (genreTranslationsMap.containsKey(genreTranslationResponseDto.genreId())) {
+                genreTranslationsMap.get(genreTranslationResponseDto.genreId()).add(genreTranslationResponseDto);
+            } else {
+                genreTranslationsMap.put(
+                    genreTranslationResponseDto.genreId(),
+                    List.of(genreTranslationResponseDto)
+                );
+            }
+        }
+
+        return genresResponseDto.stream()
+                .map(genre -> this.toGenreWithTranslationsResponseDto(
+                    genre,
+                    genreTranslationsMap.get(genre.id())
+                ))
+                .toList();
+    }
 }

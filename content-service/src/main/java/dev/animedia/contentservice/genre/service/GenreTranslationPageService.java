@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface GenreTranslationPageService {
 	Page<GenreTranslationResponseDto> findAll(Pageable pageable);
-	Page<GenreTranslationResponseDto> findByIds(List<Long> ids, Pageable pageable);
 	Page<GenreTranslationResponseDto> findByGenreId(Long genreId, Pageable pageable);
 	Page<GenreTranslationResponseDto> findByLanguageCode(String languageCode, Pageable pageable);
 }

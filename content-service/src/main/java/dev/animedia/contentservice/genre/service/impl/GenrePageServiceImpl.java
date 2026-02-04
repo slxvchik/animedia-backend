@@ -49,23 +49,89 @@ public class GenrePageServiceImpl implements GenrePageService {
     }
 
     @Override
-    public Page<GenreResponseDto> findAll(Pageable pageable) {
+    public Page<GenreWithTranslationsResponseDto> findAll(Pageable pageable) {
+
         var genres = genreRepository.findAll(pageable);
-        return genreMapper.toPageGenreResponseDto(genres);
+
+        if (genres.getContent().isEmpty()) return Page.empty(pageable);
+
+        var genreIds = genres.map(Genre::getId).toList();
+        var genresResponseDto = genreMapper.toGenresResponseDto(genres.getContent());
+
+        var genresTranslationsResponseDto = genreTranslationQueryService.findByGenreIds(genreIds);
+
+        List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationsResponseDto(genresResponseDto, genresTranslationsResponseDto);
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genres::getTotalElements
+        );
     }
 
     @Override
-    public Page<GenreResponseDto> findByIds(List<Long> ids, Pageable pageable) {
-        Set<Long> uniqueIds = new HashSet<>(ids);
-        var genres = genreRepository.findByIdIn(List.copyOf(uniqueIds), pageable);
-        return genreMapper.toPageGenreResponseDto(genres);
+    public Page<GenreWithTranslationsResponseDto> findByAlias(String alias, Pageable pageable) {
+
+        var genres = genreRepository.findByAliasLike(alias, pageable);
+
+        if (genres.getContent().isEmpty()) return Page.empty(pageable);
+
+        var genreIds = genres.map(Genre::getId).toList();
+        var genresResponseDto = genreMapper.toGenresResponseDto(genres.getContent());
+
+        var genresTranslationsResponseDto = genreTranslationQueryService.findByGenreIds(genreIds);
+
+        List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationsResponseDto(genresResponseDto, genresTranslationsResponseDto);
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genres::getTotalElements
+        );
     }
 
     @Override
-    public Page<GenreResponseDto> findByAliases(List<String> aliases, Pageable pageable) {
-        Set<String> uniqueAliases = new HashSet<>(aliases);
-        var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases), Pageable.unpaged());
-        return genreMapper.toPageGenreResponseDto(genres);
+    public Page<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases, Pageable pageable) {
+
+        var uniqueAliases = new HashSet<>(aliases);
+
+        var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases), pageable);
+
+        if (genres.getContent().isEmpty()) return Page.empty(pageable);
+
+        var genreIds = genres.map(Genre::getId).toList();
+        var genresResponseDto = genreMapper.toGenresResponseDto(genres.getContent());
+
+        var genresTranslationsResponseDto = genreTranslationQueryService.findByGenreIds(genreIds);
+
+        List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationsResponseDto(genresResponseDto, genresTranslationsResponseDto);
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genres::getTotalElements
+        );
+    }
+
+    @Override
+    public Page<GenreWithTranslationResponseDto> findByAlias(String alias, String languageCode, Pageable pageable) {
+
+        var genres = genreRepository.findByAliasLike(alias, pageable);
+
+        if (genres.getContent().isEmpty()) return Page.empty(pageable);
+
+        var genreIds = genres.map(Genre::getId).toList();
+        var genresResponseDto = genreMapper.toGenresResponseDto(genres.getContent());
+
+        var genresTranslationsResponseDto = genreTranslationQueryService.findByGenreIdsAndLanguageCode(genreIds, languageCode);
+
+        List<GenreWithTranslationResponseDto> genresWithTranslationsResponseDto = genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslationsResponseDto);
+
+        return PageableExecutionUtils.getPage(
+            genresWithTranslationsResponseDto,
+            pageable,
+            genres::getTotalElements
+        );
     }
 
     @Override
@@ -87,32 +153,6 @@ public class GenrePageServiceImpl implements GenrePageService {
             genresWithTranslation,
             pageable,
             genreTranslations::getTotalElements
-        );
-    }
-
-    @Override
-    public Page<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode, Pageable pageable) {
-
-        Set<Long> uniqueIds = new HashSet<>(ids);
-
-        Page<Genre> genres = genreRepository.findByIdIn(List.copyOf(uniqueIds), pageable);
-
-        if (genres.getContent().isEmpty()) return Page.empty(pageable);
-
-        var foundGenresResponseDto = genreMapper.toGenresResponseDto(genres.getContent());
-        var foundGenresId = genres.map(Genre::getId).toList();
-
-        List<GenreTranslationResponseDto> genresTranslation = genreTranslationQueryService.findByGenreIdsAndLanguageCode(foundGenresId, languageCode);
-
-        List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto = genreMapper.toGenresWithTranslationResponseDto(
-            foundGenresResponseDto,
-            genresTranslation
-        );
-
-        return PageableExecutionUtils.getPage(
-            genresWithTranslationResponseDto,
-            pageable,
-            genres::getTotalElements
         );
     }
 
@@ -141,5 +181,4 @@ public class GenrePageServiceImpl implements GenrePageService {
             genres::getTotalElements
         );
     }
-
 }

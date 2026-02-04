@@ -4,6 +4,7 @@ import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
+import dev.animedia.contentservice.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.genre.exception.GenresNotFoundException;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;
@@ -37,9 +38,9 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	}
 
 	@Override
-	public List<GenreResponseDto> findAll() {
-		var genres = genreRepository.findAll();
-		return genreMapper.toGenresResponseDto(genres);
+	public GenreResponseDto findById(Long id) {
+		var genre = genreRepository.findById(id).orElseThrow(GenreNotFoundException::new);
+		return genreMapper.toGenreResponseDto(genre);
 	}
 
 	@Override
@@ -52,25 +53,6 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	public List<GenreResponseDto> findByAliases(List<String> aliases) {
 		var genres = genreRepository.findByAliasIn(aliases);
 		return genreMapper.toGenresResponseDto(genres);
-	}
-
-	@Override
-	public List<GenreWithTranslationResponseDto> findByLanguage(String languageCode) {
-
-		var genresTranslations = genreTranslationQueryService.findByLanguageCode(languageCode);
-
-		if (genresTranslations.isEmpty()) return List.of();
-
-		var genresId = genresTranslations.stream().map(GenreTranslationResponseDto::genreId).toList();
-
-		// Some genres not found for translations
-		if (!this.existsAllByIds(genresId)) throw new GenresNotFoundException();
-
-		var genres = genreRepository.findByIdIn(genresId);
-
-		var genresResponseDto = genreMapper.toGenresResponseDto(genres);
-
-		return genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslations);
 	}
 
 	@Override
@@ -87,6 +69,11 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 		var genresResponseDto = genreMapper.toGenresResponseDto(genres);
 
 		return genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslationResponseDto);
+	}
+
+	@Override
+	public List<GenreWithTranslationResponseDto> findByAliasAndLanguage(String alias, String languageCode) {
+		return null;
 	}
 
 	@Override
