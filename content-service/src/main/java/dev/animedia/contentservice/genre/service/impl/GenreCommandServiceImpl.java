@@ -15,7 +15,6 @@ import dev.animedia.contentservice.genre.repository.GenreRepository;
 import dev.animedia.contentservice.genre.service.GenreCommandService;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Service
 public class GenreCommandServiceImpl implements GenreCommandService {
@@ -25,8 +24,6 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     private final GenreQueryService genreQueryService;
 
     private final GenreMapper genreMapper;
-
-    private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,5}$");
 
     @Autowired
     public GenreCommandServiceImpl(
@@ -42,11 +39,11 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     @Override
     public GenreResponseDto create(CreateGenreRequestDto createGenreRequestDto) {
 
-        if (createGenreRequestDto == null) throw new EmptyRequestException();
-
-        if (createGenreRequestDto.alias() == null || createGenreRequestDto.alias().isBlank()) throw new GenreAliasEmptyException();
-
-        if (!ALIAS_PATTERN.matcher(createGenreRequestDto.alias()).matches()) throw new GenreAliasInvalidCharsException();
+        /**
+         * Вынести в Lombok
+         * if (createGenreRequestDto.alias() == null || createGenreRequestDto.alias().isBlank()) throw new GenreAliasEmptyException();
+         * if (!ALIAS_PATTERN.matcher(createGenreRequestDto.alias()).matches()) throw new GenreAliasInvalidCharsException();
+         */
 
         var aliasExists = genreQueryService.existsByAlias(createGenreRequestDto.alias());
         if (aliasExists) throw new GenreAliasExistsException();
@@ -61,19 +58,13 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     @Override
     public List<GenreResponseDto> create(List<CreateGenreRequestDto> createGenresRequestDto) {
 
-        if (createGenresRequestDto == null || createGenresRequestDto.isEmpty()) throw new EmptyRequestException();
-
         Set<String> aliases = new HashSet<>();
 
         List<Genre> genres = new ArrayList<>();
 
         for (var createGenreDto : createGenresRequestDto) {
 
-            if (createGenreDto.alias() == null || createGenreDto.alias().isBlank()) throw new GenreAliasEmptyException();
-
             if (!aliases.add(createGenreDto.alias())) continue;
-
-            if (!ALIAS_PATTERN.matcher(createGenreDto.alias()).matches()) throw new GenreAliasInvalidCharsException();
 
             genres.add(genreMapper.toGenre(createGenreDto));
         }
@@ -86,14 +77,8 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     @Override
     public GenreResponseDto update(UpdateGenreRequestDto updateGenreRequestDto) {
 
-        if (updateGenreRequestDto == null) throw new EmptyRequestException();
-
         var genre = genreRepository.findById(updateGenreRequestDto.id())
             .orElseThrow(GenreNotFoundException::new);
-
-        if (updateGenreRequestDto.alias() == null || updateGenreRequestDto.alias().isBlank()) throw new GenreAliasEmptyException();
-
-        if (!ALIAS_PATTERN.matcher(updateGenreRequestDto.alias()).matches()) throw new GenreAliasInvalidCharsException();
 
         genre.setAlias(updateGenreRequestDto.alias());
         genre.setSort(updateGenreRequestDto.sort());
@@ -106,8 +91,6 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     @Override
     public void delete(Long id) {
 
-        if (id == null) throw new EmptyRequestException();
-
         var genreExists = genreQueryService.existsById(id);
         if (!genreExists) throw new GenreNotFoundException();
 
@@ -116,8 +99,6 @@ public class GenreCommandServiceImpl implements GenreCommandService {
 
     @Override
     public void delete(List<Long> ids) {
-
-        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
 
         var allGenresExists = genreQueryService.existsAllByIds(ids);
         if (!allGenresExists) throw new GenresNotFoundException();

@@ -19,10 +19,10 @@ import java.util.UUID;
     ),
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "uidx_comic_chapter_image_comic_chapter_uuid_language_id_image_url",
+            name = "uidx_comic_chapter_image_comic_chapter_uuid_language_code_image_url",
             columnNames = {
                 "comic_chapter_uuid",
-                "language_id",
+                "language_code",
                 "image_url"
             }
         )
@@ -38,7 +38,7 @@ public class ComicChapterImage {
     private ComicChapter comicChapter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_id", nullable = false)
+    @JoinColumn(name = "language_code", nullable = false)
     private Language language;
 
     @Column(name = "image_url", length = 512, nullable = false, unique = true)

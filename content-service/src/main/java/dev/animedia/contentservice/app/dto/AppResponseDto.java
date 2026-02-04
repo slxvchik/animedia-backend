@@ -1,15 +1,17 @@
 package dev.animedia.contentservice.app.dto;
 
+import java.util.List;
+
 public class AppResponseDto<T> {
     private final ResponseStatus status;
     private final T data;
-    private final String error;
+    private final List<String> error;
 
     private enum ResponseStatus {
         SUCCESS, ERROR
     }
 
-    private AppResponseDto(ResponseStatus status, T data, String error) {
+    private AppResponseDto(ResponseStatus status, T data, List<String> error) {
         this.status = status;
         this.data = data;
         this.error = error;
@@ -20,6 +22,10 @@ public class AppResponseDto<T> {
     }
 
     public static <T> AppResponseDto<T> error(String error) {
+        return new AppResponseDto<>(ResponseStatus.ERROR, null, List.of(error));
+    }
+
+    public static <T> AppResponseDto<T> error(List<String> error) {
         return new AppResponseDto<>(ResponseStatus.ERROR, null, error);
     }
 
@@ -31,7 +37,7 @@ public class AppResponseDto<T> {
         return data;
     }
 
-    public String getError() {
+    public List<String> getError() {
         return error;
     }
 }

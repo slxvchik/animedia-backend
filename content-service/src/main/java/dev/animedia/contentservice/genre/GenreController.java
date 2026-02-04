@@ -10,15 +10,20 @@ import dev.animedia.contentservice.genre.exception.GenreInvalidSearchTypeExcepti
 import dev.animedia.contentservice.genre.service.GenreCommandService;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 
-import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
@@ -74,7 +79,9 @@ public class GenreController {
     }
 
     @PostMapping
-    public ResponseEntity<AppResponseDto<GenreResponseDto>> create(@RequestBody CreateGenreRequestDto createGenreRequestDto) {
+    public ResponseEntity<AppResponseDto<GenreResponseDto>> create(
+        @RequestBody @Validated CreateGenreRequestDto createGenreRequestDto
+    ) {
 
         var createdGenre = genreCommandService.create(createGenreRequestDto);
 

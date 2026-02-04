@@ -20,7 +20,7 @@ public class LocaleLanguageContext {
                 Locale languageLocale = Locale.of(normalizedLanguageCode);
                 LANGUAGE_HOLDER.set(languageLocale);
             } catch (Exception exception) {
-                LOGGER.log(Level.SEVERE, "Дocale installation error: {0}", exception.getMessage());
+                LOGGER.log(Level.SEVERE, "Locale installation error: {0}", exception.getMessage());
                 LANGUAGE_HOLDER.set(DEFAULT_LANGUAGE);
             }
         }
@@ -37,6 +37,10 @@ public class LocaleLanguageContext {
 
     public static String getLocaleLanguageCode() {
         return getLocaleLanguage().getLanguage();
+    }
+
+    public static String getDefaultLocaleLanguageCode() {
+        return DEFAULT_LANGUAGE.getLanguage();
     }
 
     public static void clear() {

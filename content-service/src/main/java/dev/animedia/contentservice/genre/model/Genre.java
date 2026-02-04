@@ -43,5 +43,4 @@ public class Genre {
         this.sort = sort;
     }
 
-    
 }

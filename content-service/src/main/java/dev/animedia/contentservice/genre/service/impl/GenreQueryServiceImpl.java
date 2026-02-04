@@ -65,8 +65,6 @@ public class GenreQueryServiceImpl implements GenreQueryService {
     @Override
     public Page<GenreWithTranslationsResponseDto> findByIds(List<Long> ids, Pageable pageable) {
 
-        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
-
         Set<Long> uniqueIds = new HashSet<>(ids);
 
         var genres = genreRepository.findByIdIn(List.copyOf(uniqueIds), Pageable.unpaged());
@@ -91,8 +89,6 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
     @Override
     public Page<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases, Pageable pageable) {
-
-        if (aliases == null || aliases.isEmpty()) throw new EmptyRequestException();
 
         Set<String> uniqueAliases = new HashSet<>(aliases);
 
@@ -119,8 +115,6 @@ public class GenreQueryServiceImpl implements GenreQueryService {
     @Override
     public Page<GenreWithTranslationResponseDto> findByLanguage(String languageCode, Pageable pageable) {
 
-        if (languageCode == null) throw new EmptyRequestException();
-
         Page<GenreTranslationResponseDto> genreTranslations = genreTranslationQueryService.findByLanguageCode(languageCode, pageable);
 
         var genreIds = genreTranslations.stream()
@@ -145,8 +139,6 @@ public class GenreQueryServiceImpl implements GenreQueryService {
     @Override
     public Page<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode, Pageable pageable) {
 
-        if (ids == null || ids.isEmpty() || languageCode == null) throw new EmptyRequestException();
-
         Page<GenreTranslationResponseDto> genresTranslation = genreTranslationQueryService.findByGenreIdsAndLanguageCode(ids, languageCode, pageable);
 
         var genreIds = genresTranslation.stream()
@@ -170,8 +162,6 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
     @Override
     public Page<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode, Pageable pageable) {
-
-        if (aliases == null || aliases.isEmpty() || languageCode == null) throw new EmptyRequestException();
 
         Set<String> uniqueAliases = new HashSet<>(aliases);
 
@@ -198,24 +188,16 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
     @Override
     public boolean existsById(Long id) {
-
-        if (id == null) throw new EmptyRequestException();
-
         return genreRepository.existsById(id);
     }
 
     @Override
     public boolean existsAnyByIds(List<Long> ids) {
-
-        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
-
         return genreRepository.existsByIdIn(ids);
     }
 
     @Override
     public boolean existsAllByIds(List<Long> ids) {
-
-        if (ids == null || ids.isEmpty()) throw new EmptyRequestException();
 
         Set<Long> uniqueIds = new HashSet<>(ids);
 
@@ -226,24 +208,16 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
     @Override
     public boolean existsByAlias(String alias) {
-
-        if (alias == null) throw new EmptyRequestException();
-
         return genreRepository.existsByAlias(alias);
     }
 
     @Override
     public boolean existsAnyByAliases(List<String> aliases) {
-
-        if (aliases == null || aliases.isEmpty()) throw new EmptyRequestException();
-
         return genreRepository.existsByAliasIn(aliases);
     }
 
     @Override
     public boolean existsAllByAliases(List<String> aliases) {
-
-        if (aliases == null || aliases.isEmpty()) throw new EmptyRequestException();
 
         Set<String> uniqueAliases = new HashSet<>(aliases);
 

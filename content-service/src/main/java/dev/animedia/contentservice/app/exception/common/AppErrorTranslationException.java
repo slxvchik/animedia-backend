@@ -15,10 +15,10 @@ public class AppErrorTranslationException extends RuntimeException {
     public String getMessage(String lang) {
         switch (lang) {
             case "ru" -> {
-                return "Произошла внутрення ошибка при переводе";
+                return "Произошла внутрення ошибка при переводе ошибки";
             }
             default -> {
-                return "An internal error occurred during the translation";
+                return "An internal error occurred while translating the error";
             }
         }
     }
