@@ -1,22 +1,19 @@
 package dev.animedia.contentservice.genre.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 
 import java.util.List;
 
 public interface GenreQueryService {
 
-    Page<GenreWithTranslationsResponseDto> findAll(Pageable pageable);
-    Page<GenreWithTranslationsResponseDto> findByIds(List<Long> ids, Pageable pageable);
-    Page<GenreWithTranslationsResponseDto> findByAliases(List<String> aliases, Pageable pageable);
+    List<GenreResponseDto> findAll();
+    List<GenreResponseDto> findByIds(List<Long> ids);
+    List<GenreResponseDto> findByAliases(List<String> aliases);
 
-    Page<GenreWithTranslationResponseDto> findByLanguage(String languageCode, Pageable pageable);
-    Page<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode, Pageable pageable);
-    Page<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode, Pageable pageable);
+    List<GenreWithTranslationResponseDto> findByLanguage(String languageCode);
+    List<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode);
+    List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode);
 
     boolean existsById(Long id);
     boolean existsAnyByIds(List<Long> ids);

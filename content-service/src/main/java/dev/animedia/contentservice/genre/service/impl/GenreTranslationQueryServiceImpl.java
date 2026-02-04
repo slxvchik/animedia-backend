@@ -32,11 +32,11 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
-    public Page<GenreTranslationResponseDto> findAll(Pageable pageable) {
+    public List<GenreTranslationResponseDto> findAll() {
 
-        var genreTranslations = genreTranslationRepository.findAll(pageable);
+        var genreTranslations = genreTranslationRepository.findAll();
 
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
+        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations);
     }
 
     @Override
@@ -49,52 +49,34 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
-    public Page<GenreTranslationResponseDto> findByIds(List<Long> ids, Pageable pageable) {
+    public List<GenreTranslationResponseDto> findByIds(List<Long> ids) {
 
         Set<Long> uniqueIds = new HashSet<>(ids);
 
-        var genreTranslations = genreTranslationRepository.findByIdIn(List.copyOf(uniqueIds), pageable);
-        if (genreTranslations.getTotalElements() != uniqueIds.size()) throw new GenreTranslationsNotFoundException();
+        var genreTranslations = genreTranslationRepository.findByIdIn(List.copyOf(uniqueIds));
+        if (genreTranslations.size() != uniqueIds.size()) throw new GenreTranslationsNotFoundException();
 
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
+        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations);
     }
 
     @Override
-    public Page<GenreTranslationResponseDto> findByGenreId(Long genreId, Pageable pageable) {
+    public List<GenreTranslationResponseDto> findByGenreId(Long genreId) {
 
-        var genreTranslations = genreTranslationRepository.findByGenreId(genreId, pageable);
-        if (genreTranslations.getTotalElements() == 0) throw new GenreTranslationsNotFoundException();
+        var genreTranslations = genreTranslationRepository.findByGenreId(genreId);
+        if (genreTranslations.isEmpty()) throw new GenreTranslationsNotFoundException();
         
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
+        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations);
     }
 
     @Override
-    public Page<GenreTranslationResponseDto> findByGenreIds(List<Long> genreIds, Pageable pageable) {
-
-        var genreTranslations = genreTranslationRepository.findByGenreIdIn(genreIds, pageable);
-        if (genreTranslations.getTotalElements() == 0) throw new GenreTranslationsNotFoundException();
-
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
-    }
-
-    @Override
-    public Page<GenreTranslationResponseDto> findByGenreIdsAndLanguageCode(List<Long> genreIds, String languageCode, Pageable pageable) {
+    public List<GenreTranslationResponseDto> findByGenreIdsAndLanguageCode(List<Long> genreIds, String languageCode) {
 
         Set<Long> uniqueGenreIds = new HashSet<>(genreIds);
 
-        var genreTranslations = genreTranslationRepository.findByGenreIdInAndLanguageCode(List.copyOf(uniqueGenreIds), languageCode, pageable);
-        if (genreTranslations.getTotalElements() != uniqueGenreIds.size()) throw new GenreTranslationsNotFoundException();
+        var genreTranslations = genreTranslationRepository.findByGenreIdInAndLanguageCode(List.copyOf(uniqueGenreIds), languageCode);
+        if (genreTranslations.size() != uniqueGenreIds.size()) throw new GenreTranslationsNotFoundException();
 
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
-    }
-
-    @Override
-    public Page<GenreTranslationResponseDto> findByLanguageCode(String languageCode, Pageable pageable) {
-
-        var genreTranslations = genreTranslationRepository.findByLanguageCode(languageCode, pageable);
-        if (genreTranslations.getTotalElements() == 0) throw new GenreTranslationsNotFoundException();
-
-        return genreTranslationMapper.toPageGenreTranslationResponseDto(genreTranslations);
+        return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslations);
     }
 
     @Override

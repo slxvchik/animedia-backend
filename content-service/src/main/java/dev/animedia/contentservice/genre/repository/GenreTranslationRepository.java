@@ -18,13 +18,16 @@ public interface GenreTranslationRepository extends JpaRepository<GenreTranslati
     List<GenreTranslation> findByIdIn(List<Long> genreIds);
     Page<GenreTranslation> findByIdIn(List<Long> genreIds, Pageable pageable);
 
+    List<GenreTranslation> findByGenreId(Long genreId);
     Page<GenreTranslation> findByGenreId(Long genreId, Pageable pageable);
-    Page<GenreTranslation> findByGenreIdIn(List<Long> genreIds, Pageable pageable);
 
+    List<GenreTranslation> findByLanguageCode(String languageCode);
     Page<GenreTranslation> findByLanguageCode(String languageCode, Pageable pageable);
+
     Page<GenreTranslation> findByLanguageCodeIn(List<String> languageCodes, Pageable pageable);
 
     Optional<GenreTranslation> findByGenreIdAndLanguageCode(Long genreId, String languageCode);
+    List<GenreTranslation> findByGenreIdInAndLanguageCode(List<Long> genreIds, String languageCode);
     Page<GenreTranslation> findByGenreIdInAndLanguageCode(List<Long> genreIds, String languageCode, Pageable pageable);
 
     @Query("SELECT gt FROM GenreTranslation gt WHERE (gt.genre.id, gt.language.code) IN :pairs")
@@ -35,5 +38,6 @@ public interface GenreTranslationRepository extends JpaRepository<GenreTranslati
 
     @Query("SELECT count(gt) > 0 FROM GenreTranslation gt WHERE (gt.genre.id, gt.language.code) IN :pairs")
     boolean existsByGenreIdAndLanguageCodePairs(@Param("pairs") List<Object[]> pairs);
+
 
 }

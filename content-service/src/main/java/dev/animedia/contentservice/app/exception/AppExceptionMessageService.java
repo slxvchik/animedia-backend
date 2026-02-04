@@ -11,10 +11,11 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class AppExceptionMessageService {
@@ -23,6 +24,8 @@ public class AppExceptionMessageService {
 
     @Value("${application.exception.locale.path}")
     private String exceptionLocalePath;
+
+    private static final Logger LOGGER = Logger.getLogger(AppExceptionMessageService.class.getName());
 
     public List<String> getExceptionMessage(String exceptionCode, String languageCode) throws IOException {
         return this.getExceptionMessage(List.of(exceptionCode), languageCode);
@@ -85,6 +88,7 @@ public class AppExceptionMessageService {
                 new TypeReference<>() {}
             );
         } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error reading a file with translation errors: {0}", ex.getMessage());
             return Map.of();
         }
 

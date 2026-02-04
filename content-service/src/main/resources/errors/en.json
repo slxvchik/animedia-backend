@@ -1,30 +1,24 @@
 {
-  "EMPTY_REQUEST": "Request or one of the required fields is empty",
-  "VALIDATION_ERROR": "Field validation error",
-
-
-  "LANGUAGE_CODE_REQUIRED": "Language code is required",
-  "LANGUAGE_CODE_NOT_FOUND": "This language is not yet available",
-  "LANGUAGE_CODES_NOT_FOUND": "Some languages were not found",
-
-
-  "GENRE_INVALID_SEARCH_TYPE": "Invalid request type for genre search",
-
-  "GENRE_NOT_FOUND": "Genre not found",
-  "GENRES_NOT_FOUND": "Some genres were not found",
-  "GENRE_ID_REQUIRED": "Genre ID is required",
-  "GENRE_ALIAS_EXISTS": "A genre with this alias already exists",
-  "GENRE_ALIAS_REQUIRED": "Genre alias cannot be empty",
-  "GENRE_ALIAS_INVALID_CHARS": "Alias must be in lowercase, 2 to 10 characters per word, words can be separated by hyphens, maximum 5 words",
-  "GENRE_NAME_EXISTS": "A genre with this name already exists",
-  "GENRE_NAME_REQUIRED": "Genre name cannot be empty",
-
-  "GENRE_TRANSLATION_ID_REQUIRED": "Genre translation ID is required",
-  "GENRE_TRANSLATION_NAME_REQUIRED": "Genre translation name is required",
-  "GENRE_TRANSLATION_NOT_FOUND": "Genre translation not found",
-  "GENRE_TRANSLATIONS_NOT_FOUND": "Some genre translations were not found",
-  "GENRE_TRANSLATION_EXISTS": "This genre translation already exists",
-  "GENRE_TRANSLATIONS_EXISTS": "Some genre translations already exist",
-
-
+  "CLIENT_ERROR": "Request error.",
+  "SERVER_ERROR": "Internal server error.",
+  "EMPTY_REQUEST": "Request or one of the required fields is empty.",
+  "VALIDATION_ERROR": "Field validation error.",
+  "LANGUAGE_CODE_REQUIRED": "Language code is required.",
+  "LANGUAGE_CODE_NOT_FOUND": "This language is not yet available.",
+  "LANGUAGE_CODES_NOT_FOUND": "Some languages were not found.",
+  "GENRE_INVALID_SEARCH_TYPE": "Invalid request type for genre search.",
+  "GENRE_NOT_FOUND": "Genre not found.",
+  "GENRES_NOT_FOUND": "Some genres were not found.",
+  "GENRE_ID_REQUIRED": "Genre ID is required.",
+  "GENRE_ALIAS_EXISTS": "A genre with this alias already exists.",
+  "GENRE_ALIAS_REQUIRED": "Genre alias cannot be empty.",
+  "GENRE_ALIAS_INVALID_CHARS": "Alias must be in lowercase, 2 to 20 characters per word, words can be separated by hyphens, maximum 5 words.",
+  "GENRE_NAME_EXISTS": "A genre with this name already exists.",
+  "GENRE_NAME_REQUIRED": "Genre name cannot be empty.",
+  "GENRE_TRANSLATION_ID_REQUIRED": "Genre translation ID is required.",
+  "GENRE_TRANSLATION_NAME_REQUIRED": "Genre translation name is required.",
+  "GENRE_TRANSLATION_NOT_FOUND": "Genre translation not found.",
+  "GENRE_TRANSLATIONS_NOT_FOUND": "Some genre translations were not found.",
+  "GENRE_TRANSLATION_EXISTS": "This genre translation already exists.",
+  "GENRE_TRANSLATIONS_EXISTS": "Some genre translations already exist."
 }

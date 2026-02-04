@@ -17,14 +17,27 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LanguageInterceptor implements HandlerInterceptor {
 
     @Override
-    public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler,
-                                @Nullable Exception ex) throws Exception {
+    public void afterCompletion(
+        @NonNull
+        HttpServletRequest request,
+        @NonNull
+        HttpServletResponse response,
+        @NonNull
+        Object handler,
+        @Nullable
+        Exception ex
+    ) {
         LocaleLanguageContext.clear();
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)
-            throws Exception {
+    public boolean preHandle(
+        HttpServletRequest request,
+        @NonNull
+        HttpServletResponse response,
+        @NonNull
+        Object handler
+    ) {
         
         String languageCode = Optional.ofNullable(request.getCookies())
             .stream()

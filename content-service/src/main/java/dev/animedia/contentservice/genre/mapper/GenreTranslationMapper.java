@@ -58,4 +58,8 @@ public class GenreTranslationMapper {
             .map(this::toGenreTranslation)
             .toList();
     }
+
+	public List<GenreTranslationResponseDto> toGenreTranslationResponseDto(List<GenreTranslation> genreTranslations) {
+        return genreTranslations.stream().map(this::toGenreTranslationResponseDto).toList();
+	}
 }
