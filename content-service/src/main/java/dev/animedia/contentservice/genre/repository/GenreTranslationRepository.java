@@ -40,4 +40,7 @@ public interface GenreTranslationRepository extends JpaRepository<GenreTranslati
     boolean existsByGenreIdAndLanguageCodePairs(@Param("pairs") List<Object[]> pairs);
 
 
+    List<GenreTranslation> findByGenreIdIn(List<Long> genreIds);
+
+    Page<GenreTranslation> findByNameLike(String name, Pageable pageable);
 }

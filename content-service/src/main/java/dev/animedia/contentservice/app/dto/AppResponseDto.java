@@ -7,7 +7,7 @@ public class AppResponseDto<T> {
     private final T data;
     private final List<String> error;
 
-    private enum ResponseStatus {
+    public enum ResponseStatus {
         SUCCESS, ERROR
     }
 

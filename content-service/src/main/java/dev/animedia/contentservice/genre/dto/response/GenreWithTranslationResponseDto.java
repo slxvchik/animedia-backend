@@ -5,6 +5,7 @@ public record GenreWithTranslationResponseDto(
     String alias,
     Long sort,
     Long genreTranslationId,
+	String languageCode,
     String name,
     String description
 ) {

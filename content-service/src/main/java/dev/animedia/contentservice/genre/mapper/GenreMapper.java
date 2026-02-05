@@ -22,9 +22,25 @@ public class GenreMapper {
             genreResponseDto.alias(),
             genreResponseDto.sort(),
             genreTranslation.id(),
+            genreTranslation.languageCode(),
             genreTranslation.name(),
             genreTranslation.description()
         );
+    }
+
+    public List<GenreWithTranslationResponseDto> toGenreWithTranslationResponseDto(List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto) {
+        return genresWithTranslationsResponseDto.stream().map(
+            genreWithTranslationsResponseDto -> {
+                if (genreWithTranslationsResponseDto.translations().isEmpty()) return null;
+                GenreTranslationResponseDto genreTranslation = genreWithTranslationsResponseDto.translations().getFirst();
+                return new GenreWithTranslationResponseDto(
+                    genreWithTranslationsResponseDto.id(),
+                    genreWithTranslationsResponseDto.alias(),
+                    genreWithTranslationsResponseDto.sort(),
+                    genreTranslation.id(), genreTranslation.languageCode(), genreTranslation.name(), genreTranslation.description()
+                );
+            }
+        ).toList();
     }
 
     public GenreResponseDto toGenreResponseDto(Genre genre) {
@@ -40,11 +56,9 @@ public class GenreMapper {
     }
 
     public Genre toGenre(CreateGenreRequestDto createGenreRequestDto) {
-
         Genre genre = new Genre();
         genre.setAlias(createGenreRequestDto.alias());
         genre.setSort(createGenreRequestDto.sort());
-
         return genre;
     }
     
@@ -52,7 +66,6 @@ public class GenreMapper {
         List<GenreResponseDto> genres,
         List<GenreTranslationResponseDto> genreTranslations
     ) {
-
         // GenreId, GenreTranslationResponseDto
         Map<Long, GenreTranslationResponseDto> genreTranslationMap = genreTranslations.stream()
             .collect(
@@ -62,7 +75,6 @@ public class GenreMapper {
                     (first, second) -> first
                 )
             );
-
         return genres.stream()
             .filter(genre -> genreTranslationMap.containsKey(genre.id()))
             .map(genre -> this.toGenreWithTranslationResponseDto(
@@ -94,23 +106,74 @@ public class GenreMapper {
     ) {
         // GenreId, GenreTranslationResponseDto
         Map<Long, List<GenreTranslationResponseDto>> genreTranslationsMap = new HashMap<>();
-
         for (var genreTranslationResponseDto : genresTranslationsResponseDto) {
             if (genreTranslationsMap.containsKey(genreTranslationResponseDto.genreId())) {
                 genreTranslationsMap.get(genreTranslationResponseDto.genreId()).add(genreTranslationResponseDto);
             } else {
+                List<GenreTranslationResponseDto> genreTranslationsList = new ArrayList<>();
+                genreTranslationsList.add(genreTranslationResponseDto);
                 genreTranslationsMap.put(
                     genreTranslationResponseDto.genreId(),
-                    List.of(genreTranslationResponseDto)
+                    genreTranslationsList
+                );
+            }
+        }
+        return genresResponseDto.stream()
+            .map(genre -> this.toGenreWithTranslationsResponseDto(
+                genre,
+                genreTranslationsMap.get(genre.id())
+            ))
+            .toList();
+    }
+
+    public List<GenreWithTranslationsResponseDto> toGenresWithTranslationsResponseDto(
+        List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto
+    ) {
+        // GenreId, GenreTranslationResponseDto
+        Map<Long, List<GenreTranslationResponseDto>> genreTranslationsMap = new HashMap<>();
+        Map<Long, GenreResponseDto> genreResponseDtoMap = new HashMap<>();
+        for (var genreWithTranslationResponseDto : genresWithTranslationResponseDto) {
+
+            if (!genreResponseDtoMap.containsKey(genreWithTranslationResponseDto.id())) {
+                GenreResponseDto genreResponseDto = new GenreResponseDto(
+                    genreWithTranslationResponseDto.id(),
+                    genreWithTranslationResponseDto.alias(),
+                    genreWithTranslationResponseDto.sort()
+                );
+                genreResponseDtoMap.put(genreResponseDto.id(), genreResponseDto);
+            }
+
+            if (genreWithTranslationResponseDto.genreTranslationId() == null) continue;
+
+            GenreTranslationResponseDto genreTranslationResponseDto = new GenreTranslationResponseDto(
+                genreWithTranslationResponseDto.genreTranslationId(),
+                genreWithTranslationResponseDto.id(),
+                genreWithTranslationResponseDto.languageCode(),
+                genreWithTranslationResponseDto.name(),
+                genreWithTranslationResponseDto.description()
+            );
+
+            if (genreTranslationsMap.containsKey(genreWithTranslationResponseDto.id())) {
+                genreTranslationsMap.get(genreWithTranslationResponseDto.id()).add(
+                    genreTranslationResponseDto
+                );
+            } else {
+                List<GenreTranslationResponseDto> genreTranslationsList = new ArrayList<>();
+                genreTranslationsList.add(genreTranslationResponseDto);
+                genreTranslationsMap.put(
+                    genreWithTranslationResponseDto.id(),
+                    genreTranslationsList
                 );
             }
         }
 
-        return genresResponseDto.stream()
-                .map(genre -> this.toGenreWithTranslationsResponseDto(
-                    genre,
-                    genreTranslationsMap.get(genre.id())
-                ))
-                .toList();
+        return genreResponseDtoMap.values().stream()
+            .map(genreResponseDto -> new GenreWithTranslationsResponseDto(
+                genreResponseDto.id(),
+                genreResponseDto.alias(),
+                genreResponseDto.sort(),
+                genreTranslationsMap.get(genreResponseDto.id())
+            ))
+            .toList();
     }
 }

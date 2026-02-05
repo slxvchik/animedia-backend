@@ -45,40 +45,38 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
 	@Override
 	public List<GenreResponseDto> findByIds(List<Long> ids) {
-		var genres = genreRepository.findByIdIn(ids);
+		Set<Long> uniqueIds = new HashSet<>(ids);
+		var genres = genreRepository.findByIdIn(List.copyOf(uniqueIds));
+		if (genres.size() != uniqueIds.size()) throw new GenresNotFoundException();
 		return genreMapper.toGenresResponseDto(genres);
 	}
 
 	@Override
 	public List<GenreResponseDto> findByAliases(List<String> aliases) {
-		var genres = genreRepository.findByAliasIn(aliases);
+		Set<String> uniqueAliases = new HashSet<>(aliases);
+		var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
+		if (genres.size() != uniqueAliases.size()) throw new GenresNotFoundException();
 		return genreMapper.toGenresResponseDto(genres);
 	}
 
 	@Override
 	public List<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode) {
-
 		var genres = genreRepository.findByIdIn(ids);
-
 		if (genres.isEmpty()) return List.of();
-
 		var genreIds = genres.stream().map(Genre::getId).toList();
-
 		var genresTranslationResponseDto = genreTranslationQueryService.findByGenreIdsAndLanguageCode(genreIds, languageCode);
-
 		var genresResponseDto = genreMapper.toGenresResponseDto(genres);
-
 		return genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslationResponseDto);
 	}
 
 	@Override
-	public List<GenreWithTranslationResponseDto> findByAliasAndLanguage(String alias, String languageCode) {
-		return null;
-	}
-
-	@Override
 	public List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode) {
-		return List.of();
+		var genres = genreRepository.findByAliasIn(aliases);
+		if (genres.isEmpty()) return List.of();
+		var genreIds = genres.stream().map(Genre::getId).toList();
+		var genresTranslations = genreTranslationQueryService.findByGenreIds(genreIds);
+		var genresResponseDto = genreMapper.toGenresResponseDto(genres);
+		return genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslations);
 	}
 
 	@Override
@@ -93,11 +91,8 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
 	@Override
 	public boolean existsAllByIds(List<Long> ids) {
-
 		Set<Long> uniqueIds = new HashSet<>(ids);
-
 		var genres = genreRepository.findAllById(uniqueIds);
-
 		return uniqueIds.size() == genres.size();
 	}
 
@@ -113,11 +108,8 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
 	@Override
 	public boolean existsAllByAliases(List<String> aliases) {
-
 		Set<String> uniqueAliases = new HashSet<>(aliases);
-
 		var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
-
 		return uniqueAliases.size() == genres.size();
 	}
 }

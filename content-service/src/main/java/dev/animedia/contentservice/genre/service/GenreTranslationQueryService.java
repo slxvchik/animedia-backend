@@ -11,7 +11,6 @@ public interface GenreTranslationQueryService {
     List<GenreTranslationResponseDto> findByIds(List<Long> ids);
 
     List<GenreTranslationResponseDto> findByLanguageCode(String languageCode);
-    List<GenreTranslationResponseDto> findByGenreId(Long genreId);
     List<GenreTranslationResponseDto> findByGenreIds(List<Long> genreIds);
     List<GenreTranslationResponseDto> findByGenreIdsAndLanguageCode(List<Long> genreIds, String languageCode);
 
