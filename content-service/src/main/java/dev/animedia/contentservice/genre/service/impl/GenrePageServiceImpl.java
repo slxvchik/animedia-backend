@@ -31,13 +31,13 @@ public class GenrePageServiceImpl implements GenrePageService {
     }
 
     @Override
-    public Page<GenreWithTranslationsResponseDto> search(String alias, List<String> languageCodes, Pageable pageable) {
-        return genreNativeRepository.searchPage(alias, languageCodes, pageable);
+    public Page<GenreWithTranslationsResponseDto> search(String alias, List<String> languageCodes, String name, Pageable pageable) {
+        return genreNativeRepository.searchPage(alias, languageCodes, name, pageable);
     }
 
     @Override
-    public Page<GenreWithTranslationResponseDto> search(String alias, String languageCode, Pageable pageable) {
-        Page<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreNativeRepository.searchPage(alias, List.of(languageCode), pageable);
+    public Page<GenreWithTranslationResponseDto> search(String alias, String languageCode, String name, Pageable pageable) {
+        Page<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreNativeRepository.searchPage(alias, List.of(languageCode), name, pageable);
         var genresTranslations = genresWithTranslationsResponseDto.getContent();
         var genresTranslation = genreMapper.toGenreWithTranslationResponseDto(genresTranslations);
         return PageableExecutionUtils.getPage(

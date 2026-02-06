@@ -45,7 +45,7 @@ public class GenreNativeRepository {
 		);
 	};
 
-	public Page<GenreWithTranslationsResponseDto> searchPage(String alias, List<String> languageCodes, Pageable pageable) {
+	public Page<GenreWithTranslationsResponseDto> searchPage(String alias, List<String> languageCodes, String name, Pageable pageable) {
 
 		List<String> whereConditions = new ArrayList<>();
 		List<Object> params = new ArrayList<>();
@@ -56,17 +56,22 @@ public class GenreNativeRepository {
 		}
 
 		if (languageCodes != null && !languageCodes.isEmpty()) {
-			List<String> languagesWhereClause = new ArrayList<>();
+			List<String> languagesWhereConditions = new ArrayList<>();
 			languageCodes.forEach(langCode -> {
-				languagesWhereClause.add(" OR t.language_code = ?");
-				params.add(langCode);
+				if (!langCode.isBlank()) {
+					languagesWhereConditions.add("t.language_code = ?");
+					params.add(langCode);
+				}
 			});
-			whereConditions.add("(" + languagesWhereClause.toString().replaceFirst(" OR ", "") + ")");
+			whereConditions.add("(" + String.join(" OR ", languagesWhereConditions) + ")");
 		}
 
-		String whereClause = whereConditions.isEmpty()
-			? ""
-			: " WHERE " + String.join(" AND ", whereConditions);
+		if (name != null && !name.isBlank()) {
+			whereConditions.add("LOWER(t.name) LIKE LOWER(?)");
+			params.add("%" + name + "%");
+		}
+
+		String whereClause = whereConditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", whereConditions);
 
 		String countSql = "SELECT COUNT(DISTINCT g.id) FROM genre g LEFT JOIN genre_translation t ON g.id = t.genre_id" + whereClause;
 

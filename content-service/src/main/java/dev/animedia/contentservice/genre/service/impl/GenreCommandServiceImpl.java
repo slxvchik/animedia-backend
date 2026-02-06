@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.genre.service.impl;
 
-import dev.animedia.contentservice.app.exception.common.EmptyRequestException;
 import dev.animedia.contentservice.genre.exception.*;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;

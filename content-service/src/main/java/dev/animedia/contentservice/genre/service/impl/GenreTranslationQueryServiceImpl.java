@@ -1,9 +1,7 @@
 package dev.animedia.contentservice.genre.service.impl;
 
-import dev.animedia.contentservice.genre.dto.GenreLanguagePair;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.exception.GenreTranslationNotFoundException;
-import dev.animedia.contentservice.genre.exception.GenreTranslationsNotFoundException;
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
@@ -45,12 +43,6 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     }
 
     @Override
-    public List<GenreTranslationResponseDto> findByLanguageCode(String languageCode) {
-        var genreTranslations = genreTranslationRepository.findByLanguageCode(languageCode);
-        return genreTranslationMapper.toGenreTranslationsResponseDto(genreTranslations);
-    }
-
-    @Override
     public List<GenreTranslationResponseDto> findByGenreIds(List<Long> genreIds) {
         Set<Long> uniqueGenreIds = new HashSet<>(genreIds);
         var genreTranslations = genreTranslationRepository.findByGenreIdIn(List.copyOf(uniqueGenreIds));
@@ -84,23 +76,5 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     @Override
     public boolean existsByGenreIdAndLanguageCode(Long genreId, String languageCode) {
         return genreTranslationRepository.existsByGenreIdAndLanguageCode(genreId, languageCode);
-    }
-
-    @Override
-    public boolean existsAnyByGenreIdsAndLanguageCodes(List<GenreLanguagePair> genreIdsLanguageCodes) {
-        List<Object[]> genreIdsLanguageCodesTuple = genreIdsLanguageCodes.stream()
-            .map(gl -> new Object[] { gl.genreId(), gl.languageCode() })
-            .toList();
-        return genreTranslationRepository.existsByGenreIdAndLanguageCodePairs(genreIdsLanguageCodesTuple);
-    }
-
-    @Override
-    public boolean existsAllByGenreIdsAndLanguageCodes(List<GenreLanguagePair> genreIdsLanguageCodes) {
-        Set<GenreLanguagePair> uniqueGenreIdsLanguageCodes = new HashSet<>(genreIdsLanguageCodes);
-        List<Object[]> genreIdsLanguageCodesTuple = uniqueGenreIdsLanguageCodes.stream()
-            .map(gl -> new Object[] { gl.genreId(), gl.languageCode() })
-            .toList();
-        var genreTranslations = genreTranslationRepository.findByGenreIdsAndLanguageCodes(genreIdsLanguageCodesTuple);
-        return uniqueGenreIdsLanguageCodes.size() == genreTranslations.size();
     }
 }

@@ -3,7 +3,7 @@ package dev.animedia.contentservice.genre.controller;
 import dev.animedia.contentservice.app.dto.AppResponseDto;
 import dev.animedia.contentservice.app.dto.ContentResponse;
 import dev.animedia.contentservice.app.dto.PagedResponse;
-import dev.animedia.contentservice.app.mapper.PageMapper;
+import dev.animedia.contentservice.app.exception.AppExceptionConstants;
 import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
 import dev.animedia.contentservice.genre.dto.request.UpdateGenreRequestDto;
@@ -30,16 +30,14 @@ public class GenreAdminController {
 
     private final GenrePageService genrePageService;
     private final GenreCommandService genreCommandService;
-    private final PageMapper pageMapper;
 
     @Autowired
     public GenreAdminController(
         GenrePageService genrePageService,
-        GenreCommandService genreCommandService, PageMapper pageMapper
+        GenreCommandService genreCommandService
     ) {
         this.genrePageService = genrePageService;
         this.genreCommandService = genreCommandService;
-	    this.pageMapper = pageMapper;
     }
 
     @GetMapping("/search")
@@ -49,12 +47,14 @@ public class GenreAdminController {
         @RequestParam(required = false)
         String alias,
         @RequestParam(required = false)
-        List<String> languageCodes
+        List<String> languageCodes,
+        @RequestParam(required = false)
+        String name
     ) {
-        Page<GenreWithTranslationsResponseDto> genresTranslations = genrePageService.search(alias, languageCodes, pageable);
+        Page<GenreWithTranslationsResponseDto> genresTranslations = genrePageService.search(alias, languageCodes, name, pageable);
         return ResponseEntity.ok(
             AppResponseDto.success(
-                pageMapper.toPagedResponse(genresTranslations)
+                PagedResponse.getPagedResponse(genresTranslations)
             )
         );
     }
@@ -91,11 +91,8 @@ public class GenreAdminController {
             );
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<AppResponseDto<ContentResponse<GenreResponseDto>>> update(
-        @PathVariable
-        @NotNull(message = GenreConstants.GENRE_ID_REQUIRED_MESSAGE)
-        Long id,
         @RequestBody
         @Validated
         UpdateGenreRequestDto updateGenreRequestDto
@@ -124,6 +121,7 @@ public class GenreAdminController {
     public ResponseEntity<AppResponseDto<ContentResponse<Void>>> batchDelete(
         @RequestParam
         @NotNull(message = GenreConstants.GENRE_ID_REQUIRED_MESSAGE)
+        @Max(value = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
         List<Long> ids
     ) {
         genreCommandService.delete(ids);

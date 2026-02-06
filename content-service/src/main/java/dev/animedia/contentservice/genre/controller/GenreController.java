@@ -3,7 +3,6 @@ package dev.animedia.contentservice.genre.controller;
 import dev.animedia.contentservice.app.context.LocaleLanguageContext;
 import dev.animedia.contentservice.app.dto.AppResponseDto;
 import dev.animedia.contentservice.app.dto.PagedResponse;
-import dev.animedia.contentservice.app.mapper.PageMapper;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.service.GenrePageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenreController {
 
 	private final GenrePageService genrePageService;
-	private final PageMapper pageMapper;
 
 	@Autowired
-	public GenreController(GenrePageService genrePageService, PageMapper pageMapper) {
+	public GenreController(GenrePageService genrePageService) {
 		this.genrePageService = genrePageService;
-		this.pageMapper = pageMapper;
 	}
 
 	@GetMapping("/search")
@@ -34,13 +31,15 @@ public class GenreController {
 		@PageableDefault(sort = {"sort"})
 		Pageable pageable,
 		@RequestParam(required = false)
-		String alias
+		String alias,
+		@RequestParam(required = false)
+		String name
 	) {
 		String languageCode = LocaleLanguageContext.getLocaleLanguageCode();
-		Page<GenreWithTranslationResponseDto> genresTranslation = genrePageService.search(alias, languageCode, pageable);
+		Page<GenreWithTranslationResponseDto> genresTranslation = genrePageService.search(alias, languageCode, name, pageable);
 		return ResponseEntity.ok(
 			AppResponseDto.success(
-				pageMapper.toPagedResponse(genresTranslation)
+				PagedResponse.getPagedResponse(genresTranslation)
 			)
 		);
 	}

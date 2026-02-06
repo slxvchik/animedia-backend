@@ -2,7 +2,6 @@ package dev.animedia.contentservice.genre.service.impl;
 
 import java.util.*;
 
-import dev.animedia.contentservice.genre.dto.GenreLanguagePair;
 import dev.animedia.contentservice.genre.exception.*;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
@@ -70,46 +69,6 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         var savedGenreTranslation = genreTranslationRepository.save(genreTranslation);
 
         return genreTranslationMapper.toGenreTranslationResponseDto(savedGenreTranslation);
-    }
-
-    @Override
-    public List<GenreTranslationResponseDto> create(List<CreateGenreTranslationRequestDto> createGenreTranslationsRequestDto) {
-
-        List<CreateGenreTranslationRequestDto> uniqueCreateGenreTranslationsRequestDto = new ArrayList<>();
-
-        Set<GenreLanguagePair> genreLanguagePairs = new HashSet<>();
-        List<Long> genreIds = new ArrayList<>();
-        List<String> languageCodes = new ArrayList<>();
-
-        for (var createGenreTranslationDto : createGenreTranslationsRequestDto) {
-
-            var genreLanguagePair = new GenreLanguagePair(
-                createGenreTranslationDto.genreId(),
-                createGenreTranslationDto.languageCode()
-            );
-
-            if (!genreLanguagePairs.add(genreLanguagePair)) continue;
-
-            uniqueCreateGenreTranslationsRequestDto.add(createGenreTranslationDto);
-
-            genreIds.add(createGenreTranslationDto.genreId());
-            languageCodes.add(createGenreTranslationDto.languageCode());
-        }
-
-        var anyGenreTranslationExists = genreTranslationQueryService.existsAnyByGenreIdsAndLanguageCodes(List.copyOf(genreLanguagePairs));
-        if (anyGenreTranslationExists) throw new GenreTranslationsExistsException();
-
-        var allGenresExists = genreQueryService.existsAllByIds(genreIds);
-        if (!allGenresExists) throw new GenresNotFoundException();
-
-        var allLanguageCodesExists = languageQueryService.existsAllByCodes(languageCodes);
-        if (!allLanguageCodesExists) throw new LanguageCodeNotFoundException();
-
-        var genreTranslations = genreTranslationMapper.toGenreTranslationsFromCreate(uniqueCreateGenreTranslationsRequestDto);
-
-        var savedGenreTranslations = genreTranslationRepository.saveAll(genreTranslations);
-
-        return genreTranslationMapper.toGenreTranslationsResponseDto(savedGenreTranslations);
     }
 
     @Override

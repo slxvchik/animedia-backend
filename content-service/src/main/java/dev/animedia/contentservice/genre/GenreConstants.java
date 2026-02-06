@@ -2,6 +2,8 @@ package dev.animedia.contentservice.genre;
 
 public final class GenreConstants {
 
+    private GenreConstants() {}
+
     /**
      * Genres
      */
@@ -17,10 +19,6 @@ public final class GenreConstants {
     public static final String GENRE_NOT_FOUND_MESSAGE = "GENRE_NOT_FOUND";
     public static final String GENRES_NOT_FOUND_MESSAGE = "GENRES_NOT_FOUND";
 
-    public static final String GENRE_INVALID_SEARCH_TYPE_MESSAGE = "GENRE_SEARCH_INVALID_TYPE";
-    public static final String GENRE_SEARCH_BATCH_SIZE_LIMIT_MESSAGE = "GENRE_SEARCH_BATCH_SIZE_LIMIT";
-    public static final String GENRE_SEARCH_VALUES_REQUIRED_MESSAGE = "GENRE_SEARCH_VALUES_REQUIRED";
-
     /**
      * Translations
      */
@@ -30,6 +28,5 @@ public final class GenreConstants {
     public static final String GENRE_TRANSLATIONS_NOT_FOUND_MESSAGE = "GENRE_TRANSLATIONS_NOT_FOUND";
     public static final String GENRE_TRANSLATION_EXISTS_MESSAGE = "GENRE_TRANSLATION_EXISTS";
     public static final String GENRE_TRANSLATIONS_EXISTS_MESSAGE = "GENRE_TRANSLATIONS_EXISTS";
-
-    private GenreConstants() {}
+    public static final String GENRE_TRANSLATIONS_LANGUAGE_CODES_SIZE_LIMIT_MESSAGE = "GENRE_TRANSLATIONS_LANGUAGE_CODES_SIZE_LIMIT_MESSAGE";
 }
