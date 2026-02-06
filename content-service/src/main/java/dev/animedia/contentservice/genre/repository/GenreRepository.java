@@ -16,4 +16,6 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
     boolean existsByIdIn(List<Long> ids);
     boolean existsByAlias(String alias);
     boolean existsByAliasIn(List<String> aliases);
+
+	boolean existsByAliasAndIdIsNot(String alias, Long id);
 }

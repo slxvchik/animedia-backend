@@ -4,7 +4,7 @@
   "EMPTY_REQUEST": "Request or one of the required fields is empty.",
   "VALIDATION_ERROR": "Field validation error.",
   "LANGUAGE_CODE_REQUIRED": "Language code is required.",
-  "LANGUAGE_CODE_NOT_FOUND": "This language is not yet available.",
+  "LANGUAGE_CODE_NOT_FOUND": "Language not found.",
   "LANGUAGE_CODES_NOT_FOUND": "Some languages were not found.",
   "GENRE_INVALID_SEARCH_TYPE": "Invalid request type for genre search.",
   "GENRE_NOT_FOUND": "Genre not found.",

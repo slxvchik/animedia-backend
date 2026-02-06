@@ -112,4 +112,9 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 		var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
 		return uniqueAliases.size() == genres.size();
 	}
+
+	@Override
+	public boolean existsByAliasExcludingId(String alias, Long id) {
+		return genreRepository.existsByAliasAndIdIsNot(alias, id);
+	}
 }

@@ -121,7 +121,7 @@ public class GenreAdminController {
     public ResponseEntity<AppResponseDto<ContentResponse<Void>>> batchDelete(
         @RequestParam
         @NotNull(message = GenreConstants.GENRE_ID_REQUIRED_MESSAGE)
-        @Max(value = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
+        @Size(max = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
         List<Long> ids
     ) {
         genreCommandService.delete(ids);

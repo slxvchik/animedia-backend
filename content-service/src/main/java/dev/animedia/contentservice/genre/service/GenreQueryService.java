@@ -21,4 +21,6 @@ public interface GenreQueryService {
     boolean existsByAlias(String alias);
     boolean existsAnyByAliases(List<String> aliases);
     boolean existsAllByAliases(List<String> aliases);
+
+    boolean existsByAliasExcludingId(String alias, Long id);
 }

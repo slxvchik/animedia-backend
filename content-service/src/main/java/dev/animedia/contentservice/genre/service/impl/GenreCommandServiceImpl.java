@@ -38,12 +38,6 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     @Override
     public GenreResponseDto create(CreateGenreRequestDto createGenreRequestDto) {
 
-        /**
-         * Вынести в Lombok
-         * if (createGenreRequestDto.alias() == null || createGenreRequestDto.alias().isBlank()) throw new GenreAliasEmptyException();
-         * if (!ALIAS_PATTERN.matcher(createGenreRequestDto.alias()).matches()) throw new GenreAliasInvalidCharsException();
-         */
-
         var aliasExists = genreQueryService.existsByAlias(createGenreRequestDto.alias());
         if (aliasExists) throw new GenreAliasExistsException();
 
@@ -68,6 +62,10 @@ public class GenreCommandServiceImpl implements GenreCommandService {
             genres.add(genreMapper.toGenre(createGenreDto));
         }
 
+        var genreAliasesExists = genreQueryService.existsAnyByAliases(List.copyOf(aliases));
+
+        if (genreAliasesExists) throw new GenreAliasExistsException();
+
         var savedGenres = genreRepository.saveAll(genres);
 
         return genreMapper.toGenresResponseDto(savedGenres);
@@ -78,6 +76,9 @@ public class GenreCommandServiceImpl implements GenreCommandService {
 
         var genre = genreRepository.findById(updateGenreRequestDto.id())
             .orElseThrow(GenreNotFoundException::new);
+
+        var aliasExists = genreQueryService.existsByAliasExcludingId(updateGenreRequestDto.alias(), updateGenreRequestDto.id());
+        if (aliasExists) throw new GenreAliasExistsException();
 
         genre.setAlias(updateGenreRequestDto.alias());
         genre.setSort(updateGenreRequestDto.sort());

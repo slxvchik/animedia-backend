@@ -1,9 +1,6 @@
 package dev.animedia.contentservice.genre.repository;
 
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
-import dev.animedia.contentservice.genre.model.GenreTranslation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,7 +10,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class GenreTranslationNativeRepository {
@@ -42,7 +41,7 @@ public class GenreTranslationNativeRepository {
 
 		if (name != null && !name.isBlank()) {
 			whereConditions.add("LOWER(t.name) LIKE LOWER(?)");
-			params.add(name);
+			params.add("%" + name + "%");
 		}
 
 		if (genreId != null) {
@@ -50,16 +49,15 @@ public class GenreTranslationNativeRepository {
 			params.add(genreId);
 		}
 
-		if (languageCodes != null && !languageCodes.isEmpty()) {
-			List<String> languagesWhereConditions = new ArrayList<>();
-			languageCodes.forEach(langCode -> {
-				if (!langCode.isBlank()) {
-					languagesWhereConditions.add("t.language_code = ?");
-					params.add(langCode);
-				}
+		List<String> languageCodesWhereConditions = new ArrayList<>();
+		Optional.ofNullable(languageCodes).stream().flatMap(Collection::stream)
+			.filter(language -> language != null && !language.isBlank())
+			.forEach(language -> {
+				languageCodesWhereConditions.add("t.language_code = ?");
+				params.add(language);
 			});
-			whereConditions.add("(" + String.join(" OR ", languagesWhereConditions) + ")");
-		}
+		if (!languageCodesWhereConditions.isEmpty())
+			whereConditions.add("(" + String.join(" OR ", languageCodesWhereConditions) + ")");
 
 		String whereClause = whereConditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", whereConditions);
 

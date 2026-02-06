@@ -51,18 +51,18 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         var genreExists = genreQueryService.existsById(
             createGenreTranslationDto.genreId()
         );
-        if (genreExists) throw new GenreNotFoundException();
+        if (!genreExists) throw new GenreNotFoundException();
 
         var languageExists = languageQueryService.existsByCode(
             createGenreTranslationDto.languageCode()
         );
-        if (languageExists) throw new LanguageCodeNotFoundException();
+        if (!languageExists) throw new LanguageCodeNotFoundException();
 
         var genreTranslationExists = genreTranslationQueryService.existsByGenreIdAndLanguageCode(
             createGenreTranslationDto.genreId(),
             createGenreTranslationDto.languageCode()
         );
-        if (genreTranslationExists) throw new GenreTranslationExistsException();
+        if (!genreTranslationExists) throw new GenreTranslationExistsException();
 
         var genreTranslation = genreTranslationMapper.toGenreTranslation(createGenreTranslationDto);
 

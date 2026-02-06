@@ -17,7 +17,7 @@ public class PagedResponse<T> {
 		this.last = last;
 	}
 
-	private record PagedMetadata(
+	public record PagedMetadata(
 		int number,
 		int numberOfElements,
 		int size,
@@ -25,6 +25,22 @@ public class PagedResponse<T> {
 		int totalPages
 	) {}
 
+
+	public List<T> getContent() {
+		return content;
+	}
+
+	public PagedMetadata getPage() {
+		return page;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public boolean isLast() {
+		return last;
+	}
 
 	public static <T> PagedResponse<T> getPagedResponse(Page<T> pageResponse) {
 		return new PagedResponse<>(

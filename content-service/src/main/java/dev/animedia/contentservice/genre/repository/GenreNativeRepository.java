@@ -12,7 +12,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class GenreNativeRepository {
@@ -55,21 +57,21 @@ public class GenreNativeRepository {
 			params.add("%" + alias + "%");
 		}
 
-		if (languageCodes != null && !languageCodes.isEmpty()) {
-			List<String> languagesWhereConditions = new ArrayList<>();
-			languageCodes.forEach(langCode -> {
-				if (!langCode.isBlank()) {
-					languagesWhereConditions.add("t.language_code = ?");
-					params.add(langCode);
-				}
-			});
-			whereConditions.add("(" + String.join(" OR ", languagesWhereConditions) + ")");
-		}
-
 		if (name != null && !name.isBlank()) {
 			whereConditions.add("LOWER(t.name) LIKE LOWER(?)");
 			params.add("%" + name + "%");
 		}
+
+		List<String> languageCodesWhereConditions = new ArrayList<>();
+		Optional.ofNullable(languageCodes).stream().flatMap(Collection::stream)
+			.filter(code -> code != null && !code.isBlank())
+			.forEach(code -> {
+				languageCodesWhereConditions.add("code = ?");
+				params.add(code);
+			});
+		if (!languageCodesWhereConditions.isEmpty())
+			whereConditions.add("(" + String.join(" OR ", languageCodesWhereConditions) + ")");
+
 
 		String whereClause = whereConditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", whereConditions);
 

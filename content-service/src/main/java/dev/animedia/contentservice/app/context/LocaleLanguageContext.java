@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public class LocaleLanguageContext {
     private static final ThreadLocal<Locale> LANGUAGE_HOLDER = new ThreadLocal<>();
-    private static final Locale DEFAULT_LANGUAGE = Locale.of("en");
+    private static final Locale DEFAULT_LANGUAGE = Locale.of("ru");
     private static final Logger LOGGER = Logger.getLogger(LocaleLanguageContext.class.getName());
 
     private LocaleLanguageContext() {}

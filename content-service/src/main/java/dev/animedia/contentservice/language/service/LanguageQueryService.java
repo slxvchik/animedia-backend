@@ -8,9 +8,8 @@ import java.util.List;
 public interface LanguageQueryService {
 
     LanguageResponseDto findByCode(String languageCode);
-    List<LanguageResponseDto> findAllByCodes(Collection<String> languageCodes);
+    List<LanguageResponseDto> findByCodes(Collection<String> languageCodes);
 
     boolean existsByCode(String languageCode);
-    boolean existsAnyByCodes(Collection<String> languageCodes);
-    boolean existsAllByCodes(Collection<String> languageCodes);
+    boolean existsByNameExcludingId(String languageName, String languageCode);
 }

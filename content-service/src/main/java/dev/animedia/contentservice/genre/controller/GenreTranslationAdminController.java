@@ -10,9 +10,9 @@ import dev.animedia.contentservice.genre.dto.request.UpdateGenreTranslationReque
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
 import dev.animedia.contentservice.genre.service.GenreTranslationPageService;
-import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +40,7 @@ public class GenreTranslationAdminController {
 		this.genreTranslationPageService = genreTranslationPageService;
 	}
 
-	@GetMapping
+	@GetMapping("/search")
 	public ResponseEntity<AppResponseDto<PagedResponse<GenreTranslationResponseDto>>> search(
 		@PageableDefault
 		Pageable pageable,
@@ -49,7 +49,7 @@ public class GenreTranslationAdminController {
 		@RequestParam(required = false)
 		Long genreId,
 		@RequestParam(required = false)
-		@Max(value = 10, message = GenreConstants.GENRE_TRANSLATIONS_LANGUAGE_CODES_SIZE_LIMIT_MESSAGE)
+		@Size(max = 10, message = GenreConstants.GENRE_TRANSLATIONS_LANGUAGE_CODES_SIZE_LIMIT_MESSAGE)
 		List<String> languageCodes
 	) {
 		Page<GenreTranslationResponseDto> genresTranslations = genreTranslationPageService.search(name, genreId, languageCodes, pageable);
@@ -106,7 +106,7 @@ public class GenreTranslationAdminController {
 	public ResponseEntity<AppResponseDto<ContentResponse<GenreTranslationResponseDto>>> batchDelete(
 		@RequestParam
 		@NotNull(message = GenreConstants.GENRE_TRANSLATION_ID_REQUIRED_MESSAGE)
-		@Max(value = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
+		@Size(max = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
 		List<Long> ids
 	) {
 		genreTranslationCommandService.delete(ids);
