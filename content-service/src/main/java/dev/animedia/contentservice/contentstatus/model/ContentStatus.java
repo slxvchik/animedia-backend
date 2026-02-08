@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.contentstatus.core;
+package dev.animedia.contentservice.contentstatus.model;
 
 import jakarta.persistence.*;
 

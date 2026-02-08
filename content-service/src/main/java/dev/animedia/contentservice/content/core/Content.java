@@ -2,7 +2,7 @@ package dev.animedia.contentservice.content.core;
 
 import dev.animedia.contentservice.bookchapter.core.BookChapter;
 import dev.animedia.contentservice.comicchapter.core.ComicChapter;
-import dev.animedia.contentservice.contentstatus.core.ContentStatus;
+import dev.animedia.contentservice.contentstatus.model.ContentStatus;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.language.Language;
 import dev.animedia.contentservice.movie.Movie;

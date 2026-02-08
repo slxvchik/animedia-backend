@@ -1,6 +1,5 @@
-package dev.animedia.contentservice.contentstatus.translation;
+package dev.animedia.contentservice.contentstatus.model;
 
-import dev.animedia.contentservice.contentstatus.core.ContentStatus;
 import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 

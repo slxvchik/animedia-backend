@@ -81,12 +81,11 @@ public class LanguageAdminController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<AppResponseDto<ContentResponse<LanguageResponseDto>>> update(
+	public ResponseEntity<AppResponseDto<ContentResponse<LanguageResponseDto>>> delete(
 		@PathVariable
-		@NotNull(message = )
-		String code
+		String id
 	) {
-		languageCommandService.delete(code);
+		languageCommandService.delete(id);
 		return ResponseEntity.ok(
 			AppResponseDto.success(
 				ContentResponse.content()
