@@ -3,7 +3,7 @@ package dev.animedia.contentservice.genre.mapper;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 import org.springframework.data.domain.Page;
@@ -55,10 +55,10 @@ public class GenreMapper {
         return genres.stream().map(this::toGenreResponseDto).toList();
     }
 
-    public Genre toGenre(CreateGenreRequestDto createGenreRequestDto) {
+    public Genre toGenre(GenreRequestDto genreRequestDto) {
         Genre genre = new Genre();
-        genre.setAlias(createGenreRequestDto.alias());
-        genre.setSort(createGenreRequestDto.sort());
+        genre.setAlias(genreRequestDto.alias());
+        genre.setSort(genreRequestDto.sort());
         return genre;
     }
     

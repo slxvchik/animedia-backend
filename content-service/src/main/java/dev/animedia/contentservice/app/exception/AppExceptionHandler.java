@@ -35,7 +35,7 @@ public class AppExceptionHandler {
 
     private final AppExceptionMessageService appExceptionMessageService;
 
-    private final static Logger LOGGER = Logger.getLogger(AppExceptionHandler.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AppExceptionHandler.class.getName());
 
     private static final List<Class<? extends Exception>> CLIENT_ERROR_EXCEPTIONS = Arrays.asList(
         // Spring MVC exceptions

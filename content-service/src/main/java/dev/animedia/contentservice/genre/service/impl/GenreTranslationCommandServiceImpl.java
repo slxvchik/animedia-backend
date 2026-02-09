@@ -9,8 +9,7 @@ import dev.animedia.contentservice.language.service.LanguageQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.animedia.contentservice.genre.dto.request.CreateGenreTranslationRequestDto;
-import dev.animedia.contentservice.genre.dto.request.UpdateGenreTranslationRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
@@ -46,25 +45,25 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public GenreTranslationResponseDto create(CreateGenreTranslationRequestDto createGenreTranslationDto) {
+    public GenreTranslationResponseDto create(GenreTranslationRequestDto genreTranslationDto) {
         
         var genreExists = genreQueryService.existsById(
-            createGenreTranslationDto.genreId()
+            genreTranslationDto.genreId()
         );
         if (!genreExists) throw new GenreNotFoundException();
 
         var languageExists = languageQueryService.existsByCode(
-            createGenreTranslationDto.languageCode()
+            genreTranslationDto.languageCode()
         );
         if (!languageExists) throw new LanguageCodeNotFoundException();
 
         var genreTranslationExists = genreTranslationQueryService.existsByGenreIdAndLanguageCode(
-            createGenreTranslationDto.genreId(),
-            createGenreTranslationDto.languageCode()
+            genreTranslationDto.genreId(),
+            genreTranslationDto.languageCode()
         );
         if (!genreTranslationExists) throw new GenreTranslationExistsException();
 
-        var genreTranslation = genreTranslationMapper.toGenreTranslation(createGenreTranslationDto);
+        var genreTranslation = genreTranslationMapper.toGenreTranslation(genreTranslationDto);
 
         var savedGenreTranslation = genreTranslationRepository.save(genreTranslation);
 
@@ -72,13 +71,13 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     }
 
     @Override
-    public GenreTranslationResponseDto update(UpdateGenreTranslationRequestDto updateGenreTranslationDto) {
+    public GenreTranslationResponseDto update(Long id, GenreTranslationRequestDto genreTranslationDto) {
 
-        var genreTranslationDb = genreTranslationRepository.findById(updateGenreTranslationDto.id())
+        var genreTranslationDb = genreTranslationRepository.findById(id)
                 .orElseThrow(GenreTranslationNotFoundException::new);
 
-        genreTranslationDb.setName(updateGenreTranslationDto.name());
-        genreTranslationDb.setDescription(updateGenreTranslationDto.description());
+        genreTranslationDb.setName(genreTranslationDto.name());
+        genreTranslationDb.setDescription(genreTranslationDto.description());
 
         var savedGenreTranslation = genreTranslationRepository.save(genreTranslationDb);
 

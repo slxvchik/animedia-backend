@@ -7,8 +7,7 @@ import dev.animedia.contentservice.genre.service.GenreQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
-import dev.animedia.contentservice.genre.dto.request.UpdateGenreRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.repository.GenreRepository;
 import dev.animedia.contentservice.genre.service.GenreCommandService;
@@ -36,12 +35,12 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     }
 
     @Override
-    public GenreResponseDto create(CreateGenreRequestDto createGenreRequestDto) {
+    public GenreResponseDto create(GenreRequestDto genreRequestDto) {
 
-        var aliasExists = genreQueryService.existsByAlias(createGenreRequestDto.alias());
+        var aliasExists = genreQueryService.existsByAlias(genreRequestDto.alias());
         if (aliasExists) throw new GenreAliasExistsException();
 
-        var genre = genreMapper.toGenre(createGenreRequestDto);
+        var genre = genreMapper.toGenre(genreRequestDto);
 
         var savedGenre = genreRepository.save(genre);
 
@@ -49,13 +48,13 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     }
 
     @Override
-    public List<GenreResponseDto> create(List<CreateGenreRequestDto> createGenresRequestDto) {
+    public List<GenreResponseDto> create(List<GenreRequestDto> genresRequestDto) {
 
         Set<String> aliases = new HashSet<>();
 
         List<Genre> genres = new ArrayList<>();
 
-        for (var createGenreDto : createGenresRequestDto) {
+        for (var createGenreDto : genresRequestDto) {
 
             if (!aliases.add(createGenreDto.alias())) continue;
 
@@ -72,16 +71,16 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     }
 
     @Override
-    public GenreResponseDto update(UpdateGenreRequestDto updateGenreRequestDto) {
+    public GenreResponseDto update(Long id, GenreRequestDto genreRequestDto) {
 
-        var genre = genreRepository.findById(updateGenreRequestDto.id())
+        var genre = genreRepository.findById(id)
             .orElseThrow(GenreNotFoundException::new);
 
-        var aliasExists = genreQueryService.existsByAliasExcludingId(updateGenreRequestDto.alias(), updateGenreRequestDto.id());
+        var aliasExists = genreQueryService.existsByAliasExcludingId(genreRequestDto.alias(), id);
         if (aliasExists) throw new GenreAliasExistsException();
 
-        genre.setAlias(updateGenreRequestDto.alias());
-        genre.setSort(updateGenreRequestDto.sort());
+        genre.setAlias(genreRequestDto.alias());
+        genre.setSort(genreRequestDto.sort());
 
         var updatedGenre = genreRepository.save(genre);
 

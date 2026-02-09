@@ -1,17 +1,16 @@
 package dev.animedia.contentservice.genre.service;
 
-import dev.animedia.contentservice.genre.dto.request.UpdateGenreRequestDto;
-import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 
 import java.util.List;
 
 public interface GenreCommandService {
 
-    GenreResponseDto create(CreateGenreRequestDto createGenreRequestDto);
-    List<GenreResponseDto> create(List<CreateGenreRequestDto> createGenresRequestDto);
+    GenreResponseDto create(GenreRequestDto genreRequestDto);
+    List<GenreResponseDto> create(List<GenreRequestDto> genresRequestDto);
 
-    GenreResponseDto update(UpdateGenreRequestDto updateGenreRequestDto);
+    GenreResponseDto update(Long id, GenreRequestDto genreRequestDto);
     
     void delete(Long id);
     void delete(List<Long> id);

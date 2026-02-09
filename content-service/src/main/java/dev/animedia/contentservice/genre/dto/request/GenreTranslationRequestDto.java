@@ -5,7 +5,7 @@ import dev.animedia.contentservice.language.LanguageConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateGenreTranslationRequestDto(
+public record GenreTranslationRequestDto(
         @NotNull(message = GenreConstants.GENRE_ID_REQUIRED_MESSAGE)
         Long genreId,
         @NotBlank(message = LanguageConstants.LANGUAGE_CODE_REQUIRED_MESSAGE)

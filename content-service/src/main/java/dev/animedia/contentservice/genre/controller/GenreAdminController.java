@@ -5,8 +5,7 @@ import dev.animedia.contentservice.app.dto.ContentResponse;
 import dev.animedia.contentservice.app.dto.PagedResponse;
 import dev.animedia.contentservice.app.exception.AppExceptionConstants;
 import dev.animedia.contentservice.genre.GenreConstants;
-import dev.animedia.contentservice.genre.dto.request.CreateGenreRequestDto;
-import dev.animedia.contentservice.genre.dto.request.UpdateGenreRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 import dev.animedia.contentservice.genre.service.GenreCommandService;
@@ -63,9 +62,9 @@ public class GenreAdminController {
     public ResponseEntity<AppResponseDto<ContentResponse<GenreResponseDto>>> create(
         @RequestBody
         @Validated
-        CreateGenreRequestDto createGenreRequestDto
+        GenreRequestDto genreRequestDto
     ) {
-        var createdGenre = genreCommandService.create(createGenreRequestDto);
+        var createdGenre = genreCommandService.create(genreRequestDto);
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(
@@ -79,7 +78,7 @@ public class GenreAdminController {
     public ResponseEntity<AppResponseDto<ContentResponse<List<GenreResponseDto>>>> batchCreate(
         @RequestBody
         @Validated
-        List<CreateGenreRequestDto> createGenresRequestDto
+        List<GenreRequestDto> createGenresRequestDto
     ) {
         var createdGenres = genreCommandService.create(createGenresRequestDto);
         return ResponseEntity
@@ -91,13 +90,15 @@ public class GenreAdminController {
             );
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<AppResponseDto<ContentResponse<GenreResponseDto>>> update(
+        @PathVariable
+        Long id,
         @RequestBody
         @Validated
-        UpdateGenreRequestDto updateGenreRequestDto
+        GenreRequestDto genreRequestDto
     ) {
-        var updatedGenre = genreCommandService.update(updateGenreRequestDto);
+        var updatedGenre = genreCommandService.update(id, genreRequestDto);
         return ResponseEntity.ok(
             AppResponseDto.success(
                 ContentResponse.content(updatedGenre)

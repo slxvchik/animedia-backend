@@ -12,7 +12,7 @@ public interface GenreQueryService {
     List<GenreResponseDto> findByAliases(List<String> aliases);
 
     List<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode);
-    List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode);
+    List<GenreWithTranslationResponseDto> findByAliasesAndLanguageCode(List<String> aliases, String languageCode);
 
     boolean existsById(Long id);
     boolean existsAnyByIds(List<Long> ids);

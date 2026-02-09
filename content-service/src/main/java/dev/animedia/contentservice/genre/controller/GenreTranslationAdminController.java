@@ -5,12 +5,10 @@ import dev.animedia.contentservice.app.dto.ContentResponse;
 import dev.animedia.contentservice.app.dto.PagedResponse;
 import dev.animedia.contentservice.app.exception.AppExceptionConstants;
 import dev.animedia.contentservice.genre.GenreConstants;
-import dev.animedia.contentservice.genre.dto.request.CreateGenreTranslationRequestDto;
-import dev.animedia.contentservice.genre.dto.request.UpdateGenreTranslationRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
 import dev.animedia.contentservice.genre.service.GenreTranslationPageService;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,9 +62,9 @@ public class GenreTranslationAdminController {
 	public ResponseEntity<AppResponseDto<ContentResponse<GenreTranslationResponseDto>>> create(
 		@RequestBody
 		@Validated
-		CreateGenreTranslationRequestDto createGenreTranslationRequestDto
+		GenreTranslationRequestDto genreTranslationRequestDto
 	) {
-		var createdGenreTranslation = genreTranslationCommandService.create(createGenreTranslationRequestDto);
+		var createdGenreTranslation = genreTranslationCommandService.create(genreTranslationRequestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(
 			AppResponseDto.success(
 				ContentResponse.content(createdGenreTranslation)
@@ -74,13 +72,15 @@ public class GenreTranslationAdminController {
 		);
 	}
 
-	@PutMapping
+	@PutMapping("/{id}")
 	public ResponseEntity<AppResponseDto<ContentResponse<GenreTranslationResponseDto>>> update(
+		@PathVariable
+		Long id,
 		@RequestBody
 		@Validated
-		UpdateGenreTranslationRequestDto updateGenreTranslationRequestDto
+		GenreTranslationRequestDto genreTranslationRequestDto
 	) {
-		var updatedGenreTranslation = genreTranslationCommandService.update(updateGenreTranslationRequestDto);
+		var updatedGenreTranslation = genreTranslationCommandService.update(id, genreTranslationRequestDto);
 		return ResponseEntity.ok(
 			AppResponseDto.success(
 				ContentResponse.content(updatedGenreTranslation)

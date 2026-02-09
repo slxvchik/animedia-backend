@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import dev.animedia.contentservice.genre.dto.request.CreateGenreTranslationRequestDto;
+import dev.animedia.contentservice.genre.dto.request.GenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.model.GenreTranslation;
@@ -39,7 +39,7 @@ public class GenreTranslationMapper {
         return genreTranslations.map(this::toGenreTranslationResponseDto);
     }
 
-    public GenreTranslation toGenreTranslation(CreateGenreTranslationRequestDto requestDto) {
+    public GenreTranslation toGenreTranslation(GenreTranslationRequestDto requestDto) {
 
         Genre genreRef = entityManager.getReference(Genre.class, requestDto.genreId());
         Language languageRef = entityManager.getReference(Language.class, requestDto.languageCode());
@@ -53,7 +53,7 @@ public class GenreTranslationMapper {
         return genreTranslation;
     }
 
-    public List<GenreTranslation> toGenreTranslationsFromCreate(List<CreateGenreTranslationRequestDto> requestsDto) {
+    public List<GenreTranslation> toGenreTranslationsFromCreate(List<GenreTranslationRequestDto> requestsDto) {
         return requestsDto.stream()
             .map(this::toGenreTranslation)
             .toList();

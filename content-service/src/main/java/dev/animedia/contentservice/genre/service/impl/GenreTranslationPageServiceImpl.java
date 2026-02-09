@@ -1,9 +1,7 @@
 package dev.animedia.contentservice.genre.service.impl;
 
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
-import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationNativeRepository;
-import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreTranslationPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

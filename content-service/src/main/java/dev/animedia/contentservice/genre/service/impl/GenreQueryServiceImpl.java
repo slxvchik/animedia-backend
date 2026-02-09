@@ -70,7 +70,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	}
 
 	@Override
-	public List<GenreWithTranslationResponseDto> findByAliasesAndLanguage(List<String> aliases, String languageCode) {
+	public List<GenreWithTranslationResponseDto> findByAliasesAndLanguageCode(List<String> aliases, String languageCode) {
 		var genres = genreRepository.findByAliasIn(aliases);
 		if (genres.isEmpty()) return List.of();
 		var genreIds = genres.stream().map(Genre::getId).toList();

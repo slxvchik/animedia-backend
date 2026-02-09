@@ -8,7 +8,6 @@ import dev.animedia.contentservice.language.dto.LanguageRequestDto;
 import dev.animedia.contentservice.language.dto.LanguageResponseDto;
 import dev.animedia.contentservice.language.service.LanguageCommandService;
 import dev.animedia.contentservice.language.service.LanguagePageService;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
