@@ -5,6 +5,6 @@ import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusRespo
 
 public interface ContentStatusCommandService {
 	ContentStatusResponseDto create(ContentStatusRequestDto contentStatusRequestDto);
-	ContentStatusResponseDto update(UpdateContentStatusRequestDto updateContentStatusRequestDto);
+	ContentStatusResponseDto update(Long id, ContentStatusRequestDto contentStatusRequestDto);
 	void delete(Long id);
 }

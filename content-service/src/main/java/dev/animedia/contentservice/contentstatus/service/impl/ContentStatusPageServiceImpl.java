@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.contentstatus.service.impl;
 
+import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusSearchRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationsResponseDto;
 import dev.animedia.contentservice.contentstatus.model.ContentStatus;
 import dev.animedia.contentservice.contentstatus.repository.ContentStatusRepository;
@@ -9,18 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 
 	private final ContentStatusRepository contentStatusRepository;
-
-	Specification<ContentStatus> getSpecification() {
-		return ((root, query, criteriaBuilder) -> {
-			return criteriaBuilder.equal(root.get("name"), "test");
-		});
-	}
 
 	@Autowired
 	public ContentStatusPageServiceImpl(ContentStatusRepository contentStatusRepository) {
@@ -29,11 +22,10 @@ public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 
 	@Override
 	public Page<ContentStatusWithTranslationsResponseDto> search(
-		List<String> alias,
-		List<String> languageCode,
-		String name
+		ContentStatusSearchRequestDto contentStatusSearchRequestDto
 	) {
-
+		Specification<ContentStatus> specification = FilterSpecification.getSearchSpecification(contentStatusSearchRequestDto);
+		var contentStatuses = contentStatusRepository.findAll(specification);
 		return null;
 	}
 }
