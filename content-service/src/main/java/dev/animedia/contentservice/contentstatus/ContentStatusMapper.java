@@ -5,10 +5,15 @@ import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusTransl
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.contentstatus.model.ContentStatus;
 import dev.animedia.contentservice.contentstatus.model.ContentStatusTranslation;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ContentStatusMapper {
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public ContentStatus toContentStatus(ContentStatusRequestDto contentStatusRequestDto) {
 		ContentStatus contentStatus = new ContentStatus();

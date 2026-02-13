@@ -19,6 +19,20 @@ public class GenreTranslationMapper {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public GenreTranslation toGenreTranslation(GenreTranslationRequestDto requestDto) {
+
+        Genre genreRef = entityManager.getReference(Genre.class, requestDto.genreId());
+        Language languageRef = entityManager.getReference(Language.class, requestDto.languageCode());
+
+        GenreTranslation genreTranslation = new GenreTranslation();
+        genreTranslation.setGenre(genreRef);
+        genreTranslation.setLanguage(languageRef);
+        genreTranslation.setName(requestDto.name());
+        genreTranslation.setDescription(requestDto.description());
+
+        return genreTranslation;
+    }
+
     public GenreTranslationResponseDto toGenreTranslationResponseDto(GenreTranslation genreTranslation) {
         return new GenreTranslationResponseDto(
             genreTranslation.getId(),
@@ -32,30 +46,6 @@ public class GenreTranslationMapper {
     public List<GenreTranslationResponseDto> toGenreTranslationsResponseDto(List<GenreTranslation> genreTranslation) {
         return genreTranslation.stream()
             .map(this::toGenreTranslationResponseDto)
-            .toList();
-    }
-
-    public Page<GenreTranslationResponseDto> toPageGenreTranslationResponseDto(Page<GenreTranslation> genreTranslations) {
-        return genreTranslations.map(this::toGenreTranslationResponseDto);
-    }
-
-    public GenreTranslation toGenreTranslation(GenreTranslationRequestDto requestDto) {
-
-        Genre genreRef = entityManager.getReference(Genre.class, requestDto.genreId());
-        Language languageRef = entityManager.getReference(Language.class, requestDto.languageCode());
-        
-        GenreTranslation genreTranslation = new GenreTranslation();
-        genreTranslation.setGenre(genreRef);
-        genreTranslation.setLanguage(languageRef);
-        genreTranslation.setName(requestDto.name());
-        genreTranslation.setDescription(requestDto.description());
-
-        return genreTranslation;
-    }
-
-    public List<GenreTranslation> toGenreTranslationsFromCreate(List<GenreTranslationRequestDto> requestsDto) {
-        return requestsDto.stream()
-            .map(this::toGenreTranslation)
             .toList();
     }
 }

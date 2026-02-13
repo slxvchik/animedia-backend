@@ -39,7 +39,7 @@ public class GenrePageServiceImpl implements GenrePageService {
     public Page<GenreWithTranslationResponseDto> search(String alias, String languageCode, String name, Pageable pageable) {
         Page<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreNativeRepository.searchPage(alias, List.of(languageCode), name, pageable);
         var genresTranslations = genresWithTranslationsResponseDto.getContent();
-        var genresTranslation = genreMapper.toGenreWithTranslationResponseDto(genresTranslations);
+        var genresTranslation = genreMapper.toGenresWithTranslationResponseDto(genresTranslations);
         return PageableExecutionUtils.getPage(
             genresTranslation,
             pageable,

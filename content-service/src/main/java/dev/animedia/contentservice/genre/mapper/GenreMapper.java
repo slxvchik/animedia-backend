@@ -16,31 +16,11 @@ import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationRespon
 @Component
 public class GenreMapper {
 
-    public GenreWithTranslationResponseDto toGenreWithTranslationResponseDto(GenreResponseDto genreResponseDto, GenreTranslationResponseDto genreTranslation) {
-        return new GenreWithTranslationResponseDto(
-            genreResponseDto.id(),
-            genreResponseDto.alias(),
-            genreResponseDto.sort(),
-            genreTranslation.id(),
-            genreTranslation.languageCode(),
-            genreTranslation.name(),
-            genreTranslation.description()
-        );
-    }
-
-    public List<GenreWithTranslationResponseDto> toGenreWithTranslationResponseDto(List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto) {
-        return genresWithTranslationsResponseDto.stream().map(
-            genreWithTranslationsResponseDto -> {
-                if (genreWithTranslationsResponseDto.translations().isEmpty()) return null;
-                GenreTranslationResponseDto genreTranslation = genreWithTranslationsResponseDto.translations().getFirst();
-                return new GenreWithTranslationResponseDto(
-                    genreWithTranslationsResponseDto.id(),
-                    genreWithTranslationsResponseDto.alias(),
-                    genreWithTranslationsResponseDto.sort(),
-                    genreTranslation.id(), genreTranslation.languageCode(), genreTranslation.name(), genreTranslation.description()
-                );
-            }
-        ).toList();
+    public Genre toGenre(GenreRequestDto genreRequestDto) {
+        Genre genre = new Genre();
+        genre.setAlias(genreRequestDto.alias());
+        genre.setSort(genreRequestDto.sort());
+        return genre;
     }
 
     public GenreResponseDto toGenreResponseDto(Genre genre) {
@@ -55,11 +35,31 @@ public class GenreMapper {
         return genres.stream().map(this::toGenreResponseDto).toList();
     }
 
-    public Genre toGenre(GenreRequestDto genreRequestDto) {
-        Genre genre = new Genre();
-        genre.setAlias(genreRequestDto.alias());
-        genre.setSort(genreRequestDto.sort());
-        return genre;
+    public GenreWithTranslationResponseDto toGenresWithTranslationResponseDto(GenreResponseDto genreResponseDto, GenreTranslationResponseDto genreTranslation) {
+        return new GenreWithTranslationResponseDto(
+            genreResponseDto.id(),
+            genreResponseDto.alias(),
+            genreResponseDto.sort(),
+            genreTranslation.id(),
+            genreTranslation.languageCode(),
+            genreTranslation.name(),
+            genreTranslation.description()
+        );
+    }
+
+    public List<GenreWithTranslationResponseDto> toGenresWithTranslationResponseDto(List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto) {
+        return genresWithTranslationsResponseDto.stream().map(
+            genreWithTranslationsResponseDto -> {
+                if (genreWithTranslationsResponseDto.translations().isEmpty()) return null;
+                GenreTranslationResponseDto genreTranslation = genreWithTranslationsResponseDto.translations().getFirst();
+                return new GenreWithTranslationResponseDto(
+                    genreWithTranslationsResponseDto.id(),
+                    genreWithTranslationsResponseDto.alias(),
+                    genreWithTranslationsResponseDto.sort(),
+                    genreTranslation.id(), genreTranslation.languageCode(), genreTranslation.name(), genreTranslation.description()
+                );
+            }
+        ).toList();
     }
     
     public List<GenreWithTranslationResponseDto> toGenresWithTranslationResponseDto(
@@ -77,51 +77,9 @@ public class GenreMapper {
             );
         return genres.stream()
             .filter(genre -> genreTranslationMap.containsKey(genre.id()))
-            .map(genre -> this.toGenreWithTranslationResponseDto(
+            .map(genre -> this.toGenresWithTranslationResponseDto(
                 genre,
                 genreTranslationMap.get(genre.id())
-            ))
-            .toList();
-    }
-
-	public Page<GenreResponseDto> toPageGenreResponseDto(Page<Genre> genres) {
-        return genres.map(this::toGenreResponseDto);
-	}
-
-    public GenreWithTranslationsResponseDto toGenreWithTranslationsResponseDto(
-        GenreResponseDto genreResponseDto,
-        List<GenreTranslationResponseDto> genreTranslationsResponseDto
-    ) {
-        return new GenreWithTranslationsResponseDto(
-            genreResponseDto.id(),
-            genreResponseDto.alias(),
-            genreResponseDto.sort(),
-            genreTranslationsResponseDto
-        );
-    }
-
-    public List<GenreWithTranslationsResponseDto> toGenresWithTranslationsResponseDto(
-        List<GenreResponseDto> genresResponseDto,
-        List<GenreTranslationResponseDto> genresTranslationsResponseDto
-    ) {
-        // GenreId, GenreTranslationResponseDto
-        Map<Long, List<GenreTranslationResponseDto>> genreTranslationsMap = new HashMap<>();
-        for (var genreTranslationResponseDto : genresTranslationsResponseDto) {
-            if (genreTranslationsMap.containsKey(genreTranslationResponseDto.genreId())) {
-                genreTranslationsMap.get(genreTranslationResponseDto.genreId()).add(genreTranslationResponseDto);
-            } else {
-                List<GenreTranslationResponseDto> genreTranslationsList = new ArrayList<>();
-                genreTranslationsList.add(genreTranslationResponseDto);
-                genreTranslationsMap.put(
-                    genreTranslationResponseDto.genreId(),
-                    genreTranslationsList
-                );
-            }
-        }
-        return genresResponseDto.stream()
-            .map(genre -> this.toGenreWithTranslationsResponseDto(
-                genre,
-                genreTranslationsMap.get(genre.id())
             ))
             .toList();
     }
@@ -129,8 +87,9 @@ public class GenreMapper {
     public List<GenreWithTranslationsResponseDto> toGenresWithTranslationsResponseDto(
         List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto
     ) {
-        // GenreId, GenreTranslationResponseDto
+        // GenreId, GenreTranslationsResponseDto
         Map<Long, List<GenreTranslationResponseDto>> genreTranslationsMap = new HashMap<>();
+        // For genres without translations
         Map<Long, GenreResponseDto> genreResponseDtoMap = new HashMap<>();
         for (var genreWithTranslationResponseDto : genresWithTranslationResponseDto) {
 
