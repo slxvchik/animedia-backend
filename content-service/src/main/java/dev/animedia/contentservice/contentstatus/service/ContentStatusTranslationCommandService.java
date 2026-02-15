@@ -1,10 +1,11 @@
 package dev.animedia.contentservice.contentstatus.service;
 
-import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusTranslationRequestDto;
+import dev.animedia.contentservice.contentstatus.dto.request.CreateContentStatusTranslationRequestDto;
+import dev.animedia.contentservice.contentstatus.dto.request.UpdateContentStatusTranslationRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusTranslationResponseDto;
 
 public interface ContentStatusTranslationCommandService {
-	ContentStatusTranslationResponseDto create(ContentStatusTranslationRequestDto createContentStatusTranslationRequestDto);
-	ContentStatusTranslationResponseDto update(ContentStatusTranslationRequestDto createContentStatusTranslationRequestDto);
+	ContentStatusTranslationResponseDto create(CreateContentStatusTranslationRequestDto createContentStatusTranslationRequestDto);
+	ContentStatusTranslationResponseDto update(Long id, UpdateContentStatusTranslationRequestDto updateContentStatusTranslationRequestDto);
 	void delete(Long id);
 }

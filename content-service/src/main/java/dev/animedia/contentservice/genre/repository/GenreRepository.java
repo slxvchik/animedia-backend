@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    List<Genre> findByIdIn(List<Long> ids);
     List<Genre> findByAliasIn(List<String> aliases);
 
     boolean existsByIdIn(List<Long> ids);

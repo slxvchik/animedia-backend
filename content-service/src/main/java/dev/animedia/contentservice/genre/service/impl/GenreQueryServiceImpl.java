@@ -46,7 +46,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	@Override
 	public List<GenreResponseDto> findByIds(List<Long> ids) {
 		Set<Long> uniqueIds = new HashSet<>(ids);
-		var genres = genreRepository.findByIdIn(List.copyOf(uniqueIds));
+		var genres = genreRepository.findAllById(uniqueIds);
 		if (genres.size() != uniqueIds.size()) throw new GenresNotFoundException();
 		return genreMapper.toGenresResponseDto(genres);
 	}
@@ -61,7 +61,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
 	@Override
 	public List<GenreWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode) {
-		var genres = genreRepository.findByIdIn(ids);
+		var genres = genreRepository.findAllById(ids);
 		if (genres.isEmpty()) return List.of();
 		var genreIds = genres.stream().map(Genre::getId).toList();
 		var genresTranslationResponseDto = genreTranslationQueryService.findByGenreIdsAndLanguageCode(genreIds, languageCode);

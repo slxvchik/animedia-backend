@@ -1,6 +1,7 @@
 package dev.animedia.contentservice.contentstatus.service.impl;
 
-import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusSearchRequestDto;
+import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusAdminSearchRequestDto;
+import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusUserSearchRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationsResponseDto;
 import dev.animedia.contentservice.contentstatus.model.ContentStatus;
 import dev.animedia.contentservice.contentstatus.repository.ContentStatusRepository;
@@ -22,10 +23,14 @@ public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 
 	@Override
 	public Page<ContentStatusWithTranslationsResponseDto> search(
-		ContentStatusSearchRequestDto contentStatusSearchRequestDto
+		ContentStatusAdminSearchRequestDto contentStatusAdminSearchRequestDto
 	) {
-		Specification<ContentStatus> specification = FilterSpecification.getSearchSpecification(contentStatusSearchRequestDto);
-		var contentStatuses = contentStatusRepository.findAll(specification);
-		return null;
+		return contentStatusRepository.search(
+			contentStatusAdminSearchRequestDto.contentStatusIds(),
+			contentStatusAdminSearchRequestDto.aliases(),
+			contentStatusAdminSearchRequestDto.languageCodes(),
+			contentStatusAdminSearchRequestDto.names(),
+			contentStatusAdminSearchRequestDto.pageable()
+		);
 	}
 }

@@ -2,6 +2,7 @@ package dev.animedia.contentservice.genre.service.impl;
 
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.exception.GenreTranslationNotFoundException;
+import dev.animedia.contentservice.genre.exception.GenreTranslationsNotFoundException;
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
@@ -28,17 +29,16 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
 
     @Override
     public GenreTranslationResponseDto findById(Long id) {
-
         var genreTranslation = genreTranslationRepository.findById(id)
             .orElseThrow(GenreTranslationNotFoundException::new);
-
         return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslation);
     }
 
     @Override
     public List<GenreTranslationResponseDto> findByIds(List<Long> ids) {
         Set<Long> uniqueIds = new HashSet<>(ids);
-        var genreTranslations = genreTranslationRepository.findByIdIn(List.copyOf(uniqueIds));
+        var genreTranslations = genreTranslationRepository.findAllById(uniqueIds);
+        if (genreTranslations.size() != uniqueIds.size()) throw new GenreTranslationsNotFoundException();
         return genreTranslationMapper.toGenreTranslationsResponseDto(genreTranslations);
     }
 
@@ -69,7 +69,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     @Override
     public boolean existsAllByIds(List<Long> ids) {
         Set<Long> uniqueIds = new HashSet<>(ids);
-        var genreTranslations = genreTranslationRepository.findByIdIn(List.copyOf(uniqueIds));
+        var genreTranslations = genreTranslationRepository.findAllById(uniqueIds);
         return uniqueIds.size() == genreTranslations.size();
     }
 

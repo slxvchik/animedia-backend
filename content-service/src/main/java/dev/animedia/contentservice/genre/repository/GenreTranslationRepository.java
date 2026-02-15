@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface GenreTranslationRepository extends JpaRepository<GenreTranslation, Long>{
 
-    List<GenreTranslation> findByIdIn(List<Long> ids);
     List<GenreTranslation> findByGenreIdIn(List<Long> genreIds);
     List<GenreTranslation> findByGenreIdInAndLanguageCode(List<Long> genreIds, String languageCode);
 

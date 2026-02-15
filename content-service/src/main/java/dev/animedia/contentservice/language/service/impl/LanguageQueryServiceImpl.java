@@ -30,7 +30,7 @@ public class LanguageQueryServiceImpl implements LanguageQueryService {
     }
 
     @Override
-    public List<LanguageResponseDto> findByCodes(Collection<String> languageCodes) {
+    public List<LanguageResponseDto> findByCodes(List<String> languageCodes) {
         var languages = languageRepository.findAllById(languageCodes);
         return languageMapper.toLanguagesResponseDto(languages);
     }

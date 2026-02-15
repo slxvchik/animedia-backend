@@ -1,0 +1,15 @@
+package dev.animedia.contentservice.contentstatus.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
+
+public record ContentStatusUserSearchRequestDto(
+	@NotBlank
+	@NotNull
+	String languageCode,
+	List<String> aliases,
+	List<String> names
+) {
+}
