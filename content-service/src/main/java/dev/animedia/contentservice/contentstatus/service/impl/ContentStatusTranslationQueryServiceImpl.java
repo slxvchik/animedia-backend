@@ -20,7 +20,10 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
     private final ContentStatusTranslationMapper contentStatusTranslationMapper;
 
     @Autowired
-    public ContentStatusTranslationQueryServiceImpl(ContentStatusTranslationRepository contentStatusTranslationRepository, ContentStatusTranslationMapper contentStatusTranslationMapper) {
+    public ContentStatusTranslationQueryServiceImpl(
+        ContentStatusTranslationRepository contentStatusTranslationRepository,
+        ContentStatusTranslationMapper contentStatusTranslationMapper
+    ) {
         this.contentStatusTranslationRepository = contentStatusTranslationRepository;
         this.contentStatusTranslationMapper = contentStatusTranslationMapper;
     }
@@ -43,7 +46,7 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
         Set<Long> uniqueIds = new HashSet<>(ids);
         var contentStatusTranslations = contentStatusTranslationRepository.findAllById(uniqueIds);
         if (contentStatusTranslations.size() != uniqueIds.size()) throw new ContentStatusTranslationsNotFoundException();
-        return contentStatusTranslationMapper.toContentStatusTranslationsResponseDto();
+        return contentStatusTranslationMapper.toContentStatusTranslationsResponseDto(contentStatusTranslations);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.contentstatus.service.impl;
 
-import dev.animedia.contentservice.contentstatus.ContentStatusMapper;
 import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusRequestDto;
+import dev.animedia.contentservice.contentstatus.mapper.ContentStatusMapper;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.contentstatus.exception.ContentStatusAliasExistsException;
 import dev.animedia.contentservice.contentstatus.exception.ContentStatusNotFoundException;

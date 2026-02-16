@@ -31,6 +31,7 @@ public class ContentStatusTranslationMapper {
     }
 
     public ContentStatusTranslationResponseDto toContentStatusTranslationResponseDto(ContentStatusTranslation contentStatusTranslation) {
+        if (contentStatusTranslation == null) return null;
         return new ContentStatusTranslationResponseDto(
             contentStatusTranslation.getId(),
             contentStatusTranslation.getContentStatus().getId(),
@@ -39,7 +40,7 @@ public class ContentStatusTranslationMapper {
         );
     }
 
-    public List<ContentStatusTranslationResponseDto> toContentStatusTranslationsResponseDto(List<>) {
-        return
+    public List<ContentStatusTranslationResponseDto> toContentStatusTranslationsResponseDto(List<ContentStatusTranslation> contentStatusTranslations) {
+        return contentStatusTranslations.stream().map(this::toContentStatusTranslationResponseDto).toList();
     }
 }

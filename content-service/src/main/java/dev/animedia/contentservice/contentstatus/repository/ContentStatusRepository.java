@@ -44,4 +44,7 @@ public interface ContentStatusRepository extends JpaRepository<ContentStatus, Lo
         @Param("aliases") List<String> aliases,
         @Param("names") List<String> names
     );
+
+	boolean existsByAlias(String alias);
+    boolean existsByAliasAndIdIsNot(String alias, Long id);
 }
