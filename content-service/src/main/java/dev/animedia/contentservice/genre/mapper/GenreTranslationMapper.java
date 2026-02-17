@@ -2,7 +2,6 @@ package dev.animedia.contentservice.genre.mapper;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import dev.animedia.contentservice.genre.dto.request.GenreTranslationRequestDto;

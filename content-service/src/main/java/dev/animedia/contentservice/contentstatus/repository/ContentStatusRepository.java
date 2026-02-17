@@ -36,11 +36,11 @@ public interface ContentStatusRepository extends JpaRepository<ContentStatus, Lo
     @Query("SELECT DISTINCT new dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationResponseDto(" +
             "cs.id, cs.alias, cst.id, cst.language.code, cst.name) " +
             "FROM ContentStatus as cs LEFT JOIN FETCH ContentStatusTranslation as cst " +
-            "WHERE cst.language.code = :languageCodes " +
+            "WHERE cst.language.code = :languageCode " +
             "AND (COALESCE(:aliases, NULL) IS NULL OR cs.alias IN :aliases) " +
             "AND (COALESCE(:names, NULL) IS NULL OR cst.name IN :names)")
     List<ContentStatusWithTranslationResponseDto> search(
-        @Param("languageCodes") String languageCode,
+        @Param("languageCode") String languageCode,
         @Param("aliases") List<String> aliases,
         @Param("names") List<String> names
     );

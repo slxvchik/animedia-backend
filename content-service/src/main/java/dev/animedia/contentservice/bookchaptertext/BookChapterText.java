@@ -33,8 +33,8 @@ public class BookChapterText {
     @JoinColumn(name = "language_code")
     private Language language;
 
-    @Column(columnDefinition = "TEXT")
-    private String text;
+    @Column(name = "text_url", length = 512, nullable = false, unique = true)
+    private String textUrl;
 
     public UUID getUuid() {
         return uuid;
@@ -60,11 +60,11 @@ public class BookChapterText {
         this.language = language;
     }
 
-    public String getText() {
-        return text;
+    public String getTextUrl() {
+        return textUrl;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTextUrl(String textUrl) {
+        this.textUrl = textUrl;
     }
 }
