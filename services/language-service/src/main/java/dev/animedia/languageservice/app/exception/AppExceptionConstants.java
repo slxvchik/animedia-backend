@@ -5,5 +5,4 @@ public class AppExceptionConstants {
 
 	public static final String CLIENT_ERROR = "CLIENT_ERROR";
 	public static final String SERVER_ERROR_MESSAGE = "SERVER_ERROR";
-	public static final String BATCH_SIZE_LIMIT_MESSAGE = "BATCH_SIZE_LIMIT";
 }

@@ -1,19 +1,20 @@
 package dev.animedia.languageservice.app.exception;
 
-import dev.animedia.contentservice.app.context.LocaleLanguageContext;
-import dev.animedia.contentservice.app.exception.common.AppErrorTranslationException;
+import dev.animedia.languageservice.app.config.LanguageInterceptor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,71 +28,64 @@ public class AppExceptionMessageService {
 
     private static final Logger LOGGER = Logger.getLogger(AppExceptionMessageService.class.getName());
 
-    public List<String> getExceptionMessage(String exceptionCode, String languageCode) throws IOException {
-        return this.getExceptionMessage(List.of(exceptionCode), languageCode);
+    private final int MAX_CACHE_SIZE = 30;
+    private final Map<String, CacheEntry> cache = Collections.synchronizedMap(
+	    new LinkedHashMap<>(MAX_CACHE_SIZE, 0.75f, true) {
+		    @Override
+		    protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
+			    return size() > MAX_CACHE_SIZE;
+		    }
+	    }
+    );
+    private record CacheEntry(Map<String, String> data, long lastModified) {}
+
+    public List<String> getExceptionMessage(String exceptionCode) {
+        return this.getExceptionMessage(List.of(exceptionCode));
     }
 
-    public List<String> getExceptionMessage(List<String> exceptionCodes, String languageCode) throws IOException {
+    public List<String> getExceptionMessage(List<String> exceptionCodes) {
 
-        String filePath = getFilePath(languageCode);
+        String defaultLanguageCode = LanguageInterceptor.getDefaultLanguageCode();
+        String userLanguageCode = LanguageInterceptor.getLanguageCode();
 
-        Map<String, String> errorMessages = readErrorFile(filePath);
+        Map<String, String> defaultErrorMessages = readErrorFile(getFilePath(defaultLanguageCode));
+        Map<String, String> userLanguageErrorMessages = readErrorFile(getFilePath(userLanguageCode));
 
-        String defaultLanguageCode = LocaleLanguageContext.getDefaultLocaleLanguageCode();
-
-        if (errorMessages.isEmpty() && !languageCode.equals(defaultLanguageCode)) {
-            errorMessages = readErrorFile(getFilePath(defaultLanguageCode));
-        } else if (errorMessages.isEmpty()) throw new AppErrorTranslationException("File with translations not found");
-
-        // For translations that are not found in the selected language
-        List<String> notFoundTranslationCodes = new ArrayList<>();
-
-        List<String> translations = new ArrayList<>();
-
-        for (var exceptionCode : exceptionCodes) {
-            if (!errorMessages.containsKey(exceptionCode)) notFoundTranslationCodes.add(exceptionCode);
-            translations.add(errorMessages.get(exceptionCode));
-        }
-
-        if (!notFoundTranslationCodes.isEmpty()
-                && !languageCode.equals(defaultLanguageCode)) {
-
-            Map<String, String> defaultMessages = readErrorFile(getFilePath(defaultLanguageCode));
-
-            for (var notFoundTranslationCode : notFoundTranslationCodes) {
-                if (!defaultMessages.containsKey(notFoundTranslationCode)) throw new AppErrorTranslationException("Translate code not found: " + notFoundTranslationCode);
-                translations.add(defaultMessages.get(notFoundTranslationCode));
-            }
-        }
-
-        return translations;
+        return exceptionCodes.stream()
+            .map(exceptionCode -> userLanguageErrorMessages.getOrDefault(exceptionCode,
+                defaultErrorMessages.getOrDefault(exceptionCode, "Translating error...")
+            ))
+            .toList();
     }
 
     private String getFilePath(String languageCode) {
         return exceptionLocalePath + languageCode + ".json";
     }
 
-    private Map<String, String> readErrorFile(String filePath) throws IOException {
+    private Map<String, String> readErrorFile(String filePath) {
 
-        Resource resource = new ClassPathResource(filePath);
-
-        if (!resource.exists()) {
-            return Map.of();
-        }
-
-        File file = resource.getFile();
-
-        Map<String, String> allErrorMessages;
         try {
-            allErrorMessages = objectMapper.readValue(
-                file,
-                new TypeReference<>() {}
-            );
+
+            Path path = Path.of(filePath);
+            if (!Files.exists(path)) return Map.of();
+
+            long currentModified = Files.getLastModifiedTime(path).toMillis();
+            CacheEntry cached = cache.get(filePath);
+
+            if (cached != null && cached.lastModified() == currentModified) return cached.data();
+
+            synchronized (this) {
+                Map<String, String> messages = objectMapper.readValue(
+                    path.toFile(),
+                    new TypeReference<>() {}
+                );
+                cache.put(filePath, new CacheEntry(messages, currentModified));
+                return messages;
+            }
+
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error reading a file with translation errors: {0}", ex.getMessage());
             return Map.of();
         }
-
-        return allErrorMessages;
     }
 }

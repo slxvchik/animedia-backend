@@ -26,7 +26,6 @@ public class GrpcLanguageService extends LanguageServiceGrpc.LanguageServiceImpl
 
 	@Override
 	public void get(CommonProto.AppRequest request, StreamObserver<CommonProto.AppResponse> responseObserver) {
-		String languageCode = request.getLanguageCode();
 		if (request.getData().is(LanguageProto.GetLanguageRequest.class)) {
 
 		} else {
