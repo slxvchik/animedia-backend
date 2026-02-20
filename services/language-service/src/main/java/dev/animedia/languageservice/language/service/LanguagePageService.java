@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface LanguagePageService {
-	Page<LanguageResponseDto> search(List<String> languageCodes, List<String> names, Pageable pageable);
+	Page<LanguageResponseDto> search(List<String> languageCodes, List<String> nativeNames, Boolean isActive, Pageable pageable);
 }

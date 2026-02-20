@@ -6,15 +6,12 @@ import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,10 +36,6 @@ public class AppExceptionMessageService {
     );
     private record CacheEntry(Map<String, String> data, long lastModified) {}
 
-    public List<String> getExceptionMessage(String exceptionCode) {
-        return this.getExceptionMessage(List.of(exceptionCode));
-    }
-
     public List<String> getExceptionMessage(List<String> exceptionCodes) {
 
         String defaultLanguageCode = LanguageInterceptor.getDefaultLanguageCode();
@@ -59,7 +52,7 @@ public class AppExceptionMessageService {
     }
 
     private String getFilePath(String languageCode) {
-        return exceptionLocalePath + languageCode + ".json";
+        return exceptionLocalePath + "/" + languageCode + ".json";
     }
 
     private Map<String, String> readErrorFile(String filePath) {

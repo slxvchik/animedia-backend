@@ -1,0 +1,11 @@
+{
+  "CLIENT_ERROR": "Client error.",
+  "SERVER_ERROR": "Internal server error.",
+  "LANGUAGE_CODE_REQUIRED": "Language code is required.",
+  "LANGUAGE_CODE_NOT_FOUND": "This language is not yet available.",
+  "LANGUAGE_CODE_EXISTS": "This language code already exists.",
+  "LANGUAGE_CODE_INVALID_PATTERN": "Language code must be 2 lowercase characters [a-z].",
+  "LANGUAGE_CODES_NOT_FOUND": "Some language codes were not found.",
+  "LANGUAGE_NAME_REQUIRED": "Language name is required.",
+  "LANGUAGE_NAME_EXISTS": "This language name already exists."
+}

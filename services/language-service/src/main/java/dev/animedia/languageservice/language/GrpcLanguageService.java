@@ -3,118 +3,108 @@ package dev.animedia.languageservice.language;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.language.LanguageProto;
 import dev.animedia.grpc.language.LanguageServiceGrpc;
+import dev.animedia.languageservice.app.FieldValidator;
+import dev.animedia.languageservice.app.PaginationMapper;
+import dev.animedia.languageservice.language.dto.LanguageRequestDto;
 import dev.animedia.languageservice.language.service.LanguageCommandService;
 import dev.animedia.languageservice.language.service.LanguagePageService;
-import io.grpc.Status;
+import dev.animedia.languageservice.language.service.LanguageQueryService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
+
 
 @GrpcService
 public class GrpcLanguageService extends LanguageServiceGrpc.LanguageServiceImplBase {
 
 	private final LanguagePageService languagePageService;
 	private final LanguageCommandService languageCommandService;
+	private final LanguageMapper languageMapper;
+	private final LanguageQueryService languageQueryService;
+	private final PaginationMapper paginationMapper;
+	private final FieldValidator fieldValidator;
 
 	@Autowired
 	public GrpcLanguageService(LanguagePageService languagePageService,
-		LanguageCommandService languageCommandService
+		LanguageCommandService languageCommandService,
+		LanguageMapper languageMapper,
+		LanguageQueryService languageQueryService,
+		PaginationMapper paginationMapper, FieldValidator fieldValidator
 	) {
 		this.languagePageService = languagePageService;
 		this.languageCommandService = languageCommandService;
+		this.languageMapper = languageMapper;
+		this.languageQueryService = languageQueryService;
+		this.paginationMapper = paginationMapper;
+		this.fieldValidator = fieldValidator;
 	}
 
 	@Override
-	public void get(CommonProto.AppRequest request, StreamObserver<CommonProto.AppResponse> responseObserver) {
-		if (request.getData().is(LanguageProto.GetLanguageRequest.class)) {
+	public void get(
+		LanguageProto.GetLanguageRequest request,
+		StreamObserver<LanguageProto.LanguageResponse> responseObserver
+	) {
+		String languageCode = request.getCode();
+		var languageResponseDto = languageQueryService.findByCode(languageCode);
 
-		} else {
-			CommonProto.AppResponse response = CommonProto.AppResponse.newBuilder()
-				.setSuccess(false)
-				.addErrors("")
-				.build();
-			var statusRuntimeException = Status.INVALID_ARGUMENT.withDescription("").asException();
-			responseObserver.onError(statusRuntimeException);
-		}
+		var response = languageMapper.toProtoResponse(languageResponseDto);
+
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void search(CommonProto.AppRequest request, StreamObserver<CommonProto.AppResponse> responseObserver) {
-		super.search(request, responseObserver);
+	public void search(
+		LanguageProto.SearchLanguageRequest request,
+		StreamObserver<LanguageProto.LanguageListResponse> responseObserver
+	) {
+		var pageable = paginationMapper.toPageable(request.getPagination());
+		var languagesResponseDto = languagePageService.search(request.getCodesList(), request.getNativeNamesList(), request.hasIsActive() ? request.getIsActive() : null, pageable);
+
+		var paginationResponse = paginationMapper.toProtoPaginationResponse(languagesResponseDto);
+
+		var response = languageMapper.toProtoListResponse(languagesResponseDto.getContent(), paginationResponse);
+
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void create(CommonProto.AppRequest request, StreamObserver<CommonProto.AppResponse> responseObserver) {
-		super.create(request, responseObserver);
+	public void create(
+		LanguageProto.CreateLanguageRequest request,
+		StreamObserver<LanguageProto.LanguageResponse> responseObserver
+	) {
+		var languageRequestDto = languageMapper.toLanguageRequestDto(request);
+		fieldValidator.validate(languageRequestDto);
+		var languageResponseDto = languageCommandService.create(languageRequestDto);
+		var response = languageMapper.toProtoResponse(languageResponseDto);
+
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void update(CommonProto.AppRequest request, StreamObserver<CommonProto.AppResponse> responseObserver) {
-		super.update(request, responseObserver);
+	public void update(
+		LanguageProto.UpdateLanguageRequest request,
+		StreamObserver<LanguageProto.LanguageResponse> responseObserver
+	) {
+		var languageRequestDto = languageMapper.toLanguageRequestDto(request);
+		fieldValidator.validate(languageRequestDto);
+		var languageResponseDto = languageCommandService.update(languageRequestDto);
+		var response = languageMapper.toProtoResponse(languageResponseDto);
+
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void delete(CommonProto.AppRequest request, StreamObserver<CommonProto.AppResponse> responseObserver) {
-		super.delete(request, responseObserver);
+	public void delete(
+		LanguageProto.DeleteLanguageRequest request,
+		StreamObserver<CommonProto.EmptyResponse> responseObserver
+	) {
+		String languageCode = request.getCode();
+		languageCommandService.delete(languageCode);
+
+		responseObserver.onCompleted();
 	}
-
-
-//	public ResponseEntity<AppResponseDto<PagedResponse<LanguageResponseDto>>> search(
-//		@PageableDefault
-//		Pageable pageable,
-//		@RequestParam(required = false)
-//		@Size(max = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
-//		List<String> languagesCodes,
-//		@RequestParam(required = false)
-//		@Size(max = 100, message = AppExceptionConstants.BATCH_SIZE_LIMIT_MESSAGE)
-//		List<String> names
-//	) {
-//		var appR = CommonProto.AppResponse.newBuilder();
-//
-//		Page<LanguageResponseDto> languagesResponseDto = languagePageService.search(languagesCodes, names, pageable);
-//		return ResponseEntity.ok(
-//			AppResponseDto.success(
-//				PagedResponse.getPagedResponse(languagesResponseDto)
-//			)
-//		);
-//	}
-//
-//	@PostMapping
-//	public ResponseEntity<AppResponseDto<ContentResponse<LanguageResponseDto>>> create(
-//		@Validated
-//		LanguageRequestDto languageRequestDto
-//	) {
-//		var createdGenre = languageCommandService.create(languageRequestDto);
-//		return ResponseEntity.ok(
-//			AppResponseDto.success(
-//				ContentResponse.content(createdGenre)
-//			)
-//		);
-//	}
-//
-//	@PutMapping
-//	public ResponseEntity<AppResponseDto<ContentResponse<LanguageResponseDto>>> update(
-//		@Validated
-//		LanguageRequestDto languageRequestDto
-//	) {
-//		var updatedGenre = languageCommandService.update(languageRequestDto);
-//		return ResponseEntity.ok(
-//			AppResponseDto.success(
-//				ContentResponse.content(updatedGenre)
-//			)
-//		);
-//	}
-//
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<AppResponseDto<ContentResponse<LanguageResponseDto>>> delete(
-//		@PathVariable
-//		String id
-//	) {
-//		languageCommandService.delete(id);
-//		return ResponseEntity.ok(
-//			AppResponseDto.success(
-//				ContentResponse.content()
-//			)
-//		);
-//	}
 }

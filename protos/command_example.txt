@@ -1,2 +1,2 @@
-protoc --java_out=../services/language-service/protobuf --proto_path=. .\common\common.proto
-protoc --plugin=protoc-gen-grpc-java="C:\Program Files\protoc-33.5-win64\bin\protoc-gen-grpc-java-1.79.0-windows-x86_64.exe" --grpc-java_out=../services/language-service/protobuf --java_out=../services/language-service/protobuf --proto_path=. .\services\language\language.proto
+protoc --java_out=../services/language-service/src/main/java --proto_path=. .\common\common.proto
+protoc --plugin=protoc-gen-grpc-java="C:\Program Files\protoc-33.5-win64\bin\protoc-gen-grpc-java-1.79.0-windows-x86_64.exe" --grpc-java_out=../services/language-service/src/main/java --java_out=../services/language-service/src/main/java --proto_path=. .\services\language\language.proto

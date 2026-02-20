@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class LanguageInterceptor implements ServerInterceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LanguageInterceptor.class);
-	private static final Context.Key<String> LANGUAGE_CONTEXT = Context.key("language");
+	public static final Context.Key<String> LANGUAGE_CONTEXT = Context.key("language");
 	private static final String DEFAULT_LANGUAGE_CODE = "en";
 
 	@Override
@@ -27,8 +27,16 @@ public class LanguageInterceptor implements ServerInterceptor {
 		}
 
 		Context context = Context.current().withValue(LANGUAGE_CONTEXT, languageCode);
-
-		return Contexts.interceptCall(context, call, headers, next);
+		return  Contexts.interceptCall(
+			context, call, headers,
+			(call1, headers1) -> {
+				try {
+					return context.call(() -> next.startCall(call1, headers1));
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		);
 	}
 
 	public static String getLanguageCode() {

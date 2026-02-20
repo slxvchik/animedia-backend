@@ -21,7 +21,7 @@ public class LanguagePageServiceImpl implements LanguagePageService {
 	}
 
 	@Override
-	public Page<LanguageResponseDto> search(List<String> languageCodes, List<String> names, Pageable pageable) {
-		return languageNativeRepository.searchPage(languageCodes, names, pageable);
+	public Page<LanguageResponseDto> search(List<String> languageCodes, List<String> nativeNames, Boolean isActive, Pageable pageable) {
+		return languageNativeRepository.searchPage(languageCodes, nativeNames, isActive, pageable);
 	}
 }

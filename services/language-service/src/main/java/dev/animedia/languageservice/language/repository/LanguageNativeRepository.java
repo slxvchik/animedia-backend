@@ -24,10 +24,15 @@ public class LanguageNativeRepository {
 
 	private final RowMapper<LanguageResponseDto> languageResponseDtoRowMapper = (resultSet, rowNum) -> new LanguageResponseDto(
 		resultSet.getString("code"),
-		resultSet.getString("name")
+		resultSet.getString("name"),
+		resultSet.getString("native_name"),
+		resultSet.getBoolean("is_active"),
+		resultSet.getBoolean("is_default"),
+		resultSet.getInt("sort_order"),
+		resultSet.getString("flag_emoji")
 	);
 
-	public Page<LanguageResponseDto> searchPage(List<String> languageCodes, List<String> names, Pageable pageable) {
+	public Page<LanguageResponseDto> searchPage(List<String> languageCodes, List<String> nativeNames, Boolean isActive, Pageable pageable) {
 
 		List<String> whereConditions = new ArrayList<>();
 		List<Object> params = new ArrayList<>();
@@ -43,16 +48,20 @@ public class LanguageNativeRepository {
 			whereConditions.add("(" + String.join(" OR ", languageCodesWhereConditions) + ")");
 
 
-		List<String> namesConditions = new ArrayList<>();
-		Optional.ofNullable(names).stream().flatMap(Collection::stream)
-			.filter(name -> name != null && !name.isBlank())
-			.forEach(name -> {
-				namesConditions.add("LOWER(name) LIKE LOWER(?)");
-				params.add("%" + name + "%");
+		List<String> nativeNamesConditions = new ArrayList<>();
+		Optional.ofNullable(nativeNames).stream().flatMap(Collection::stream)
+			.filter(nativeName -> nativeName != null && !nativeName.isBlank())
+			.forEach(nativeName -> {
+				nativeNamesConditions.add("LOWER(native_name) LIKE LOWER(?)");
+				params.add("%" + nativeName + "%");
 			});
-		if (!namesConditions.isEmpty())
-			whereConditions.add("(" + String.join(" OR ", namesConditions) + ")");
+		if (!nativeNamesConditions.isEmpty())
+			whereConditions.add("(" + String.join(" OR ", nativeNamesConditions) + ")");
 
+		if (isActive != null) {
+			whereConditions.add("is_active = ?");
+			params.add(isActive);
+		}
 
 		String whereClause = whereConditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", whereConditions);
 
@@ -60,7 +69,7 @@ public class LanguageNativeRepository {
 
 		Long total = jdbcTemplate.queryForObject(countSql, Long.class, params.toArray());
 
-		String sql = "SELECT code, name FROM language" + whereClause + " ORDER BY code LIMIT ? OFFSET ?";
+		String sql = "SELECT code, name, native_name, is_active, is_default, sort_order, flag_emoji FROM language" + whereClause + " ORDER BY code LIMIT ? OFFSET ?";
 
 		params.add(pageable.getPageSize());
 		params.add(pageable.getOffset());

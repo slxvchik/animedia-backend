@@ -15,19 +15,19 @@ public class Language {
     @Column(length = 128, unique = true, nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "native_name")
     private String nativeName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_active")
     private Boolean isActive = false;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_default")
     private Boolean isDefault = false;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "sort_order")
     private Integer sortOrder = 0;
 
-    @Column
+    @Column(name = "flag_emoji")
     private String flagEmoji;
 
     public String getCode() {

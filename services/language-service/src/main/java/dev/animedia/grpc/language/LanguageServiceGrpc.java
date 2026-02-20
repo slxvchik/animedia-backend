@@ -12,29 +12,29 @@ public final class LanguageServiceGrpc {
   public static final java.lang.String SERVICE_NAME = "protos.services.language.LanguageService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getGetMethod;
+  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.GetLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageResponse> getGetMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "get",
-      requestType = dev.animedia.grpc.common.CommonProto.AppRequest.class,
-      responseType = dev.animedia.grpc.common.CommonProto.AppResponse.class,
+      requestType = dev.animedia.grpc.language.LanguageProto.GetLanguageRequest.class,
+      responseType = dev.animedia.grpc.language.LanguageProto.LanguageResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getGetMethod() {
-    io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse> getGetMethod;
+  public static io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.GetLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageResponse> getGetMethod() {
+    io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.GetLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageResponse> getGetMethod;
     if ((getGetMethod = LanguageServiceGrpc.getGetMethod) == null) {
       synchronized (LanguageServiceGrpc.class) {
         if ((getGetMethod = LanguageServiceGrpc.getGetMethod) == null) {
           LanguageServiceGrpc.getGetMethod = getGetMethod =
-              io.grpc.MethodDescriptor.<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse>newBuilder()
+              io.grpc.MethodDescriptor.<dev.animedia.grpc.language.LanguageProto.GetLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "get"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppRequest.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.GetLanguageRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppResponse.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.LanguageResponse.getDefaultInstance()))
               .setSchemaDescriptor(new LanguageServiceMethodDescriptorSupplier("get"))
               .build();
         }
@@ -43,29 +43,29 @@ public final class LanguageServiceGrpc {
     return getGetMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getSearchMethod;
+  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageListResponse> getSearchMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "search",
-      requestType = dev.animedia.grpc.common.CommonProto.AppRequest.class,
-      responseType = dev.animedia.grpc.common.CommonProto.AppResponse.class,
+      requestType = dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest.class,
+      responseType = dev.animedia.grpc.language.LanguageProto.LanguageListResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getSearchMethod() {
-    io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse> getSearchMethod;
+  public static io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageListResponse> getSearchMethod() {
+    io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageListResponse> getSearchMethod;
     if ((getSearchMethod = LanguageServiceGrpc.getSearchMethod) == null) {
       synchronized (LanguageServiceGrpc.class) {
         if ((getSearchMethod = LanguageServiceGrpc.getSearchMethod) == null) {
           LanguageServiceGrpc.getSearchMethod = getSearchMethod =
-              io.grpc.MethodDescriptor.<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse>newBuilder()
+              io.grpc.MethodDescriptor.<dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageListResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "search"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppRequest.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppResponse.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.LanguageListResponse.getDefaultInstance()))
               .setSchemaDescriptor(new LanguageServiceMethodDescriptorSupplier("search"))
               .build();
         }
@@ -74,29 +74,29 @@ public final class LanguageServiceGrpc {
     return getSearchMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getCreateMethod;
+  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageResponse> getCreateMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "create",
-      requestType = dev.animedia.grpc.common.CommonProto.AppRequest.class,
-      responseType = dev.animedia.grpc.common.CommonProto.AppResponse.class,
+      requestType = dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest.class,
+      responseType = dev.animedia.grpc.language.LanguageProto.LanguageResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getCreateMethod() {
-    io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse> getCreateMethod;
+  public static io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageResponse> getCreateMethod() {
+    io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageResponse> getCreateMethod;
     if ((getCreateMethod = LanguageServiceGrpc.getCreateMethod) == null) {
       synchronized (LanguageServiceGrpc.class) {
         if ((getCreateMethod = LanguageServiceGrpc.getCreateMethod) == null) {
           LanguageServiceGrpc.getCreateMethod = getCreateMethod =
-              io.grpc.MethodDescriptor.<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse>newBuilder()
+              io.grpc.MethodDescriptor.<dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "create"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppRequest.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppResponse.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.LanguageResponse.getDefaultInstance()))
               .setSchemaDescriptor(new LanguageServiceMethodDescriptorSupplier("create"))
               .build();
         }
@@ -105,29 +105,29 @@ public final class LanguageServiceGrpc {
     return getCreateMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getUpdateMethod;
+  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageResponse> getUpdateMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "update",
-      requestType = dev.animedia.grpc.common.CommonProto.AppRequest.class,
-      responseType = dev.animedia.grpc.common.CommonProto.AppResponse.class,
+      requestType = dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest.class,
+      responseType = dev.animedia.grpc.language.LanguageProto.LanguageResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getUpdateMethod() {
-    io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse> getUpdateMethod;
+  public static io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest,
+      dev.animedia.grpc.language.LanguageProto.LanguageResponse> getUpdateMethod() {
+    io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageResponse> getUpdateMethod;
     if ((getUpdateMethod = LanguageServiceGrpc.getUpdateMethod) == null) {
       synchronized (LanguageServiceGrpc.class) {
         if ((getUpdateMethod = LanguageServiceGrpc.getUpdateMethod) == null) {
           LanguageServiceGrpc.getUpdateMethod = getUpdateMethod =
-              io.grpc.MethodDescriptor.<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse>newBuilder()
+              io.grpc.MethodDescriptor.<dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest, dev.animedia.grpc.language.LanguageProto.LanguageResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "update"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppRequest.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppResponse.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.LanguageResponse.getDefaultInstance()))
               .setSchemaDescriptor(new LanguageServiceMethodDescriptorSupplier("update"))
               .build();
         }
@@ -136,29 +136,29 @@ public final class LanguageServiceGrpc {
     return getUpdateMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getDeleteMethod;
+  private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest,
+      dev.animedia.grpc.common.CommonProto.EmptyResponse> getDeleteMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "delete",
-      requestType = dev.animedia.grpc.common.CommonProto.AppRequest.class,
-      responseType = dev.animedia.grpc.common.CommonProto.AppResponse.class,
+      requestType = dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest.class,
+      responseType = dev.animedia.grpc.common.CommonProto.EmptyResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest,
-      dev.animedia.grpc.common.CommonProto.AppResponse> getDeleteMethod() {
-    io.grpc.MethodDescriptor<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse> getDeleteMethod;
+  public static io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest,
+      dev.animedia.grpc.common.CommonProto.EmptyResponse> getDeleteMethod() {
+    io.grpc.MethodDescriptor<dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest, dev.animedia.grpc.common.CommonProto.EmptyResponse> getDeleteMethod;
     if ((getDeleteMethod = LanguageServiceGrpc.getDeleteMethod) == null) {
       synchronized (LanguageServiceGrpc.class) {
         if ((getDeleteMethod = LanguageServiceGrpc.getDeleteMethod) == null) {
           LanguageServiceGrpc.getDeleteMethod = getDeleteMethod =
-              io.grpc.MethodDescriptor.<dev.animedia.grpc.common.CommonProto.AppRequest, dev.animedia.grpc.common.CommonProto.AppResponse>newBuilder()
+              io.grpc.MethodDescriptor.<dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest, dev.animedia.grpc.common.CommonProto.EmptyResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "delete"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppRequest.getDefaultInstance()))
+                  dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.common.CommonProto.AppResponse.getDefaultInstance()))
+                  dev.animedia.grpc.common.CommonProto.EmptyResponse.getDefaultInstance()))
               .setSchemaDescriptor(new LanguageServiceMethodDescriptorSupplier("delete"))
               .build();
         }
@@ -232,36 +232,36 @@ public final class LanguageServiceGrpc {
 
     /**
      */
-    default void get(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    default void get(dev.animedia.grpc.language.LanguageProto.GetLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetMethod(), responseObserver);
     }
 
     /**
      */
-    default void search(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    default void search(dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageListResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSearchMethod(), responseObserver);
     }
 
     /**
      */
-    default void create(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    default void create(dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateMethod(), responseObserver);
     }
 
     /**
      */
-    default void update(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    default void update(dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateMethod(), responseObserver);
     }
 
     /**
      */
-    default void delete(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    default void delete(dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.EmptyResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getDeleteMethod(), responseObserver);
     }
   }
@@ -295,40 +295,40 @@ public final class LanguageServiceGrpc {
 
     /**
      */
-    public void get(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    public void get(dev.animedia.grpc.language.LanguageProto.GetLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void search(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    public void search(dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageListResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getSearchMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void create(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    public void create(dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getCreateMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void update(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    public void update(dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void delete(dev.animedia.grpc.common.CommonProto.AppRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse> responseObserver) {
+    public void delete(dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest request,
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.EmptyResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getDeleteMethod(), getCallOptions()), request, responseObserver);
     }
@@ -352,35 +352,35 @@ public final class LanguageServiceGrpc {
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse get(dev.animedia.grpc.common.CommonProto.AppRequest request) throws io.grpc.StatusException {
+    public dev.animedia.grpc.language.LanguageProto.LanguageResponse get(dev.animedia.grpc.language.LanguageProto.GetLanguageRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse search(dev.animedia.grpc.common.CommonProto.AppRequest request) throws io.grpc.StatusException {
+    public dev.animedia.grpc.language.LanguageProto.LanguageListResponse search(dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getSearchMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse create(dev.animedia.grpc.common.CommonProto.AppRequest request) throws io.grpc.StatusException {
+    public dev.animedia.grpc.language.LanguageProto.LanguageResponse create(dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCreateMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse update(dev.animedia.grpc.common.CommonProto.AppRequest request) throws io.grpc.StatusException {
+    public dev.animedia.grpc.language.LanguageProto.LanguageResponse update(dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getUpdateMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse delete(dev.animedia.grpc.common.CommonProto.AppRequest request) throws io.grpc.StatusException {
+    public dev.animedia.grpc.common.CommonProto.EmptyResponse delete(dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteMethod(), getCallOptions(), request);
     }
@@ -404,35 +404,35 @@ public final class LanguageServiceGrpc {
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse get(dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public dev.animedia.grpc.language.LanguageProto.LanguageResponse get(dev.animedia.grpc.language.LanguageProto.GetLanguageRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse search(dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public dev.animedia.grpc.language.LanguageProto.LanguageListResponse search(dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getSearchMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse create(dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public dev.animedia.grpc.language.LanguageProto.LanguageResponse create(dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getCreateMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse update(dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public dev.animedia.grpc.language.LanguageProto.LanguageResponse update(dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getUpdateMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public dev.animedia.grpc.common.CommonProto.AppResponse delete(dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public dev.animedia.grpc.common.CommonProto.EmptyResponse delete(dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getDeleteMethod(), getCallOptions(), request);
     }
@@ -456,40 +456,40 @@ public final class LanguageServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.common.CommonProto.AppResponse> get(
-        dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.language.LanguageProto.LanguageResponse> get(
+        dev.animedia.grpc.language.LanguageProto.GetLanguageRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.common.CommonProto.AppResponse> search(
-        dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.language.LanguageProto.LanguageListResponse> search(
+        dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getSearchMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.common.CommonProto.AppResponse> create(
-        dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.language.LanguageProto.LanguageResponse> create(
+        dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getCreateMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.common.CommonProto.AppResponse> update(
-        dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.language.LanguageProto.LanguageResponse> update(
+        dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getUpdateMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.common.CommonProto.AppResponse> delete(
-        dev.animedia.grpc.common.CommonProto.AppRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.common.CommonProto.EmptyResponse> delete(
+        dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getDeleteMethod(), getCallOptions()), request);
     }
@@ -519,24 +519,24 @@ public final class LanguageServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_GET:
-          serviceImpl.get((dev.animedia.grpc.common.CommonProto.AppRequest) request,
-              (io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse>) responseObserver);
+          serviceImpl.get((dev.animedia.grpc.language.LanguageProto.GetLanguageRequest) request,
+              (io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse>) responseObserver);
           break;
         case METHODID_SEARCH:
-          serviceImpl.search((dev.animedia.grpc.common.CommonProto.AppRequest) request,
-              (io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse>) responseObserver);
+          serviceImpl.search((dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest) request,
+              (io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageListResponse>) responseObserver);
           break;
         case METHODID_CREATE:
-          serviceImpl.create((dev.animedia.grpc.common.CommonProto.AppRequest) request,
-              (io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse>) responseObserver);
+          serviceImpl.create((dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest) request,
+              (io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse>) responseObserver);
           break;
         case METHODID_UPDATE:
-          serviceImpl.update((dev.animedia.grpc.common.CommonProto.AppRequest) request,
-              (io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse>) responseObserver);
+          serviceImpl.update((dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest) request,
+              (io.grpc.stub.StreamObserver<dev.animedia.grpc.language.LanguageProto.LanguageResponse>) responseObserver);
           break;
         case METHODID_DELETE:
-          serviceImpl.delete((dev.animedia.grpc.common.CommonProto.AppRequest) request,
-              (io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.AppResponse>) responseObserver);
+          serviceImpl.delete((dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest) request,
+              (io.grpc.stub.StreamObserver<dev.animedia.grpc.common.CommonProto.EmptyResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -560,36 +560,36 @@ public final class LanguageServiceGrpc {
           getGetMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              dev.animedia.grpc.common.CommonProto.AppRequest,
-              dev.animedia.grpc.common.CommonProto.AppResponse>(
+              dev.animedia.grpc.language.LanguageProto.GetLanguageRequest,
+              dev.animedia.grpc.language.LanguageProto.LanguageResponse>(
                 service, METHODID_GET)))
         .addMethod(
           getSearchMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              dev.animedia.grpc.common.CommonProto.AppRequest,
-              dev.animedia.grpc.common.CommonProto.AppResponse>(
+              dev.animedia.grpc.language.LanguageProto.SearchLanguageRequest,
+              dev.animedia.grpc.language.LanguageProto.LanguageListResponse>(
                 service, METHODID_SEARCH)))
         .addMethod(
           getCreateMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              dev.animedia.grpc.common.CommonProto.AppRequest,
-              dev.animedia.grpc.common.CommonProto.AppResponse>(
+              dev.animedia.grpc.language.LanguageProto.CreateLanguageRequest,
+              dev.animedia.grpc.language.LanguageProto.LanguageResponse>(
                 service, METHODID_CREATE)))
         .addMethod(
           getUpdateMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              dev.animedia.grpc.common.CommonProto.AppRequest,
-              dev.animedia.grpc.common.CommonProto.AppResponse>(
+              dev.animedia.grpc.language.LanguageProto.UpdateLanguageRequest,
+              dev.animedia.grpc.language.LanguageProto.LanguageResponse>(
                 service, METHODID_UPDATE)))
         .addMethod(
           getDeleteMethod(),
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
-              dev.animedia.grpc.common.CommonProto.AppRequest,
-              dev.animedia.grpc.common.CommonProto.AppResponse>(
+              dev.animedia.grpc.language.LanguageProto.DeleteLanguageRequest,
+              dev.animedia.grpc.common.CommonProto.EmptyResponse>(
                 service, METHODID_DELETE)))
         .build();
   }

@@ -1,5 +1,5 @@
 services:
-  db:
+  db_language:
     container_name: animedia_language_service_database
     image: postgres:18.0
     environment:
@@ -9,12 +9,12 @@ services:
     ports:
       - "${DB_PORT}:5432"
     volumes:
-      - db_data:/var/lib/postgresql
+      - db_data_language:/var/lib/postgresql
     networks:
       - animedia_language_service
 
 volumes:
-  db_data:
+  db_data_language:
 
 networks:
   animedia_language_service:
