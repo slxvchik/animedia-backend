@@ -2,7 +2,7 @@
   "CLIENT_ERROR": "Ошибка в запросе.",
   "SERVER_ERROR": "Внутренняя ошибка сервера.",
   "LANGUAGE_CODE_REQUIRED": "Код языка обязателен.",
-  "LANGUAGE_CODE_NOT_FOUND": "Этот язык еще недоступен.",
+  "LANGUAGE_CODE_NOT_FOUND": "Язык не найден.",
   "LANGUAGE_CODE_EXISTS": "Такой код языка уже существует.",
   "LANGUAGE_CODE_INVALID_PATTERN": "Код языка должен состоять из 2х символов в нижнем регистре [a-z]",
   "LANGUAGE_CODES_NOT_FOUND": "Некоторые языки не найдены.",
