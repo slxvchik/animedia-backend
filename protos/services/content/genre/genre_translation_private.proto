@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package protos.services.content.genre;
+
+option java_package="dev.animedia.grpc.genre";
+option java_outer_classname="GenreTranslationPrivateProto";
+
+service GenrePublicService {
+    rpc search(SearchRequest) returns (SearchResponse);
+    rpc create(CreateRequest) returns (GenreTranslationResponse);
+    rpc update(UpdateRequest) returns (GenreTranslationResponse);
+    rpc delete(DeleteRequest) returns (common.EmptyRequest);
+    rpc deleteBatch(DeleteBatchRequest) returns (common.EmptyRequest);
+}
+
+message SearchRequest {
+    optional genre_id = 1;
+    repeated string names = 2;
+    repeated string language_codes = 3;
+    common.PaginationRequest pagination = 4;
+}
+
+message SearchResponse {
+    repeated GenreTranslationResponse translations = 1;
+}
+
+message GenreWithTranslationResponse {
+    GenreResponse genre = 1;
+    GenreTranslationResponse translation = 2;
+    common.PaginationResponse pagination = 3;
+}
+
+message CreateRequest {
+    int64 genre_id = 1;
+    string language_code = 2;
+    string name = 3;
+    string description = 4;
+}
+
+message UpdateRequest {
+    int64 id = 1;
+    int64 genre_id = 2;
+    string language_code = 3;
+    string name = 4;
+    string description = 5;
+}
+
+message DeleteRequest {
+    int64 id = 1;
+}
+
+message DeleteBatchRequest {
+    repeated DeleteRequest ids = 1;
+}

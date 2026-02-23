@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package protos.services.content.genre;
+
+option java_package="dev.animedia.grpc.genre";
+option java_outer_classname="GenrePublicProto";
+
+service GenrePublicService {
+    rpc search(SearchRequest) returns (SearchRequest);
+}
+
+message SearchRequest {
+    repeated string alias = 1;
+    repeated string name = 2;
+    common.PaginationRequest pagination = 3;
+}
+
+message SearchRequest {
+    GenreResponse genre = 1;
+    GenreTranslationResponse translation = 2;
+    common.PaginationResponse pagination = 3;
+}

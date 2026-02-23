@@ -34,20 +34,25 @@ public class GenreTranslationNativeRepository {
 		resultSet.getString("description")
 	);
 
-	public Page<GenreTranslationResponseDto> searchPage(String name, Long genreId, List<String> languageCodes, Pageable pageable) {
+	public Page<GenreTranslationResponseDto> searchPage(Long genreId, List<String> names, List<String> languageCodes, Pageable pageable) {
 
 		List<String> whereConditions = new ArrayList<>();
 		List<Object> params = new ArrayList<>();
-
-		if (name != null && !name.isBlank()) {
-			whereConditions.add("LOWER(t.name) LIKE LOWER(?)");
-			params.add("%" + name + "%");
-		}
 
 		if (genreId != null) {
 			whereConditions.add("t.genre_id = ?");
 			params.add(genreId);
 		}
+
+		List<String> namesWhereConditions = new ArrayList<>();
+		Optional.ofNullable(names).stream().flatMap(Collection::stream)
+			.filter(name -> name != null && !name.isBlank())
+			.forEach(name -> {
+				namesWhereConditions.add("LOWER(t.name) LIKE LOWER(?)");
+				params.add("%" + name + "%");
+			});
+		if (!namesWhereConditions.isEmpty())
+			whereConditions.add("(" + String.join(" OR ", namesWhereConditions) + ")");
 
 		List<String> languageCodesWhereConditions = new ArrayList<>();
 		Optional.ofNullable(languageCodes).stream().flatMap(Collection::stream)

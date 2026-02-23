@@ -47,20 +47,30 @@ public class GenreNativeRepository {
 		);
 	};
 
-	public Page<GenreWithTranslationsResponseDto> searchPage(String alias, List<String> languageCodes, String name, Pageable pageable) {
+	public Page<GenreWithTranslationsResponseDto> searchPage(List<String> aliases, List<String> names, List<String> languageCodes, Pageable pageable) {
 
 		List<String> whereConditions = new ArrayList<>();
 		List<Object> params = new ArrayList<>();
 
-		if (alias != null && !alias.isBlank()) {
-			whereConditions.add("LOWER(g.alias) LIKE LOWER(?)");
-			params.add("%" + alias + "%");
-		}
+		List<String> aliasesWhereConditions = new ArrayList<>();
+		Optional.ofNullable(aliases).stream().flatMap(Collection::stream)
+			.filter(alias -> alias != null && !alias.isBlank)
+			.forEach(alias -> {
+				aliasesWhereConditions.add("LOWER(g.alias) LIKE LOWER(?)");
+				params.add("%" + alias + "%");
+			});
+		if (!aliasesWhereConditions.isEmpty())
+			.whereConditions.add("(" + String.join(" OR ", aliasesWhereConditions) + ")");
 
-		if (name != null && !name.isBlank()) {
-			whereConditions.add("LOWER(t.name) LIKE LOWER(?)");
-			params.add("%" + name + "%");
-		}
+		List<String> namesWhereConditions = new ArrayList<>();
+		Optional.ofNullable(names).stream().flatMap(Collection::stream)
+			.filter(name -> name != null && !name.isBlank)
+			.forEach(name -> {
+				namesWhereConditions.add("LOWER(t.name) LIKE LOWER(?)");
+				params.add("%" + name + "%");
+			});
+		if (!namesWhereConditions.isEmpty())
+			.whereConditions.add("(" + String.join(" OR ", namesWhereConditions) + ")");
 
 		List<String> languageCodesWhereConditions = new ArrayList<>();
 		Optional.ofNullable(languageCodes).stream().flatMap(Collection::stream)
@@ -71,7 +81,6 @@ public class GenreNativeRepository {
 			});
 		if (!languageCodesWhereConditions.isEmpty())
 			whereConditions.add("(" + String.join(" OR ", languageCodesWhereConditions) + ")");
-
 
 		String whereClause = whereConditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", whereConditions);
 

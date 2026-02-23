@@ -23,7 +23,7 @@ message GetLanguageRequest {
 
 message SearchLanguageRequest {
   repeated string codes = 1;
-  repeated string nativeNames = 2;
+  repeated string native_names = 2;
   optional bool is_active = 3;
   optional common.PaginationRequest pagination = 4;
 }
@@ -63,6 +63,6 @@ message LanguageResponse {
 }
 
 message LanguageListResponse {
-  repeated LanguageResponse items = 1;
+  repeated LanguageResponse languages = 1;
   common.PaginationResponse pagination = 2;
 }

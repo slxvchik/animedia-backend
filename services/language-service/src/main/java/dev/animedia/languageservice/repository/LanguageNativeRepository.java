@@ -47,7 +47,6 @@ public class LanguageNativeRepository {
 		if (!languageCodesWhereConditions.isEmpty())
 			whereConditions.add("(" + String.join(" OR ", languageCodesWhereConditions) + ")");
 
-
 		List<String> nativeNamesConditions = new ArrayList<>();
 		Optional.ofNullable(nativeNames).stream().flatMap(Collection::stream)
 			.filter(nativeName -> nativeName != null && !nativeName.isBlank())
