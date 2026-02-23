@@ -1,9 +1,11 @@
 package dev.animedia.contentservice.genre.service.impl;
 
-import dev.animedia.contentservice.genre.exception.*;
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     public GenreResponseDto create(GenreRequestDto genreRequestDto) {
 
         var aliasExists = genreQueryService.existsByAlias(genreRequestDto.alias());
-        if (aliasExists) throw new GenreAliasExistsException();
+        if (aliasExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
 
         var genre = genreMapper.toGenre(genreRequestDto);
 
@@ -51,19 +53,15 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     public List<GenreResponseDto> create(List<GenreRequestDto> genresRequestDto) {
 
         Set<String> aliases = new HashSet<>();
-
         List<Genre> genres = new ArrayList<>();
 
         for (var createGenreDto : genresRequestDto) {
-
             if (!aliases.add(createGenreDto.alias())) continue;
-
             genres.add(genreMapper.toGenre(createGenreDto));
         }
 
         var genreAliasesExists = genreQueryService.existsAnyByAliases(List.copyOf(aliases));
-
-        if (genreAliasesExists) throw new GenreAliasExistsException();
+        if (genreAliasesExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
 
         var savedGenres = genreRepository.saveAll(genres);
 
@@ -74,10 +72,10 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     public GenreResponseDto update(Long id, GenreRequestDto genreRequestDto) {
 
         var genre = genreRepository.findById(id)
-            .orElseThrow(GenreNotFoundException::new);
+            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE));
 
         var aliasExists = genreQueryService.existsByAliasExcludingId(genreRequestDto.alias(), id);
-        if (aliasExists) throw new GenreAliasExistsException();
+        if (aliasExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
 
         genre.setAlias(genreRequestDto.alias());
         genre.setSort(genreRequestDto.sort());
@@ -89,19 +87,15 @@ public class GenreCommandServiceImpl implements GenreCommandService {
 
     @Override
     public void delete(Long id) {
-
         var genreExists = genreQueryService.existsById(id);
-        if (!genreExists) throw new GenreNotFoundException();
-
+        if (!genreExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
         genreRepository.deleteById(id);
     }
 
     @Override
     public void delete(List<Long> ids) {
-
         var allGenresExists = genreQueryService.existsAllByIds(ids);
-        if (!allGenresExists) throw new GenresNotFoundException();
-
+        if (!allGenresExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
         genreRepository.deleteAllByIdInBatch(ids);
     }
 }

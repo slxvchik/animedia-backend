@@ -10,12 +10,12 @@ option java_outer_classname="GenrePrivateProto";
 
 service GenrePrivateService {
     rpc search(SearchRequest) returns (SearchResponse);
-    
+
     rpc create(CreateRequest) returns (GenreResponse);
-    rpc createBatch(CreateBatchRequest) returns (CreateBatchResponse);
-    
+    rpc createBatch(CreateBatchRequest) returns (GenreResponseList);
+
     rpc update(UpdateRequest) returns (GenreResponse);
-    
+
     rpc delete(DeleteRequest) returns (common.EmptyResponse);
     rpc deleteBatch(DeleteBatchRequest) returns (common.EmptyResponse);
 }
@@ -32,8 +32,8 @@ message SearchResponse {
 
 message SearchRequest {
     repeated string alias = 1;
-    repeated string language_codes = 2;
-    optional string name = 3;
+    repeated string names = 2;
+    repeated string language_codes = 3;
     optional common.PaginationRequest pagination = 4;
 }
 
@@ -44,10 +44,6 @@ message CreateRequest {
 
 message CreateBatchRequest {
     repeated CreateRequest genres = 1;
-}
-
-message CreateBatchResponse {
-    repeated GenreResponse genres = 1;
 }
 
 message UpdateRequest {

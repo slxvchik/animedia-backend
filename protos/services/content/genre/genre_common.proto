@@ -11,6 +11,10 @@ message GenreResponse {
     int64 sort = 3;
 }
 
+message GenreResponseList {
+    repeated GenreResponse genres = 1;
+}
+
 message GenreTranslationResponse {
     int64 id = 1;
     int64 genre_id = 2;

@@ -1,27 +1,42 @@
 package dev.animedia.contentservice.app.exception;
 
-import org.springframework.http.HttpStatus;
+import io.grpc.Status.Code;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class AppException extends RuntimeException {
+public class AppException extends RuntimeException {
 
-    private final HttpStatus httpStatus;
-    private final String code;
+    private final Code grpcStatus;
+    private final List<String> codes;
     private static final Logger LOGGER = Logger.getLogger(AppException.class.getName());
 
-    protected AppException(HttpStatus httpStatus, String code) {
-        LOGGER.log(Level.WARNING, "App exception: {0}", String.format("Http status code: %s; code: %s;",  httpStatus.toString(), code));
-        this.httpStatus = httpStatus;
-        this.code = code;
+    public AppException(Code grpcStatus, List<String> codes) {
+        LOGGER.log(Level.WARNING, "App exception: {0}", String.format("Grpc status code: %s; codes: %s;",  grpcStatus.name(), codes));
+        this.grpcStatus = grpcStatus;
+        this.codes = codes;
     }
 
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    public AppException(Code grpcStatus, String codes) {
+        this(grpcStatus, List.of(codes));
     }
 
-    public String getCode() {
-        return code;
+    public AppException(List<String> codes) {
+        LOGGER.log(Level.WARNING, "App exception: {0}", String.format("Codes: %s;", codes));
+        this.grpcStatus = Code.INTERNAL;
+        this.codes = codes;
+    }
+
+    public AppException(String code) {
+        this(List.of(code));
+    }
+
+    public Code getGrpcStatus() {
+        return grpcStatus;
+    }
+
+    public List<String> getCodes() {
+        return codes;
     }
 }

@@ -54,23 +54,23 @@ public class GenreNativeRepository {
 
 		List<String> aliasesWhereConditions = new ArrayList<>();
 		Optional.ofNullable(aliases).stream().flatMap(Collection::stream)
-			.filter(alias -> alias != null && !alias.isBlank)
+			.filter(alias -> alias != null && !alias.isBlank())
 			.forEach(alias -> {
 				aliasesWhereConditions.add("LOWER(g.alias) LIKE LOWER(?)");
 				params.add("%" + alias + "%");
 			});
 		if (!aliasesWhereConditions.isEmpty())
-			.whereConditions.add("(" + String.join(" OR ", aliasesWhereConditions) + ")");
+			whereConditions.add("(" + String.join(" OR ", aliasesWhereConditions) + ")");
 
 		List<String> namesWhereConditions = new ArrayList<>();
 		Optional.ofNullable(names).stream().flatMap(Collection::stream)
-			.filter(name -> name != null && !name.isBlank)
+			.filter(name -> name != null && !name.isBlank())
 			.forEach(name -> {
 				namesWhereConditions.add("LOWER(t.name) LIKE LOWER(?)");
 				params.add("%" + name + "%");
 			});
 		if (!namesWhereConditions.isEmpty())
-			.whereConditions.add("(" + String.join(" OR ", namesWhereConditions) + ")");
+			whereConditions.add("(" + String.join(" OR ", namesWhereConditions) + ")");
 
 		List<String> languageCodesWhereConditions = new ArrayList<>();
 		Optional.ofNullable(languageCodes).stream().flatMap(Collection::stream)

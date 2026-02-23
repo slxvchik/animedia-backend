@@ -2,10 +2,11 @@ package dev.animedia.contentservice.genre.service.impl;
 
 import java.util.*;
 
-import dev.animedia.contentservice.genre.exception.*;
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
-import dev.animedia.contentservice.language.service.LanguageQueryService;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,6 @@ import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDt
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
-import dev.animedia.contentservice.language.exception.LanguageCodeNotFoundException;
 
 @Service
 public class GenreTranslationCommandServiceImpl implements GenreTranslationCommandService {
@@ -24,7 +24,6 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     private final GenreTranslationRepository genreTranslationRepository;
 
     private final GenreQueryService genreQueryService;
-    private final LanguageQueryService languageQueryService;
     private final GenreTranslationQueryService genreTranslationQueryService;
 
     @Autowired
@@ -32,7 +31,6 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         GenreTranslationMapper genreTranslationMapper,
         GenreTranslationRepository genreTranslationRepository,
         GenreQueryService genreQueryService,
-        LanguageQueryService languageQueryService,
         GenreTranslationQueryService genreTranslationQueryService
     ) {
         this.genreTranslationMapper = genreTranslationMapper;
@@ -40,28 +38,22 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         this.genreTranslationRepository = genreTranslationRepository;
 
         this.genreQueryService = genreQueryService;
-        this.languageQueryService = languageQueryService;
         this.genreTranslationQueryService = genreTranslationQueryService;
     }
 
     @Override
     public GenreTranslationResponseDto create(GenreTranslationRequestDto genreTranslationDto) {
-        
+
         var genreExists = genreQueryService.existsById(
             genreTranslationDto.genreId()
         );
-        if (!genreExists) throw new GenreNotFoundException();
-
-        var languageExists = languageQueryService.existsByCode(
-            genreTranslationDto.languageCode()
-        );
-        if (!languageExists) throw new LanguageCodeNotFoundException();
+        if (!genreExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
 
         var genreTranslationExists = genreTranslationQueryService.existsByGenreIdAndLanguageCode(
             genreTranslationDto.genreId(),
             genreTranslationDto.languageCode()
         );
-        if (!genreTranslationExists) throw new GenreTranslationExistsException();
+        if (genreTranslationExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_TRANSLATION_EXISTS_MESSAGE);
 
         var genreTranslation = genreTranslationMapper.toGenreTranslation(genreTranslationDto);
 
@@ -74,7 +66,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     public GenreTranslationResponseDto update(Long id, GenreTranslationRequestDto genreTranslationDto) {
 
         var genreTranslationDb = genreTranslationRepository.findById(id)
-                .orElseThrow(GenreTranslationNotFoundException::new);
+                .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE));
 
         genreTranslationDb.setName(genreTranslationDto.name());
         genreTranslationDb.setDescription(genreTranslationDto.description());
@@ -88,7 +80,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     public void delete(Long genreTranslationId) {
 
         var genreTranslationExists = genreTranslationQueryService.existsById(genreTranslationId);
-        if (!genreTranslationExists) throw new GenreTranslationNotFoundException();
+        if (!genreTranslationExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
 
         genreTranslationRepository.deleteById(genreTranslationId);
     }
@@ -97,7 +89,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     public void delete(List<Long> genreTranslationIds) {
 
         var allGenreTranslationsExists = genreTranslationQueryService.existsAllByIds(genreTranslationIds);
-        if (!allGenreTranslationsExists) throw new GenreTranslationsNotFoundException();
+        if (!allGenreTranslationsExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
 
         genreTranslationRepository.deleteAllByIdInBatch(genreTranslationIds);
     }

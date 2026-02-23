@@ -4,7 +4,6 @@ import dev.animedia.contentservice.bookchapter.core.BookChapter;
 import dev.animedia.contentservice.comicchapter.core.ComicChapter;
 import dev.animedia.contentservice.contentstatus.model.ContentStatus;
 import dev.animedia.contentservice.genre.model.Genre;
-import dev.animedia.contentservice.language.Language;
 import dev.animedia.contentservice.movie.Movie;
 import dev.animedia.contentservice.series.core.Series;
 import jakarta.persistence.*;
@@ -70,20 +69,10 @@ public class Content {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "content_languages",
-        joinColumns = @JoinColumn(name = "content_uuid"),
-        inverseJoinColumns = @JoinColumn(name = "language_code"),
-        uniqueConstraints = {
-            @UniqueConstraint(name = "uidx_content_languages_content_uuid_genre_id", columnNames = {"content_uuid", "language_code"})
-        },
-        indexes = {
-            @Index(name = "idx_content_languages_content_uuid_language_code", columnList = "content_uuid,language_code"),
-            @Index(name = "idx_content_languages_language_code", columnList = "language_code")
-        }
-    )
-    private Set<Language> languages = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_uuid"))
+    @Column(name = "language_code")
+    private Set<String> languageCodes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -200,12 +189,12 @@ public class Content {
         this.active = active;
     }
 
-    public Set<Language> getLanguages() {
-        return languages;
+    public Set<String> getLanguageCodes() {
+        return languageCodes;
     }
 
-    public void setLanguages(Set<Language> languages) {
-        this.languages = languages;
+    public void setLanguageCodes(Set<String> languageCodes) {
+        this.languageCodes = languageCodes;
     }
 
     public Set<Genre> getGenres() {

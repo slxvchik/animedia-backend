@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface GenreTranslationPageService {
-	Page<GenreTranslationResponseDto> search(String name, Long genreId, List<String> languageCodes, Pageable pageable);
+	Page<GenreTranslationResponseDto> search(Long genreId, List<String> names, List<String> languageCodes, Pageable pageable);
 }

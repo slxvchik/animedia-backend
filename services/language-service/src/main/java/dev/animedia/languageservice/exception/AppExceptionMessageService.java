@@ -25,7 +25,7 @@ public class AppExceptionMessageService {
 
     private static final Logger LOGGER = Logger.getLogger(AppExceptionMessageService.class.getName());
 
-    private final int MAX_CACHE_SIZE = 30;
+    private static final int MAX_CACHE_SIZE = 30;
     private final Map<String, CacheEntry> cache = Collections.synchronizedMap(
 	    new LinkedHashMap<>(MAX_CACHE_SIZE, 0.75f, true) {
 		    @Override

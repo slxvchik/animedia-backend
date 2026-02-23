@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.comicchapterimage;
 
 import dev.animedia.contentservice.comicchapter.core.ComicChapter;
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -37,9 +36,8 @@ public class ComicChapterImage {
     @JoinColumn(name = "comic_chapter_uuid", nullable = false)
     private ComicChapter comicChapter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(name = "image_url", length = 512, nullable = false, unique = true)
     private String imageUrl;
@@ -63,12 +61,12 @@ public class ComicChapterImage {
         this.comicChapter = comicChapter;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public Integer getPage() {

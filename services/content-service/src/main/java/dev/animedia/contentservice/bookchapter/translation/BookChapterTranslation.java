@@ -3,7 +3,6 @@ package dev.animedia.contentservice.bookchapter.translation;
 import java.util.UUID;
 
 import dev.animedia.contentservice.bookchapter.core.BookChapter;
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 @Entity
@@ -29,9 +28,8 @@ public class BookChapterTranslation {
     @JoinColumn(name = "book_chapter_uuid", nullable = false)
     private BookChapter bookChapter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(length = 4096)
     private String name;
@@ -55,12 +53,12 @@ public class BookChapterTranslation {
         this.bookChapter = bookChapter;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getName() {

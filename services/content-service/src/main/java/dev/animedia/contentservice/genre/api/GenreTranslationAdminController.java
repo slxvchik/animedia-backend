@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.genre.controller;
+package dev.animedia.contentservice.genre.api;
 
 import dev.animedia.contentservice.app.dto.AppResponseDto;
 import dev.animedia.contentservice.app.dto.ContentResponse;

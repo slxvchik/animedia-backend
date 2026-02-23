@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.contentstatus.model;
 
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,9 +25,8 @@ public class ContentStatusTranslation {
     @JoinColumn(name = "content_status_id", nullable = false)
     private ContentStatus contentStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(length = 512, nullable = false)
     private String name;
@@ -49,12 +47,12 @@ public class ContentStatusTranslation {
         this.contentStatus = contentStatus;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getName() {

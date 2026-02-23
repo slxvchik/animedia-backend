@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.genre.model;
 
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,9 +21,8 @@ public class GenreTranslation {
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(length = 256, nullable = false)
     private String name;
@@ -48,12 +46,12 @@ public class GenreTranslation {
         this.genre = genre;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getName() {

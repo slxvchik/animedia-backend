@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.comicchapter.translation;
 
 import dev.animedia.contentservice.comicchapter.core.ComicChapter;
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -29,9 +28,8 @@ public class ComicChapterTranslation {
     @JoinColumn(name = "comic_chapter_uuid", nullable = false)
     private ComicChapter comicChapter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(length = 2048)
     private String name;
@@ -55,12 +53,12 @@ public class ComicChapterTranslation {
         this.comicChapter = comicChapter;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getName() {

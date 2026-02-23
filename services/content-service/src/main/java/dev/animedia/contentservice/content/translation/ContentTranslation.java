@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.content.translation;
 
 import dev.animedia.contentservice.content.core.Content;
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -29,9 +28,8 @@ public class ContentTranslation {
     @JoinColumn(name = "content_uuid", nullable = false)
     private Content content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(length = 512, nullable = false)
     private String title;
@@ -55,12 +53,12 @@ public class ContentTranslation {
         this.content = content;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getTitle() {

@@ -23,7 +23,7 @@ public class GenreTranslationPageServiceImpl implements GenreTranslationPageServ
 	}
 
 	@Override
-	public Page<GenreTranslationResponseDto> search(String name, Long genreId, List<String> languageCodes, Pageable pageable) {
-		return genreTranslationNativeRepository.searchPage(name, genreId, languageCodes, pageable);
+	public Page<GenreTranslationResponseDto> search(Long genreId, List<String> names, List<String> languageCodes, Pageable pageable) {
+		return genreTranslationNativeRepository.searchPage(genreId, names, languageCodes, pageable);
 	}
 }

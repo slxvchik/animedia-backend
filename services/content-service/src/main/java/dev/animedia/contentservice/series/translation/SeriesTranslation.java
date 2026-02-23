@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.series.translation;
 
-import dev.animedia.contentservice.language.Language;
 import dev.animedia.contentservice.series.core.Series;
 import jakarta.persistence.*;
 
@@ -29,9 +28,8 @@ public class SeriesTranslation {
     @JoinColumn(name = "series_uuid", nullable = false)
     private Series series;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_code", nullable = false)
-    private Language language;
+    @Column(name = "language_code", nullable = false)
+    private String languageCode;
 
     @Column(length = 2048)
     private String name;
@@ -55,12 +53,12 @@ public class SeriesTranslation {
         this.series = series;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public String getName() {

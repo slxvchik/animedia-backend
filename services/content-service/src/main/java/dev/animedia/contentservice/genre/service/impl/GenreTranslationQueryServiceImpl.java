@@ -1,11 +1,12 @@
 package dev.animedia.contentservice.genre.service.impl;
 
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
-import dev.animedia.contentservice.genre.exception.GenreTranslationNotFoundException;
-import dev.animedia.contentservice.genre.exception.GenreTranslationsNotFoundException;
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     @Override
     public GenreTranslationResponseDto findById(Long id) {
         var genreTranslation = genreTranslationRepository.findById(id)
-            .orElseThrow(GenreTranslationNotFoundException::new);
+            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_TRANSLATION_NOT_FOUND_MESSAGE));
         return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslation);
     }
 
@@ -38,7 +39,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     public List<GenreTranslationResponseDto> findByIds(List<Long> ids) {
         Set<Long> uniqueIds = new HashSet<>(ids);
         var genreTranslations = genreTranslationRepository.findAllById(uniqueIds);
-        if (genreTranslations.size() != uniqueIds.size()) throw new GenreTranslationsNotFoundException();
+        if (genreTranslations.size() != uniqueIds.size()) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_TRANSLATIONS_NOT_FOUND_MESSAGE);
         return genreTranslationMapper.toGenreTranslationsResponseDto(genreTranslations);
     }
 

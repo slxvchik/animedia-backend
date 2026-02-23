@@ -4,7 +4,6 @@ import dev.animedia.contentservice.contentstatus.dto.request.CreateContentStatus
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusTranslationResponseDto;
 import dev.animedia.contentservice.contentstatus.model.ContentStatus;
 import dev.animedia.contentservice.contentstatus.model.ContentStatusTranslation;
-import dev.animedia.contentservice.language.Language;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
@@ -20,11 +19,10 @@ public class ContentStatusTranslationMapper {
     public ContentStatusTranslation toContentStatusTranslation(CreateContentStatusTranslationRequestDto createContentStatusTranslationRequestDto) {
 
         ContentStatus contentStatus = entityManager.getReference(ContentStatus.class, createContentStatusTranslationRequestDto.contentStatusId());
-        Language language = entityManager.getReference(Language.class, createContentStatusTranslationRequestDto.languageCode());
 
         ContentStatusTranslation contentStatusTranslation = new ContentStatusTranslation();
         contentStatusTranslation.setContentStatus(contentStatus);
-        contentStatusTranslation.setLanguage(language);
+        contentStatusTranslation.setLanguageCode(createContentStatusTranslationRequestDto.languageCode());
         contentStatusTranslation.setName(contentStatusTranslation.getName());
 
         return contentStatusTranslation;
@@ -35,7 +33,7 @@ public class ContentStatusTranslationMapper {
         return new ContentStatusTranslationResponseDto(
             contentStatusTranslation.getId(),
             contentStatusTranslation.getContentStatus().getId(),
-            contentStatusTranslation.getLanguage().getCode(),
+            contentStatusTranslation.getLanguageCode(),
             contentStatusTranslation.getName()
         );
     }

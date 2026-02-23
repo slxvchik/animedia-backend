@@ -55,7 +55,7 @@ public class LanguageMapper {
 	public LanguageProto.LanguageListResponse toProtoListResponse(List<LanguageResponseDto> languageResponseDtoList, CommonProto.PaginationResponse paginationResponse) {
 		List<LanguageProto.LanguageResponse> languages = languageResponseDtoList.stream().map(this::toProtoResponse).toList();
 		return LanguageProto.LanguageListResponse.newBuilder()
-			.addAllItems(languages)
+			.addAllLanguages(languages)
 			.setPagination(paginationResponse)
 			.build();
 	}

@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package protos.services.content.genre;
 
+import "common/common.proto";
+import "services/content/genre/genre_common.proto";
+
 option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="GenrePublicProto";
 
@@ -15,7 +18,7 @@ message SearchRequest {
     common.PaginationRequest pagination = 3;
 }
 
-message SearchRequest {
+message SearchResponse {
     GenreResponse genre = 1;
     GenreTranslationResponse translation = 2;
     common.PaginationResponse pagination = 3;

@@ -1,16 +1,15 @@
 package dev.animedia.contentservice.genre.service.impl;
 
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
-import dev.animedia.contentservice.genre.exception.GenreNotFoundException;
-import dev.animedia.contentservice.genre.exception.GenresNotFoundException;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.repository.GenreRepository;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,8 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 
 	@Override
 	public GenreResponseDto findById(Long id) {
-		var genre = genreRepository.findById(id).orElseThrow(GenreNotFoundException::new);
+		var genre = genreRepository.findById(id)
+			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE));
 		return genreMapper.toGenreResponseDto(genre);
 	}
 
@@ -47,7 +47,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	public List<GenreResponseDto> findByIds(List<Long> ids) {
 		Set<Long> uniqueIds = new HashSet<>(ids);
 		var genres = genreRepository.findAllById(uniqueIds);
-		if (genres.size() != uniqueIds.size()) throw new GenresNotFoundException();
+		if (genres.size() != uniqueIds.size()) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
 		return genreMapper.toGenresResponseDto(genres);
 	}
 
@@ -55,7 +55,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	public List<GenreResponseDto> findByAliases(List<String> aliases) {
 		Set<String> uniqueAliases = new HashSet<>(aliases);
 		var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
-		if (genres.size() != uniqueAliases.size()) throw new GenresNotFoundException();
+		if (genres.size() != uniqueAliases.size()) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
 		return genreMapper.toGenresResponseDto(genres);
 	}
 

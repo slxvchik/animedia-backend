@@ -48,7 +48,8 @@ public class GenreMapper {
     }
 
     public List<GenreWithTranslationResponseDto> toGenresWithTranslationResponseDto(List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto) {
-        return genresWithTranslationsResponseDto.stream().map(
+        return genresWithTranslationsResponseDto.stream()
+        .map(
             genreWithTranslationsResponseDto -> {
                 if (genreWithTranslationsResponseDto.translations().isEmpty()) return null;
                 GenreTranslationResponseDto genreTranslation = genreWithTranslationsResponseDto.translations().getFirst();
@@ -59,7 +60,9 @@ public class GenreMapper {
                     genreTranslation.id(), genreTranslation.languageCode(), genreTranslation.name(), genreTranslation.description()
                 );
             }
-        ).toList();
+        )
+        .filter(Objects::nonNull)
+        .toList();
     }
     
     public List<GenreWithTranslationResponseDto> toGenresWithTranslationResponseDto(
