@@ -46,7 +46,7 @@ public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivat
         var genresWithTranslations = genrePageService.search(request.getAliasList(), request.getNamesList(), request.getLanguageCodesList(), pageable);
 
         var protoPagination = paginationMapper.toProtoPaginationResponse(genresWithTranslations);
-        GenrePrivateProto.SearchResponse response = grpcGenreMapper.toSearchResponse(genresWithTranslations.getContent(), protoPagination);
+        GenrePrivateProto.SearchResponse response = grpcGenreMapper.toPrivateSearchResponse(genresWithTranslations.getContent(), protoPagination);
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();

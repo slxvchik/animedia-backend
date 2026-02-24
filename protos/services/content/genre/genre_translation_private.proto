@@ -8,7 +8,7 @@ import "services/content/genre/genre_common.proto";
 option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="GenreTranslationPrivateProto";
 
-service GenrePublicService {
+service GenreTranslationPrivateService {
     rpc search(SearchRequest) returns (SearchResponse);
     rpc create(CreateRequest) returns (GenreTranslationResponse);
     rpc update(UpdateRequest) returns (GenreTranslationResponse);
@@ -25,6 +25,7 @@ message SearchRequest {
 
 message SearchResponse {
     repeated GenreTranslationResponse translations = 1;
+    common.PaginationResponse pagination = 2;
 }
 
 message GenreWithTranslationResponse {
@@ -53,5 +54,5 @@ message DeleteRequest {
 }
 
 message DeleteBatchRequest {
-    repeated DeleteRequest ids = 1;
+    repeated int64 ids = 1;
 }

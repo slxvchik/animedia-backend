@@ -13,28 +13,28 @@ public final class GenrePublicServiceGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest,
-      dev.animedia.grpc.genre.GenrePublicProto.SearchRequest> getSearchMethod;
+      dev.animedia.grpc.genre.GenrePublicProto.SearchResponse> getSearchMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "search",
       requestType = dev.animedia.grpc.genre.GenrePublicProto.SearchRequest.class,
-      responseType = dev.animedia.grpc.genre.GenrePublicProto.SearchRequest.class,
+      responseType = dev.animedia.grpc.genre.GenrePublicProto.SearchResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest,
-      dev.animedia.grpc.genre.GenrePublicProto.SearchRequest> getSearchMethod() {
-    io.grpc.MethodDescriptor<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest, dev.animedia.grpc.genre.GenrePublicProto.SearchRequest> getSearchMethod;
+      dev.animedia.grpc.genre.GenrePublicProto.SearchResponse> getSearchMethod() {
+    io.grpc.MethodDescriptor<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest, dev.animedia.grpc.genre.GenrePublicProto.SearchResponse> getSearchMethod;
     if ((getSearchMethod = GenrePublicServiceGrpc.getSearchMethod) == null) {
       synchronized (GenrePublicServiceGrpc.class) {
         if ((getSearchMethod = GenrePublicServiceGrpc.getSearchMethod) == null) {
           GenrePublicServiceGrpc.getSearchMethod = getSearchMethod =
-              io.grpc.MethodDescriptor.<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest, dev.animedia.grpc.genre.GenrePublicProto.SearchRequest>newBuilder()
+              io.grpc.MethodDescriptor.<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest, dev.animedia.grpc.genre.GenrePublicProto.SearchResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "search"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   dev.animedia.grpc.genre.GenrePublicProto.SearchRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  dev.animedia.grpc.genre.GenrePublicProto.SearchRequest.getDefaultInstance()))
+                  dev.animedia.grpc.genre.GenrePublicProto.SearchResponse.getDefaultInstance()))
               .setSchemaDescriptor(new GenrePublicServiceMethodDescriptorSupplier("search"))
               .build();
         }
@@ -109,7 +109,7 @@ public final class GenrePublicServiceGrpc {
     /**
      */
     default void search(dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest> responseObserver) {
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.genre.GenrePublicProto.SearchResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSearchMethod(), responseObserver);
     }
   }
@@ -144,7 +144,7 @@ public final class GenrePublicServiceGrpc {
     /**
      */
     public void search(dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request,
-        io.grpc.stub.StreamObserver<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest> responseObserver) {
+        io.grpc.stub.StreamObserver<dev.animedia.grpc.genre.GenrePublicProto.SearchResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getSearchMethod(), getCallOptions()), request, responseObserver);
     }
@@ -168,7 +168,7 @@ public final class GenrePublicServiceGrpc {
 
     /**
      */
-    public dev.animedia.grpc.genre.GenrePublicProto.SearchRequest search(dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request) throws io.grpc.StatusException {
+    public dev.animedia.grpc.genre.GenrePublicProto.SearchResponse search(dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request) throws io.grpc.StatusException {
       return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getSearchMethod(), getCallOptions(), request);
     }
@@ -192,7 +192,7 @@ public final class GenrePublicServiceGrpc {
 
     /**
      */
-    public dev.animedia.grpc.genre.GenrePublicProto.SearchRequest search(dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request) {
+    public dev.animedia.grpc.genre.GenrePublicProto.SearchResponse search(dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getSearchMethod(), getCallOptions(), request);
     }
@@ -216,7 +216,7 @@ public final class GenrePublicServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest> search(
+    public com.google.common.util.concurrent.ListenableFuture<dev.animedia.grpc.genre.GenrePublicProto.SearchResponse> search(
         dev.animedia.grpc.genre.GenrePublicProto.SearchRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getSearchMethod(), getCallOptions()), request);
@@ -244,7 +244,7 @@ public final class GenrePublicServiceGrpc {
       switch (methodId) {
         case METHODID_SEARCH:
           serviceImpl.search((dev.animedia.grpc.genre.GenrePublicProto.SearchRequest) request,
-              (io.grpc.stub.StreamObserver<dev.animedia.grpc.genre.GenrePublicProto.SearchRequest>) responseObserver);
+              (io.grpc.stub.StreamObserver<dev.animedia.grpc.genre.GenrePublicProto.SearchResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -269,7 +269,7 @@ public final class GenrePublicServiceGrpc {
           io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
               dev.animedia.grpc.genre.GenrePublicProto.SearchRequest,
-              dev.animedia.grpc.genre.GenrePublicProto.SearchRequest>(
+              dev.animedia.grpc.genre.GenrePublicProto.SearchResponse>(
                 service, METHODID_SEARCH)))
         .build();
   }

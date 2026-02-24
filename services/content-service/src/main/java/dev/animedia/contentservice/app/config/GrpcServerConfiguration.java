@@ -1,17 +1,27 @@
 package dev.animedia.contentservice.app.config;
 
+import dev.animedia.contentservice.app.exception.AppExceptionMessageService;
+import io.grpc.ServerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.core.annotation.Order;
+import org.springframework.grpc.server.GlobalServerInterceptor;
 
 @Configuration
 public class GrpcServerConfiguration {
-    
-    private final LanguageInterceptor languageInterceptor;
 
-    @Autowired
-    public GrpcServerConfiguration(LanguageInterceptor languageInterceptor) {
-        this.languageInterceptor = languageInterceptor;
+    @Bean
+    @Order(100)
+    @GlobalServerInterceptor
+    ServerInterceptor getLanguageInterceptor() {
+        return new LanguageInterceptor();
+    }
+
+    @Bean
+    @Order(101)
+    @GlobalServerInterceptor
+    ServerInterceptor getGlobalExceptionInterceptor(AppExceptionMessageService appExceptionMessageService) {
+        return new GlobalExceptionInterceptor(appExceptionMessageService);
     }
 }
