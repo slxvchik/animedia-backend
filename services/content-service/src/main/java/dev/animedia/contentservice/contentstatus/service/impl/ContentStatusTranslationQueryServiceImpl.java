@@ -1,11 +1,12 @@
 package dev.animedia.contentservice.contentstatus.service.impl;
 
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.contentstatus.ContentStatusConstants;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusTranslationResponseDto;
-import dev.animedia.contentservice.contentstatus.exception.ContentStatusTranslationNotFoundException;
-import dev.animedia.contentservice.contentstatus.exception.ContentStatusTranslationsNotFoundException;
 import dev.animedia.contentservice.contentstatus.mapper.ContentStatusTranslationMapper;
 import dev.animedia.contentservice.contentstatus.repository.ContentStatusTranslationRepository;
 import dev.animedia.contentservice.contentstatus.service.ContentStatusTranslationQueryService;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
     @Override
     public ContentStatusTranslationResponseDto findById(Long id) {
         var contentStatusTranslation = contentStatusTranslationRepository.findById(id)
-            .orElseThrow(ContentStatusTranslationNotFoundException::new);
+            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATION_NOT_FOUND_MESSAGE));
         return contentStatusTranslationMapper.toContentStatusTranslationResponseDto(contentStatusTranslation);
     }
 
@@ -45,7 +46,8 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
     public List<ContentStatusTranslationResponseDto> findByIds(List<Long> ids) {
         Set<Long> uniqueIds = new HashSet<>(ids);
         var contentStatusTranslations = contentStatusTranslationRepository.findAllById(uniqueIds);
-        if (contentStatusTranslations.size() != uniqueIds.size()) throw new ContentStatusTranslationsNotFoundException();
+        if (contentStatusTranslations.size() != uniqueIds.size())
+            throw new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATIONS_NOT_FOUND_MESSAGE);
         return contentStatusTranslationMapper.toContentStatusTranslationsResponseDto(contentStatusTranslations);
     }
 

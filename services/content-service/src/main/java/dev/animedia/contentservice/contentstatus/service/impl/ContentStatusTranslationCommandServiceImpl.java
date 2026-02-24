@@ -1,15 +1,15 @@
 package dev.animedia.contentservice.contentstatus.service.impl;
 
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.contentstatus.ContentStatusConstants;
 import dev.animedia.contentservice.contentstatus.dto.request.CreateContentStatusTranslationRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.request.UpdateContentStatusTranslationRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusTranslationResponseDto;
-import dev.animedia.contentservice.contentstatus.exception.ContentStatusTranslationExistsException;
-import dev.animedia.contentservice.contentstatus.exception.ContentStatusTranslationNotFoundException;
 import dev.animedia.contentservice.contentstatus.mapper.ContentStatusTranslationMapper;
 import dev.animedia.contentservice.contentstatus.repository.ContentStatusTranslationRepository;
 import dev.animedia.contentservice.contentstatus.service.ContentStatusTranslationCommandService;
 import dev.animedia.contentservice.contentstatus.service.ContentStatusTranslationQueryService;
-import dev.animedia.contentservice.genre.exception.GenreNotFoundException;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class ContentStatusTranslationCommandServiceImpl implements ContentStatus
 			createContentStatusTranslationRequestDto.contentStatusId(),
 			createContentStatusTranslationRequestDto.languageCode()
 		);
-		if (contentStatusTranslationExists) throw new ContentStatusTranslationExistsException();
+		if (contentStatusTranslationExists) throw new AppException(Status.Code.ALREADY_EXISTS, ContentStatusConstants.CONTENT_STATUS_TRANSLATION_EXISTS_MESSAGE);
 
 		var contentStatusTranslation = contentStatusTranslationMapper.toContentStatusTranslation(createContentStatusTranslationRequestDto);
 
@@ -48,7 +48,8 @@ public class ContentStatusTranslationCommandServiceImpl implements ContentStatus
 
 	@Override
 	public ContentStatusTranslationResponseDto update(Long id, UpdateContentStatusTranslationRequestDto updateContentStatusTranslationRequestDto) {
-		var contentStatusTranslation = contentStatusTranslationRepository.findById(id).orElseThrow(GenreNotFoundException::new);
+		var contentStatusTranslation = contentStatusTranslationRepository.findById(id)
+			.orElseThrow(() -> new AppException(ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE));
 		contentStatusTranslation.setName(updateContentStatusTranslationRequestDto.name());
 		var savedContentStatusTranslation = contentStatusTranslationRepository.save(contentStatusTranslation);
 		return contentStatusTranslationMapper.toContentStatusTranslationResponseDto(savedContentStatusTranslation);
@@ -57,7 +58,7 @@ public class ContentStatusTranslationCommandServiceImpl implements ContentStatus
 	@Override
 	public void delete(Long id) {
 		var contentStatusTranslationExists = contentStatusTranslationQueryService.existsById(id);
-		if (contentStatusTranslationExists) throw new ContentStatusTranslationNotFoundException();
+		if (contentStatusTranslationExists) throw new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATION_NOT_FOUND_MESSAGE);
 		contentStatusTranslationRepository.deleteById(id);
 	}
 }

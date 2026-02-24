@@ -1,18 +1,11 @@
-package dev.animedia.contentservice.contentstatus.controller;
+package dev.animedia.contentservice.contentstatus.api;
 
 import dev.animedia.contentservice.app.dto.AppResponseDto;
 import dev.animedia.contentservice.app.dto.ContentResponse;
 import dev.animedia.contentservice.app.dto.PagedResponse;
-import dev.animedia.contentservice.contentstatus.dto.request.ContentStatusRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.request.CreateContentStatusTranslationRequestDto;
-import dev.animedia.contentservice.contentstatus.dto.request.SearchContentStatusAdminRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.request.UpdateContentStatusTranslationRequestDto;
-import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusTranslationResponseDto;
-import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationsResponseDto;
-import dev.animedia.contentservice.contentstatus.mapper.ContentStatusMapper;
-import dev.animedia.contentservice.contentstatus.service.ContentStatusCommandService;
-import dev.animedia.contentservice.contentstatus.service.ContentStatusPageService;
 import dev.animedia.contentservice.contentstatus.service.ContentStatusTranslationCommandService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

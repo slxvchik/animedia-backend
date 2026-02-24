@@ -15,7 +15,7 @@ service GenrePublicService {
 message SearchRequest {
     repeated string alias = 1;
     repeated string name = 2;
-    common.PaginationRequest pagination = 3;
+    optional common.PaginationRequest pagination = 3;
 }
 
 message SearchResponse {

@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.contentstatus.controller;
+package dev.animedia.contentservice.contentstatus.api;
 
 import dev.animedia.contentservice.app.dto.AppResponseDto;
 import dev.animedia.contentservice.app.dto.ContentResponse;

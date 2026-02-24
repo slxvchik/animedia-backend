@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package protos.services.content.status;
+
+import "common/common.proto";
+import "services/content/status/content_status_common.proto";
+
+service ContentStatusTranslationPrivateService {
+  rpc create(CreateRequest) returns (ContentStatusTranslationResponse);
+  rpc update(UpdateRequest) returns (ContentStatusTranslationResponse);
+  rpc delete(DeleteRequest) returns (common.EmptyResponse);
+}
+
+message CreateRequest {
+  int64 content_status_id = 1;
+  string language_code = 2;
+  string name = 3;
+}
+
+message UpdateRequest {
+  int64 id = 1;
+  string name = 2;
+}
+
+message DeleteRequest {
+  int64 id = 1;
+}

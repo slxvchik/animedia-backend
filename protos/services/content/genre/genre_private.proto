@@ -27,7 +27,7 @@ message GenreWithTranslationsResponse {
 
 message SearchResponse {
     repeated GenreWithTranslationsResponse genres = 1;
-    common.PaginationResponse pagination = 2;
+    optional common.PaginationResponse pagination = 2;
 }
 
 message SearchRequest {

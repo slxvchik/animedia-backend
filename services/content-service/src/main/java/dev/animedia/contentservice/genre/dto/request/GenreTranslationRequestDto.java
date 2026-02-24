@@ -10,7 +10,7 @@ public record GenreTranslationRequestDto(
         Long genreId,
         @NotBlank(message = AppExceptionConstants.LANGUAGE_CODE_REQUIRED_MESSAGE)
         String languageCode,
-        @NotBlank(message = GenreConstants.GENRE_NAME_REQUIRED_MESSAGE)
+        @NotBlank(message = GenreConstants.GENRE_TRANSLATION_NAME_REQUIRED_MESSAGE)
         String name,
         String description
 ) {}

@@ -1004,17 +1004,17 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         int index);
 
     /**
-     * <code>.protos.common.PaginationResponse pagination = 2;</code>
+     * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
      * @return Whether the pagination field is set.
      */
     boolean hasPagination();
     /**
-     * <code>.protos.common.PaginationResponse pagination = 2;</code>
+     * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
      * @return The pagination.
      */
     dev.animedia.grpc.common.CommonProto.PaginationResponse getPagination();
     /**
-     * <code>.protos.common.PaginationResponse pagination = 2;</code>
+     * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
      */
     dev.animedia.grpc.common.CommonProto.PaginationResponseOrBuilder getPaginationOrBuilder();
   }
@@ -1101,7 +1101,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
     public static final int PAGINATION_FIELD_NUMBER = 2;
     private dev.animedia.grpc.common.CommonProto.PaginationResponse pagination_;
     /**
-     * <code>.protos.common.PaginationResponse pagination = 2;</code>
+     * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
      * @return Whether the pagination field is set.
      */
     @java.lang.Override
@@ -1109,7 +1109,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>.protos.common.PaginationResponse pagination = 2;</code>
+     * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
      * @return The pagination.
      */
     @java.lang.Override
@@ -1117,7 +1117,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
       return pagination_ == null ? dev.animedia.grpc.common.CommonProto.PaginationResponse.getDefaultInstance() : pagination_;
     }
     /**
-     * <code>.protos.common.PaginationResponse pagination = 2;</code>
+     * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
      */
     @java.lang.Override
     public dev.animedia.grpc.common.CommonProto.PaginationResponseOrBuilder getPaginationOrBuilder() {
@@ -1756,14 +1756,14 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
       private com.google.protobuf.SingleFieldBuilder<
           dev.animedia.grpc.common.CommonProto.PaginationResponse, dev.animedia.grpc.common.CommonProto.PaginationResponse.Builder, dev.animedia.grpc.common.CommonProto.PaginationResponseOrBuilder> paginationBuilder_;
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        * @return Whether the pagination field is set.
        */
       public boolean hasPagination() {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        * @return The pagination.
        */
       public dev.animedia.grpc.common.CommonProto.PaginationResponse getPagination() {
@@ -1774,7 +1774,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         }
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       public Builder setPagination(dev.animedia.grpc.common.CommonProto.PaginationResponse value) {
         if (paginationBuilder_ == null) {
@@ -1790,7 +1790,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         return this;
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       public Builder setPagination(
           dev.animedia.grpc.common.CommonProto.PaginationResponse.Builder builderForValue) {
@@ -1804,7 +1804,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         return this;
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       public Builder mergePagination(dev.animedia.grpc.common.CommonProto.PaginationResponse value) {
         if (paginationBuilder_ == null) {
@@ -1825,7 +1825,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         return this;
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       public Builder clearPagination() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -1838,7 +1838,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         return this;
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       public dev.animedia.grpc.common.CommonProto.PaginationResponse.Builder getPaginationBuilder() {
         bitField0_ |= 0x00000002;
@@ -1846,7 +1846,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         return internalGetPaginationFieldBuilder().getBuilder();
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       public dev.animedia.grpc.common.CommonProto.PaginationResponseOrBuilder getPaginationOrBuilder() {
         if (paginationBuilder_ != null) {
@@ -1857,7 +1857,7 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
         }
       }
       /**
-       * <code>.protos.common.PaginationResponse pagination = 2;</code>
+       * <code>optional .protos.common.PaginationResponse pagination = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           dev.animedia.grpc.common.CommonProto.PaginationResponse, dev.animedia.grpc.common.CommonProto.PaginationResponse.Builder, dev.animedia.grpc.common.CommonProto.PaginationResponseOrBuilder> 
@@ -6160,38 +6160,39 @@ public final class GenrePrivateProto extends com.google.protobuf.GeneratedFile {
       "tionsResponse\022;\n\005genre\030\001 \001(\0132,.protos.se" +
       "rvices.content.genre.GenreResponse\022M\n\014tr" +
       "anslations\030\002 \003(\01327.protos.services.conte" +
-      "nt.genre.GenreTranslationResponse\"\225\001\n\016Se" +
+      "nt.genre.GenreTranslationResponse\"\251\001\n\016Se" +
       "archResponse\022L\n\006genres\030\001 \003(\0132<.protos.se" +
       "rvices.content.genre.GenreWithTranslatio" +
-      "nsResponse\0225\n\npagination\030\002 \001(\0132!.protos." +
-      "common.PaginationResponse\"\217\001\n\rSearchRequ" +
-      "est\022\r\n\005alias\030\001 \003(\t\022\r\n\005names\030\002 \003(\t\022\026\n\016lan" +
-      "guage_codes\030\003 \003(\t\0229\n\npagination\030\004 \001(\0132 ." +
-      "protos.common.PaginationRequestH\000\210\001\001B\r\n\013" +
-      "_pagination\",\n\rCreateRequest\022\r\n\005alias\030\001 " +
-      "\001(\t\022\014\n\004sort\030\002 \001(\003\"R\n\022CreateBatchRequest\022" +
-      "<\n\006genres\030\001 \003(\0132,.protos.services.conten" +
-      "t.genre.CreateRequest\"8\n\rUpdateRequest\022\n" +
-      "\n\002id\030\001 \001(\003\022\r\n\005alias\030\002 \001(\t\022\014\n\004sort\030\003 \001(\003\"" +
-      "\033\n\rDeleteRequest\022\n\n\002id\030\001 \001(\003\"!\n\022DeleteBa" +
-      "tchRequest\022\013\n\003ids\030\001 \003(\0032\362\004\n\023GenrePrivate" +
-      "Service\022e\n\006search\022,.protos.services.cont" +
-      "ent.genre.SearchRequest\032-.protos.service" +
-      "s.content.genre.SearchResponse\022d\n\006create" +
-      "\022,.protos.services.content.genre.CreateR" +
-      "equest\032,.protos.services.content.genre.G" +
-      "enreResponse\022r\n\013createBatch\0221.protos.ser" +
-      "vices.content.genre.CreateBatchRequest\0320" +
-      ".protos.services.content.genre.GenreResp" +
-      "onseList\022d\n\006update\022,.protos.services.con" +
-      "tent.genre.UpdateRequest\032,.protos.servic" +
-      "es.content.genre.GenreResponse\022T\n\006delete" +
-      "\022,.protos.services.content.genre.DeleteR" +
-      "equest\032\034.protos.common.EmptyResponse\022^\n\013" +
-      "deleteBatch\0221.protos.services.content.ge" +
-      "nre.DeleteBatchRequest\032\034.protos.common.E" +
-      "mptyResponseB,\n\027dev.animedia.grpc.genreB" +
-      "\021GenrePrivateProtob\006proto3"
+      "nsResponse\022:\n\npagination\030\002 \001(\0132!.protos." +
+      "common.PaginationResponseH\000\210\001\001B\r\n\013_pagin" +
+      "ation\"\217\001\n\rSearchRequest\022\r\n\005alias\030\001 \003(\t\022\r" +
+      "\n\005names\030\002 \003(\t\022\026\n\016language_codes\030\003 \003(\t\0229\n" +
+      "\npagination\030\004 \001(\0132 .protos.common.Pagina" +
+      "tionRequestH\000\210\001\001B\r\n\013_pagination\",\n\rCreat" +
+      "eRequest\022\r\n\005alias\030\001 \001(\t\022\014\n\004sort\030\002 \001(\003\"R\n" +
+      "\022CreateBatchRequest\022<\n\006genres\030\001 \003(\0132,.pr" +
+      "otos.services.content.genre.CreateReques" +
+      "t\"8\n\rUpdateRequest\022\n\n\002id\030\001 \001(\003\022\r\n\005alias\030" +
+      "\002 \001(\t\022\014\n\004sort\030\003 \001(\003\"\033\n\rDeleteRequest\022\n\n\002" +
+      "id\030\001 \001(\003\"!\n\022DeleteBatchRequest\022\013\n\003ids\030\001 " +
+      "\003(\0032\362\004\n\023GenrePrivateService\022e\n\006search\022,." +
+      "protos.services.content.genre.SearchRequ" +
+      "est\032-.protos.services.content.genre.Sear" +
+      "chResponse\022d\n\006create\022,.protos.services.c" +
+      "ontent.genre.CreateRequest\032,.protos.serv" +
+      "ices.content.genre.GenreResponse\022r\n\013crea" +
+      "teBatch\0221.protos.services.content.genre." +
+      "CreateBatchRequest\0320.protos.services.con" +
+      "tent.genre.GenreResponseList\022d\n\006update\022," +
+      ".protos.services.content.genre.UpdateReq" +
+      "uest\032,.protos.services.content.genre.Gen" +
+      "reResponse\022T\n\006delete\022,.protos.services.c" +
+      "ontent.genre.DeleteRequest\032\034.protos.comm" +
+      "on.EmptyResponse\022^\n\013deleteBatch\0221.protos" +
+      ".services.content.genre.DeleteBatchReque" +
+      "st\032\034.protos.common.EmptyResponseB,\n\027dev." +
+      "animedia.grpc.genreB\021GenrePrivateProtob\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

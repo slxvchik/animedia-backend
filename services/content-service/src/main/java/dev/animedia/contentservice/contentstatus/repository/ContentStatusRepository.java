@@ -39,10 +39,11 @@ public interface ContentStatusRepository extends JpaRepository<ContentStatus, Lo
             "WHERE cst.language.code = :languageCode " +
             "AND (COALESCE(:aliases, NULL) IS NULL OR cs.alias IN :aliases) " +
             "AND (COALESCE(:names, NULL) IS NULL OR cst.name IN :names)")
-    List<ContentStatusWithTranslationResponseDto> search(
+    Page<ContentStatusWithTranslationResponseDto> search(
         @Param("languageCode") String languageCode,
         @Param("aliases") List<String> aliases,
-        @Param("names") List<String> names
+        @Param("names") List<String> names,
+        Pageable pageable
     );
 
 	boolean existsByAlias(String alias);

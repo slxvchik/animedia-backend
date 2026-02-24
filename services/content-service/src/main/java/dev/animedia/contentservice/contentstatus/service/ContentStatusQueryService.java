@@ -1,14 +1,10 @@
 package dev.animedia.contentservice.contentstatus.service;
 
-import dev.animedia.contentservice.contentstatus.dto.request.SearchContentStatusUserRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationResponseDto;
 
-import java.util.List;
-
 public interface ContentStatusQueryService {
 
-	List<ContentStatusWithTranslationResponseDto> search(SearchContentStatusUserRequestDto searchRequestDto);
 	ContentStatusResponseDto findById(Long id);
 	ContentStatusWithTranslationResponseDto findByIdAndLanguageCode(Long id, String languageCode);
 

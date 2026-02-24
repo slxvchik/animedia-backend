@@ -1,14 +1,17 @@
 package dev.animedia.contentservice.contentstatus.service.impl;
 
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.contentstatus.ContentStatusConstants;
 import dev.animedia.contentservice.contentstatus.mapper.ContentStatusMapper;
-import dev.animedia.contentservice.contentstatus.dto.request.SearchContentStatusUserRequestDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.contentstatus.exception.ContentStatusNotFoundException;
 import dev.animedia.contentservice.contentstatus.repository.ContentStatusRepository;
 import dev.animedia.contentservice.contentstatus.service.ContentStatusQueryService;
 import dev.animedia.contentservice.contentstatus.service.ContentStatusTranslationQueryService;
+import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,17 +35,9 @@ public class ContentStatusQueryImpl implements ContentStatusQueryService {
     }
 
     @Override
-    public List<ContentStatusWithTranslationResponseDto> search(SearchContentStatusUserRequestDto searchRequestDto) {
-        return contentStatusRepository.search(
-            searchRequestDto.languageCode(),
-            searchRequestDto.aliases(),
-            searchRequestDto.names()
-        );
-    }
-
-    @Override
     public ContentStatusResponseDto findById(Long id) {
-        var contentStatus = contentStatusRepository.findById(id).orElseThrow(ContentStatusNotFoundException::new);
+        var contentStatus = contentStatusRepository.findById(id)
+            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE));
         return contentStatusMapper.toContentStatusResponseDto(contentStatus);
     }
 

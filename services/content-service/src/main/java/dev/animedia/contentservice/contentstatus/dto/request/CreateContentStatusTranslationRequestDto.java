@@ -1,13 +1,14 @@
 package dev.animedia.contentservice.contentstatus.dto.request;
 
+import dev.animedia.contentservice.contentstatus.ContentStatusConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateContentStatusTranslationRequestDto(
-	@NotNull
+	@NotNull(message = ContentStatusConstants.CONTENT_STATUS_ID_REQUIRED_MESSAGE)
 	Long contentStatusId,
-	@NotBlank
+	@NotBlank(message = ContentStatusConstants.CONTENT_STATUS_LANGUAGE_ID_REQUIRED_MESSAGE)
 	String languageCode,
-	@NotBlank
+	@NotBlank(message = ContentStatusConstants.CONTENT_STATUS_NAME_REQUIRED_MESSAGE)
 	String name
 ) {}
