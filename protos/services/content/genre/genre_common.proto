@@ -22,3 +22,8 @@ message GenreTranslationResponse {
     string name = 4;
     string description = 5;
 }
+
+message GenreWithTranslationResponse {
+    GenreResponse genre = 1;
+    GenreTranslationResponse translation = 2;
+}

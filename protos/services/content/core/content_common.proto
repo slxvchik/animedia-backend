@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package protos.services.content.core;
+
+import "google/protobuf/timestamp.proto";
+import "services/content/status/content_status_common.proto";
+import "services/content/genre/genre_common.proto";
+
+option java_package="dev.animedia.grpc.content.core";
+option java_outer_classname="ContentCommonProto";
+
+message ContentResponse {
+  string uuid = 1;
+  string alias = 2;
+  ContentType type = 3;
+  int32 season = 4;
+  protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
+  string cover_url = 6;
+  string trailer_url = 7;
+  google.protobuf.Timestamp release_date = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+  bool active = 11;
+  repeated string language_codes = 12;
+  repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
+}
+
+enum ContentType {
+  MOVIE = 0;
+  SERIES = 1;
+  COMIC = 2;
+  BOOK = 3;
+}

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package protos.services.content.status;
 
-option java_package="dev.animedia.grpc.content";
+option java_package="dev.animedia.grpc.status";
 option java_outer_classname="ContentStatusCommonProto";
 
 message ContentStatusResponse {
@@ -15,4 +15,9 @@ message ContentStatusTranslationResponse {
   int64 content_status_id = 2;
   string language_code = 3;
   string name = 4;
+}
+
+message ContentStatusWithTranslationResponse {
+  ContentStatusResponse content_status = 1;
+  ContentStatusTranslationResponse translation = 2;
 }

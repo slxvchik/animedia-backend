@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package protos.services.content.core;
+
+import "google/protobuf/timestamp.proto";
+import "common/common.proto";
+import "services/content/core/content_common.proto";
+import "services/content/status/content_status_common.proto";
+import "services/content/genre/genre_common.proto";
+
+option java_package="dev.animedia.content.core";
+option java_outer_classname="ContentPublicProto";
+
+service ContentPublicService {
+  rpc search(SearchRequest) returns (SearchResponse);
+}
+
+message SearchRequest {
+  optional string uuids = 1;
+  optional string alias = 2;
+  repeated ContentType type = 3;
+  repeated int32 season = 4;
+  repeated int64 content_status_ids = 5;
+  optional google.protobuf.Timestamp release_date_from = 6;
+  optional google.protobuf.Timestamp release_date_to = 7;
+  optional google.protobuf.Timestamp created_at_from = 8;
+  optional google.protobuf.Timestamp created_at_to = 9;
+  optional google.protobuf.Timestamp updated_at_from = 10;
+  optional google.protobuf.Timestamp updated_at_to = 11;
+  optional bool active = 12;
+  repeated string language_codes = 13;
+  optional SortBy sort = 14;
+  optional protos.common.PaginationRequest pagination = 15;
+}
+
+enum SortBy {
+  RELEASE_DATE = 0;
+  CREATED_AT = 1;
+  UPDATED_AT = 2;
+  SORT = 3;
+}
+
+message SearchResponse {
+  repeated ContentResponse content = 1;
+  protos.common.PaginationResponse pagination = 2;
+}

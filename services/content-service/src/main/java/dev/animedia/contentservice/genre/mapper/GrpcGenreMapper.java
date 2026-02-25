@@ -50,7 +50,7 @@ public class GrpcGenreMapper {
     }
 
     public GenrePublicProto.SearchResponse toPublicSearchResponse(List<GenreWithTranslationResponseDto> genresWithTranslation, CommonProto.PaginationResponse pagination) {
-        List<GenrePublicProto.GenreWithTranslationResponse> genres = new ArrayList<>();
+        List<GenreCommonProto.GenreWithTranslationResponse> genres = new ArrayList<>();
 
         genresWithTranslation.forEach(genreWithTranslationResponseDto -> {
 
@@ -68,7 +68,7 @@ public class GrpcGenreMapper {
                 .setDescription(genreWithTranslationResponseDto.description())
                 .build();
 
-            var genreWithTranslations = GenrePublicProto.GenreWithTranslationResponse.newBuilder()
+            var genreWithTranslations = GenreCommonProto.GenreWithTranslationResponse.newBuilder()
                 .setGenre(genre)
                 .setTranslation(translation)
                 .build();

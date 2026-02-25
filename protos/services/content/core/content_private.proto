@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package protos.services.content.core;
+
+import "common/common.proto";
+
+option java_package="dev.animedia.content.core";
+option java_outer_classname="ContentPrivateProto";
+
+service ContentPrivateService {
+
+}

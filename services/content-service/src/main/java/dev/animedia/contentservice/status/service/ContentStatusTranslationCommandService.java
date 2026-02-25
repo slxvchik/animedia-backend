@@ -1,0 +1,11 @@
+package dev.animedia.contentservice.status.service;
+
+import dev.animedia.contentservice.status.dto.request.CreateContentStatusTranslationRequestDto;
+import dev.animedia.contentservice.status.dto.request.UpdateContentStatusTranslationRequestDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusTranslationResponseDto;
+
+public interface ContentStatusTranslationCommandService {
+	ContentStatusTranslationResponseDto create(CreateContentStatusTranslationRequestDto createContentStatusTranslationRequestDto);
+	ContentStatusTranslationResponseDto update(Long id, UpdateContentStatusTranslationRequestDto updateContentStatusTranslationRequestDto);
+	void delete(Long id);
+}
