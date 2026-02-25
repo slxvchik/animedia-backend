@@ -5,6 +5,9 @@ package protos.services.content.status;
 import "common/common.proto";
 import "services/content/status/content_status_common.proto";
 
+option java_package="dev.animedia.grpc.content";
+option java_outer_classname="ContentStatusTranslationPrivateProto";
+
 service ContentStatusTranslationPrivateService {
   rpc create(CreateRequest) returns (ContentStatusTranslationResponse);
   rpc update(UpdateRequest) returns (ContentStatusTranslationResponse);

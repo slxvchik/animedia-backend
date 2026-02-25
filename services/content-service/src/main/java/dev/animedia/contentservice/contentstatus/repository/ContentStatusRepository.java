@@ -16,31 +16,16 @@ import java.util.List;
 @Repository
 public interface ContentStatusRepository extends JpaRepository<ContentStatus, Long>, JpaSpecificationExecutor<ContentStatus> {
 
-    @Query("SELECT DISTINCT new dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationsResponseDto(" +
-                "cs.id, cs.alias," +
-                "new dev.animedia.contentservice.contentstatus.dto.response.ContentStatusTranslationResponseDto(cst.id, cst.contentStatus.id, cst.language.code, cst.name)" +
-            ") " +
+    @Query("SELECT DISTINCT new dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationResponseDto(" +
+            "cs.id, cs.alias, cst.id, cst.language.code, cst.name) " +
             "FROM ContentStatus as cs LEFT JOIN FETCH ContentStatusTranslation as cst " +
             "WHERE (COALESCE(:ids, NULL) IS NULL OR cs.id IN :ids) " +
             "AND (COALESCE(:languageCodes, NULL) IS NULL OR cst.language.code IN :languageCodes) " +
             "AND (COALESCE(:aliases, NULL) IS NULL OR cs.alias IN :aliases) " +
             "AND (COALESCE(:names, NULL) IS NULL OR cst.name IN :names)")
-    Page<ContentStatusWithTranslationsResponseDto> search(
+    Page<ContentStatusWithTranslationResponseDto> search(
         @Param("ids") List<Long> ids,
         @Param("languageCodes") List<String> languageCodes,
-        @Param("aliases") List<String> aliases,
-        @Param("names") List<String> names,
-        Pageable pageable
-    );
-
-    @Query("SELECT DISTINCT new dev.animedia.contentservice.contentstatus.dto.response.ContentStatusWithTranslationResponseDto(" +
-            "cs.id, cs.alias, cst.id, cst.language.code, cst.name) " +
-            "FROM ContentStatus as cs LEFT JOIN FETCH ContentStatusTranslation as cst " +
-            "WHERE cst.language.code = :languageCode " +
-            "AND (COALESCE(:aliases, NULL) IS NULL OR cs.alias IN :aliases) " +
-            "AND (COALESCE(:names, NULL) IS NULL OR cst.name IN :names)")
-    Page<ContentStatusWithTranslationResponseDto> search(
-        @Param("languageCode") String languageCode,
         @Param("aliases") List<String> aliases,
         @Param("names") List<String> names,
         Pageable pageable

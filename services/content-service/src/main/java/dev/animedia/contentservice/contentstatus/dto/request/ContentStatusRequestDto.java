@@ -1,9 +1,9 @@
 package dev.animedia.contentservice.contentstatus.dto.request;
 
 import dev.animedia.contentservice.contentstatus.ContentStatusConstants;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public record ContentStatusRequestDto(
-	@NotBlank(message = ContentStatusConstants.CONTENT_STATUS_LANGUAGE_ALIAS_REQUIRED_MESSAGE)
+	@Pattern(regexp = ContentStatusConstants.CONTENT_STATUS_ALIAS_PATTERN, message = ContentStatusConstants.CONTENT_STATUS_INVALID_ALIAS_PATTERN_MESSAGE)
 	String alias
 ) {}

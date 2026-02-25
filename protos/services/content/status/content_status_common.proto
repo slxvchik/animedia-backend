@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package protos.services.content.status;
 
+option java_package="dev.animedia.grpc.content";
+option java_outer_classname="ContentStatusCommonProto";
+
 message ContentStatusResponse {
   int64 id = 1;
   string alias = 2;

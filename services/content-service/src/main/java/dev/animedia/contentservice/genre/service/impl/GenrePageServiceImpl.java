@@ -42,7 +42,7 @@ public class GenrePageServiceImpl implements GenrePageService {
         var genresTranslation = genreMapper.toGenresWithTranslationResponseDto(genresTranslations);
         return PageableExecutionUtils.getPage(
             genresTranslation,
-            pageable,
+            genresWithTranslationsResponseDto.getPageable(),
             genresWithTranslationsResponseDto::getTotalElements
         );
     }

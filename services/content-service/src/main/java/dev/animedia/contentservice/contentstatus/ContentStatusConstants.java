@@ -2,8 +2,10 @@ package dev.animedia.contentservice.contentstatus;
 
 public class ContentStatusConstants {
 
+	public static final String CONTENT_STATUS_ALIAS_PATTERN = "^[a-z]{2,20}(?:-[a-z]{1,20}){0,5}$";
+
 	public static final String CONTENT_STATUS_LANGUAGE_ID_REQUIRED_MESSAGE = "CONTENT_STATUS_LANGUAGE_ID_REQUIRED";
-	public static final String CONTENT_STATUS_LANGUAGE_ALIAS_REQUIRED_MESSAGE = "CONTENT_STATUS_LANGUAGE_ALIAS_REQUIRED";
+	public static final String CONTENT_STATUS_INVALID_ALIAS_PATTERN_MESSAGE = "CONTENT_STATUS_LANGUAGE_ALIAS_PATTERN";
 
 	public static final String CONTENT_STATUS_ALIAS_EXISTS_MESSAGE = "CONTENT_STATUS_ALIAS_EXISTS";
 	public static final String CONTENT_STATUS_NOT_FOUND_MESSAGE = "CONTENT_STATUS_NOT_FOUND";
