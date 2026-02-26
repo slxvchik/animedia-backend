@@ -68,12 +68,12 @@ public class Content {
     @Column(nullable = false)
     private Integer sort;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_uuid"))
     @Column(name = "language_code")
     private Set<String> languageCodes = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "content_genres",
         joinColumns = @JoinColumn(name = "content_uuid"),
