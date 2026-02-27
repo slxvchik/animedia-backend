@@ -6,32 +6,46 @@ import dev.animedia.contentservice.content.dto.response.ContentTranslationRespon
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationResponseDto;
 import dev.animedia.contentservice.content.model.Content;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
+import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
+import dev.animedia.contentservice.status.model.ContentStatus;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ContentMapper {
 
-	public Content toContent(ContentRequestDto contentRequestDto) {
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	public Content toContent(ContentRequestDto dto) {
 		Content content = new Content();
 
-		if (contentRequestDto.uuid() != null) {
-			content.setUuid(contentRequestDto.uuid());
+		content.setAlias(dto.alias());
+		content.setType(dto.type());
+		content.setSeason(dto.season());
+
+		ContentStatus status = entityManager.getReference(ContentStatus.class, dto.contentStatusId());
+		content.setStatus(status);
+
+		content.setCoverUrl(dto.coverUrl());
+		content.setTrailerUrl(dto.trailerUrl());
+		content.setReleaseDate(dto.releaseDate());
+		content.setActive(dto.active());
+		content.setSort(dto.sort());
+		content.setLanguageCodes(dto.languageCodes());
+
+		Set<Genre> genres = new HashSet<>();
+		for (var genreId : dto.genreIds()) {
+			genres.add(entityManager.getReference(Genre.class, genreId));
 		}
-		content.setAlias(contentRequestDto.alias());
-		content.setType(contentRequestDto.type());
-		content.setSeason(contentRequestDto.season());
-		content.setStatus(contentRequestDto.status());
-		content.setCoverUrl(contentRequestDto.coverUrl());
-		content.setTrailerUrl(contentRequestDto.trailerUrl());
-		content.setReleaseDate(contentRequestDto.releaseDate());
-		content.setActive(contentRequestDto.active());
-		content.setSort(contentRequestDto.sort());
-		content.setLanguageCodes(contentRequestDto.languageCodes());
-		content.setGenres(contentRequestDto.genres());
+		content.setGenres(genres);
 
 		return content;
 	}
@@ -66,6 +80,29 @@ public class ContentMapper {
 		return new ContentWithTranslationResponseDto(
 			contentResponseDto,
 			translationResponseDto
+		);
+	}
+
+	public void updateEntity(ContentRequestDto dto, Content content) {
+		content.setAlias(dto.alias());
+		content.setType(dto.type());
+		content.setSeason(dto.season());
+
+		content.setStatus(entityManager.getReference(ContentStatus.class, dto.contentStatusId()));
+
+		content.setCoverUrl(dto.coverUrl());
+		content.setTrailerUrl(dto.trailerUrl());
+		content.setReleaseDate(dto.releaseDate());
+		content.setActive(dto.active());
+
+		content.getLanguageCodes().clear();
+		dto.languageCodes().forEach(code ->
+			content.getLanguageCodes().add(code)
+		);
+
+		content.getGenres().clear();
+		dto.genreIds().forEach(id ->
+			content.getGenres().add(entityManager.getReference(Genre.class, id))
 		);
 	}
 }

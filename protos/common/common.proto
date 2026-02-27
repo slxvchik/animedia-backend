@@ -21,3 +21,8 @@ message PaginationResponse {
 }
 
 message EmptyResponse {}
+
+enum SortType {
+  DESC = 0;
+  ASC = 1;
+}

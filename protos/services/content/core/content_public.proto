@@ -24,8 +24,9 @@ message SearchRequest {
   optional google.protobuf.Timestamp release_date_from = 5;
   optional google.protobuf.Timestamp release_date_to = 6;
   repeated string language_codes = 7;
-  optional SortBy sort = 8;
-  optional protos.common.PaginationRequest pagination = 9;
+  optional SortBy sort_by = 8;
+  optional protos.common.SortType sort_type = 9;
+  optional protos.common.PaginationRequest pagination = 10;
 }
 
 enum SortBy {

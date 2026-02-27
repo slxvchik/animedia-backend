@@ -88,6 +88,9 @@ public class Content {
     )
     private Set<Genre> genres = new HashSet<>();
 
+    @OneToMany(mappedBy = "content", fetch = FetchType.LAZY)
+    private Set<ContentTranslation> translations = new HashSet<>();
+
     public UUID getUuid() {
         return uuid;
     }
@@ -198,5 +201,13 @@ public class Content {
 
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
+    }
+
+    public Set<ContentTranslation> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(Set<ContentTranslation> translations) {
+        this.translations = translations;
     }
 }

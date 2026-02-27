@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface ContentCommandService {
 	ContentResponseDto create(ContentRequestDto contentRequestDto);
-	ContentResponseDto update(ContentRequestDto contentRequestDto);
+	ContentResponseDto update(UUID uuid, ContentRequestDto contentRequestDto);
 	void delete(UUID uuid);
 }

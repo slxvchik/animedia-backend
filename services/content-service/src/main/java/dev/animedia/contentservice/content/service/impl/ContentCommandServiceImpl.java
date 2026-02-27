@@ -10,10 +10,16 @@ import dev.animedia.contentservice.content.model.Content;
 import dev.animedia.contentservice.content.repository.ContentRepository;
 import dev.animedia.contentservice.content.service.ContentCommandService;
 import dev.animedia.contentservice.content.service.ContentQueryService;
+import dev.animedia.contentservice.genre.GenreConstants;
+import dev.animedia.contentservice.genre.service.GenreQueryService;
+import dev.animedia.contentservice.status.ContentStatusConstants;
+import dev.animedia.contentservice.status.service.ContentStatusQueryService;
 import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,48 +28,55 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 	private final ContentRepository contentRepository;
 	private final ContentMapper contentMapper;
 	private final ContentQueryService contentQueryService;
+	private final GenreQueryService genreQueryService;
+	private final ContentStatusQueryService contentStatusQueryService;
 
 	@Autowired
 	public ContentCommandServiceImpl(
 		ContentRepository contentRepository,
 		ContentMapper contentMapper,
-		ContentQueryService contentQueryService
+		ContentQueryService contentQueryService,
+		GenreQueryService genreQueryService,
+		ContentStatusQueryService contentStatusQueryService
 	) {
 		this.contentRepository = contentRepository;
 		this.contentMapper = contentMapper;
 		this.contentQueryService = contentQueryService;
+		this.genreQueryService = genreQueryService;
+		this.contentStatusQueryService = contentStatusQueryService;
 	}
 
 	@Override
-	public ContentResponseDto create(ContentRequestDto contentRequestDto) {
-		Content content = contentMapper.toContent(contentRequestDto);
+	public ContentResponseDto create(ContentRequestDto requestDto) {
+		Content content = contentMapper.toContent(requestDto);
+
+		List<String> errorMessages = new ArrayList<>();
+
 		var contentExists = contentQueryService.exists(content.getAlias(), content.getType(), content.getSeason());
-		if (contentExists) throw new AppException(Status.Code.ALREADY_EXISTS, ContentConstants.CONTENT_EXISTS_MESSAGE);
+		if (contentExists) errorMessages.add(ContentConstants.CONTENT_EXISTS_MESSAGE);
+
+		validateRequest(errorMessages, requestDto);
+		if (!errorMessages.isEmpty()) throw new AppException(Status.Code.INVALID_ARGUMENT, errorMessages);
+
 		var savedContentUuid = contentRepository.save(content).getUuid();
 		String languageCode = LanguageInterceptor.getLanguageCode();
 		return contentQueryService.findByUuid(savedContentUuid, languageCode);
 	}
 
-	@SuppressWarnings("DuplicatedCode")
 	@Override
-	public ContentResponseDto update(ContentRequestDto contentRequestDto) {
-		var content = contentRepository.findById(contentRequestDto.uuid())
+	public ContentResponseDto update(UUID uuid, ContentRequestDto requestDto) {
+		var content = contentRepository.findById(uuid)
 			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
 
-		var contentExists = contentQueryService.existsExcludeId(contentRequestDto.alias(), contentRequestDto.type(), contentRequestDto.season(), contentRequestDto.uuid());
-		if (contentExists) throw new AppException(Status.Code.ALREADY_EXISTS, ContentConstants.CONTENT_EXISTS_MESSAGE);
+		List<String> errorMessages = new ArrayList<>();
 
-		content.setAlias(contentRequestDto.alias());
-		content.setType(contentRequestDto.type());
-		content.setSeason(contentRequestDto.season());
-		content.setStatus(contentRequestDto.status());
-		content.setCoverUrl(contentRequestDto.coverUrl());
-		content.setTrailerUrl(contentRequestDto.trailerUrl());
-		content.setReleaseDate(contentRequestDto.releaseDate());
-		content.setActive(contentRequestDto.active());
-		content.setLanguageCodes(contentRequestDto.languageCodes());
-		content.setGenres(contentRequestDto.genres());
+		var contentExists = contentQueryService.existsExcludeId(requestDto.alias(), requestDto.type(), requestDto.season(), uuid);
+		if (contentExists) errorMessages.add(ContentConstants.CONTENT_EXISTS_MESSAGE);
 
+		validateRequest(errorMessages, requestDto);
+		if (!errorMessages.isEmpty()) throw new AppException(Status.Code.INVALID_ARGUMENT, errorMessages);
+
+		contentMapper.updateEntity(requestDto, content);
 		contentRepository.save(content);
 
 		String languageCode = LanguageInterceptor.getLanguageCode();
@@ -75,5 +88,13 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 		var contentExists = contentQueryService.exists(uuid);
 		if (!contentExists) throw new AppException(Status.Code.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE);
 		contentRepository.deleteById(uuid);
+	}
+
+	private void validateRequest(List<String> errorMessages, ContentRequestDto request) {
+		var genresExists = genreQueryService.existsAllByIds(new ArrayList<>(request.genreIds()));
+		if (!genresExists) errorMessages.add(GenreConstants.GENRES_NOT_FOUND_MESSAGE);
+
+		var contentStatusExists = contentStatusQueryService.existsById(request.contentStatusId());
+		if (!contentStatusExists) errorMessages.add(ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE);
 	}
 }

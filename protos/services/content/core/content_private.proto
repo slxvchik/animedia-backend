@@ -21,19 +21,21 @@ service ContentPrivateService {
 message SearchRequest {
   optional string uuid = 1;
   optional string alias = 2;
-  repeated ContentType type = 3;
-  repeated int32 seasons = 4;
-  repeated int64 content_status_ids = 5;
-  optional google.protobuf.Timestamp release_date_from = 6;
-  optional google.protobuf.Timestamp release_date_to = 7;
-  optional google.protobuf.Timestamp created_at_from = 8;
-  optional google.protobuf.Timestamp created_at_to = 9;
-  optional google.protobuf.Timestamp updated_at_from = 10;
-  optional google.protobuf.Timestamp updated_at_to = 11;
-  optional bool active = 12;
-  repeated string language_codes = 13;
-  optional SortBy sort = 14;
-  optional protos.common.PaginationRequest pagination = 15;
+  optional string title = 3;
+  repeated ContentType type = 4;
+  repeated int32 seasons = 5;
+  repeated int64 content_status_ids = 6;
+  optional google.protobuf.Timestamp release_date_from = 7;
+  optional google.protobuf.Timestamp release_date_to = 8;
+  optional google.protobuf.Timestamp created_at_from = 9;
+  optional google.protobuf.Timestamp created_at_to = 10;
+  optional google.protobuf.Timestamp updated_at_from = 11;
+  optional google.protobuf.Timestamp updated_at_to = 12;
+  optional bool active = 13;
+  repeated string language_codes = 14;
+  optional SortBy sort_by = 15;
+  optional protos.common.SortType sort_type = 16;
+  optional protos.common.PaginationRequest pagination = 17;
 }
 
 enum SortBy {

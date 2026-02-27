@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.content.dto.request;
 
 import dev.animedia.contentservice.content.model.ContentType;
-import dev.animedia.contentservice.status.model.ContentStatus;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -12,9 +11,10 @@ import java.util.UUID;
 public record PrivateSearchRequestDto(
 	UUID uuid,
 	String alias,
+	String title,
 	ContentType type,
 	List<Integer> seasons,
-	List<ContentStatus> contentStatuses,
+	List<Long> contentStatusIds,
 	LocalDate releaseFrom,
 	LocalDate releaseTo,
 	LocalDateTime createdAtFrom,
@@ -23,13 +23,6 @@ public record PrivateSearchRequestDto(
 	LocalDateTime updatedAtTo,
 	Boolean active,
 	List<String> languageCodes,
-	SortBy sortBy,
+	List<Long> genreIds,
 	Pageable pageable
-) {
-	enum SortBy {
-		RELEASE_DATE,
-		CREATED_AT,
-		UPDATED_AT,
-		SORT
-	}
-}
+) implements CommonSearchRequestDto {}
