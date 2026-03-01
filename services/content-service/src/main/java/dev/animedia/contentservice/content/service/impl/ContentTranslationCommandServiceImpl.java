@@ -21,7 +21,6 @@ public class ContentTranslationCommandServiceImpl implements ContentTranslationC
 
 	@Override
 	public ContentTranslationResponseDto create(ContentTranslationRequestDto contentRequestDto) {
-
 		return null;
 	}
 
