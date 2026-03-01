@@ -4,7 +4,9 @@ import dev.animedia.contentservice.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentTranslationResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationResponseDto;
+import dev.animedia.contentservice.content.dto.response.ContentWithTranslationsResponseDto;
 import dev.animedia.contentservice.content.model.Content;
+import dev.animedia.contentservice.content.model.ContentType;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
@@ -13,6 +15,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +57,7 @@ public class ContentMapper {
 	public ContentResponseDto toContentResponseDto(
 		Content content,
 		ContentStatusWithTranslationResponseDto contentStatusWithTranslation,
-		List<GenreWithTranslationResponseDto> genreWithTranslations
+		List<GenreWithTranslationResponseDto> genresWithTranslation
 	) {
 		return new ContentResponseDto(
 			content.getUuid().toString(),
@@ -69,8 +73,26 @@ public class ContentMapper {
 			content.getActive(),
 			content.getSort(),
 			new ArrayList<>(content.getLanguageCodes()),
-			genreWithTranslations
+			genresWithTranslation
 		);
+	}
+
+	public List<ContentWithTranslationsResponseDto> toContentsWithTranslationsResponseDto(
+		List<Content> contents,
+		List<ContentTranslationResponseDto> contentsTranslation,
+		List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation,
+		List<GenreWithTranslationResponseDto> genresWithTranslation
+	) {
+		return null;
+	}
+
+	public List<ContentWithTranslationResponseDto> toContentsWithTranslationResponseDto(
+		List<Content> contents,
+		List<ContentTranslationResponseDto> contentsTranslation,
+		List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation,
+		List<GenreWithTranslationResponseDto> genresWithTranslation
+	) {
+		return null;
 	}
 
 	public ContentWithTranslationResponseDto toContentWithTranslationResponseDto(
@@ -78,8 +100,25 @@ public class ContentMapper {
 		ContentTranslationResponseDto translationResponseDto
 	) {
 		return new ContentWithTranslationResponseDto(
-			contentResponseDto,
-			translationResponseDto
+			contentResponseDto.uuid(),
+			contentResponseDto.alias(),
+			contentResponseDto.type(),
+			contentResponseDto.season(),
+			contentResponseDto.status(),
+			contentResponseDto.coverUrl(),
+			contentResponseDto.trailerUrl(),
+			contentResponseDto.releaseDate(),
+			contentResponseDto.createdAt(),
+			contentResponseDto.updatedAt(),
+			contentResponseDto.active(),
+			contentResponseDto.sort(),
+			contentResponseDto.languageCodes(),
+			contentResponseDto.genres(),
+
+			translationResponseDto.uuid(),
+			translationResponseDto.languageCode(),
+			translationResponseDto.title(),
+			translationResponseDto.description()
 		);
 	}
 

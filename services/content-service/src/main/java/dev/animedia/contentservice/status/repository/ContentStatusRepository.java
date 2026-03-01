@@ -16,10 +16,10 @@ import java.util.List;
 public interface ContentStatusRepository extends JpaRepository<ContentStatus, Long>, JpaSpecificationExecutor<ContentStatus> {
 
     @Query("SELECT DISTINCT new dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto(" +
-            "cs.id, cs.alias, cst.id, cst.language.code, cst.name) " +
+            "cs.id, cs.alias, cst.id, cst.languageCode, cst.name) " +
             "FROM ContentStatus as cs LEFT JOIN FETCH ContentStatusTranslation as cst " +
             "WHERE (COALESCE(:ids, NULL) IS NULL OR cs.id IN :ids) " +
-            "AND (COALESCE(:languageCodes, NULL) IS NULL OR cst.language.code IN :languageCodes) " +
+            "AND (COALESCE(:languageCodes, NULL) IS NULL OR cst.languageCode IN :languageCodes) " +
             "AND (COALESCE(:aliases, NULL) IS NULL OR cs.alias IN :aliases) " +
             "AND (COALESCE(:names, NULL) IS NULL OR cst.name IN :names)")
     Page<ContentStatusWithTranslationResponseDto> search(
@@ -32,4 +32,14 @@ public interface ContentStatusRepository extends JpaRepository<ContentStatus, Lo
 
 	boolean existsByAlias(String alias);
     boolean existsByAliasAndIdIsNot(String alias, Long id);
+
+    @Query("SELECT DISTINCT new dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto(" +
+            "cs.id, cs.alias, cst.id, cst.languageCode, cst.name) " +
+            "FROM ContentStatus as cs LEFT JOIN FETCH ContentStatusTranslation as cst " +
+            "WHERE cs.id IN :ids " +
+            "AND cst.languageCode = :languageCode ")
+    List<ContentStatusWithTranslationResponseDto> findAllByIdAndLanguageCode(
+        @Param("ids") List<Long> ids,
+        @Param("languageCode") String languageCode
+    );
 }

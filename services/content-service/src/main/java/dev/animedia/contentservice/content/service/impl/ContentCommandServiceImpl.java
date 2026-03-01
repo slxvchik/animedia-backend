@@ -56,6 +56,7 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 		if (contentExists) errorMessages.add(ContentConstants.CONTENT_EXISTS_MESSAGE);
 
 		validateRequest(errorMessages, requestDto);
+
 		if (!errorMessages.isEmpty()) throw new AppException(Status.Code.INVALID_ARGUMENT, errorMessages);
 
 		var savedContentUuid = contentRepository.save(content).getUuid();

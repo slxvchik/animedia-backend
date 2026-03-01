@@ -12,6 +12,8 @@ import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ContentStatusQueryImpl implements ContentStatusQueryService {
 
@@ -39,9 +41,14 @@ public class ContentStatusQueryImpl implements ContentStatusQueryService {
 
     @Override
     public ContentStatusWithTranslationResponseDto findByIdAndLanguageCode(Long id, String languageCode) {
-        var contentStatusResponseDto = this.findById(id);
-        var contentStatusTranslationResponseDto = contentStatusTranslationQueryService.findByContentStatusIdAndLanguageCode(id, languageCode);
-        return contentStatusMapper.toContentStatusWithTranslationResponseDto(contentStatusResponseDto, contentStatusTranslationResponseDto);
+        var contentStatusesResponseDto = contentStatusRepository.findAllByIdAndLanguageCode(List.of(id), languageCode);
+        if (contentStatusesResponseDto.isEmpty()) throw new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE);
+        return contentStatusesResponseDto.getFirst();
+    }
+
+    @Override
+    public List<ContentStatusWithTranslationResponseDto> findByIdsAndLanguageCode(List<Long> ids, String languageCode) {
+        return contentStatusRepository.findAllByIdAndLanguageCode(ids, languageCode);
     }
 
     @Override
