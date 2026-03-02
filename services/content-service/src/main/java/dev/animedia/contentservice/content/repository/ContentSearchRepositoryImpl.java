@@ -9,6 +9,7 @@ import dev.animedia.contentservice.genre.model.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 	private static final String COLUMN_STATUS_ID = "id";
 	private static final String COLUMN_RELEASE_DATE = "releaseDate";
 	private static final String COLUMN_LANGUAGE_CODES = "languageCodes";
+    private static final String COLUMN_LANGUAGE_CODE = "languageCode";
 	private static final String COLUMN_CREATED_AT = "createdAt";
 	private static final String COLUMN_UPDATED_AT = "updatedAt";
 	private static final String COLUMN_SORT = "sort";
@@ -46,22 +48,22 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
     @Override
     @Transactional(readOnly = true)
     public Page<UUID> search(PrivateSearchRequestDto searchRequestDto) {
-        return executeSearch(searchRequestDto, searchRequestDto.pageable());
+        return executeSearch(searchRequestDto, null, searchRequestDto.pageable());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<UUID> search(PublicSearchRequestDto searchRequestDto) {
-        return executeSearch(searchRequestDto, searchRequestDto.pageable());
+    public Page<UUID> search(PublicSearchRequestDto searchRequestDto, String languageCode) {
+        return executeSearch(searchRequestDto, languageCode, searchRequestDto.pageable());
     }
 
-    private Page<UUID> executeSearch(CommonSearchRequestDto request, Pageable pageable) {
+    private Page<UUID> executeSearch(CommonSearchRequestDto request, @Nullable String languageCode, Pageable pageable) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Content> countRoot = countQuery.from(Content.class);
 
-        List<Predicate> countPredicates = buildPredicates(request, cb, countRoot);
+        List<Predicate> countPredicates = buildPredicates(request, languageCode, cb, countRoot);
 
         countQuery.select(cb.countDistinct(countRoot.get(COLUMN_ID)));
         if (!countPredicates.isEmpty()) {
@@ -77,7 +79,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
         CriteriaQuery<UUID> query = cb.createQuery(UUID.class);
         Root<Content> contentRoot = query.from(Content.class);
 
-        List<Predicate> dataPredicates = buildPredicates(request, cb, contentRoot);
+        List<Predicate> dataPredicates = buildPredicates(request, languageCode, cb, contentRoot);
 
         query.select(contentRoot.get(COLUMN_ID)).distinct(true);
         if (!dataPredicates.isEmpty()) {
@@ -99,10 +101,10 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
         return new PageImpl<>(contentIds, pageable, total);
     }
 
-    private List<Predicate> buildPredicates(CommonSearchRequestDto r, CriteriaBuilder cb, Root<Content> contentRoot) {
+    private List<Predicate> buildPredicates(CommonSearchRequestDto r, String languageCode, CriteriaBuilder cb, Root<Content> contentRoot) {
         List<Predicate> predicates = new ArrayList<>();
 
-        buildCommonPredicates(predicates, r, cb, contentRoot);
+        buildCommonPredicates(predicates, r, languageCode, cb, contentRoot);
 
         if (r instanceof PrivateSearchRequestDto pr) {
             buildPrivatePredicates(predicates, pr, cb, contentRoot);
@@ -114,6 +116,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
     private void buildCommonPredicates(
         List<Predicate> predicates,
         CommonSearchRequestDto r,
+        String languageCode,
         CriteriaBuilder cb,
         Root<Content> contentRoot
     ) {
@@ -123,14 +126,14 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
                 "%" + r.alias() + "%")
             );
         }
-        if (r.title() != null && !r.title().isBlank()) {
+        if (r.title() != null && !r.title().isBlank() || languageCode != null && !languageCode.isBlank()) {
             Join<Content, ContentTranslation> translationJoin = contentRoot.join(TABLE_TRANSLATIONS);
-            predicates.add(
-                cb.like(
-                    translationJoin.get(COLUMN_TITLE),
-                    "%" + r.title() + "%"
-                )
-            );
+            if (r.title() != null && !r.title().isBlank()) {
+                predicates.add(cb.like(translationJoin.get(COLUMN_TITLE), "%" + r.title() + "%"));
+            }
+            if (languageCode != null && !languageCode.isBlank()) {
+                predicates.add(cb.equal(translationJoin.get(COLUMN_LANGUAGE_CODE), languageCode));
+            }
         }
         if (r.type() != null) {
             predicates.add(cb.equal(contentRoot.get(COLUMN_TYPE), r.type()));

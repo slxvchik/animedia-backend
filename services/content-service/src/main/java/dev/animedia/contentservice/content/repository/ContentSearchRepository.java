@@ -11,5 +11,5 @@ import java.util.UUID;
 
 public interface ContentSearchRepository {
 	Page<UUID> search(PrivateSearchRequestDto searchRequestDto);
-	Page<UUID> search(PublicSearchRequestDto searchRequestDto);
+	Page<UUID> search(PublicSearchRequestDto searchRequestDto, String languageCode);
 }

@@ -62,7 +62,9 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 		var contentUuids = contentSearchRepository.search(privateSearchRequestDto);
 		if (contentUuids.isEmpty()) return Page.empty(contentUuids.getPageable());
 
-		var searchResult = searchFullContents(contentUuids.getContent());
+		String languageCode = LanguageInterceptor.getLanguageCode();
+
+		var searchResult = searchFullContents(contentUuids.getContent(), languageCode);
 		var contentsWithTranslations = contentMapper.toContentsWithTranslationsResponseDto(
 			searchResult.contents(),
 			searchResult.translations(),
@@ -79,10 +81,13 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 
 	@Override
 	public Page<ContentWithTranslationResponseDto> search(PublicSearchRequestDto publicSearchRequestDto) {
-		var contentUuids = contentSearchRepository.search(publicSearchRequestDto);
+
+		String languageCode = LanguageInterceptor.getLanguageCode();
+
+		var contentUuids = contentSearchRepository.search(publicSearchRequestDto, languageCode);
 		if (contentUuids.isEmpty()) return Page.empty(contentUuids.getPageable());
 
-		var searchResult = searchFullContents(contentUuids.getContent());
+		var searchResult = searchFullContents(contentUuids.getContent(), languageCode);
 		var contentsWithTranslations = contentMapper.toContentsWithTranslationResponseDto(
 			searchResult.contents(),
 			searchResult.translations(),
@@ -101,7 +106,7 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 	 * @param contentUuids - all content IDs for which to find entities
 	 * @return all nested content entities with a translation as a ResponseDto
 	 */
-	private SearchResult searchFullContents(List<UUID> contentUuids) {
+	private SearchResult searchFullContents(List<UUID> contentUuids, String languageCode) {
 		List<Content> contents = contentRepository.findAllById(contentUuids);
 
 		List<Long> genreIds = contents.stream()
@@ -114,8 +119,6 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 			.map(c -> c.getStatus().getId())
 			.distinct()
 			.toList();
-
-		String languageCode = LanguageInterceptor.getLanguageCode();
 
 		List<ContentTranslationResponseDto> translations = contentTranslationQueryService.findByContentUuidsAndLanguageCode(contentUuids, languageCode);
 		List<GenreWithTranslationResponseDto> genres = genreQueryService.findByIdsAndLanguageCode(genreIds, languageCode);
