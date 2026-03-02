@@ -97,6 +97,10 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 		);
 	}
 
+	/**
+	 * @param contentUuids - all content IDs for which to find entities
+	 * @return all nested content entities with a translation as a ResponseDto
+	 */
 	private SearchResult searchFullContents(List<UUID> contentUuids) {
 		List<Content> contents = contentRepository.findAllById(contentUuids);
 

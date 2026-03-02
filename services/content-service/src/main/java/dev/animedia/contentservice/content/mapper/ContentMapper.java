@@ -6,7 +6,6 @@ import dev.animedia.contentservice.content.dto.response.ContentTranslationRespon
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationsResponseDto;
 import dev.animedia.contentservice.content.model.Content;
-import dev.animedia.contentservice.content.model.ContentType;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
@@ -15,12 +14,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class ContentMapper {
@@ -77,22 +73,155 @@ public class ContentMapper {
 		);
 	}
 
+	/**
+	 * @param contents - content entity without translation
+	 * @param contentsTranslation - translation response dto for content
+	 * @param contentStatusesWithTranslation - statuses response dto with translation
+	 * @param genresWithTranslation - genres response dto with translation
+	 * @return a list of content with a multiple translations and translated nested entities.
+	 */
 	public List<ContentWithTranslationsResponseDto> toContentsWithTranslationsResponseDto(
 		List<Content> contents,
 		List<ContentTranslationResponseDto> contentsTranslation,
 		List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation,
 		List<GenreWithTranslationResponseDto> genresWithTranslation
 	) {
-		return null;
+		// content translations map by content id
+		Map<String, List<ContentTranslationResponseDto>> translationsMap = contentsTranslation.stream()
+			.collect(Collectors.groupingBy(ContentTranslationResponseDto::contentUuid));
+
+		// statuses map by id
+		Map<Long, ContentStatusWithTranslationResponseDto> statusesMap = contentStatusesWithTranslation.stream()
+			.collect(
+				Collectors.toMap(
+					ContentStatusWithTranslationResponseDto::id,
+					Function.identity(),
+					(first, second) -> first
+				)
+			);
+
+		// genres map by id
+		Map<Long, GenreWithTranslationResponseDto> genresMap = genresWithTranslation.stream()
+			.collect(
+				Collectors.toMap(
+					GenreWithTranslationResponseDto::id,
+					Function.identity(),
+					(first, second) -> first
+				)
+			);
+
+		return contents.stream()
+			.map(content -> {
+				String contentUuid = content.getUuid().toString();
+
+				var statusResponse = statusesMap.get(content.getStatus().getId());
+
+				var genresResponse = content.getGenres().stream()
+					.map(g -> genresMap.get(g.getId()))
+					.filter(Objects::nonNull)
+					.toList();
+
+				return new ContentWithTranslationsResponseDto(
+					contentUuid,
+					content.getAlias(),
+					content.getType(),
+					content.getSeason(),
+					statusResponse,
+					content.getCoverUrl(),
+					content.getTrailerUrl(),
+					content.getReleaseDate(),
+					content.getCreatedAt(),
+					content.getUpdatedAt(),
+					content.getActive(),
+					content.getSort(),
+					new ArrayList<>(content.getLanguageCodes()),
+					genresResponse,
+					translationsMap.getOrDefault(contentUuid, List.of())
+				);
+			})
+			.toList();
 	}
 
+	/**
+	 * @param contents - content entity without translation
+	 * @param contentsTranslation - translation response dto for content
+	 * @param contentStatusesWithTranslation - statuses response dto with translation
+	 * @param genresWithTranslation - genres response dto with translation
+	 * @return a list of content with a single translation and translated nested entities.
+	 */
 	public List<ContentWithTranslationResponseDto> toContentsWithTranslationResponseDto(
 		List<Content> contents,
 		List<ContentTranslationResponseDto> contentsTranslation,
 		List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation,
 		List<GenreWithTranslationResponseDto> genresWithTranslation
 	) {
-		return null;
+		// content translations map by content id
+		Map<String, ContentTranslationResponseDto> translationMap = contentsTranslation.stream()
+			.collect(
+				Collectors.toMap(
+					ContentTranslationResponseDto::contentUuid,
+					Function.identity()
+				)
+			);
+
+		// statuses map by id
+		Map<Long, ContentStatusWithTranslationResponseDto> statusesMap = contentStatusesWithTranslation.stream()
+			.collect(
+				Collectors.toMap(
+					ContentStatusWithTranslationResponseDto::id,
+					Function.identity(),
+					(first, second) -> first
+				)
+			);
+
+		// genres map by id
+		Map<Long, GenreWithTranslationResponseDto> genresMap = genresWithTranslation.stream()
+			.collect(
+				Collectors.toMap(
+					GenreWithTranslationResponseDto::id,
+					Function.identity(),
+					(first, second) -> first
+				)
+			);
+
+		return contents.stream()
+			.map(content -> {
+				String contentUuid = content.getUuid().toString();
+
+				var translation = translationMap.get(contentUuid);
+				if (translation == null) return null;
+
+				var statusResponse = statusesMap.get(content.getStatus().getId());
+
+				var genresResponse = content.getGenres().stream()
+					.map(g -> genresMap.get(g.getId()))
+					.filter(Objects::nonNull)
+					.toList();
+
+				return new ContentWithTranslationResponseDto(
+					contentUuid,
+					content.getAlias(),
+					content.getType(),
+					content.getSeason(),
+					statusResponse,
+					content.getCoverUrl(),
+					content.getTrailerUrl(),
+					content.getReleaseDate(),
+					content.getCreatedAt(),
+					content.getUpdatedAt(),
+					content.getActive(),
+					content.getSort(),
+					new ArrayList<>(content.getLanguageCodes()),
+					genresResponse,
+
+					translation.uuid(),
+					translation.languageCode(),
+					translation.title(),
+					translation.description()
+				);
+			})
+			.filter(Objects::nonNull)
+			.toList();
 	}
 
 	public ContentWithTranslationResponseDto toContentWithTranslationResponseDto(

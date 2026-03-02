@@ -21,7 +21,26 @@ import java.util.*;
 @Repository
 public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
-    @PersistenceContext
+	private static final String COLUMN_ID = "uuid";
+	private static final String COLUMN_ALIAS = "alias";
+	private static final String COLUMN_TITLE = "title";
+	private static final String COLUMN_TYPE = "type";
+	private static final String COLUMN_SEASON = "season";
+	private static final String COLUMN_STATUS = "status";
+	private static final String COLUMN_STATUS_ID = "id";
+	private static final String COLUMN_RELEASE_DATE = "releaseDate";
+	private static final String COLUMN_LANGUAGE_CODES = "languageCodes";
+	private static final String COLUMN_CREATED_AT = "createdAt";
+	private static final String COLUMN_UPDATED_AT = "updatedAt";
+	private static final String COLUMN_SORT = "sort";
+	private static final String COLUMN_ACTIVE = "active";
+
+	private static final String TABLE_TRANSLATIONS = "translations";
+	private static final String TABLE_GENRES = "genres";
+	private static final String COLUMN_GENRE_ID = "id";
+
+
+	@PersistenceContext
     private EntityManager entityManager;
 
     @Override
@@ -44,7 +63,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
         List<Predicate> countPredicates = buildPredicates(request, cb, countRoot);
 
-        countQuery.select(cb.countDistinct(countRoot.get("uuid")));
+        countQuery.select(cb.countDistinct(countRoot.get(COLUMN_ID)));
         if (!countPredicates.isEmpty()) {
             countQuery.where(countPredicates.toArray(new Predicate[0]));
         }
@@ -60,7 +79,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
         List<Predicate> dataPredicates = buildPredicates(request, cb, contentRoot);
 
-        query.select(contentRoot.get("uuid")).distinct(true);
+        query.select(contentRoot.get(COLUMN_ID)).distinct(true);
         if (!dataPredicates.isEmpty()) {
             query.where(dataPredicates.toArray(new Predicate[0]));
         }
@@ -100,28 +119,28 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
     ) {
         if (r.alias() != null && !r.alias().isBlank()) {
             predicates.add(
-                cb.like(contentRoot.get("alias"),
+                cb.like(contentRoot.get(COLUMN_ALIAS),
                 "%" + r.alias() + "%")
             );
         }
         if (r.title() != null && !r.title().isBlank()) {
-            Join<Content, ContentTranslation> translationJoin = contentRoot.join("translations");
+            Join<Content, ContentTranslation> translationJoin = contentRoot.join(TABLE_TRANSLATIONS);
             predicates.add(
                 cb.like(
-                    translationJoin.get("title"),
+                    translationJoin.get(COLUMN_TITLE),
                     "%" + r.title() + "%"
                 )
             );
         }
         if (r.type() != null) {
-            predicates.add(cb.equal(contentRoot.get("type"), r.type()));
+            predicates.add(cb.equal(contentRoot.get(COLUMN_TYPE), r.type()));
         }
         if (r.seasons() != null && !r.seasons().isEmpty()) {
             var seasons = r.seasons().stream()
                 .filter(Objects::nonNull)
                 .toList();
             if (!seasons.isEmpty()) {
-                predicates.add(contentRoot.get("season").in(seasons));
+                predicates.add(contentRoot.get(COLUMN_SEASON).in(seasons));
             }
         }
         if (r.contentStatusIds() != null && !r.contentStatusIds().isEmpty()) {
@@ -129,21 +148,21 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
                 .filter(Objects::nonNull)
                 .toList();
             if (!statusIds.isEmpty()) {
-                predicates.add(contentRoot.get("status").get("id").in(statusIds));
+                predicates.add(contentRoot.get(COLUMN_STATUS).get(COLUMN_STATUS_ID).in(statusIds));
             }
         }
         if (r.releaseFrom() != null) {
-            predicates.add(cb.greaterThanOrEqualTo(contentRoot.get("releaseDate"), r.releaseFrom()));
+            predicates.add(cb.greaterThanOrEqualTo(contentRoot.get(COLUMN_RELEASE_DATE), r.releaseFrom()));
         }
         if (r.releaseTo() != null) {
-            predicates.add(cb.lessThanOrEqualTo(contentRoot.get("releaseDate"), r.releaseTo()));
+            predicates.add(cb.lessThanOrEqualTo(contentRoot.get(COLUMN_RELEASE_DATE), r.releaseTo()));
         }
         if (r.languageCodes() != null && !r.languageCodes().isEmpty()) {
             var languages = r.languageCodes().stream()
                 .filter(Objects::nonNull)
                 .toList();
             if (!languages.isEmpty()) {
-                predicates.add(contentRoot.get("languageCodes").in(languages));
+                predicates.add(contentRoot.get(COLUMN_LANGUAGE_CODES).in(languages));
             }
         }
         if (r.genreIds() != null && !r.genreIds().isEmpty()) {
@@ -151,8 +170,8 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
                 .filter(Objects::nonNull)
                 .toList();
             if (!genres.isEmpty()) {
-                Join<Content, Genre> genreJoin = contentRoot.join("genres");
-                predicates.add(genreJoin.get("id").in(genres));
+                Join<Content, Genre> genreJoin = contentRoot.join(TABLE_GENRES);
+                predicates.add(genreJoin.get(COLUMN_GENRE_ID).in(genres));
             }
         }
     }
@@ -164,28 +183,28 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
         Root<Content> contentRoot
     ) {
         if (pr.uuid() != null) {
-            predicates.add(cb.equal(contentRoot.get("uuid"), pr.uuid()));
+            predicates.add(cb.equal(contentRoot.get(COLUMN_ID), pr.uuid()));
         }
         if (pr.createdAtFrom() != null) {
-            predicates.add(cb.greaterThanOrEqualTo(contentRoot.get("createdAt"), pr.createdAtFrom()));
+            predicates.add(cb.greaterThanOrEqualTo(contentRoot.get(COLUMN_CREATED_AT), pr.createdAtFrom()));
         }
         if (pr.createdAtTo() != null) {
-            predicates.add(cb.lessThanOrEqualTo(contentRoot.get("createdAt"), pr.createdAtTo()));
+            predicates.add(cb.lessThanOrEqualTo(contentRoot.get(COLUMN_CREATED_AT), pr.createdAtTo()));
         }
         if (pr.updatedAtFrom() != null) {
-            predicates.add(cb.greaterThanOrEqualTo(contentRoot.get("updatedAt"), pr.updatedAtFrom()));
+            predicates.add(cb.greaterThanOrEqualTo(contentRoot.get(COLUMN_UPDATED_AT), pr.updatedAtFrom()));
         }
         if (pr.updatedAtTo() != null) {
-            predicates.add(cb.lessThanOrEqualTo(contentRoot.get("updatedAt"), pr.updatedAtTo()));
+            predicates.add(cb.lessThanOrEqualTo(contentRoot.get(COLUMN_UPDATED_AT), pr.updatedAtTo()));
         }
         if (pr.active() != null) {
-            predicates.add(cb.equal(contentRoot.get("active"), pr.active()));
+            predicates.add(cb.equal(contentRoot.get(COLUMN_ACTIVE), pr.active()));
         }
     }
 
     private List<Order> getOrders(Sort sort, CriteriaBuilder cb, Root<Content> root) {
         Set<String> allowedColumns = Set.of(
-            "releaseDate", "createdAt", "updatedAt", "sort"
+            COLUMN_RELEASE_DATE, COLUMN_CREATED_AT, COLUMN_UPDATED_AT, COLUMN_SORT
         );
         List<Order> orders = new ArrayList<>();
         sort.forEach(order -> {
