@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.content;
+package dev.animedia.contentservice.content.repository;
 
 import dev.animedia.contentservice.content.model.Content;
 import dev.animedia.contentservice.content.model.ContentTranslation;
@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ContentSpecifications {
+public class ContentSpecification {
+	private ContentSpecification() {}
 	public static Specification<Content> hasUuid(UUID uuid) {
 		return (root, query, cb) ->
 			uuid != null
