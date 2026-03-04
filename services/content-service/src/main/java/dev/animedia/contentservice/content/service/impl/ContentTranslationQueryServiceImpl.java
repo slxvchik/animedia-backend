@@ -25,4 +25,14 @@ public class ContentTranslationQueryServiceImpl implements ContentTranslationQue
 	public List<ContentTranslationResponseDto> findByContentUuidsAndLanguageCode(List<UUID> contentUuids, String languageCode) {
 		return null;
 	}
+
+	@Override
+	public boolean existsById(UUID uuid) {
+		return false;
+	}
+
+	@Override
+	public boolean existsByContentIdAndLanguageCode(UUID contentUuid, String languageCode) {
+		return false;
+	}
 }

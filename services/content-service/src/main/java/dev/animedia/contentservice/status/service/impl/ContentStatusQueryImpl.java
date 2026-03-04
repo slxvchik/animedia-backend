@@ -35,14 +35,14 @@ public class ContentStatusQueryImpl implements ContentStatusQueryService {
     @Override
     public ContentStatusResponseDto findById(Long id) {
         var contentStatus = contentStatusRepository.findById(id)
-            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE));
+            .orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE));
         return contentStatusMapper.toContentStatusResponseDto(contentStatus);
     }
 
     @Override
     public ContentStatusWithTranslationResponseDto findByIdAndLanguageCode(Long id, String languageCode) {
         var contentStatusesResponseDto = contentStatusRepository.findAllByIdAndLanguageCode(List.of(id), languageCode);
-        if (contentStatusesResponseDto.isEmpty()) throw new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE);
+        if (contentStatusesResponseDto.isEmpty()) throw new AppException(AppExceptionStatus.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_NOT_FOUND_MESSAGE);
         return contentStatusesResponseDto.getFirst();
     }
 

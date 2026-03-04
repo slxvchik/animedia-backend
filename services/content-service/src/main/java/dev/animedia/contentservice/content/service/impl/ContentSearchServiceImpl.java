@@ -94,9 +94,14 @@ public class ContentSearchServiceImpl implements ContentSearchService {
 		);
 	}
 
-	// TODO: add private fields
 	private Page<Content> searchContents(PrivateSearchRequestDto searchRequestDto) {
 		var specs = List.of(
+			ContentSpecification.hasUuid(searchRequestDto.uuid()),
+			ContentSpecification.hasCreatedAtFrom(searchRequestDto.createdAtFrom()),
+			ContentSpecification.hasCreatedTo(searchRequestDto.createdAtTo()),
+			ContentSpecification.hasUpdatedAtFrom(searchRequestDto.updatedAtFrom()),
+			ContentSpecification.hasUpdatedAtTo(searchRequestDto.updatedAtTo()),
+			ContentSpecification.hasActive(searchRequestDto.active()),
 			ContentSpecification.hasAlias(searchRequestDto.alias()),
 			ContentSpecification.hasTranslationFilters(searchRequestDto.title(), null),
 			ContentSpecification.hasType(searchRequestDto.type()),

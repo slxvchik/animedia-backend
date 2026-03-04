@@ -1,15 +1,15 @@
 package dev.animedia.languageservice.service.impl;
 
-import dev.animedia.languageservice.exception.AppException;
-import dev.animedia.languageservice.model.Language;
 import dev.animedia.languageservice.constants.LanguageErrorConstants;
-import dev.animedia.languageservice.mapper.LanguageMapper;
-import dev.animedia.languageservice.repository.LanguageRepository;
 import dev.animedia.languageservice.dto.LanguageRequestDto;
 import dev.animedia.languageservice.dto.LanguageResponseDto;
+import dev.animedia.languageservice.exception.AppException;
+import dev.animedia.languageservice.exception.AppExceptionStatus;
+import dev.animedia.languageservice.mapper.LanguageMapper;
+import dev.animedia.languageservice.model.Language;
+import dev.animedia.languageservice.repository.LanguageRepository;
 import dev.animedia.languageservice.service.LanguageCommandService;
 import dev.animedia.languageservice.service.LanguageQueryService;
-import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +44,7 @@ public class LanguageCommandServiceImpl implements LanguageCommandService {
 		var languageNameExists = languageQueryService.existsByCode(requestDto.name());
 		if (languageNameExists) errorMessages.add(LanguageErrorConstants.LANGUAGE_NAME_EXISTS_MESSAGE);
 
-		if (!errorMessages.isEmpty()) throw new AppException(Status.Code.ALREADY_EXISTS, errorMessages);
+		if (!errorMessages.isEmpty()) throw new AppException(AppExceptionStatus.ALREADY_EXISTS, errorMessages);
 
 		Language language = languageMapper.toLanguage(requestDto);
 
@@ -57,10 +57,10 @@ public class LanguageCommandServiceImpl implements LanguageCommandService {
 	public LanguageResponseDto update(LanguageRequestDto requestDto) {
 
 		var language = languageRepository.findById(requestDto.code())
-			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, LanguageErrorConstants.LANGUAGE_CODE_NOT_FOUND_MESSAGE));
+			.orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, LanguageErrorConstants.LANGUAGE_CODE_NOT_FOUND_MESSAGE));
 
 		var languageNameExists = languageQueryService.existsByNameExcludingId(requestDto.name(), requestDto.code());
-		if (languageNameExists) throw new AppException(Status.Code.ALREADY_EXISTS, LanguageErrorConstants.LANGUAGE_NAME_EXISTS_MESSAGE);
+		if (languageNameExists) throw new AppException(AppExceptionStatus.ALREADY_EXISTS, LanguageErrorConstants.LANGUAGE_NAME_EXISTS_MESSAGE);
 
 		language.setName(requestDto.name());
 
@@ -72,7 +72,7 @@ public class LanguageCommandServiceImpl implements LanguageCommandService {
 	@Override
 	public void delete(String languageCode) {
 		var languageExists = languageQueryService.existsByCode(languageCode);
-		if (!languageExists) throw new AppException(Status.Code.NOT_FOUND, LanguageErrorConstants.LANGUAGE_CODE_NOT_FOUND_MESSAGE);
+		if (!languageExists) throw new AppException(AppExceptionStatus.NOT_FOUND, LanguageErrorConstants.LANGUAGE_CODE_NOT_FOUND_MESSAGE);
 		languageRepository.deleteById(languageCode);
 	}
 }

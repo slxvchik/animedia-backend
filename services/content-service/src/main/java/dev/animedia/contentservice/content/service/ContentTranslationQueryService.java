@@ -11,4 +11,7 @@ public interface ContentTranslationQueryService {
 	Page<ContentTranslationResponseDto> search(String contentUuid, String title, Pageable pageable);
 	ContentTranslationResponseDto findByContentUuidAndLanguageCode(UUID contentUuid, String languageCode);
 	List<ContentTranslationResponseDto> findByContentUuidsAndLanguageCode(List<UUID> contentUuid, String languageCode);
+
+	boolean existsById(UUID uuid);
+	boolean existsByContentIdAndLanguageCode(UUID contentUuid, String languageCode);
 }

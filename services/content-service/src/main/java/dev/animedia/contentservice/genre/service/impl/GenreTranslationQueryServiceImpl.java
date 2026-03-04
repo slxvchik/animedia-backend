@@ -31,7 +31,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     @Override
     public GenreTranslationResponseDto findById(Long id) {
         var genreTranslation = genreTranslationRepository.findById(id)
-            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_TRANSLATION_NOT_FOUND_MESSAGE));
+            .orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_TRANSLATION_NOT_FOUND_MESSAGE));
         return genreTranslationMapper.toGenreTranslationResponseDto(genreTranslation);
     }
 
@@ -39,7 +39,7 @@ public class GenreTranslationQueryServiceImpl implements GenreTranslationQuerySe
     public List<GenreTranslationResponseDto> findByIds(List<Long> ids) {
         Set<Long> uniqueIds = new HashSet<>(ids);
         var genreTranslations = genreTranslationRepository.findAllById(uniqueIds);
-        if (genreTranslations.size() != uniqueIds.size()) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_TRANSLATIONS_NOT_FOUND_MESSAGE);
+        if (genreTranslations.size() != uniqueIds.size()) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_TRANSLATIONS_NOT_FOUND_MESSAGE);
         return genreTranslationMapper.toGenreTranslationsResponseDto(genreTranslations);
     }
 

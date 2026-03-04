@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface ContentTranslationCommandService {
 	ContentTranslationResponseDto create(ContentTranslationRequestDto contentRequestDto);
-	ContentTranslationResponseDto update(ContentTranslationRequestDto contentRequestDto);
+	ContentTranslationResponseDto update(UUID uuid,ContentTranslationRequestDto contentRequestDto);
 	void delete(UUID uuid);
 }

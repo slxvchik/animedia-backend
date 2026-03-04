@@ -39,7 +39,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	@Override
 	public GenreResponseDto findById(Long id) {
 		var genre = genreRepository.findById(id)
-			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE));
+			.orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE));
 		return genreMapper.toGenreResponseDto(genre);
 	}
 
@@ -47,7 +47,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	public List<GenreResponseDto> findByIds(List<Long> ids) {
 		Set<Long> uniqueIds = new HashSet<>(ids);
 		var genres = genreRepository.findAllById(uniqueIds);
-		if (genres.size() != uniqueIds.size()) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
+		if (genres.size() != uniqueIds.size()) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
 		return genreMapper.toGenresResponseDto(genres);
 	}
 
@@ -55,7 +55,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 	public List<GenreResponseDto> findByAliases(List<String> aliases) {
 		Set<String> uniqueAliases = new HashSet<>(aliases);
 		var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
-		if (genres.size() != uniqueAliases.size()) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
+		if (genres.size() != uniqueAliases.size()) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
 		return genreMapper.toGenresResponseDto(genres);
 	}
 

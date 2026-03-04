@@ -2,6 +2,7 @@ package dev.animedia.contentservice.app.config;
 
 import dev.animedia.contentservice.app.exception.AppException;
 import dev.animedia.contentservice.app.exception.AppExceptionMessageService;
+import dev.animedia.contentservice.app.exception.AppExceptionStatusMapper;
 import io.grpc.*;
 
 import java.nio.charset.StandardCharsets;
@@ -10,9 +11,14 @@ import java.util.List;
 public class GlobalExceptionInterceptor implements ServerInterceptor {
 
 	private final AppExceptionMessageService appExceptionMessageService;
+	private final AppExceptionStatusMapper appExceptionStatusMapper;
 
-	public GlobalExceptionInterceptor(AppExceptionMessageService appExceptionMessageService) {
+	public GlobalExceptionInterceptor(
+		AppExceptionMessageService appExceptionMessageService,
+		AppExceptionStatusMapper appExceptionStatusMapper
+	) {
 		this.appExceptionMessageService = appExceptionMessageService;
+		this.appExceptionStatusMapper = appExceptionStatusMapper;
 	}
 
 	@Override
@@ -52,7 +58,7 @@ public class GlobalExceptionInterceptor implements ServerInterceptor {
 			metadata.put(key, value);
 
 			call.close(
-				appException.getGrpcStatus().toStatus().withDescription(ex.getMessage()),
+				appExceptionStatusMapper.toGrpcCode(appException.getStatus()).toStatus().withDescription(ex.getMessage()),
 				metadata
 			);
 		} else {

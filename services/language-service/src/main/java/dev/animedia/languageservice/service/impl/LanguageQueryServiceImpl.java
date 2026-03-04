@@ -1,12 +1,12 @@
 package dev.animedia.languageservice.service.impl;
 
-import dev.animedia.languageservice.exception.AppException;
 import dev.animedia.languageservice.constants.LanguageErrorConstants;
+import dev.animedia.languageservice.dto.LanguageResponseDto;
+import dev.animedia.languageservice.exception.AppException;
+import dev.animedia.languageservice.exception.AppExceptionStatus;
 import dev.animedia.languageservice.mapper.LanguageMapper;
 import dev.animedia.languageservice.repository.LanguageRepository;
-import dev.animedia.languageservice.dto.LanguageResponseDto;
 import dev.animedia.languageservice.service.LanguageQueryService;
-import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class LanguageQueryServiceImpl implements LanguageQueryService {
     @Override
     public LanguageResponseDto findByCode(String languageCode) {
         var language = languageRepository.findById(languageCode)
-            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, LanguageErrorConstants.LANGUAGE_CODE_NOT_FOUND_MESSAGE));
+            .orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, LanguageErrorConstants.LANGUAGE_CODE_NOT_FOUND_MESSAGE));
         return languageMapper.toLanguageResponseDto(language);
     }
 

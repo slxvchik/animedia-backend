@@ -32,7 +32,7 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
     @Override
     public ContentStatusTranslationResponseDto findById(Long id) {
         var contentStatusTranslation = contentStatusTranslationRepository.findById(id)
-            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATION_NOT_FOUND_MESSAGE));
+            .orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATION_NOT_FOUND_MESSAGE));
         return contentStatusTranslationMapper.toContentStatusTranslationResponseDto(contentStatusTranslation);
     }
 
@@ -47,7 +47,7 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
         Set<Long> uniqueIds = new HashSet<>(ids);
         var contentStatusTranslations = contentStatusTranslationRepository.findAllById(uniqueIds);
         if (contentStatusTranslations.size() != uniqueIds.size())
-            throw new AppException(Status.Code.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATIONS_NOT_FOUND_MESSAGE);
+            throw new AppException(AppExceptionStatus.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATIONS_NOT_FOUND_MESSAGE);
         return contentStatusTranslationMapper.toContentStatusTranslationsResponseDto(contentStatusTranslations);
     }
 

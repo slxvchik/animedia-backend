@@ -22,7 +22,7 @@ public class FieldValidator {
         var violations = validator.validate(requestDto, groups);
         if (!violations.isEmpty()) {
             List<String> errorCodes = violations.stream().map(ConstraintViolation::getMessage).toList();
-            throw new AppException(Status.Code.INVALID_ARGUMENT, errorCodes);
+            throw new AppException(AppExceptionStatus.INVALID_ARGUMENT, errorCodes);
         }
     }
 
@@ -30,7 +30,7 @@ public class FieldValidator {
         var violations = validator.validate(listRequestDto, groups);
         if (!violations.isEmpty()) {
             List<String> errorCodes = violations.stream().map(ConstraintViolation::getMessage).toList();
-            throw new AppException(Status.Code.INVALID_ARGUMENT, errorCodes);
+            throw new AppException(AppExceptionStatus.INVALID_ARGUMENT, errorCodes);
         }
     }
 }

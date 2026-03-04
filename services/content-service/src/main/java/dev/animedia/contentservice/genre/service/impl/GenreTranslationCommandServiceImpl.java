@@ -1,20 +1,19 @@
 package dev.animedia.contentservice.genre.service.impl;
 
-import java.util.*;
-
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.genre.GenreConstants;
-import dev.animedia.contentservice.genre.service.GenreQueryService;
-import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
-import io.grpc.Status;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import dev.animedia.contentservice.genre.dto.request.GenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.mapper.GenreTranslationMapper;
 import dev.animedia.contentservice.genre.repository.GenreTranslationRepository;
+import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
+import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GenreTranslationCommandServiceImpl implements GenreTranslationCommandService {
@@ -47,13 +46,13 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
         var genreExists = genreQueryService.existsById(
             genreTranslationDto.genreId()
         );
-        if (!genreExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
+        if (!genreExists) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
 
         var genreTranslationExists = genreTranslationQueryService.existsByGenreIdAndLanguageCode(
             genreTranslationDto.genreId(),
             genreTranslationDto.languageCode()
         );
-        if (genreTranslationExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_TRANSLATION_EXISTS_MESSAGE);
+        if (genreTranslationExists) throw new AppException(AppExceptionStatus.ALREADY_EXISTS, GenreConstants.GENRE_TRANSLATION_EXISTS_MESSAGE);
 
         var genreTranslation = genreTranslationMapper.toGenreTranslation(genreTranslationDto);
 
@@ -66,7 +65,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     public GenreTranslationResponseDto update(Long id, GenreTranslationRequestDto genreTranslationDto) {
 
         var genreTranslationDb = genreTranslationRepository.findById(id)
-                .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE));
 
         genreTranslationDb.setName(genreTranslationDto.name());
         genreTranslationDb.setDescription(genreTranslationDto.description());
@@ -80,7 +79,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     public void delete(Long genreTranslationId) {
 
         var genreTranslationExists = genreTranslationQueryService.existsById(genreTranslationId);
-        if (!genreTranslationExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
+        if (!genreTranslationExists) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
 
         genreTranslationRepository.deleteById(genreTranslationId);
     }
@@ -89,7 +88,7 @@ public class GenreTranslationCommandServiceImpl implements GenreTranslationComma
     public void delete(List<Long> genreTranslationIds) {
 
         var allGenreTranslationsExists = genreTranslationQueryService.existsAllByIds(genreTranslationIds);
-        if (!allGenreTranslationsExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
+        if (!allGenreTranslationsExists) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
 
         genreTranslationRepository.deleteAllByIdInBatch(genreTranslationIds);
     }

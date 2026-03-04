@@ -1,6 +1,7 @@
 package dev.animedia.contentservice.genre.service.impl;
 
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import dev.animedia.contentservice.genre.model.Genre;
@@ -40,7 +41,7 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     public GenreResponseDto create(GenreRequestDto genreRequestDto) {
 
         var aliasExists = genreQueryService.existsByAlias(genreRequestDto.alias());
-        if (aliasExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
+        if (aliasExists) throw new AppException(AppExceptionStatus.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
 
         var genre = genreMapper.toGenre(genreRequestDto);
 
@@ -61,7 +62,7 @@ public class GenreCommandServiceImpl implements GenreCommandService {
         }
 
         var genreAliasesExists = genreQueryService.existsAnyByAliases(List.copyOf(aliases));
-        if (genreAliasesExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
+        if (genreAliasesExists) throw new AppException(AppExceptionStatus.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
 
         var savedGenres = genreRepository.saveAll(genres);
 
@@ -72,10 +73,10 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     public GenreResponseDto update(Long id, GenreRequestDto genreRequestDto) {
 
         var genre = genreRepository.findById(id)
-            .orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE));
+            .orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE));
 
         var aliasExists = genreQueryService.existsByAliasExcludingId(genreRequestDto.alias(), id);
-        if (aliasExists) throw new AppException(Status.Code.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
+        if (aliasExists) throw new AppException(AppExceptionStatus.ALREADY_EXISTS, GenreConstants.GENRE_ALIAS_EXISTS_MESSAGE);
 
         genre.setAlias(genreRequestDto.alias());
         genre.setSort(genreRequestDto.sort());
@@ -88,14 +89,14 @@ public class GenreCommandServiceImpl implements GenreCommandService {
     @Override
     public void delete(Long id) {
         var genreExists = genreQueryService.existsById(id);
-        if (!genreExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
+        if (!genreExists) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
         genreRepository.deleteById(id);
     }
 
     @Override
     public void delete(List<Long> ids) {
         var allGenresExists = genreQueryService.existsAllByIds(ids);
-        if (!allGenresExists) throw new AppException(Status.Code.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
+        if (!allGenresExists) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRE_NOT_FOUND_MESSAGE);
         genreRepository.deleteAllByIdInBatch(ids);
     }
 }

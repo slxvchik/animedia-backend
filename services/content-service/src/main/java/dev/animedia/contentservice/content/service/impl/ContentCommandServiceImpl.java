@@ -2,6 +2,7 @@ package dev.animedia.contentservice.content.service.impl;
 
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.content.ContentConstants;
 import dev.animedia.contentservice.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
@@ -14,7 +15,6 @@ import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.status.ContentStatusConstants;
 import dev.animedia.contentservice.status.service.ContentStatusQueryService;
-import io.grpc.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +57,7 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 
 		validateRequest(errorMessages, requestDto);
 
-		if (!errorMessages.isEmpty()) throw new AppException(Status.Code.INVALID_ARGUMENT, errorMessages);
+		if (!errorMessages.isEmpty()) throw new AppException(AppExceptionStatus.INVALID_ARGUMENT, errorMessages);
 
 		var savedContentUuid = contentRepository.save(content).getUuid();
 		String languageCode = LanguageInterceptor.getLanguageCode();
@@ -67,7 +67,7 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 	@Override
 	public ContentResponseDto update(UUID uuid, ContentRequestDto requestDto) {
 		var content = contentRepository.findById(uuid)
-			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
+			.orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
 
 		List<String> errorMessages = new ArrayList<>();
 
@@ -75,7 +75,7 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 		if (contentExists) errorMessages.add(ContentConstants.CONTENT_EXISTS_MESSAGE);
 
 		validateRequest(errorMessages, requestDto);
-		if (!errorMessages.isEmpty()) throw new AppException(Status.Code.INVALID_ARGUMENT, errorMessages);
+		if (!errorMessages.isEmpty()) throw new AppException(AppExceptionStatus.INVALID_ARGUMENT, errorMessages);
 
 		contentMapper.updateEntity(requestDto, content);
 		contentRepository.save(content);
@@ -87,7 +87,7 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 	@Override
 	public void delete(UUID uuid) {
 		var contentExists = contentQueryService.exists(uuid);
-		if (!contentExists) throw new AppException(Status.Code.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE);
+		if (!contentExists) throw new AppException(AppExceptionStatus.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE);
 		contentRepository.deleteById(uuid);
 	}
 

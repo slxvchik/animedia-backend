@@ -1,6 +1,7 @@
 package dev.animedia.contentservice.app.config;
 
 import dev.animedia.contentservice.app.exception.AppExceptionMessageService;
+import dev.animedia.contentservice.app.exception.AppExceptionStatusMapper;
 import io.grpc.ServerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,10 @@ public class GrpcServerConfiguration {
     @Bean
     @Order(101)
     @GlobalServerInterceptor
-    ServerInterceptor getGlobalExceptionInterceptor(AppExceptionMessageService appExceptionMessageService) {
-        return new GlobalExceptionInterceptor(appExceptionMessageService);
+    ServerInterceptor getGlobalExceptionInterceptor(
+        AppExceptionMessageService appExceptionMessageService,
+        AppExceptionStatusMapper appExceptionStatusMapper
+    ) {
+        return new GlobalExceptionInterceptor(appExceptionMessageService, appExceptionStatusMapper);
     }
 }

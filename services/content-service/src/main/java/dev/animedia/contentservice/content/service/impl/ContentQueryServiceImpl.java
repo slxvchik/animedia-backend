@@ -45,7 +45,7 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 	@Override
 	public ContentResponseDto findByUuid(UUID contentUuid, String languageCode) {
 		var content = contentRepository.findById(contentUuid)
-			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
+			.orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
 		var contentStatusResponseDto = contentStatusQueryService.findByIdAndLanguageCode(content.getStatus().getId(), languageCode);
 		var genreIds = content.getGenres().stream()
 			.map(Genre::getId)
@@ -57,7 +57,7 @@ public class ContentQueryServiceImpl implements ContentQueryService {
 	@Override
 	public ContentWithTranslationResponseDto findByAlias(String alias, String languageCode) {
 		var content = contentRepository.findByAlias(alias)
-			.orElseThrow(() -> new AppException(Status.Code.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
+			.orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
 
 		var contentStatusResponseDto = contentStatusQueryService.findByIdAndLanguageCode(content.getStatus().getId(), languageCode);
 		var genreIds = content.getGenres().stream()
