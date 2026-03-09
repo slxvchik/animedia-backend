@@ -1,6 +1,14 @@
 package dev.animedia.contentservice.genre.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
@@ -9,13 +17,6 @@ import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.repository.GenreRepository;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.genre.service.GenreTranslationQueryService;
-import io.grpc.Status;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class GenreQueryServiceImpl implements GenreQueryService {

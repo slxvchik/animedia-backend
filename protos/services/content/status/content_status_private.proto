@@ -18,8 +18,8 @@ service ContentStatusPrivateService {
 message SearchRequest {
   repeated int64 ids = 1;
   repeated string language_codes = 2;
-  repeated string aliases = 3;
-  repeated string names = 4;
+  optional string alias = 3;
+  optional string name = 4;
   optional common.PaginationRequest pagination = 5;
 }
 

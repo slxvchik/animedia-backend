@@ -1,5 +1,10 @@
 package dev.animedia.contentservice.status.mapper;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
+
 import dev.animedia.contentservice.status.dto.request.ContentStatusRequestDto;
 import dev.animedia.contentservice.status.dto.request.CreateContentStatusTranslationRequestDto;
 import dev.animedia.contentservice.status.dto.request.UpdateContentStatusTranslationRequestDto;
@@ -12,10 +17,6 @@ import dev.animedia.grpc.status.ContentStatusCommonProto;
 import dev.animedia.grpc.status.ContentStatusPrivateProto;
 import dev.animedia.grpc.status.ContentStatusPublicProto;
 import dev.animedia.grpc.status.ContentStatusTranslationPrivateProto;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class GrpcContentStatusMapper {
@@ -50,14 +51,6 @@ public class GrpcContentStatusMapper {
 			.addAllContentStatuses(protoContentStatuses)
 			.setPagination(paginationResponse)
 			.build();
-	}
-
-	public ContentStatusRequestDto toContentStatusRequestDto(ContentStatusPrivateProto.CreateRequest request) {
-		return new ContentStatusRequestDto(request.getAlias());
-	}
-
-	public ContentStatusRequestDto toContentStatusRequestDto(ContentStatusPrivateProto.UpdateRequest request) {
-		return new ContentStatusRequestDto(request.getAlias());
 	}
 
 	public ContentStatusCommonProto.ContentStatusResponse toProtoContentStatus(ContentStatusResponseDto contentStatusResponseDto) {
@@ -99,6 +92,15 @@ public class GrpcContentStatusMapper {
 			.build();
 	}
 
+	public ContentStatusCommonProto.ContentStatusTranslationResponse toProtoContentStatusTranslation(ContentStatusTranslationResponseDto contentStatusTranslation) {
+		return ContentStatusCommonProto.ContentStatusTranslationResponse.newBuilder()
+			.setId(contentStatusTranslation.id())
+			.setContentStatusId(contentStatusTranslation.contentStatusId())
+			.setLanguageCode(contentStatusTranslation.languageCode())
+			.setName(contentStatusTranslation.name())
+			.build();
+	}
+
 	public CreateContentStatusTranslationRequestDto toCreateContentStatusRequestDto(ContentStatusTranslationPrivateProto.CreateRequest request) {
 		return new CreateContentStatusTranslationRequestDto(
 			request.getContentStatusId(),
@@ -113,12 +115,11 @@ public class GrpcContentStatusMapper {
 		);
 	}
 
-	public ContentStatusCommonProto.ContentStatusTranslationResponse toProtoContentStatusTranslation(ContentStatusTranslationResponseDto contentStatusTranslation) {
-		return ContentStatusCommonProto.ContentStatusTranslationResponse.newBuilder()
-			.setId(contentStatusTranslation.id())
-			.setContentStatusId(contentStatusTranslation.contentStatusId())
-			.setLanguageCode(contentStatusTranslation.languageCode())
-			.setName(contentStatusTranslation.name())
-			.build();
+	public ContentStatusRequestDto toContentStatusRequestDto(ContentStatusPrivateProto.CreateRequest request) {
+		return new ContentStatusRequestDto(request.getAlias());
+	}
+
+	public ContentStatusRequestDto toContentStatusRequestDto(ContentStatusPrivateProto.UpdateRequest request) {
+		return new ContentStatusRequestDto(request.getAlias());
 	}
 }

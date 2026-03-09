@@ -1,6 +1,12 @@
 package dev.animedia.contentservice.content.service.impl;
 
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.content.ContentConstants;
 import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationResponseDto;
@@ -12,11 +18,6 @@ import dev.animedia.contentservice.content.service.ContentTranslationQueryServic
 import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.status.service.ContentStatusQueryService;
-import io.grpc.Status;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class ContentQueryServiceImpl implements ContentQueryService {

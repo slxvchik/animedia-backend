@@ -1,19 +1,20 @@
 package dev.animedia.contentservice.content.repository;
 
-import dev.animedia.contentservice.content.model.Content;
-import dev.animedia.contentservice.content.model.ContentTranslation;
-import dev.animedia.contentservice.content.model.ContentType;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
-import org.springframework.data.jpa.domain.Specification;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import dev.animedia.contentservice.content.model.Content;
+import dev.animedia.contentservice.content.model.ContentTranslation;
+import dev.animedia.contentservice.content.model.ContentType;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 
 public class ContentSpecification {
 	private ContentSpecification() {}
@@ -113,7 +114,14 @@ public class ContentSpecification {
 			List<Predicate> predicates = new ArrayList<>();
 
 			if (hasTitle) {
-				predicates.add(cb.like(join.get("title"), "%" + title + "%"));
+				predicates.add(
+					cb.like(
+						cb.lower(
+							join.get("title")
+						),
+						"%" + title.toLowerCase() + "%"
+					)
+				);
 			}
 			if (hasLang) {
 				predicates.add(cb.equal(join.get("languageCode"), languageCode));

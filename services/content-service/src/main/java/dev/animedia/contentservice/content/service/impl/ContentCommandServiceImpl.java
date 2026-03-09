@@ -1,5 +1,12 @@
 package dev.animedia.contentservice.content.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.app.exception.AppException;
 import dev.animedia.contentservice.app.exception.AppExceptionStatus;
@@ -15,12 +22,6 @@ import dev.animedia.contentservice.genre.GenreConstants;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.status.ContentStatusConstants;
 import dev.animedia.contentservice.status.service.ContentStatusQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ContentCommandServiceImpl implements ContentCommandService {

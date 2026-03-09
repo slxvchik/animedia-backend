@@ -1,5 +1,16 @@
 package dev.animedia.contentservice.content.mapper;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import dev.animedia.contentservice.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentTranslationResponseDto;
@@ -12,11 +23,6 @@ import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslat
 import dev.animedia.contentservice.status.model.ContentStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Component;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class ContentMapper {
@@ -91,24 +97,10 @@ public class ContentMapper {
 			.collect(Collectors.groupingBy(ContentTranslationResponseDto::contentUuid));
 
 		// statuses map by id
-		Map<Long, ContentStatusWithTranslationResponseDto> statusesMap = contentStatusesWithTranslation.stream()
-			.collect(
-				Collectors.toMap(
-					ContentStatusWithTranslationResponseDto::id,
-					Function.identity(),
-					(first, second) -> first
-				)
-			);
+		Map<Long, ContentStatusWithTranslationResponseDto> statusesMap = createMapByKey(contentStatusesWithTranslation, ContentStatusWithTranslationResponseDto::id);
 
 		// genres map by id
-		Map<Long, GenreWithTranslationResponseDto> genresMap = genresWithTranslation.stream()
-			.collect(
-				Collectors.toMap(
-					GenreWithTranslationResponseDto::id,
-					Function.identity(),
-					(first, second) -> first
-				)
-			);
+		Map<Long, GenreWithTranslationResponseDto> genresMap = createMapByKey(genresWithTranslation, GenreWithTranslationResponseDto::id);
 
 		return contents.stream()
 			.map(content -> {
@@ -165,24 +157,10 @@ public class ContentMapper {
 			);
 
 		// statuses map by id
-		Map<Long, ContentStatusWithTranslationResponseDto> statusesMap = contentStatusesWithTranslation.stream()
-			.collect(
-				Collectors.toMap(
-					ContentStatusWithTranslationResponseDto::id,
-					Function.identity(),
-					(first, second) -> first
-				)
-			);
+		Map<Long, ContentStatusWithTranslationResponseDto> statusesMap = createMapByKey(contentStatusesWithTranslation, ContentStatusWithTranslationResponseDto::id);
 
 		// genres map by id
-		Map<Long, GenreWithTranslationResponseDto> genresMap = genresWithTranslation.stream()
-			.collect(
-				Collectors.toMap(
-					GenreWithTranslationResponseDto::id,
-					Function.identity(),
-					(first, second) -> first
-				)
-			);
+		Map<Long, GenreWithTranslationResponseDto> genresMap = createMapByKey(genresWithTranslation, GenreWithTranslationResponseDto::id);
 
 		return contents.stream()
 			.map(content -> {
@@ -272,5 +250,16 @@ public class ContentMapper {
 		dto.genreIds().forEach(id ->
 			content.getGenres().add(entityManager.getReference(Genre.class, id))
 		);
+	}
+
+	private <K, V> Map<K, V> createMapByKey(List<V> entities, Function<V, K> keyExtractor) {
+		return entities.stream()
+			.collect(
+				Collectors.toMap(
+					keyExtractor,
+					Function.identity(),
+					(first, second) -> first
+				)
+			);
 	}
 }

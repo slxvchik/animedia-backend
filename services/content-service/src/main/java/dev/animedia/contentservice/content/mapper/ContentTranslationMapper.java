@@ -1,12 +1,15 @@
 package dev.animedia.contentservice.content.mapper;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
 import dev.animedia.contentservice.content.dto.request.ContentTranslationRequestDto;
 import dev.animedia.contentservice.content.dto.response.ContentTranslationResponseDto;
 import dev.animedia.contentservice.content.model.Content;
 import dev.animedia.contentservice.content.model.ContentTranslation;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ContentTranslationMapper {
@@ -23,6 +26,13 @@ public class ContentTranslationMapper {
 			contentTranslation.getDescription()
 		);
 	}
+
+	public List<ContentTranslationResponseDto> toContentTranslationsResponseDto(List<ContentTranslation> contentTranslations) {
+		return contentTranslations.stream()
+			.map(this::toContentTranslationResponseDto)
+			.toList();
+	}
+	
 	public ContentTranslation toContentTranslation(ContentTranslationRequestDto dto) {
 
 		Content content = entityManager.getReference(Content.class, dto.contentUuid());

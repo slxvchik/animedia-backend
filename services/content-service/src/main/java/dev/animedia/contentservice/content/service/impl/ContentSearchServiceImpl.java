@@ -1,5 +1,14 @@
 package dev.animedia.contentservice.content.service.impl;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Service;
+
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.content.dto.request.PrivateSearchRequestDto;
 import dev.animedia.contentservice.content.dto.request.PublicSearchRequestDto;
@@ -16,14 +25,6 @@ import dev.animedia.contentservice.genre.model.Genre;
 import dev.animedia.contentservice.genre.service.GenreQueryService;
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
 import dev.animedia.contentservice.status.service.ContentStatusQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ContentSearchServiceImpl implements ContentSearchService {

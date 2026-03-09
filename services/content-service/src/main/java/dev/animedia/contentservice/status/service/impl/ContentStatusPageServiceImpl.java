@@ -1,17 +1,18 @@
 package dev.animedia.contentservice.status.service.impl;
 
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
-import dev.animedia.contentservice.status.mapper.ContentStatusMapper;
-import dev.animedia.contentservice.status.repository.ContentStatusRepository;
-import dev.animedia.contentservice.status.service.ContentStatusPageService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
+import dev.animedia.contentservice.status.mapper.ContentStatusMapper;
+import dev.animedia.contentservice.status.repository.ContentStatusRepository;
+import dev.animedia.contentservice.status.service.ContentStatusPageService;
 
 @Service
 public class ContentStatusPageServiceImpl implements ContentStatusPageService {
@@ -31,15 +32,15 @@ public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 	public Page<ContentStatusWithTranslationsResponseDto> search(
 		List<Long> contentStatusIds,
 		List<String> languageCodes,
-		List<String> aliases,
-		List<String> names,
+		String alias,
+		String name,
 		Pageable pageable
 	) {
 		var contentStatusesWithTranslation = contentStatusRepository.search(
 			contentStatusIds,
 			languageCodes,
-			aliases,
-			names,
+			alias,
+			name,
 			pageable
 		);
 
@@ -55,15 +56,15 @@ public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 	@Override
 	public Page<ContentStatusWithTranslationResponseDto> search(
 		String languageCode,
-		List<String> aliases,
-		List<String> names,
+		String alias,
+		String name,
 		Pageable pageable
 	) {
 		return contentStatusRepository.search(
 			null,
 			List.of(languageCode),
-			aliases,
-			names,
+			alias,
+			name,
 			pageable
 		);
 	}

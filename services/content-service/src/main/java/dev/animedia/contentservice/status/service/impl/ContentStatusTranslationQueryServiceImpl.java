@@ -1,18 +1,19 @@
 package dev.animedia.contentservice.status.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.status.ContentStatusConstants;
 import dev.animedia.contentservice.status.dto.response.ContentStatusTranslationResponseDto;
 import dev.animedia.contentservice.status.mapper.ContentStatusTranslationMapper;
 import dev.animedia.contentservice.status.repository.ContentStatusTranslationRepository;
 import dev.animedia.contentservice.status.service.ContentStatusTranslationQueryService;
-import io.grpc.Status;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTranslationQueryService {

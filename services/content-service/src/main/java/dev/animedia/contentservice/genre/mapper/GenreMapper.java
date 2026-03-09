@@ -1,17 +1,20 @@
 package dev.animedia.contentservice.genre.mapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
-import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import dev.animedia.contentservice.genre.model.Genre;
+import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
+import dev.animedia.contentservice.genre.model.Genre;
 
 @Component
 public class GenreMapper {
@@ -49,20 +52,19 @@ public class GenreMapper {
 
     public List<GenreWithTranslationResponseDto> toGenresWithTranslationResponseDto(List<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto) {
         return genresWithTranslationsResponseDto.stream()
-        .map(
-            genreWithTranslationsResponseDto -> {
-                if (genreWithTranslationsResponseDto.translations().isEmpty()) return null;
-                GenreTranslationResponseDto genreTranslation = genreWithTranslationsResponseDto.translations().getFirst();
-                return new GenreWithTranslationResponseDto(
-                    genreWithTranslationsResponseDto.id(),
-                    genreWithTranslationsResponseDto.alias(),
-                    genreWithTranslationsResponseDto.sort(),
-                    genreTranslation.id(), genreTranslation.languageCode(), genreTranslation.name(), genreTranslation.description()
-                );
-            }
-        )
-        .filter(Objects::nonNull)
-        .toList();
+            .map(genreWithTranslationsResponseDto -> {
+                    if (genreWithTranslationsResponseDto.translations().isEmpty()) return null;
+                    GenreTranslationResponseDto genreTranslation = genreWithTranslationsResponseDto.translations().getFirst();
+                    return new GenreWithTranslationResponseDto(
+                        genreWithTranslationsResponseDto.id(),
+                        genreWithTranslationsResponseDto.alias(),
+                        genreWithTranslationsResponseDto.sort(),
+                        genreTranslation.id(), genreTranslation.languageCode(), genreTranslation.name(), genreTranslation.description()
+                    );
+                }
+            )
+            .filter(Objects::nonNull)
+            .toList();
     }
     
     public List<GenreWithTranslationResponseDto> toGenresWithTranslationResponseDto(

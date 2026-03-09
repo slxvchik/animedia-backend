@@ -1,5 +1,10 @@
 package dev.animedia.contentservice.content.service.impl;
 
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import dev.animedia.contentservice.app.exception.AppException;
 import dev.animedia.contentservice.app.exception.AppExceptionStatus;
 import dev.animedia.contentservice.content.ContentConstants;
@@ -9,10 +14,6 @@ import dev.animedia.contentservice.content.mapper.ContentTranslationMapper;
 import dev.animedia.contentservice.content.repository.ContentTranslationRepository;
 import dev.animedia.contentservice.content.service.ContentTranslationCommandService;
 import dev.animedia.contentservice.content.service.ContentTranslationQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class ContentTranslationCommandServiceImpl implements ContentTranslationCommandService {
@@ -60,7 +61,6 @@ public class ContentTranslationCommandServiceImpl implements ContentTranslationC
 	public void delete(UUID uuid) {
 		var translationExists = contentTranslationQueryService.existsById(uuid);
 		if (!translationExists) throw new AppException(AppExceptionStatus.NOT_FOUND, ContentConstants.CONTENT_TRANSLATION_NOT_FOUND_MESSAGE);
-
 		contentTranslationRepository.deleteById(uuid);
 	}
 }

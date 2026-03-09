@@ -1,12 +1,14 @@
 package dev.animedia.languageservice.config;
 
-import dev.animedia.languageservice.exception.AppExceptionMessageService;
-import io.grpc.ServerInterceptor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.grpc.server.GlobalServerInterceptor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import dev.animedia.languageservice.exception.AppExceptionMessageService;
+import dev.animedia.languageservice.mapper.AppExceptionStatusMapper;
+import io.grpc.ServerInterceptor;
 
 @Configuration
 public class GrpcServerConfiguration {
@@ -22,9 +24,10 @@ public class GrpcServerConfiguration {
 	@Order(101)
 	@GlobalServerInterceptor
 	ServerInterceptor globalExceptionInterceptor(
-		AppExceptionMessageService appExceptionMessageService
+		AppExceptionMessageService appExceptionMessageService,
+		AppExceptionStatusMapper appExceptionStatusMapper
 	) {
-		return new GlobalExceptionInterceptor(appExceptionMessageService);
+		return new GlobalExceptionInterceptor(appExceptionMessageService, appExceptionStatusMapper);
 	}
 
 	@Bean

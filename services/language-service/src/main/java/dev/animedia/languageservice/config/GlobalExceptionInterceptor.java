@@ -1,18 +1,29 @@
 package dev.animedia.languageservice.config;
 
-import dev.animedia.languageservice.exception.AppException;
-import dev.animedia.languageservice.exception.AppExceptionMessageService;
-import io.grpc.*;
-
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import dev.animedia.languageservice.exception.AppException;
+import dev.animedia.languageservice.exception.AppExceptionMessageService;
+import dev.animedia.languageservice.mapper.AppExceptionStatusMapper;
+import io.grpc.ForwardingServerCallListener;
+import io.grpc.Metadata;
+import io.grpc.ServerCall;
+import io.grpc.ServerCallHandler;
+import io.grpc.ServerInterceptor;
+import io.grpc.Status;
 
 public class GlobalExceptionInterceptor implements ServerInterceptor {
 
 	private final AppExceptionMessageService appExceptionMessageService;
+	private final AppExceptionStatusMapper appExceptionStatusMapper;
 
-	public GlobalExceptionInterceptor(AppExceptionMessageService appExceptionMessageService) {
+	public GlobalExceptionInterceptor(
+		AppExceptionMessageService appExceptionMessageService,
+		AppExceptionStatusMapper appExceptionStatusMapper
+	) {
 		this.appExceptionMessageService = appExceptionMessageService;
+		this.appExceptionStatusMapper = appExceptionStatusMapper;
 	}
 
 	@Override
@@ -54,7 +65,11 @@ public class GlobalExceptionInterceptor implements ServerInterceptor {
 			);
 
 			serverCall.close(
-				appException.getGrpcStatus().toStatus().withDescription(ex.getMessage()),
+				appExceptionStatusMapper.toGrpcCode(
+					appException.getStatus()
+				)
+				.toStatus()
+				.withDescription(ex.getMessage()),
 				metadata
 			);
 		} else {

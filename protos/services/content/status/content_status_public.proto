@@ -13,12 +13,12 @@ service ContentStatusPublicService {
 }
 
 message SearchRequest {
-  repeated string aliases = 1;
-  repeated string names = 2;
+  optional string alias = 1;
+  optional string name = 2;
   common.PaginationRequest pagination = 3;
 }
 
 message SearchResponse {
-    repeated ContentStatusWithTranslationResponse content_statuses = 1;
-    common.PaginationResponse pagination = 2;
+  repeated ContentStatusWithTranslationResponse content_statuses = 1;
+  common.PaginationResponse pagination = 2;
 }

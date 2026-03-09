@@ -1,35 +1,32 @@
 package dev.animedia.contentservice.status.service.impl;
 
-import dev.animedia.contentservice.app.exception.AppException;
-import dev.animedia.contentservice.status.ContentStatusConstants;
-import dev.animedia.contentservice.status.mapper.ContentStatusMapper;
-import dev.animedia.contentservice.status.dto.response.ContentStatusResponseDto;
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.status.repository.ContentStatusRepository;
-import dev.animedia.contentservice.status.service.ContentStatusQueryService;
-import dev.animedia.contentservice.status.service.ContentStatusTranslationQueryService;
-import io.grpc.Status;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import dev.animedia.contentservice.app.exception.AppException;
+import dev.animedia.contentservice.app.exception.AppExceptionStatus;
+import dev.animedia.contentservice.status.ContentStatusConstants;
+import dev.animedia.contentservice.status.dto.response.ContentStatusResponseDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
+import dev.animedia.contentservice.status.mapper.ContentStatusMapper;
+import dev.animedia.contentservice.status.repository.ContentStatusRepository;
+import dev.animedia.contentservice.status.service.ContentStatusQueryService;
 
 @Service
 public class ContentStatusQueryImpl implements ContentStatusQueryService {
 
     private final ContentStatusRepository contentStatusRepository;
     private final ContentStatusMapper contentStatusMapper;
-    private final ContentStatusTranslationQueryService contentStatusTranslationQueryService;
 
     @Autowired
     public ContentStatusQueryImpl(
         ContentStatusRepository contentStatusRepository,
-        ContentStatusMapper contentStatusMapper,
-        ContentStatusTranslationQueryService contentStatusTranslationQueryService
+        ContentStatusMapper contentStatusMapper
     ) {
         this.contentStatusRepository = contentStatusRepository;
         this.contentStatusMapper = contentStatusMapper;
-        this.contentStatusTranslationQueryService = contentStatusTranslationQueryService;
     }
 
     @Override
