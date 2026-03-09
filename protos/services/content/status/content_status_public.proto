@@ -6,19 +6,19 @@ import "common/common.proto";
 import "services/content/status/content_status_common.proto";
 
 option java_package="dev.animedia.grpc.status";
-option java_outer_classname="ContentStatusPublicProto";
+option java_outer_classname="PublicContentStatusProto";
 
-service ContentStatusPublicService {
-  rpc search(SearchRequest) returns (SearchResponse);
+service PublicContentStatusService {
+  rpc search(PublicSearchRequest) returns (PublicSearchResponse);
 }
 
-message SearchRequest {
+message PublicSearchRequest {
   optional string alias = 1;
   optional string name = 2;
   common.PaginationRequest pagination = 3;
 }
 
-message SearchResponse {
-  repeated ContentStatusWithTranslationResponse content_statuses = 1;
+message PublicSearchResponse {
+  repeated ContentStatusWithTranslationResponse statuses = 1;
   common.PaginationResponse pagination = 2;
 }

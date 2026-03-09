@@ -12,6 +12,13 @@ enum ContentType {
   BOOK = 3;
 }
 
+enum SortBy {
+  RELEASE_DATE = 0;
+  CREATED_AT = 1;
+  UPDATED_AT = 2;
+  SORT = 3;
+}
+
 message ContentTranslationResponse {
   string uuid = 1;
   string content_uuid = 2;

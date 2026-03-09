@@ -9,16 +9,16 @@ import "services/content/status/content_status_common.proto";
 import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.core";
-option java_outer_classname="ContentPrivateProto";
+option java_outer_classname="PrivateContentProto";
 
-service ContentPrivateService {
-  rpc search(SearchRequest) returns (SearchResponse);
-  rpc create(CreateRequest) returns (ContentPrivateResponse);
-  rpc update(UpdateRequest) returns (ContentPrivateResponse);
-  rpc delete(DeleteRequest) returns (common.EmptyResponse);
+service PrivateContentService {
+  rpc search(PrivateSearchRequest) returns (PrivateSearchResponse);
+  rpc create(PrivateCreateRequest) returns (PrivateContentResponse);
+  rpc update(PrivateUpdateRequest) returns (PrivateContentResponse);
+  rpc delete(PrivateDeleteRequest) returns (common.EmptyResponse);
 }
 
-message SearchRequest {
+message PrivateSearchRequest {
   optional string uuid = 1;
   optional string alias = 2;
   optional string title = 3;
@@ -38,19 +38,12 @@ message SearchRequest {
   optional protos.common.PaginationRequest pagination = 17;
 }
 
-enum SortBy {
-  RELEASE_DATE = 0;
-  CREATED_AT = 1;
-  UPDATED_AT = 2;
-  SORT = 3;
-}
-
-message SearchResponse {
-  repeated ContentPrivateResponseWithTranslations contents = 1;
+message PrivateSearchResponse {
+  repeated PrivateContentResponseWithTranslations contents = 1;
   common.PaginationResponse pagination = 2;
 }
 
-message CreateRequest {
+message PrivateCreateRequest {
   string alias = 1;
   ContentType type = 2;
   int32 season = 3;
@@ -65,7 +58,7 @@ message CreateRequest {
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 12;
 }
 
-message UpdateRequest {
+message PrivateUpdateRequest {
   string uuid = 1;
   string alias = 2;
   ContentType type = 3;
@@ -81,11 +74,11 @@ message UpdateRequest {
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
 }
 
-message DeleteRequest {
+message PrivateDeleteRequest {
   string uuid = 1;
 }
 
-message ContentPrivateResponse {
+message PrivateContentResponse {
   string uuid = 1;
   string alias = 2;
   ContentType type = 3;
@@ -101,7 +94,7 @@ message ContentPrivateResponse {
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
 }
 
-message ContentPrivateResponseWithTranslations {
-  ContentPrivateResponse content = 1;
+message PrivateContentResponseWithTranslations {
+  PrivateContentResponse content = 1;
   repeated ContentTranslationResponse translations = 2;
 }

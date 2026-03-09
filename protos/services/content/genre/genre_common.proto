@@ -27,3 +27,8 @@ message GenreWithTranslationResponse {
     GenreResponse genre = 1;
     GenreTranslationResponse translation = 2;
 }
+
+message GenreWithTranslationsResponse {
+    GenreResponse genre = 1;
+    repeated GenreTranslationResponse translations = 2;
+}

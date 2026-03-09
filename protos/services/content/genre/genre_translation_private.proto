@@ -8,40 +8,34 @@ import "services/content/genre/genre_common.proto";
 option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="GenreTranslationPrivateProto";
 
-service GenreTranslationPrivateService {
-    rpc search(SearchRequest) returns (SearchResponse);
-    rpc create(CreateRequest) returns (GenreTranslationResponse);
-    rpc update(UpdateRequest) returns (GenreTranslationResponse);
-    rpc delete(DeleteRequest) returns (common.EmptyResponse);
-    rpc deleteBatch(DeleteBatchRequest) returns (common.EmptyResponse);
+service PrivateGenreTranslationService {
+    rpc search(PrivateTranslationSearchRequest) returns (PrivateTranslationSearchResponse);
+    rpc create(PrivateTranslationCreateRequest) returns (GenreTranslationResponse);
+    rpc update(PrivateTranslationUpdateRequest) returns (GenreTranslationResponse);
+    rpc delete(PrivateTranslationDeleteRequest) returns (common.EmptyResponse);
+    rpc deleteBatch(PrivateTranslationDeleteBatchRequest) returns (common.EmptyResponse);
 }
 
-message SearchRequest {
+message PrivateTranslationSearchRequest {
     optional int64 genre_id = 1;
     repeated string names = 2;
     repeated string language_codes = 3;
     common.PaginationRequest pagination = 4;
 }
 
-message SearchResponse {
+message PrivateTranslationSearchResponse {
     repeated GenreTranslationResponse translations = 1;
     common.PaginationResponse pagination = 2;
 }
 
-message GenreWithTranslationResponse {
-    GenreResponse genre = 1;
-    GenreTranslationResponse translation = 2;
-    common.PaginationResponse pagination = 3;
-}
-
-message CreateRequest {
+message PrivateTranslationCreateRequest {
     int64 genre_id = 1;
     string language_code = 2;
     string name = 3;
     string description = 4;
 }
 
-message UpdateRequest {
+message PrivateTranslationUpdateRequest {
     int64 id = 1;
     int64 genre_id = 2;
     string language_code = 3;
@@ -49,10 +43,10 @@ message UpdateRequest {
     string description = 5;
 }
 
-message DeleteRequest {
+message PrivateTranslationDeleteRequest {
     int64 id = 1;
 }
 
-message DeleteBatchRequest {
+message PrivateTranslationDeleteBatchRequest {
     repeated int64 ids = 1;
 }

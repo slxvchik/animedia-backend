@@ -21,3 +21,8 @@ message ContentStatusWithTranslationResponse {
   ContentStatusResponse content_status = 1;
   ContentStatusTranslationResponse translation = 2;
 }
+
+message ContentStatusWithTranslations {
+  ContentStatusResponse content_status = 1;
+  repeated ContentStatusTranslationResponse translations = 2;
+}

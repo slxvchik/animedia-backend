@@ -9,14 +9,14 @@ import "services/content/status/content_status_common.proto";
 import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.core";
-option java_outer_classname="ContentPublicProto";
+option java_outer_classname="PublicContentProto";
 
-service ContentPublicService {
-  rpc search(SearchRequest) returns (SearchResponse);
-  rpc get(GetRequest) returns (ContentPublicResponseWithTranslation);
+service PublicContentService {
+  rpc search(PublicSearchRequest) returns (PublicSearchResponse);
+  rpc get(PublicGetRequest) returns (PublicContentResponseWithTranslation);
 }
 
-message SearchRequest {
+message PublicSearchRequest {
   optional string alias = 1;
   repeated ContentType type = 2;
   repeated int32 seasons = 3;
@@ -29,21 +29,16 @@ message SearchRequest {
   optional protos.common.PaginationRequest pagination = 10;
 }
 
-enum SortBy {
-  RELEASE_DATE = 0;
-  SORT = 1;
-}
-
-message SearchResponse {
-  repeated ContentPublicResponseWithTranslation contents = 1;
+message PublicSearchResponse {
+  repeated PublicContentResponseWithTranslation contents = 1;
   protos.common.PaginationResponse pagination = 2;
 }
 
-message GetRequest {
+message PublicGetRequest {
   string alias = 1;
 }
 
-message ContentPublicResponse {
+message PublicContentResponse {
   string uuid = 1;
   string alias = 2;
   ContentType type = 3;
@@ -56,7 +51,7 @@ message ContentPublicResponse {
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 10;
 }
 
-message ContentPublicResponseWithTranslation {
-  ContentPublicResponse content = 1;
+message PublicContentResponseWithTranslation {
+  PublicContentResponse content = 1;
   ContentTranslationResponse translation = 2;
 }

@@ -6,56 +6,51 @@ import "common/common.proto";
 import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.genre";
-option java_outer_classname="GenrePrivateProto";
+option java_outer_classname="PrivateGenreProto";
 
-service GenrePrivateService {
-    rpc search(SearchRequest) returns (SearchResponse);
+service PrivateGenreService {
+    rpc search(PrivateSearchRequest) returns (PrivateSearchResponse);
 
-    rpc create(CreateRequest) returns (GenreResponse);
-    rpc createBatch(CreateBatchRequest) returns (GenreResponseList);
+    rpc create(PrivateCreateRequest) returns (GenreResponse);
+    rpc createBatch(PrivateCreateBatchRequest) returns (GenreResponseList);
 
-    rpc update(UpdateRequest) returns (GenreResponse);
+    rpc update(PrivateUpdateRequest) returns (GenreResponse);
 
-    rpc delete(DeleteRequest) returns (common.EmptyResponse);
-    rpc deleteBatch(DeleteBatchRequest) returns (common.EmptyResponse);
+    rpc delete(PrivateDeleteRequest) returns (common.EmptyResponse);
+    rpc deleteBatch(PrivateDeleteBatchRequest) returns (common.EmptyResponse);
 }
 
-message GenreWithTranslationsResponse {
-    GenreResponse genre = 1;
-    repeated GenreTranslationResponse translations = 2;
-}
-
-message SearchResponse {
+message PrivateSearchResponse {
     repeated GenreWithTranslationsResponse genres = 1;
     optional common.PaginationResponse pagination = 2;
 }
 
-message SearchRequest {
+message PrivateSearchRequest {
     repeated string alias = 1;
     repeated string names = 2;
     repeated string language_codes = 3;
     optional common.PaginationRequest pagination = 4;
 }
 
-message CreateRequest {
+message PrivateCreateRequest {
     string alias = 1;
     int64 sort = 2;
 }
 
-message CreateBatchRequest {
-    repeated CreateRequest genres = 1;
+message PrivateCreateBatchRequest {
+    repeated PrivateCreateRequest genres = 1;
 }
 
-message UpdateRequest {
+message PrivateUpdateRequest {
     int64 id = 1;
     string alias = 2;
     int64 sort = 3;
 }
 
-message DeleteRequest {
+message PrivateDeleteRequest {
     int64 id = 1;
 }
 
-message DeleteBatchRequest {
+message PrivateDeleteBatchRequest {
     repeated int64 ids = 1;
 }

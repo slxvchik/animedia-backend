@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd  ">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -28,16 +28,17 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
-		<grpc.version>1.79.0</grpc.version>
-		<protobuf-java.version>4.33.5</protobuf-java.version>
+		<grpc.version>1.77.1</grpc.version>
+		<protobuf.version>4.33.4</protobuf.version>
 		<spring-grpc.version>1.0.2</spring-grpc.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>${protobuf-java.version}</version>
+			<version>${protobuf.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-services</artifactId>
@@ -92,5 +93,45 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.github.ascopes</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>4.0.3</version>
+				<configuration>
+					<protoc>${protobuf.version}</protoc>
+					<sourceDirectories>
+						<sourceDirectory>${project.basedir}/../../protos</sourceDirectory>
+					</sourceDirectories>
+					<binaryMavenPlugins>
+						<binaryMavenPlugin>
+							<groupId>io.grpc</groupId>
+							<artifactId>protoc-gen-grpc-java</artifactId>
+							<version>${grpc.version}</version>
+							<options>@generated=omit</options>
+						</binaryMavenPlugin>
+					</binaryMavenPlugins>
+					<includes>
+						<include>common/*.proto</include>
+						<include>services/language/*.proto</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

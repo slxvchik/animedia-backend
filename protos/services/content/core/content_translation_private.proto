@@ -6,39 +6,39 @@ import "common/common.proto";
 import "services/content/core/content_common.proto";
 
 option java_package="dev.animedia.grpc.core";
-option java_outer_classname="ContentTranslationPrivateProto";
+option java_outer_classname="PrivateContentTranslationProto";
 
-service ContentPrivateService {
-  rpc search(SearchRequest) returns (SearchResponse);
-  rpc create(CreateRequest) returns (ContentTranslationResponse);
-  rpc update(UpdateRequest) returns (ContentTranslationResponse);
-  rpc delete(DeleteRequest) returns (common.EmptyResponse);
+service PrivateContentTranslationService {
+  rpc search(PrivateTranslationSearchRequest) returns (PrivateTranslationSearchResponse);
+  rpc create(PrivateTranslationCreateRequest) returns (ContentTranslationResponse);
+  rpc update(PrivateTranslationUpdateRequest) returns (ContentTranslationResponse);
+  rpc delete(PrivateTranslationDeleteRequest) returns (common.EmptyResponse);
 }
 
-message SearchRequest {
+message PrivateTranslationSearchRequest {
   repeated string content_uuid = 1;
   repeated string language_codes = 2;
   optional common.PaginationRequest pagination = 3;
 }
 
-message SearchResponse {
+message PrivateTranslationSearchResponse {
   repeated ContentTranslationResponse content_translations = 1;
   common.PaginationResponse pagination = 2;
 }
 
-message CreateRequest {
-  string content_uuid = 2;
-  string language_code = 3;
-  string title = 4;
-  optional string description = 5;
+message PrivateTranslationCreateRequest {
+  string content_uuid = 1;
+  string language_code = 2;
+  string title = 3;
+  optional string description = 4;
 }
 
-message UpdateRequest {
+message PrivateTranslationUpdateRequest {
   string uuid = 1;
   string title = 2;
   optional string description = 3;
 }
 
-message DeleteRequest {
+message PrivateTranslationDeleteRequest {
   string uuid = 1;
 }
