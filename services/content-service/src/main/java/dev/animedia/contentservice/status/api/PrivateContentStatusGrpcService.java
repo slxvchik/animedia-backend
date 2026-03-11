@@ -7,14 +7,14 @@ import dev.animedia.contentservice.status.service.ContentStatusCommandService;
 import dev.animedia.contentservice.status.service.ContentStatusPageService;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.status.ContentStatusCommonProto;
-import dev.animedia.grpc.status.ContentStatusPrivateProto;
-import dev.animedia.grpc.status.ContentStatusPrivateServiceGrpc;
+import dev.animedia.grpc.status.PrivateContentStatusProto;
+import dev.animedia.grpc.status.PrivateContentStatusServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
-public class GrpcContentStatusPrivateService extends ContentStatusPrivateServiceGrpc.ContentStatusPrivateServiceImplBase {
+public class PrivateContentStatusGrpcService extends PrivateContentStatusServiceGrpc.PrivateContentStatusServiceImplBase {
 
 	private final ContentStatusCommandService contentStatusCommandService;
 	private final ContentStatusPageService contentStatusPageService;
@@ -23,7 +23,7 @@ public class GrpcContentStatusPrivateService extends ContentStatusPrivateService
 	private final FieldValidator fieldValidator;
 
 	@Autowired
-	public GrpcContentStatusPrivateService(
+	public PrivateContentStatusGrpcService(
 		ContentStatusCommandService contentStatusCommandService,
 		ContentStatusPageService contentStatusPageService,
 		PaginationMapper paginationMapper,
@@ -39,11 +39,11 @@ public class GrpcContentStatusPrivateService extends ContentStatusPrivateService
 
 	@Override
 	public void search(
-		ContentStatusPrivateProto.SearchRequest request,
-		StreamObserver<ContentStatusPrivateProto.SearchResponse> responseObserver
+		PrivateContentStatusProto.PrivateSearchRequest request,
+		StreamObserver<PrivateContentStatusProto.PrivateSearchResponse> responseObserver
 	) {
 		var paginationRequest = paginationMapper.toPageable(request.getPagination());
-		var contentStatuses = contentStatusPageService.search(request.getIdsList(), request.getLanguageCodesList(), request.getAliasesList(), request.getNamesList(), paginationRequest);
+		var contentStatuses = contentStatusPageService.search(request.getIdsList(), request.getLanguageCodesList(), request.hasAlias() ? request.getAlias() : null, request.hasName() ? request.getName() : null, paginationRequest);
 
 		var paginationResponse = paginationMapper.toProtoPaginationResponse(contentStatuses);
 		var response = grpcContentStatusMapper.toPrivateSearchResponse(contentStatuses, paginationResponse);
@@ -54,7 +54,7 @@ public class GrpcContentStatusPrivateService extends ContentStatusPrivateService
 
 	@Override
 	public void create(
-		ContentStatusPrivateProto.CreateRequest request,
+		PrivateContentStatusProto.PrivateCreateRequest request,
 		StreamObserver<ContentStatusCommonProto.ContentStatusResponse> responseObserver
 	) {
 		var requestDto = grpcContentStatusMapper.toContentStatusRequestDto(request);
@@ -68,7 +68,7 @@ public class GrpcContentStatusPrivateService extends ContentStatusPrivateService
 
 	@Override
 	public void update(
-		ContentStatusPrivateProto.UpdateRequest request,
+		PrivateContentStatusProto.PrivateUpdateRequest request,
 		StreamObserver<ContentStatusCommonProto.ContentStatusResponse> responseObserver
 	) {
 		var requestDto = grpcContentStatusMapper.toContentStatusRequestDto(request);
@@ -82,7 +82,7 @@ public class GrpcContentStatusPrivateService extends ContentStatusPrivateService
 
 	@Override
 	public void delete(
-		ContentStatusPrivateProto.DeleteRequest request,
+		PrivateContentStatusProto.PrivateDeleteRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
 		contentStatusCommandService.delete(request.getId());

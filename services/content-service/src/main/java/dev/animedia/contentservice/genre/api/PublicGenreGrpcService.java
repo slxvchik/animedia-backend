@@ -4,22 +4,22 @@ import dev.animedia.contentservice.app.PaginationMapper;
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.genre.service.GenrePageService;
-import dev.animedia.grpc.genre.GenrePublicProto;
-import dev.animedia.grpc.genre.GenrePublicServiceGrpc;
+import dev.animedia.grpc.genre.PublicGenreProto;
+import dev.animedia.grpc.genre.PublicGenreServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
-public class GrpcGenrePublicService extends GenrePublicServiceGrpc.GenrePublicServiceImplBase {
+public class PublicGenreGrpcService extends PublicGenreServiceGrpc.PublicGenreServiceImplBase {
 
     private final GenrePageService genrePageService;
     private final PaginationMapper paginationMapper;
     private final GrpcGenreMapper grpcGenreMapper;
 
     @Autowired
-    public GrpcGenrePublicService(GenrePageService genrePageService, PaginationMapper paginationMapper,
-        GrpcGenreMapper grpcGenreMapper
+    public PublicGenreGrpcService(GenrePageService genrePageService, PaginationMapper paginationMapper,
+                                  GrpcGenreMapper grpcGenreMapper
     ) {
         this.genrePageService = genrePageService;
         this.paginationMapper = paginationMapper;
@@ -27,7 +27,7 @@ public class GrpcGenrePublicService extends GenrePublicServiceGrpc.GenrePublicSe
     }
 
     @Override
-    public void search(GenrePublicProto.SearchRequest request, StreamObserver<GenrePublicProto.SearchResponse> responseObserver) {
+    public void search(PublicGenreProto.PublicSearchRequest request, StreamObserver<PublicGenreProto.PublicSearchResponse> responseObserver) {
         String languageCode = LanguageInterceptor.getLanguageCode();
         var pagination = paginationMapper.toPageable(request.getPagination());
         var genresWithTranslationResponseDto = genrePageService.search(request.getAliasList(), request.getNameList(), languageCode, pagination);

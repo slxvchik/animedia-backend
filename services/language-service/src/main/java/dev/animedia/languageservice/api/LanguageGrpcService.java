@@ -15,7 +15,7 @@ import org.springframework.grpc.server.service.GrpcService;
 
 
 @GrpcService
-public class GrpcLanguageService extends LanguageServiceGrpc.LanguageServiceImplBase {
+public class LanguageGrpcService extends LanguageServiceGrpc.LanguageServiceImplBase {
 
 	private final LanguagePageService languagePageService;
 	private final LanguageCommandService languageCommandService;
@@ -25,7 +25,8 @@ public class GrpcLanguageService extends LanguageServiceGrpc.LanguageServiceImpl
 	private final FieldValidator fieldValidator;
 
 	@Autowired
-	public GrpcLanguageService(LanguagePageService languagePageService,
+	public LanguageGrpcService(
+		LanguagePageService languagePageService,
 		LanguageCommandService languageCommandService,
 		LanguageMapper languageMapper,
 		LanguageQueryService languageQueryService,

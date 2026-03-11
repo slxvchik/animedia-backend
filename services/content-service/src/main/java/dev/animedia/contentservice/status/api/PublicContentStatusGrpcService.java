@@ -4,14 +4,14 @@ import dev.animedia.contentservice.app.PaginationMapper;
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.status.mapper.GrpcContentStatusMapper;
 import dev.animedia.contentservice.status.service.ContentStatusPageService;
-import dev.animedia.grpc.status.ContentStatusPublicProto;
-import dev.animedia.grpc.status.ContentStatusPublicServiceGrpc;
+import dev.animedia.grpc.status.PublicContentStatusProto;
+import dev.animedia.grpc.status.PublicContentStatusServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
-public class GrpcContentStatusPublicService extends ContentStatusPublicServiceGrpc.ContentStatusPublicServiceImplBase {
+public class PublicContentStatusGrpcService extends PublicContentStatusServiceGrpc.PublicContentStatusServiceImplBase {
 
 
 	private final ContentStatusPageService contentStatusPageService;
@@ -19,7 +19,7 @@ public class GrpcContentStatusPublicService extends ContentStatusPublicServiceGr
 	private final GrpcContentStatusMapper grpcContentStatusMapper;
 
 	@Autowired
-	public GrpcContentStatusPublicService(
+	public PublicContentStatusGrpcService(
 		ContentStatusPageService contentStatusPageService,
 		PaginationMapper paginationMapper,
 		GrpcContentStatusMapper grpcContentStatusMapper
@@ -31,13 +31,13 @@ public class GrpcContentStatusPublicService extends ContentStatusPublicServiceGr
 
 	@Override
 	public void search(
-		ContentStatusPublicProto.SearchRequest request,
-		StreamObserver<ContentStatusPublicProto.SearchResponse> responseObserver
+		PublicContentStatusProto.PublicSearchRequest request,
+		StreamObserver<PublicContentStatusProto.PublicSearchResponse> responseObserver
 	) {
 		var paginationRequest = paginationMapper.toPageable(request.getPagination());
 		String languageCode = LanguageInterceptor.getLanguageCode();
 
-		var contentStatuses = contentStatusPageService.search(languageCode, request.getAliasesList(), request.getNamesList(), paginationRequest);
+		var contentStatuses = contentStatusPageService.search(languageCode, request.hasAlias() ? request.getAlias() : null, request.hasName() ? request.getName() : null, paginationRequest);
 		var paginationResponse = paginationMapper.toProtoPaginationResponse(contentStatuses);
 
 		var response = grpcContentStatusMapper.toPublicSearchResponse(contentStatuses, paginationResponse);

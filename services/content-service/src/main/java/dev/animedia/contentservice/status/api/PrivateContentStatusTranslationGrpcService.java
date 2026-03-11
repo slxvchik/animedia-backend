@@ -5,21 +5,21 @@ import dev.animedia.contentservice.status.mapper.GrpcContentStatusMapper;
 import dev.animedia.contentservice.status.service.ContentStatusTranslationCommandService;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.status.ContentStatusCommonProto;
-import dev.animedia.grpc.status.ContentStatusTranslationPrivateProto;
-import dev.animedia.grpc.status.ContentStatusTranslationPrivateServiceGrpc;
+import dev.animedia.grpc.status.PrivateContentStatusTranslationProto;
+import dev.animedia.grpc.status.PrivateContentStatusTranslationServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
-public class GrpcContentStatusTranslationPrivateService extends ContentStatusTranslationPrivateServiceGrpc.ContentStatusTranslationPrivateServiceImplBase {
+public class PrivateContentStatusTranslationGrpcService extends PrivateContentStatusTranslationServiceGrpc.PrivateContentStatusTranslationServiceImplBase {
 
 	private final ContentStatusTranslationCommandService contentStatusTranslationCommandService;
 	private final GrpcContentStatusMapper grpcContentStatusMapper;
 	private final FieldValidator fieldValidator;
 
 	@Autowired
-	public GrpcContentStatusTranslationPrivateService(
+	public PrivateContentStatusTranslationGrpcService(
 		ContentStatusTranslationCommandService contentStatusTranslationCommandService,
 		GrpcContentStatusMapper grpcContentStatusMapper,
 		FieldValidator fieldValidator
@@ -31,7 +31,7 @@ public class GrpcContentStatusTranslationPrivateService extends ContentStatusTra
 
 	@Override
 	public void create(
-		ContentStatusTranslationPrivateProto.CreateRequest request,
+		PrivateContentStatusTranslationProto.PrivateTranslationCreateRequest request,
 		StreamObserver<ContentStatusCommonProto.ContentStatusTranslationResponse> responseObserver
 	) {
 		var requestDto = grpcContentStatusMapper.toCreateContentStatusRequestDto(request);
@@ -46,7 +46,7 @@ public class GrpcContentStatusTranslationPrivateService extends ContentStatusTra
 
 	@Override
 	public void update(
-		ContentStatusTranslationPrivateProto.UpdateRequest request,
+		PrivateContentStatusTranslationProto.PrivateTranslationUpdateRequest request,
 		StreamObserver<ContentStatusCommonProto.ContentStatusTranslationResponse> responseObserver
 	) {
 		var requestDto = grpcContentStatusMapper.toUpdateContentStatusRequestDto(request);
@@ -61,7 +61,7 @@ public class GrpcContentStatusTranslationPrivateService extends ContentStatusTra
 
 	@Override
 	public void delete(
-		ContentStatusTranslationPrivateProto.DeleteRequest request,
+		PrivateContentStatusTranslationProto.PrivateTranslationDeleteRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
 		contentStatusTranslationCommandService.delete(request.getId());

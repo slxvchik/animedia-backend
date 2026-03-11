@@ -6,13 +6,15 @@ import dev.animedia.contentservice.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
 import dev.animedia.contentservice.genre.service.GenreTranslationPageService;
 import dev.animedia.grpc.common.CommonProto;
-import dev.animedia.grpc.genre.*;
+import dev.animedia.grpc.genre.GenreCommonProto;
+import dev.animedia.grpc.genre.PrivateGenreTranslationServiceGrpc;
+import dev.animedia.grpc.genre.PrivateGenreTranslationProto;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
-public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateServiceGrpc.GenreTranslationPrivateServiceImplBase {
+public class PrivateGenreTranslationGrpcService extends PrivateGenreTranslationServiceGrpc.PrivateGenreTranslationServiceImplBase {
 
 	private final GenreTranslationCommandService genreTranslationCommandService;
 	private final GenreTranslationPageService genreTranslationPageService;
@@ -21,7 +23,7 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 	private final FieldValidator fieldValidator;
 
 	@Autowired
-	public GrpcGenreTranslationPrivateService(
+	public PrivateGenreTranslationGrpcService(
 		GenreTranslationCommandService genreTranslationCommandService,
 		GenreTranslationPageService genreTranslationPageService,
 		PaginationMapper paginationMapper,
@@ -37,8 +39,8 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 
 	@Override
 	public void search(
-		GenreTranslationPrivateProto.SearchRequest request,
-		StreamObserver<GenreTranslationPrivateProto.SearchResponse> responseObserver
+		PrivateGenreTranslationProto.PrivateTranslationSearchRequest request,
+		StreamObserver<PrivateGenreTranslationProto.PrivateTranslationSearchResponse> responseObserver
 	) {
 		var paginationRequest = paginationMapper.toPageable(request.getPagination());
 		var genreTranslationsResponseDto = genreTranslationPageService.search(
@@ -51,7 +53,7 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 		var pagination = paginationMapper.toProtoPaginationResponse(genreTranslationsResponseDto);
 		var genreTranslationsResponse = grpcGenreMapper.toProtoGenreTranslations(genreTranslationsResponseDto.getContent());
 
-		var response = GenreTranslationPrivateProto.SearchResponse.newBuilder()
+		var response = PrivateGenreTranslationProto.PrivateTranslationSearchResponse.newBuilder()
 			.addAllTranslations(genreTranslationsResponse)
 			.setPagination(pagination)
 			.build();
@@ -62,7 +64,7 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 
 	@Override
 	public void create(
-		GenreTranslationPrivateProto.CreateRequest request,
+		PrivateGenreTranslationProto.PrivateTranslationCreateRequest request,
 		StreamObserver<GenreCommonProto.GenreTranslationResponse> responseObserver
 	) {
 		var genreTranslationRequestDto = grpcGenreMapper.toGenreTranslationRequestDto(request);
@@ -77,7 +79,7 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 
 	@Override
 	public void update(
-		GenreTranslationPrivateProto.UpdateRequest request,
+			PrivateGenreTranslationProto.PrivateTranslationUpdateRequest request,
 		StreamObserver<GenreCommonProto.GenreTranslationResponse> responseObserver
 	) {
 		var genreTranslationRequestDto = grpcGenreMapper.toGenreTranslationRequestDto(request);
@@ -92,7 +94,7 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 
 	@Override
 	public void delete(
-		GenreTranslationPrivateProto.DeleteRequest request,
+		PrivateGenreTranslationProto.PrivateTranslationDeleteRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
 		genreTranslationCommandService.delete(request.getId());
@@ -101,7 +103,7 @@ public class GrpcGenreTranslationPrivateService extends GenreTranslationPrivateS
 
 	@Override
 	public void deleteBatch(
-		GenreTranslationPrivateProto.DeleteBatchRequest request,
+		PrivateGenreTranslationProto.PrivateTranslationDeleteBatchRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
 		genreTranslationCommandService.delete(request.getIdsList());

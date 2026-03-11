@@ -8,8 +8,8 @@ import dev.animedia.contentservice.genre.service.GenreCommandService;
 import dev.animedia.contentservice.genre.service.GenrePageService;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.genre.GenreCommonProto;
-import dev.animedia.grpc.genre.GenrePrivateProto;
-import dev.animedia.grpc.genre.GenrePrivateServiceGrpc;
+import dev.animedia.grpc.genre.PrivateGenreProto;
+import dev.animedia.grpc.genre.PrivateGenreServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
@@ -17,7 +17,7 @@ import org.springframework.grpc.server.service.GrpcService;
 import java.util.List;
 
 @GrpcService
-public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivateServiceImplBase {
+public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenreServiceImplBase {
 
     private final GenrePageService genrePageService;
     private final GenreCommandService genreCommandService;
@@ -26,7 +26,7 @@ public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivat
     private final FieldValidator fieldValidator;
 
     @Autowired
-    public GrpcGenrePrivateService(
+    public PrivateGenreGrpcService(
         GenrePageService genrePageService,
         GenreCommandService genreCommandService,
         GrpcGenreMapper grpcGenreMapper,
@@ -41,19 +41,19 @@ public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivat
     }
 
     @Override
-    public void search(GenrePrivateProto.SearchRequest request, StreamObserver<GenrePrivateProto.SearchResponse> responseObserver) {
+    public void search(PrivateGenreProto.PrivateSearchRequest request, StreamObserver<PrivateGenreProto.PrivateSearchResponse> responseObserver) {
         var pageable = paginationMapper.toPageable(request.getPagination());
         var genresWithTranslations = genrePageService.search(request.getAliasList(), request.getNamesList(), request.getLanguageCodesList(), pageable);
 
         var protoPagination = paginationMapper.toProtoPaginationResponse(genresWithTranslations);
-        GenrePrivateProto.SearchResponse response = grpcGenreMapper.toPrivateSearchResponse(genresWithTranslations.getContent(), protoPagination);
+        PrivateGenreProto.PrivateSearchResponse response = grpcGenreMapper.toPrivateSearchResponse(genresWithTranslations.getContent(), protoPagination);
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
-    public void create(GenrePrivateProto.CreateRequest request, StreamObserver<GenreCommonProto.GenreResponse> responseObserver) {
+    public void create(PrivateGenreProto.PrivateCreateRequest request, StreamObserver<GenreCommonProto.GenreResponse> responseObserver) {
         GenreRequestDto genreRequestDto = grpcGenreMapper.toGenreRequestDto(request);
         fieldValidator.validate(genreRequestDto);
         var genreResponseDto = genreCommandService.create(genreRequestDto);
@@ -64,7 +64,7 @@ public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivat
     }
 
     @Override
-    public void createBatch(GenrePrivateProto.CreateBatchRequest request, StreamObserver<GenreCommonProto.GenreResponseList> responseObserver) {
+    public void createBatch(PrivateGenreProto.PrivateCreateBatchRequest request, StreamObserver<GenreCommonProto.GenreResponseList> responseObserver) {
         List<GenreRequestDto> genresRequestDto = grpcGenreMapper.toGenresRequestDto(request);
         fieldValidator.validate(genresRequestDto);
         var genresResponseDto = genreCommandService.create(genresRequestDto);
@@ -75,7 +75,7 @@ public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivat
     }
 
     @Override
-    public void update(GenrePrivateProto.UpdateRequest request, StreamObserver<GenreCommonProto.GenreResponse> responseObserver) {
+    public void update(PrivateGenreProto.PrivateUpdateRequest request, StreamObserver<GenreCommonProto.GenreResponse> responseObserver) {
         GenreRequestDto genreRequestDto = grpcGenreMapper.toGenreRequestDto(request);
         var genreResponseDto = genreCommandService.update(request.getId(), genreRequestDto);
 
@@ -85,13 +85,13 @@ public class GrpcGenrePrivateService extends GenrePrivateServiceGrpc.GenrePrivat
     }
 
     @Override
-    public void delete(GenrePrivateProto.DeleteRequest request, StreamObserver<CommonProto.EmptyResponse> responseObserver) {
+    public void delete(PrivateGenreProto.PrivateDeleteRequest request, StreamObserver<CommonProto.EmptyResponse> responseObserver) {
         genreCommandService.delete(request.getId());
         responseObserver.onCompleted();
     }
 
     @Override
-    public void deleteBatch(GenrePrivateProto.DeleteBatchRequest request, StreamObserver<CommonProto.EmptyResponse> responseObserver) {
+    public void deleteBatch(PrivateGenreProto.PrivateDeleteBatchRequest request, StreamObserver<CommonProto.EmptyResponse> responseObserver) {
         genreCommandService.delete(request.getIdsList());
         responseObserver.onCompleted();
     }
