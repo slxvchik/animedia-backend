@@ -14,16 +14,16 @@ import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslat
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.status.ContentStatusCommonProto;
-import dev.animedia.grpc.status.ContentStatusPrivateProto;
-import dev.animedia.grpc.status.ContentStatusPublicProto;
-import dev.animedia.grpc.status.ContentStatusTranslationPrivateProto;
+import dev.animedia.grpc.status.PrivateContentStatusProto;
+import dev.animedia.grpc.status.PublicContentStatusProto;
+import dev.animedia.grpc.status.PrivateContentStatusTranslationProto;
 
 @Component
 public class GrpcContentStatusMapper {
 
-	public ContentStatusPrivateProto.SearchResponse toPrivateSearchResponse(Page<ContentStatusWithTranslationsResponseDto> contentStatuses, CommonProto.PaginationResponse paginationResponse) {
+	public PrivateContentStatusProto.PrivateSearchResponse toPrivateSearchResponse(Page<ContentStatusWithTranslationsResponseDto> contentStatuses, CommonProto.PaginationResponse paginationResponse) {
 
-		List<ContentStatusPrivateProto.ContentStatusWithTranslations> protoContentStatuses = contentStatuses.stream()
+		List<ContentStatusCommonProto.ContentStatusWithTranslations> protoContentStatuses = contentStatuses.stream()
 			.map(contentStatus -> {
 
 				var protoContentStatus = ContentStatusCommonProto.ContentStatusResponse.newBuilder()
@@ -41,13 +41,13 @@ public class GrpcContentStatusMapper {
 						.build()
 					).toList();
 
-				return ContentStatusPrivateProto.ContentStatusWithTranslations.newBuilder()
+				return ContentStatusCommonProto.ContentStatusWithTranslations.newBuilder()
 					.setContentStatus(protoContentStatus)
 					.addAllTranslations(translations)
 					.build();
 			}).toList();
 
-		return ContentStatusPrivateProto.SearchResponse.newBuilder()
+		return PrivateContentStatusProto.PrivateSearchResponse.newBuilder()
 			.addAllContentStatuses(protoContentStatuses)
 			.setPagination(paginationResponse)
 			.build();
@@ -60,7 +60,7 @@ public class GrpcContentStatusMapper {
 			.build();
 	}
 
-	public ContentStatusPublicProto.SearchResponse toPublicSearchResponse(
+	public PublicContentStatusProto.PublicSearchResponse toPublicSearchResponse(
 		Page<ContentStatusWithTranslationResponseDto> contentStatuses,
 		CommonProto.PaginationResponse paginationResponse
 	) {
@@ -86,8 +86,8 @@ public class GrpcContentStatusMapper {
 			})
 			.toList();
 
-		return ContentStatusPublicProto.SearchResponse.newBuilder()
-			.addAllContentStatuses(protoContentStatuses)
+		return PublicContentStatusProto.PublicSearchResponse.newBuilder()
+			.addAllStatuses(protoContentStatuses)
 			.setPagination(paginationResponse)
 			.build();
 	}
@@ -101,7 +101,7 @@ public class GrpcContentStatusMapper {
 			.build();
 	}
 
-	public CreateContentStatusTranslationRequestDto toCreateContentStatusRequestDto(ContentStatusTranslationPrivateProto.CreateRequest request) {
+	public CreateContentStatusTranslationRequestDto toCreateContentStatusRequestDto(PrivateContentStatusTranslationProto.PrivateTranslationCreateRequest request) {
 		return new CreateContentStatusTranslationRequestDto(
 			request.getContentStatusId(),
 			request.getLanguageCode(),
@@ -109,17 +109,17 @@ public class GrpcContentStatusMapper {
 		);
 	}
 
-	public UpdateContentStatusTranslationRequestDto toUpdateContentStatusRequestDto(ContentStatusTranslationPrivateProto.UpdateRequest request) {
+	public UpdateContentStatusTranslationRequestDto toUpdateContentStatusRequestDto(PrivateContentStatusTranslationProto.PrivateTranslationUpdateRequest request) {
 		return new UpdateContentStatusTranslationRequestDto(
 			request.getName()
 		);
 	}
 
-	public ContentStatusRequestDto toContentStatusRequestDto(ContentStatusPrivateProto.CreateRequest request) {
+	public ContentStatusRequestDto toContentStatusRequestDto(PrivateContentStatusProto.PrivateCreateRequest request) {
 		return new ContentStatusRequestDto(request.getAlias());
 	}
 
-	public ContentStatusRequestDto toContentStatusRequestDto(ContentStatusPrivateProto.UpdateRequest request) {
+	public ContentStatusRequestDto toContentStatusRequestDto(PrivateContentStatusProto.PrivateUpdateRequest request) {
 		return new ContentStatusRequestDto(request.getAlias());
 	}
 }

@@ -15,6 +15,5 @@ public record PublicSearchRequestDto(
 	LocalDate releaseFrom,
 	LocalDate releaseTo,
 	List<String> languageCodes,
-	List<Long> genreIds,
-	Pageable pageable
+	List<Long> genreIds
 ) implements CommonSearchRequestDto {}

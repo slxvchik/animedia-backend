@@ -23,6 +23,5 @@ public record PrivateSearchRequestDto(
 	LocalDateTime updatedAtTo,
 	Boolean active,
 	List<String> languageCodes,
-	List<Long> genreIds,
-	Pageable pageable
+	List<Long> genreIds
 ) implements CommonSearchRequestDto {}

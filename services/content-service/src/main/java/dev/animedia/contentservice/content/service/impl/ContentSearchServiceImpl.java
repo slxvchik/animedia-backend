@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,8 @@ public class ContentSearchServiceImpl implements ContentSearchService {
 	}
 
 	@Override
-	public Page<ContentWithTranslationsResponseDto> search(PrivateSearchRequestDto privateSearchRequestDto) {
-		var contentPage = searchContents(privateSearchRequestDto);
+	public Page<ContentWithTranslationsResponseDto> search(PrivateSearchRequestDto privateSearchRequestDto, Pageable pageable) {
+		var contentPage = searchContents(privateSearchRequestDto, pageable);
 		if (contentPage.isEmpty()) return Page.empty(contentPage.getPageable());
 
 		String languageCode = LanguageInterceptor.getLanguageCode();
@@ -73,11 +74,11 @@ public class ContentSearchServiceImpl implements ContentSearchService {
 	}
 
 	@Override
-	public Page<ContentWithTranslationResponseDto> search(PublicSearchRequestDto publicSearchRequestDto) {
+	public Page<ContentWithTranslationResponseDto> search(PublicSearchRequestDto publicSearchRequestDto, Pageable pageable) {
 
 		String languageCode = LanguageInterceptor.getLanguageCode();
 
-		var contentUuids = searchContents(publicSearchRequestDto, languageCode);
+		var contentUuids = searchContents(publicSearchRequestDto, languageCode, pageable);
 		if (contentUuids.isEmpty()) return Page.empty(contentUuids.getPageable());
 
 		var searchResult = fetchContentRelations(contentUuids.getContent(), languageCode);
@@ -95,7 +96,7 @@ public class ContentSearchServiceImpl implements ContentSearchService {
 		);
 	}
 
-	private Page<Content> searchContents(PrivateSearchRequestDto searchRequestDto) {
+	private Page<Content> searchContents(PrivateSearchRequestDto searchRequestDto, Pageable pageable) {
 		var specs = List.of(
 			ContentSpecification.hasUuid(searchRequestDto.uuid()),
 			ContentSpecification.hasCreatedAtFrom(searchRequestDto.createdAtFrom()),
@@ -114,10 +115,10 @@ public class ContentSearchServiceImpl implements ContentSearchService {
 			ContentSpecification.hasGenres(searchRequestDto.genreIds())
 		);
 
-		return contentRepository.findAll(Specification.allOf(specs), searchRequestDto.pageable());
+		return contentRepository.findAll(Specification.allOf(specs), pageable);
 	}
 
-	private Page<Content> searchContents(PublicSearchRequestDto searchRequestDto, String languageCode) {
+	private Page<Content> searchContents(PublicSearchRequestDto searchRequestDto, String languageCode, Pageable pageable) {
 		var specs = List.of(
 			ContentSpecification.hasAlias(searchRequestDto.alias()),
 			ContentSpecification.hasTranslationFilters(searchRequestDto.title(), languageCode),
@@ -130,7 +131,7 @@ public class ContentSearchServiceImpl implements ContentSearchService {
 			ContentSpecification.hasGenres(searchRequestDto.genreIds())
 		);
 
-		return contentRepository.findAll(Specification.allOf(specs), searchRequestDto.pageable());
+		return contentRepository.findAll(Specification.allOf(specs), pageable);
 	}
 
 	/**
