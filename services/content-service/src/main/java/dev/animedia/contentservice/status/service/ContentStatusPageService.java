@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationListResponseDto;
 
 public interface ContentStatusPageService {
-    Page<ContentStatusWithTranslationsResponseDto> search(
+    Page<ContentStatusWithTranslationListResponseDto> search(
         List<Long> contentStatusIds,
         List<String> languageCodes,
         String alias,

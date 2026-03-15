@@ -38,7 +38,7 @@ public class ContentStatusTranslationMapper {
         );
     }
 
-    public List<ContentStatusTranslationResponseDto> toContentStatusTranslationsResponseDto(List<ContentStatusTranslation> contentStatusTranslations) {
+    public List<ContentStatusTranslationResponseDto> toContentStatusTranslationListResponseDto(List<ContentStatusTranslation> contentStatusTranslations) {
         return contentStatusTranslations.stream().map(this::toContentStatusTranslationResponseDto).toList();
     }
 }

@@ -11,7 +11,7 @@ import dev.animedia.contentservice.status.dto.request.UpdateContentStatusTransla
 import dev.animedia.contentservice.status.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.status.dto.response.ContentStatusTranslationResponseDto;
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationListResponseDto;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.status.ContentStatusCommonProto;
 import dev.animedia.grpc.status.PrivateContentStatusProto;
@@ -21,9 +21,9 @@ import dev.animedia.grpc.status.PrivateContentStatusTranslationProto;
 @Component
 public class GrpcContentStatusMapper {
 
-	public PrivateContentStatusProto.PrivateSearchResponse toPrivateSearchResponse(Page<ContentStatusWithTranslationsResponseDto> contentStatuses, CommonProto.PaginationResponse paginationResponse) {
+	public PrivateContentStatusProto.PrivateSearchResponse toPrivateSearchResponse(Page<ContentStatusWithTranslationListResponseDto> contentStatuses, CommonProto.PaginationResponse paginationResponse) {
 
-		List<ContentStatusCommonProto.ContentStatusWithTranslations> protoContentStatuses = contentStatuses.stream()
+		List<ContentStatusCommonProto.ContentStatusWithTranslationsResponse> protoContentStatuses = contentStatuses.stream()
 			.map(contentStatus -> {
 
 				var protoContentStatus = ContentStatusCommonProto.ContentStatusResponse.newBuilder()
@@ -32,16 +32,9 @@ public class GrpcContentStatusMapper {
 					.build();
 
 				var translations = contentStatus.translations().stream()
-					.map(translation ->
-						ContentStatusCommonProto.ContentStatusTranslationResponse.newBuilder()
-						.setId(translation.id())
-						.setContentStatusId(translation.contentStatusId())
-						.setLanguageCode(translation.languageCode())
-						.setName(translation.name())
-						.build()
-					).toList();
+					.map(this::toProtoContentStatusTranslation).toList();
 
-				return ContentStatusCommonProto.ContentStatusWithTranslations.newBuilder()
+				return ContentStatusCommonProto.ContentStatusWithTranslationsResponse.newBuilder()
 					.setContentStatus(protoContentStatus)
 					.addAllTranslations(translations)
 					.build();
@@ -60,30 +53,46 @@ public class GrpcContentStatusMapper {
 			.build();
 	}
 
+	public ContentStatusCommonProto.ContentStatusWithTranslationResponse toProtoContentStatusWithTranslation(ContentStatusWithTranslationResponseDto contentStatus) {
+		var protoContentStatus = ContentStatusCommonProto.ContentStatusResponse.newBuilder()
+			.setId(contentStatus.id())
+			.setAlias(contentStatus.alias())
+			.build();
+
+		var protoTranslation = ContentStatusCommonProto.ContentStatusTranslationResponse.newBuilder()
+			.setId(contentStatus.contentStatusTranslationId())
+			.setContentStatusId(contentStatus.id())
+			.setLanguageCode(contentStatus.languageCode())
+			.setName(contentStatus.name())
+			.build();
+
+		return ContentStatusCommonProto.ContentStatusWithTranslationResponse.newBuilder()
+			.setContentStatus(protoContentStatus)
+			.setTranslation(protoTranslation)
+			.build();
+	}
+
+	public ContentStatusCommonProto.ContentStatusWithTranslationsResponse toProtoContentStatusWithTranslations(ContentStatusWithTranslationListResponseDto contentStatus) {
+		var protoContentStatus = ContentStatusCommonProto.ContentStatusResponse.newBuilder()
+			.setId(contentStatus.id())
+			.setAlias(contentStatus.alias())
+			.build();
+
+		var protoTranslations = contentStatus.translations().stream()
+			.map(this::toProtoContentStatusTranslation).toList();
+
+		return ContentStatusCommonProto.ContentStatusWithTranslationsResponse.newBuilder()
+			.setContentStatus(protoContentStatus)
+			.addAllTranslations(protoTranslations)
+			.build();
+	}
+
 	public PublicContentStatusProto.PublicSearchResponse toPublicSearchResponse(
 		Page<ContentStatusWithTranslationResponseDto> contentStatuses,
 		CommonProto.PaginationResponse paginationResponse
 	) {
 		var protoContentStatuses = contentStatuses.stream()
-			.map(contentStatus -> {
-
-				var protoContentStatus = ContentStatusCommonProto.ContentStatusResponse.newBuilder()
-					.setId(contentStatus.id())
-					.setAlias(contentStatus.alias())
-					.build();
-
-				var protoTranslation = ContentStatusCommonProto.ContentStatusTranslationResponse.newBuilder()
-					.setId(contentStatus.contentStatusTranslationId())
-					.setContentStatusId(contentStatus.id())
-					.setLanguageCode(contentStatus.languageCode())
-					.setName(contentStatus.name())
-					.build();
-
-				return ContentStatusCommonProto.ContentStatusWithTranslationResponse.newBuilder()
-					.setContentStatus(protoContentStatus)
-					.setTranslation(protoTranslation)
-					.build();
-			})
+			.map(this::toProtoContentStatusWithTranslation)
 			.toList();
 
 		return PublicContentStatusProto.PublicSearchResponse.newBuilder()

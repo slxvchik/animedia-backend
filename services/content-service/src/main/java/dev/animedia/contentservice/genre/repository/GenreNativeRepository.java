@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.genre.repository;
 
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationListResponseDto;
 import dev.animedia.contentservice.genre.mapper.GenreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,7 +47,7 @@ public class GenreNativeRepository {
 		);
 	};
 
-	public Page<GenreWithTranslationsResponseDto> searchPage(List<String> aliases, List<String> names, List<String> languageCodes, Pageable pageable) {
+	public Page<GenreWithTranslationListResponseDto> searchPage(List<String> aliases, List<String> names, List<String> languageCodes, Pageable pageable) {
 
 		List<String> whereConditions = new ArrayList<>();
 		List<Object> params = new ArrayList<>();
@@ -99,7 +99,7 @@ public class GenreNativeRepository {
 			params.toArray()
 		);
 
-		List<GenreWithTranslationsResponseDto> genresWithTranslations = genreMapper.toGenresWithTranslationsResponseDto(content);
+		List<GenreWithTranslationListResponseDto> genresWithTranslations = genreMapper.toGenreListWithTranslationListResponseDto(content);
 
 		return new PageImpl<>(genresWithTranslations, pageable, total != null ? total : 0);
 	}

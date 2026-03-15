@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.status.api;
 
-import dev.animedia.contentservice.app.PaginationMapper;
+import dev.animedia.contentservice.app.mapper.PaginationMapper;
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.status.mapper.GrpcContentStatusMapper;
 import dev.animedia.contentservice.status.service.ContentStatusPageService;

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package protos.services.content.core;
 
+import "common/common.proto";
+
 option java_package="dev.animedia.grpc.core";
 option java_outer_classname="ContentCommonProto";
 
@@ -13,10 +15,15 @@ enum ContentType {
 }
 
 enum SortBy {
-  RELEASE_DATE = 0;
-  CREATED_AT = 1;
-  UPDATED_AT = 2;
-  SORT = 3;
+  SORT = 0;
+  RELEASE_DATE = 1;
+  CREATED_AT = 2;
+  UPDATED_AT = 3;
+}
+
+message Sort {
+  SortBy sort_by = 1;
+  protos.common.SortType sort_type = 2;
 }
 
 message ContentTranslationResponse {

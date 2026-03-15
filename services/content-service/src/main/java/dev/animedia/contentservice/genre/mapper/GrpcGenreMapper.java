@@ -4,29 +4,26 @@ import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.dto.request.GenreTranslationRequestDto;
 import dev.animedia.contentservice.genre.dto.response.GenreResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreTranslationResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationListResponseDto;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.genre.GenreCommonProto;
 import dev.animedia.grpc.genre.PrivateGenreProto;
-import dev.animedia.grpc.genre.PublicGenreProto;
 import dev.animedia.grpc.genre.PrivateGenreTranslationProto;
+import dev.animedia.grpc.genre.PublicGenreProto;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class GrpcGenreMapper {
 
     public PrivateGenreProto.PrivateSearchResponse toPrivateSearchResponse(
-        List<GenreWithTranslationsResponseDto> genresWithTranslations,
+        List<GenreWithTranslationListResponseDto> genresWithTranslations,
         CommonProto.PaginationResponse pagination
     ) {
 
-        List<GenreCommonProto.GenreWithTranslationsResponse> genres = new ArrayList<>();
-
-        genresWithTranslations.forEach(genreResponseDto -> {
+        List<GenreCommonProto.GenreWithTranslationsResponse> genres = genresWithTranslations.stream().map(genreResponseDto -> {
 
             GenreCommonProto.GenreResponse genre = GenreCommonProto.GenreResponse.newBuilder()
                 .setId(genreResponseDto.id())
@@ -34,14 +31,13 @@ public class GrpcGenreMapper {
                 .setSort(genreResponseDto.sort())
                 .build();
 
-            List<GenreCommonProto.GenreTranslationResponse> translations = toProtoGenreTranslations(genreResponseDto.translations());
-            var genreWithTranslations = GenreCommonProto.GenreWithTranslationsResponse.newBuilder()
-                    .setGenre(genre)
-                    .addAllTranslations(translations)
-                    .build();
-
-            genres.add(genreWithTranslations);
-        });
+            List<GenreCommonProto.GenreTranslationResponse> translations = toProtoGenreTranslationList(genreResponseDto.translations());
+            return GenreCommonProto.GenreWithTranslationsResponse.newBuilder()
+                .setGenre(genre)
+                .addAllTranslations(translations)
+                .build();
+        })
+        .toList();
 
         return PrivateGenreProto.PrivateSearchResponse.newBuilder()
             .addAllGenres(genres)
@@ -50,31 +46,9 @@ public class GrpcGenreMapper {
     }
 
     public PublicGenreProto.PublicSearchResponse toPublicSearchResponse(List<GenreWithTranslationResponseDto> genresWithTranslation, CommonProto.PaginationResponse pagination) {
-        List<GenreCommonProto.GenreWithTranslationResponse> genres = new ArrayList<>();
-
-        genresWithTranslation.forEach(genreWithTranslationResponseDto -> {
-
-            GenreCommonProto.GenreResponse genre = GenreCommonProto.GenreResponse.newBuilder()
-                .setId(genreWithTranslationResponseDto.id())
-                .setAlias(genreWithTranslationResponseDto.alias())
-                .setSort(genreWithTranslationResponseDto.sort())
-                .build();
-
-            GenreCommonProto.GenreTranslationResponse translation = GenreCommonProto.GenreTranslationResponse.newBuilder()
-                .setId(genreWithTranslationResponseDto.genreTranslationId())
-                .setGenreId(genreWithTranslationResponseDto.id())
-                .setLanguageCode(genreWithTranslationResponseDto.languageCode())
-                .setName(genreWithTranslationResponseDto.name())
-                .setDescription(genreWithTranslationResponseDto.description())
-                .build();
-
-            var genreWithTranslations = GenreCommonProto.GenreWithTranslationResponse.newBuilder()
-                .setGenre(genre)
-                .setTranslation(translation)
-                .build();
-
-            genres.add(genreWithTranslations);
-        });
+        List<GenreCommonProto.GenreWithTranslationResponse> genres = genresWithTranslation.stream()
+            .map(this::toProtoGenreWithTranslation)
+            .toList();
 
         return PublicGenreProto.PublicSearchResponse.newBuilder()
             .addAllGenres(genres)
@@ -82,7 +56,32 @@ public class GrpcGenreMapper {
             .build();
     }
 
-    public List<GenreCommonProto.GenreTranslationResponse> toProtoGenreTranslations(List<GenreTranslationResponseDto> genreTranslationsResponseDto) {
+    public GenreCommonProto.GenreWithTranslationResponse toProtoGenreWithTranslation(GenreWithTranslationResponseDto genreWithTranslationResponseDto) {
+        GenreCommonProto.GenreResponse genre = GenreCommonProto.GenreResponse.newBuilder()
+            .setId(genreWithTranslationResponseDto.id())
+            .setAlias(genreWithTranslationResponseDto.alias())
+            .setSort(genreWithTranslationResponseDto.sort())
+            .build();
+
+        GenreCommonProto.GenreTranslationResponse translation = GenreCommonProto.GenreTranslationResponse.newBuilder()
+            .setId(genreWithTranslationResponseDto.genreTranslationId())
+            .setGenreId(genreWithTranslationResponseDto.id())
+            .setLanguageCode(genreWithTranslationResponseDto.languageCode())
+            .setName(genreWithTranslationResponseDto.name())
+            .setDescription(genreWithTranslationResponseDto.description())
+            .build();
+
+        return GenreCommonProto.GenreWithTranslationResponse.newBuilder()
+            .setGenre(genre)
+            .setTranslation(translation)
+            .build();
+    }
+
+    public List<GenreCommonProto.GenreWithTranslationResponse> toProtoGenreListWithTranslation(List<GenreWithTranslationResponseDto> genresWithTranslationResponseDto) {
+        return genresWithTranslationResponseDto.stream().map(this::toProtoGenreWithTranslation).toList();
+    }
+
+    public List<GenreCommonProto.GenreTranslationResponse> toProtoGenreTranslationList(List<GenreTranslationResponseDto> genreTranslationsResponseDto) {
         return genreTranslationsResponseDto.stream().map(this::toProtoGenreTranslation).toList();
     }
 
@@ -104,7 +103,7 @@ public class GrpcGenreMapper {
             .build();
     }
 
-    public GenreCommonProto.GenreResponseList toProtoGenres(List<GenreResponseDto> genresResponseDto) {
+    public GenreCommonProto.GenreResponseList toProtoGenreList(List<GenreResponseDto> genresResponseDto) {
         var genres = genresResponseDto.stream().map(this::toProtoGenre).toList();
         return GenreCommonProto.GenreResponseList.newBuilder()
             .addAllGenres(genres)
@@ -118,7 +117,7 @@ public class GrpcGenreMapper {
         );
     }
 
-    public List<GenreRequestDto> toGenresRequestDto(PrivateGenreProto.PrivateCreateBatchRequest requests) {
+    public List<GenreRequestDto> toGenreListRequestDto(PrivateGenreProto.PrivateCreateBatchRequest requests) {
         return requests.getGenresList().stream().map(this::toGenreRequestDto).toList();
     }
 

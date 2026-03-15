@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.status.api;
 
 import dev.animedia.contentservice.app.FieldValidator;
-import dev.animedia.contentservice.app.PaginationMapper;
+import dev.animedia.contentservice.app.mapper.PaginationMapper;
 import dev.animedia.contentservice.status.mapper.GrpcContentStatusMapper;
 import dev.animedia.contentservice.status.service.ContentStatusCommandService;
 import dev.animedia.contentservice.status.service.ContentStatusPageService;

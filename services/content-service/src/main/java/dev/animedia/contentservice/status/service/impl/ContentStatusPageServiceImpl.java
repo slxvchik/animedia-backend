@@ -9,7 +9,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationListResponseDto;
 import dev.animedia.contentservice.status.mapper.ContentStatusMapper;
 import dev.animedia.contentservice.status.repository.ContentStatusRepository;
 import dev.animedia.contentservice.status.service.ContentStatusPageService;
@@ -29,7 +29,7 @@ public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 	}
 
 	@Override
-	public Page<ContentStatusWithTranslationsResponseDto> search(
+	public Page<ContentStatusWithTranslationListResponseDto> search(
 		List<Long> contentStatusIds,
 		List<String> languageCodes,
 		String alias,
@@ -44,7 +44,7 @@ public class ContentStatusPageServiceImpl implements ContentStatusPageService {
 			pageable
 		);
 
-		var contentStatusesWithTranslations = contentStatusMapper.toContentStatusesWithTranslations(contentStatusesWithTranslation.getContent());
+		var contentStatusesWithTranslations = contentStatusMapper.toContentStatusListWithTranslationListResponseDto(contentStatusesWithTranslation.getContent());
 
 		return PageableExecutionUtils.getPage(
 			contentStatusesWithTranslations,

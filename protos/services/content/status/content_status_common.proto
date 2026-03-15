@@ -22,7 +22,7 @@ message ContentStatusWithTranslationResponse {
   ContentStatusTranslationResponse translation = 2;
 }
 
-message ContentStatusWithTranslations {
+message ContentStatusWithTranslationsResponse {
   ContentStatusResponse content_status = 1;
   repeated ContentStatusTranslationResponse translations = 2;
 }

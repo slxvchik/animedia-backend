@@ -1,9 +1,10 @@
-package dev.animedia.contentservice.app;
+package dev.animedia.contentservice.app.mapper;
 
 import dev.animedia.grpc.common.CommonProto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,14 @@ public class PaginationMapper {
 		return PageRequest.of(
 			paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0,
 			paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10
+		);
+	}
+
+	public Pageable toPageableWithSort(CommonProto.PaginationRequest paginationRequest, Sort sort) {
+		return PageRequest.of(
+			paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0,
+			paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10,
+			sort
 		);
 	}
 }

@@ -24,7 +24,7 @@ message PrivateSearchRequest {
 }
 
 message PrivateSearchResponse {
-  repeated ContentStatusWithTranslations content_statuses = 1;
+  repeated ContentStatusWithTranslationsResponse content_statuses = 1;
   common.PaginationResponse pagination = 2;
 }
 

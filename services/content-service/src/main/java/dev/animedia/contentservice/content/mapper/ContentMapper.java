@@ -15,7 +15,7 @@ import dev.animedia.contentservice.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentTranslationResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationResponseDto;
-import dev.animedia.contentservice.content.dto.response.ContentWithTranslationsResponseDto;
+import dev.animedia.contentservice.content.dto.response.ContentWithTranslationListResponseDto;
 import dev.animedia.contentservice.content.model.Content;
 import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.model.Genre;
@@ -86,7 +86,7 @@ public class ContentMapper {
 	 * @param genresWithTranslation - genres response dto with translation
 	 * @return a list of content with a multiple translations and translated nested entities.
 	 */
-	public List<ContentWithTranslationsResponseDto> toContentsWithTranslationsResponseDto(
+	public List<ContentWithTranslationListResponseDto> toContentListWithTranslationListResponseDto(
 		List<Content> contents,
 		List<ContentTranslationResponseDto> contentsTranslation,
 		List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation,
@@ -113,7 +113,7 @@ public class ContentMapper {
 					.filter(Objects::nonNull)
 					.toList();
 
-				return new ContentWithTranslationsResponseDto(
+				return new ContentWithTranslationListResponseDto(
 					contentUuid,
 					content.getAlias(),
 					content.getType(),
@@ -141,7 +141,7 @@ public class ContentMapper {
 	 * @param genresWithTranslation - genres response dto with translation
 	 * @return a list of content with a single translation and translated nested entities.
 	 */
-	public List<ContentWithTranslationResponseDto> toContentsWithTranslationResponseDto(
+	public List<ContentWithTranslationResponseDto> toContentListWithTranslationResponseDto(
 		List<Content> contents,
 		List<ContentTranslationResponseDto> contentsTranslation,
 		List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation,

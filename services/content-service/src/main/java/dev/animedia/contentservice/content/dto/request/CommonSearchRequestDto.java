@@ -8,7 +8,7 @@ import java.util.List;
 public interface CommonSearchRequestDto {
 	String alias();
 	String title();
-	ContentType type();
+	List<ContentType> types();
 	List<Integer> seasons();
 	List<Long> contentStatusIds();
 	LocalDate releaseFrom();

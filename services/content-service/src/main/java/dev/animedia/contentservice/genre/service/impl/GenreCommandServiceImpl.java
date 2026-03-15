@@ -68,7 +68,7 @@ public class GenreCommandServiceImpl implements GenreCommandService {
 
         var savedGenres = genreRepository.saveAll(genres);
 
-        return genreMapper.toGenresResponseDto(savedGenres);
+        return genreMapper.toGenreListResponseDto(savedGenres);
     }
 
     @Override

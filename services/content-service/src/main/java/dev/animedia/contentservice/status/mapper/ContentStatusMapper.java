@@ -4,7 +4,7 @@ import dev.animedia.contentservice.status.dto.request.ContentStatusRequestDto;
 import dev.animedia.contentservice.status.dto.response.ContentStatusResponseDto;
 import dev.animedia.contentservice.status.dto.response.ContentStatusTranslationResponseDto;
 import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationResponseDto;
-import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationsResponseDto;
+import dev.animedia.contentservice.status.dto.response.ContentStatusWithTranslationListResponseDto;
 import dev.animedia.contentservice.status.model.ContentStatus;
 import org.springframework.stereotype.Component;
 
@@ -29,24 +29,7 @@ public class ContentStatusMapper {
 		);
 	}
 
-	public ContentStatusWithTranslationResponseDto toContentStatusWithTranslationResponseDto(ContentStatusResponseDto contentStatusResponseDto, ContentStatusTranslationResponseDto contentStatusTranslationResponseDto) {
-		return contentStatusTranslationResponseDto == null ?
-			new ContentStatusWithTranslationResponseDto(
-				contentStatusResponseDto.id(),
-				contentStatusResponseDto.alias(),
-				null,
-				null,
-				null
-			) : new ContentStatusWithTranslationResponseDto(
-				contentStatusResponseDto.id(),
-				contentStatusResponseDto.alias(),
-				contentStatusTranslationResponseDto.id(),
-				contentStatusTranslationResponseDto.languageCode(),
-				contentStatusTranslationResponseDto.name()
-			);
-	}
-
-	public List<ContentStatusWithTranslationsResponseDto> toContentStatusesWithTranslations(List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation) {
+	public List<ContentStatusWithTranslationListResponseDto> toContentStatusListWithTranslationListResponseDto(List<ContentStatusWithTranslationResponseDto> contentStatusesWithTranslation) {
 		// ContentStatusId, translations
 		Map<Long, List<ContentStatusTranslationResponseDto>> contentStatusTranslations = new HashMap<>();
 		Map<Long, ContentStatusResponseDto> contentStatuses = new HashMap<>();
@@ -65,7 +48,7 @@ public class ContentStatusMapper {
 		}
 
 		return contentStatuses.values().stream()
-			.map(status -> new ContentStatusWithTranslationsResponseDto(
+			.map(status -> new ContentStatusWithTranslationListResponseDto(
 				status.id(),
 				status.alias(),
 				contentStatusTranslations.get(status.id())

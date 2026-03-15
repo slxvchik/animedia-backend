@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ContentWithTranslationsResponseDto(
+public record ContentWithTranslationListResponseDto(
 	String uuid,
 	String alias,
 	ContentType type,

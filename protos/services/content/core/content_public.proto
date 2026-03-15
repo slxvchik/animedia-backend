@@ -18,15 +18,16 @@ service PublicContentService {
 
 message PublicSearchRequest {
   optional string alias = 1;
-  repeated ContentType type = 2;
-  repeated int32 seasons = 3;
-  repeated int64 content_status_ids = 4;
-  optional google.protobuf.Timestamp release_date_from = 5;
-  optional google.protobuf.Timestamp release_date_to = 6;
-  repeated string language_codes = 7;
-  optional SortBy sort_by = 8;
-  optional protos.common.SortType sort_type = 9;
-  optional protos.common.PaginationRequest pagination = 10;
+  optional string title = 2;
+  repeated ContentType type = 3;
+  repeated int32 seasons = 4;
+  repeated int64 content_status_ids = 5;
+  optional protos.common.Date release_date_from = 6;
+  optional protos.common.Date release_date_to = 7;
+  repeated string language_codes = 8;
+  repeated int64 genre_ids = 9;
+  optional Sort sort = 10;
+  optional protos.common.PaginationRequest pagination = 11;
 }
 
 message PublicSearchResponse {
@@ -46,7 +47,7 @@ message PublicContentResponse {
   protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
   string cover_url = 6;
   string trailer_url = 7;
-  google.protobuf.Timestamp release_date = 8;
+  protos.common.Date release_date = 8;
   repeated string language_codes = 9;
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 10;
 }

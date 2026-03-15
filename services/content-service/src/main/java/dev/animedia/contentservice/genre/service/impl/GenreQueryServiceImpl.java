@@ -49,7 +49,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 		Set<Long> uniqueIds = new HashSet<>(ids);
 		var genres = genreRepository.findAllById(uniqueIds);
 		if (genres.size() != uniqueIds.size()) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
-		return genreMapper.toGenresResponseDto(genres);
+		return genreMapper.toGenreListResponseDto(genres);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 		Set<String> uniqueAliases = new HashSet<>(aliases);
 		var genres = genreRepository.findByAliasIn(List.copyOf(uniqueAliases));
 		if (genres.size() != uniqueAliases.size()) throw new AppException(AppExceptionStatus.NOT_FOUND, GenreConstants.GENRES_NOT_FOUND_MESSAGE);
-		return genreMapper.toGenresResponseDto(genres);
+		return genreMapper.toGenreListResponseDto(genres);
 	}
 
 	@Override
@@ -66,8 +66,8 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 		if (genres.isEmpty()) return List.of();
 		var genreIds = genres.stream().map(Genre::getId).toList();
 		var genresTranslationResponseDto = genreTranslationQueryService.findByGenreIdsAndLanguageCode(genreIds, languageCode);
-		var genresResponseDto = genreMapper.toGenresResponseDto(genres);
-		return genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslationResponseDto);
+		var genresResponseDto = genreMapper.toGenreListResponseDto(genres);
+		return genreMapper.toGenreListWithTranslationResponseDto(genresResponseDto, genresTranslationResponseDto);
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public class GenreQueryServiceImpl implements GenreQueryService {
 		if (genres.isEmpty()) return List.of();
 		var genreIds = genres.stream().map(Genre::getId).toList();
 		var genresTranslations = genreTranslationQueryService.findByGenreIds(genreIds);
-		var genresResponseDto = genreMapper.toGenresResponseDto(genres);
-		return genreMapper.toGenresWithTranslationResponseDto(genresResponseDto, genresTranslations);
+		var genresResponseDto = genreMapper.toGenreListResponseDto(genres);
+		return genreMapper.toGenreListWithTranslationResponseDto(genresResponseDto, genresTranslations);
 	}
 
 	@Override

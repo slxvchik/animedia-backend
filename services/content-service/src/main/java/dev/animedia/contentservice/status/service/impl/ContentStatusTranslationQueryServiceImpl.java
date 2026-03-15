@@ -49,7 +49,7 @@ public class ContentStatusTranslationQueryServiceImpl implements ContentStatusTr
         var contentStatusTranslations = contentStatusTranslationRepository.findAllById(uniqueIds);
         if (contentStatusTranslations.size() != uniqueIds.size())
             throw new AppException(AppExceptionStatus.NOT_FOUND, ContentStatusConstants.CONTENT_STATUS_TRANSLATIONS_NOT_FOUND_MESSAGE);
-        return contentStatusTranslationMapper.toContentStatusTranslationsResponseDto(contentStatusTranslations);
+        return contentStatusTranslationMapper.toContentStatusTranslationListResponseDto(contentStatusTranslations);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.genre.api;
 
 import dev.animedia.contentservice.app.FieldValidator;
-import dev.animedia.contentservice.app.PaginationMapper;
+import dev.animedia.contentservice.app.mapper.PaginationMapper;
 import dev.animedia.contentservice.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.genre.service.GenreCommandService;
@@ -65,11 +65,11 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
 
     @Override
     public void createBatch(PrivateGenreProto.PrivateCreateBatchRequest request, StreamObserver<GenreCommonProto.GenreResponseList> responseObserver) {
-        List<GenreRequestDto> genresRequestDto = grpcGenreMapper.toGenresRequestDto(request);
+        List<GenreRequestDto> genresRequestDto = grpcGenreMapper.toGenreListRequestDto(request);
         fieldValidator.validate(genresRequestDto);
         var genresResponseDto = genreCommandService.create(genresRequestDto);
 
-        var response = grpcGenreMapper.toProtoGenres(genresResponseDto);
+        var response = grpcGenreMapper.toProtoGenreList(genresResponseDto);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

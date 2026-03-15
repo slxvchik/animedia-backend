@@ -32,7 +32,7 @@ public class ContentTranslationQueryServiceImpl implements ContentTranslationQue
 	@Override
 	public Page<ContentTranslationResponseDto> search(UUID contentUuid, String title, Pageable pageable) {
 		var translations = contentTranslationRepository.search(contentUuid, title, pageable);
-		var translationsResponseDto = contentTranslationMapper.toContentTranslationsResponseDto(translations.getContent());
+		var translationsResponseDto = contentTranslationMapper.toContentTranslationListResponseDto(translations.getContent());
 
 		return PageableExecutionUtils.getPage(
 			translationsResponseDto,
@@ -50,7 +50,7 @@ public class ContentTranslationQueryServiceImpl implements ContentTranslationQue
 	@Override
 	public List<ContentTranslationResponseDto> findByContentUuidsAndLanguageCode(List<UUID> contentUuids, String languageCode) {
 		var translations = contentTranslationRepository.findByContentUuidsAndLanguageCode(contentUuids, languageCode);
-		return contentTranslationMapper.toContentTranslationsResponseDto(translations);
+		return contentTranslationMapper.toContentTranslationListResponseDto(translations);
 	}
 
 	@Override

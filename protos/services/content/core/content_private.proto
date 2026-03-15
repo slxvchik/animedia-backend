@@ -25,21 +25,21 @@ message PrivateSearchRequest {
   repeated ContentType type = 4;
   repeated int32 seasons = 5;
   repeated int64 content_status_ids = 6;
-  optional google.protobuf.Timestamp release_date_from = 7;
-  optional google.protobuf.Timestamp release_date_to = 8;
+  optional protos.common.Date release_date_from = 7;
+  optional protos.common.Date release_date_to = 8;
   optional google.protobuf.Timestamp created_at_from = 9;
   optional google.protobuf.Timestamp created_at_to = 10;
   optional google.protobuf.Timestamp updated_at_from = 11;
   optional google.protobuf.Timestamp updated_at_to = 12;
   optional bool active = 13;
   repeated string language_codes = 14;
-  optional SortBy sort_by = 15;
-  optional protos.common.SortType sort_type = 16;
+  repeated int64 genre_ids = 15;
+  optional Sort sort = 16;
   optional protos.common.PaginationRequest pagination = 17;
 }
 
 message PrivateSearchResponse {
-  repeated PrivateContentResponseWithTranslations contents = 1;
+  repeated PrivateContentResponseWithTranslationList contents = 1;
   common.PaginationResponse pagination = 2;
 }
 
@@ -50,7 +50,7 @@ message PrivateCreateRequest {
   protos.services.content.status.ContentStatusWithTranslationResponse status = 4;
   string cover_url = 5;
   string trailer_url = 6;
-  google.protobuf.Timestamp release_date = 7;
+  protos.common.Date release_date = 7;
   google.protobuf.Timestamp created_at = 8;
   google.protobuf.Timestamp updated_at = 9;
   bool active = 10;
@@ -66,7 +66,7 @@ message PrivateUpdateRequest {
   protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
   string cover_url = 6;
   string trailer_url = 7;
-  google.protobuf.Timestamp release_date = 8;
+  protos.common.Date release_date = 8;
   google.protobuf.Timestamp created_at = 9;
   google.protobuf.Timestamp updated_at = 10;
   bool active = 11;
@@ -86,7 +86,7 @@ message PrivateContentResponse {
   protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
   string cover_url = 6;
   string trailer_url = 7;
-  google.protobuf.Timestamp release_date = 8;
+  protos.common.Date release_date = 8;
   google.protobuf.Timestamp created_at = 9;
   google.protobuf.Timestamp updated_at = 10;
   bool active = 11;
@@ -94,7 +94,7 @@ message PrivateContentResponse {
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
 }
 
-message PrivateContentResponseWithTranslations {
+message PrivateContentResponseWithTranslationList {
   PrivateContentResponse content = 1;
   repeated ContentTranslationResponse translations = 2;
 }

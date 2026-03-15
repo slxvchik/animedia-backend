@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.genre.api;
 
 import dev.animedia.contentservice.app.FieldValidator;
-import dev.animedia.contentservice.app.PaginationMapper;
+import dev.animedia.contentservice.app.mapper.PaginationMapper;
 import dev.animedia.contentservice.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.genre.service.GenreTranslationCommandService;
 import dev.animedia.contentservice.genre.service.GenreTranslationPageService;
@@ -51,7 +51,7 @@ public class PrivateGenreTranslationGrpcService extends PrivateGenreTranslationS
 		);
 
 		var pagination = paginationMapper.toProtoPaginationResponse(genreTranslationsResponseDto);
-		var genreTranslationsResponse = grpcGenreMapper.toProtoGenreTranslations(genreTranslationsResponseDto.getContent());
+		var genreTranslationsResponse = grpcGenreMapper.toProtoGenreTranslationList(genreTranslationsResponseDto.getContent());
 
 		var response = PrivateGenreTranslationProto.PrivateTranslationSearchResponse.newBuilder()
 			.addAllTranslations(genreTranslationsResponse)

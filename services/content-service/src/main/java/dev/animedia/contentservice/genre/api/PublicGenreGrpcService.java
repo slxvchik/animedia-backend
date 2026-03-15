@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.genre.api;
 
-import dev.animedia.contentservice.app.PaginationMapper;
+import dev.animedia.contentservice.app.mapper.PaginationMapper;
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.genre.service.GenrePageService;

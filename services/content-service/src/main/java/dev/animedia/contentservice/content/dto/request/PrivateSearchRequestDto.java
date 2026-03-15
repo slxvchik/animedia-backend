@@ -12,7 +12,7 @@ public record PrivateSearchRequestDto(
 	UUID uuid,
 	String alias,
 	String title,
-	ContentType type,
+	List<ContentType> types,
 	List<Integer> seasons,
 	List<Long> contentStatusIds,
 	LocalDate releaseFrom,

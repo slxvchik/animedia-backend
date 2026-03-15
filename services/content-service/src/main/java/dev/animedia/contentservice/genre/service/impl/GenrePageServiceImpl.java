@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
-import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationsResponseDto;
+import dev.animedia.contentservice.genre.dto.response.GenreWithTranslationListResponseDto;
 
 import java.util.List;
 
@@ -31,15 +31,15 @@ public class GenrePageServiceImpl implements GenrePageService {
     }
 
     @Override
-    public Page<GenreWithTranslationsResponseDto> search(List<String> aliases, List<String> names, List<String> languageCodes, Pageable pageable) {
+    public Page<GenreWithTranslationListResponseDto> search(List<String> aliases, List<String> names, List<String> languageCodes, Pageable pageable) {
         return genreNativeRepository.searchPage(aliases, names, languageCodes, pageable);
     }
 
     @Override
     public Page<GenreWithTranslationResponseDto> search(List<String> aliases, List<String> names, String languageCode, Pageable pageable) {
-        Page<GenreWithTranslationsResponseDto> genresWithTranslationsResponseDto = genreNativeRepository.searchPage(aliases, names, List.of(languageCode), pageable);
+        Page<GenreWithTranslationListResponseDto> genresWithTranslationsResponseDto = genreNativeRepository.searchPage(aliases, names, List.of(languageCode), pageable);
         var genresTranslations = genresWithTranslationsResponseDto.getContent();
-        var genresTranslation = genreMapper.toGenresWithTranslationResponseDto(genresTranslations);
+        var genresTranslation = genreMapper.toGenreListWithTranslationResponseDto(genresTranslations);
         return PageableExecutionUtils.getPage(
             genresTranslation,
             genresWithTranslationsResponseDto.getPageable(),

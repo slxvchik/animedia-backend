@@ -30,16 +30,16 @@ public class ContentSpecification {
 				? cb.like(root.get("alias"), "%" + alias + "%")
 				: null;
 	}
-	public static Specification<Content> hasType(ContentType type) {
-		return (root, query, cb) ->
-			type != null
-				? cb.equal(root.get("type"), type)
-				: null;
+	public static Specification<Content> hasTypes(List<ContentType> types) {
+		return (root, query, cb) -> {
+			var cleanTypes = cleanList(types);
+			return cleanTypes != null ? root.get("type").in(cleanTypes) : null;
+		};
 	}
 	public static Specification<Content> hasSeasons(List<Integer> seasons) {
 		return (root, query, cb) -> {
 			var cleanSeasons = cleanList(seasons);
-			return cleanSeasons != null ? root.get("seasons").in(cleanSeasons) : null;
+			return cleanSeasons != null ? root.get("season").in(cleanSeasons) : null;
 		};
 	}
 	public static Specification<Content> hasStatuses(List<Long> statuses) {

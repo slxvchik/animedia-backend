@@ -27,7 +27,7 @@ public class ContentTranslationMapper {
 		);
 	}
 
-	public List<ContentTranslationResponseDto> toContentTranslationsResponseDto(List<ContentTranslation> contentTranslations) {
+	public List<ContentTranslationResponseDto> toContentTranslationListResponseDto(List<ContentTranslation> contentTranslations) {
 		return contentTranslations.stream()
 			.map(this::toContentTranslationResponseDto)
 			.toList();
