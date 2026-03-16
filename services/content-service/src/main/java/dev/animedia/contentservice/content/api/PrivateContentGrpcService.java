@@ -1,7 +1,9 @@
 package dev.animedia.contentservice.content.api;
 
+import dev.animedia.contentservice.app.FieldValidator;
 import dev.animedia.contentservice.app.config.LanguageInterceptor;
 import dev.animedia.contentservice.app.mapper.PaginationMapper;
+import dev.animedia.contentservice.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.content.dto.request.PrivateSearchRequestDto;
 import dev.animedia.contentservice.content.mapper.ContentSortMapper;
 import dev.animedia.contentservice.content.mapper.GrpcContentMapper;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.grpc.server.service.GrpcService;
 
+import java.util.UUID;
+
 @GrpcService
 public class PrivateContentGrpcService extends PrivateContentServiceGrpc.PrivateContentServiceImplBase {
 
@@ -23,14 +27,23 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
     private final PaginationMapper paginationMapper;
     private final ContentSortMapper contentSortMapper;
     private final GrpcContentMapper grpcContentMapper;
+    private final FieldValidator fieldValidator;
 
     @Autowired
-    public PrivateContentGrpcService(ContentCommandService contentCommandService, ContentSearchService contentSearchService, PaginationMapper paginationMapper, ContentSortMapper contentSortMapper, GrpcContentMapper grpcContentMapper) {
+    public PrivateContentGrpcService(
+        ContentCommandService contentCommandService,
+        ContentSearchService contentSearchService,
+        PaginationMapper paginationMapper,
+        ContentSortMapper contentSortMapper,
+        GrpcContentMapper grpcContentMapper,
+	    FieldValidator fieldValidator
+    ) {
         this.contentCommandService = contentCommandService;
         this.contentSearchService = contentSearchService;
         this.paginationMapper = paginationMapper;
         this.contentSortMapper = contentSortMapper;
         this.grpcContentMapper = grpcContentMapper;
+	    this.fieldValidator = fieldValidator;
     }
 
     @Override
@@ -48,12 +61,22 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
 
     @Override
     public void create(PrivateContentProto.PrivateCreateRequest request, StreamObserver<PrivateContentProto.PrivateContentResponse> responseObserver) {
-        super.create(request, responseObserver);
+        ContentRequestDto contentRequestDto = grpcContentMapper.toContentRequestDto(request);
+        fieldValidator.validate(contentRequestDto);
+        String languageCode = LanguageInterceptor.getLanguageCode();
+        var createdContent = contentCommandService.create(contentRequestDto, languageCode);
+        responseObserver.onNext(grpcContentMapper.toPrivateContentResponse(createdContent));
+        responseObserver.onCompleted();
     }
 
     @Override
     public void update(PrivateContentProto.PrivateUpdateRequest request, StreamObserver<PrivateContentProto.PrivateContentResponse> responseObserver) {
-        super.update(request, responseObserver);
+        ContentRequestDto contentRequestDto = grpcContentMapper.toContentRequestDto(request);
+        fieldValidator.validate(contentRequestDto);
+        String languageCode = LanguageInterceptor.getLanguageCode();
+        var updatedContent = contentCommandService.update(UUID.fromString(request.getUuid()), contentRequestDto, languageCode);
+        responseObserver.onNext(grpcContentMapper.toPrivateContentResponse(updatedContent));
+        responseObserver.onCompleted();
     }
 
     @Override

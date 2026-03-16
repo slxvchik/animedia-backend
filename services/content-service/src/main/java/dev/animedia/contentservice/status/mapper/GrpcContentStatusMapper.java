@@ -72,21 +72,6 @@ public class GrpcContentStatusMapper {
 			.build();
 	}
 
-	public ContentStatusCommonProto.ContentStatusWithTranslationsResponse toProtoContentStatusWithTranslations(ContentStatusWithTranslationListResponseDto contentStatus) {
-		var protoContentStatus = ContentStatusCommonProto.ContentStatusResponse.newBuilder()
-			.setId(contentStatus.id())
-			.setAlias(contentStatus.alias())
-			.build();
-
-		var protoTranslations = contentStatus.translations().stream()
-			.map(this::toProtoContentStatusTranslation).toList();
-
-		return ContentStatusCommonProto.ContentStatusWithTranslationsResponse.newBuilder()
-			.setContentStatus(protoContentStatus)
-			.addAllTranslations(protoTranslations)
-			.build();
-	}
-
 	public PublicContentStatusProto.PublicSearchResponse toPublicSearchResponse(
 		Page<ContentStatusWithTranslationResponseDto> contentStatuses,
 		CommonProto.PaginationResponse paginationResponse

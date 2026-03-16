@@ -1,8 +1,10 @@
 package dev.animedia.contentservice.content.mapper;
 
 import dev.animedia.contentservice.app.mapper.DateMapper;
+import dev.animedia.contentservice.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.content.dto.request.PrivateSearchRequestDto;
 import dev.animedia.contentservice.content.dto.request.PublicSearchRequestDto;
+import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationListResponseDto;
 import dev.animedia.contentservice.content.dto.response.ContentWithTranslationResponseDto;
 import dev.animedia.contentservice.genre.mapper.GrpcGenreMapper;
@@ -16,6 +18,7 @@ import dev.animedia.grpc.status.ContentStatusCommonProto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -161,5 +164,59 @@ public class GrpcContentMapper {
 				.addAllContents(contents)
 				.setPagination(pagination)
 				.build();
+	}
+
+	public ContentRequestDto toContentRequestDto(PrivateContentProto.PrivateCreateRequest request) {
+		return new ContentRequestDto(
+			request.getAlias(),
+			typeMapper.toType(request.getType()),
+			request.getSeason(),
+			request.getContentStatusId(),
+			request.getCoverUrl(),
+			request.getTrailerUrl(),
+			dateMapper.toLocalDate(request.getReleaseDate()),
+			request.getActive(),
+			request.getSort(),
+			new HashSet<>(request.getLanguageCodesList()),
+			new HashSet<>(request.getGenreIdsList())
+		);
+	}
+
+	public ContentRequestDto toContentRequestDto(PrivateContentProto.PrivateUpdateRequest request) {
+		return new ContentRequestDto(
+			request.getAlias(),
+			typeMapper.toType(request.getType()),
+			request.getSeason(),
+			request.getContentStatusId(),
+			request.getCoverUrl(),
+			request.getTrailerUrl(),
+			dateMapper.toLocalDate(request.getReleaseDate()),
+			request.getActive(),
+			request.getSort(),
+			new HashSet<>(request.getLanguageCodesList()),
+			new HashSet<>(request.getGenreIdsList())
+		);
+	}
+
+	public PrivateContentProto.PrivateContentResponse toPrivateContentResponse(ContentResponseDto content) {
+
+		var status = grpcContentStatusMapper.toProtoContentStatusWithTranslation(content.status());
+		var genres = grpcGenreMapper.toProtoGenreListWithTranslation(content.genres());
+
+		return PrivateContentProto.PrivateContentResponse.newBuilder()
+			.setUuid(content.uuid())
+			.setAlias(content.alias())
+			.setType(typeMapper.toGrpcType(content.type()))
+			.setSeason(content.season())
+			.setStatus(status)
+			.setCoverUrl(content.coverUrl())
+			.setTrailerUrl(content.trailerUrl())
+			.setReleaseDate(dateMapper.toGrpcDate(content.releaseDate()))
+			.setCreatedAt(dateMapper.toTimestamp(content.createdAt()))
+			.setUpdatedAt(dateMapper.toTimestamp(content.updatedAt()))
+			.setActive(content.active())
+			.addAllLanguageCodes(content.languageCodes())
+			.addAllGenres(genres)
+			.build();
 	}
 }
