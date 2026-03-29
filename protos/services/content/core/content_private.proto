@@ -47,7 +47,7 @@ message PrivateCreateRequest {
   string alias = 1;
   ContentType type = 2;
   int32 season = 3;
-  protos.services.content.status.ContentStatusWithTranslationResponse status = 4;
+  int64 content_status_id = 4;
   string cover_url = 5;
   string trailer_url = 6;
   protos.common.Date release_date = 7;
@@ -56,6 +56,9 @@ message PrivateCreateRequest {
   bool active = 10;
   repeated string language_codes = 11;
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 12;
+  int32 sort = 11;
+  repeated string language_codes = 12;
+  repeated int64 genre_ids = 13;
 }
 
 message PrivateUpdateRequest {
@@ -63,7 +66,7 @@ message PrivateUpdateRequest {
   string alias = 2;
   ContentType type = 3;
   int32 season = 4;
-  protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
+  int64 content_status_id = 5;
   string cover_url = 6;
   string trailer_url = 7;
   protos.common.Date release_date = 8;
@@ -72,6 +75,9 @@ message PrivateUpdateRequest {
   bool active = 11;
   repeated string language_codes = 12;
   repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
+  int32 sort = 12;
+  repeated string language_codes = 13;
+  repeated int64 genre_ids = 14;
 }
 
 message PrivateDeleteRequest {

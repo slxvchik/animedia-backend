@@ -48,7 +48,7 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 	}
 
 	@Override
-	public ContentResponseDto create(ContentRequestDto requestDto) {
+	public ContentResponseDto create(ContentRequestDto requestDto, String languageCode) {
 		Content content = contentMapper.toContent(requestDto);
 
 		List<String> errorMessages = new ArrayList<>();
@@ -61,12 +61,11 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 		if (!errorMessages.isEmpty()) throw new AppException(AppExceptionStatus.INVALID_ARGUMENT, errorMessages);
 
 		var savedContentUuid = contentRepository.save(content).getUuid();
-		String languageCode = LanguageInterceptor.getLanguageCode();
 		return contentQueryService.findByUuid(savedContentUuid, languageCode);
 	}
 
 	@Override
-	public ContentResponseDto update(UUID uuid, ContentRequestDto requestDto) {
+	public ContentResponseDto update(UUID uuid, ContentRequestDto requestDto, String languageCode) {
 		var content = contentRepository.findById(uuid)
 			.orElseThrow(() -> new AppException(AppExceptionStatus.NOT_FOUND, ContentConstants.CONTENT_NOT_FOUND_MESSAGE));
 
@@ -81,7 +80,6 @@ public class ContentCommandServiceImpl implements ContentCommandService {
 		contentMapper.updateEntity(requestDto, content);
 		contentRepository.save(content);
 
-		String languageCode = LanguageInterceptor.getLanguageCode();
 		return contentQueryService.findByUuid(content.getUuid(), languageCode);
 	}
 

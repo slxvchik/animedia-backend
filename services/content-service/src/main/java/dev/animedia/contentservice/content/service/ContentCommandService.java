@@ -6,7 +6,7 @@ import dev.animedia.contentservice.content.dto.response.ContentResponseDto;
 import java.util.UUID;
 
 public interface ContentCommandService {
-	ContentResponseDto create(ContentRequestDto contentRequestDto);
-	ContentResponseDto update(UUID uuid, ContentRequestDto contentRequestDto);
+	ContentResponseDto create(ContentRequestDto contentRequestDto, String languageCode);
+	ContentResponseDto update(UUID uuid, ContentRequestDto contentRequestDto, String languageCode);
 	void delete(UUID uuid);
 }
