@@ -54,8 +54,6 @@ message PrivateCreateRequest {
   google.protobuf.Timestamp created_at = 8;
   google.protobuf.Timestamp updated_at = 9;
   bool active = 10;
-  repeated string language_codes = 11;
-  repeated protos.services.content.genre.GenreWithTranslationResponse genres = 12;
   int32 sort = 11;
   repeated string language_codes = 12;
   repeated int64 genre_ids = 13;
@@ -73,8 +71,6 @@ message PrivateUpdateRequest {
   google.protobuf.Timestamp created_at = 9;
   google.protobuf.Timestamp updated_at = 10;
   bool active = 11;
-  repeated string language_codes = 12;
-  repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
   int32 sort = 12;
   repeated string language_codes = 13;
   repeated int64 genre_ids = 14;
