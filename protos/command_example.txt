@@ -1,7 +1,7 @@
-protoc --java_out=../services/language-service/src/main/java --proto_path=. .\common\common.proto
+protoc --java_out=../services/languageJpa-service/src/main/java --proto_path=. .\common\common.proto
 protoc --java_out=../services/content-service/src/main/java --proto_path=. .\common\common.proto
 
-protoc --plugin=protoc-gen-grpc-java="C:\Program Files\protoc-33.5-win64\bin\protoc-gen-grpc-java-1.79.0-windows-x86_64.exe" --grpc-java_out=../services/language-service/src/main/java --java_out=../services/language-service/src/main/java --proto_path=. .\services\language\language.proto
+protoc --plugin=protoc-gen-grpc-java="C:\Program Files\protoc-33.5-win64\bin\protoc-gen-grpc-java-1.79.0-windows-x86_64.exe" --grpc-java_out=../services/languageJpa-service/src/main/java --java_out=../services/languageJpa-service/src/main/java --proto_path=. .\services\languageJpa\languageJpa.proto
 
 protoc --plugin=protoc-gen-grpc-java="C:\Program Files\protoc-34.0-rc-2-win64\bin\protoc-gen-grpc-java-1.79.0-windows-x86_64.exe" --grpc-java_out=../services/content-service/src/main/java --java_out=../services/content-service/src/main/java --proto_path=. .\services\content\genre\genre_common.proto
 protoc --plugin=protoc-gen-grpc-java="C:\Program Files\protoc-34.0-rc-2-win64\bin\protoc-gen-grpc-java-1.79.0-windows-x86_64.exe" --grpc-java_out=../services/content-service/src/main/java --java_out=../services/content-service/src/main/java --proto_path=. .\services\content\genre\genre_private.proto

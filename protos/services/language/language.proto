@@ -9,10 +9,10 @@ option java_outer_classname="LanguageProto";
 
 service LanguageService {
   rpc get(GetLanguageRequest) returns (LanguageResponse);
-  rpc search(SearchLanguageRequest) returns (LanguageListResponse);
+  rpc search(SearchLanguageRequest) returns (common.PaginationResponse);
 
-  rpc create(CreateLanguageRequest) returns (LanguageResponse);
-  rpc update(UpdateLanguageRequest) returns (LanguageResponse);
+  rpc create(LanguageRequest) returns (LanguageResponse);
+  rpc update(LanguageRequest) returns (LanguageResponse);
   rpc delete(DeleteLanguageRequest) returns (common.EmptyResponse);
 }
 
@@ -22,29 +22,18 @@ message GetLanguageRequest {
 
 message SearchLanguageRequest {
   repeated string codes = 1;
-  repeated string native_names = 2;
+  repeated string names = 2;
   optional bool is_active = 3;
   optional common.PaginationRequest pagination = 4;
 }
 
-message CreateLanguageRequest {
+message LanguageRequest {
   string code = 1;
   string name = 2;
-  string native_name = 3;
-  optional bool is_active = 4;
-  optional bool is_default = 5;
-  optional int32 sort_order = 6;
-  string flag_emoji = 7;
-}
-
-message UpdateLanguageRequest {
-  string code = 1;
-  string name = 2;
-  string native_name = 3;
-  optional bool is_active = 4;
-  optional bool is_default = 5;
-  optional int32 sort_order = 6;
-  string flag_emoji = 7;
+  optional bool is_active = 3;
+  optional bool is_default = 4;
+  optional int32 sort_order = 5;
+  string flag_emoji = 6;
 }
 
 message DeleteLanguageRequest {
@@ -54,14 +43,8 @@ message DeleteLanguageRequest {
 message LanguageResponse {
   string code = 1;
   string name = 2;
-  string native_name = 3;
-  bool is_active = 4;
-  bool is_default = 5;
-  int32 sort_order = 6;
-  string flag_emoji = 7;
-}
-
-message LanguageListResponse {
-  repeated LanguageResponse languages = 1;
-  common.PaginationResponse pagination = 2;
+  bool is_active = 3;
+  bool is_default = 4;
+  int32 sort_order = 5;
+  string flag_emoji = 6;
 }

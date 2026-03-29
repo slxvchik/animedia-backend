@@ -2,22 +2,25 @@ syntax = "proto3";
 
 package protos.common;
 
+import "google/protobuf/any.proto";
+
 option java_package="dev.animedia.grpc.common";
 option java_outer_classname="CommonProto";
 
 message PaginationRequest {
-  int32 page = 1;
-  int32 size = 2;
-  string sort = 3;
+  int64 page = 1;
+  int64 size = 2;
+  Sort sort = 3;
 }
 
 message PaginationResponse {
-  int32 current_page = 1;
-  int32 page_size = 2;
-  int32 total_pages = 3;
-  int64 total_elements = 4;
-  bool has_next = 5;
-  bool has_previous = 6;
+  repeated google.protobuf.Any content = 1;
+  int64 current_page = 2;
+  int64 page_size = 3;
+  int64 total_pages = 4;
+  int64 total_elements = 5;
+  bool has_next = 6;
+  bool has_previous = 7;
 }
 
 message Date {
@@ -28,7 +31,12 @@ message Date {
 
 message EmptyResponse {}
 
-enum SortType {
+message Sort {
+  string field = 1;
+  SortDirection direction = 2;
+}
+
+enum SortDirection {
   DESC = 0;
   ASC = 1;
 }
