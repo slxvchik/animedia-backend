@@ -21,11 +21,6 @@ enum SortBy {
   UPDATED_AT = 3;
 }
 
-message Sort {
-  SortBy sort_by = 1;
-  protos.common.SortType sort_type = 2;
-}
-
 message ContentTranslationResponse {
   string uuid = 1;
   string content_uuid = 2;

@@ -63,7 +63,7 @@ public class Content {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private Boolean active = false;
 
     @Column(nullable = false)
     private Integer sort;

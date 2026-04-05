@@ -2,8 +2,8 @@ package dev.animedia.languageservice.infrastructure.grpc.mapper;
 
 import com.google.protobuf.Any;
 import dev.animedia.grpc.common.CommonProto;
-import dev.animedia.languageservice.application.dto.Page;
-import dev.animedia.languageservice.application.dto.Pageable;
+import dev.animedia.languageservice.domain.model.Page;
+import dev.animedia.languageservice.domain.model.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,16 +31,7 @@ public class PaginationGrpcMapper {
 	public Pageable toPageable(CommonProto.PaginationRequest paginationRequest) {
 		return new Pageable(
 			paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0,
-			paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10,
-			paginationRequest.getSort().getField(),
-			toDirection(paginationRequest.getSort().getDirection())
+			paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10
 		);
-	}
-
-	private Pageable.Direction toDirection(CommonProto.SortDirection direction) {
-		if (direction.getNumber() == CommonProto.SortDirection.ASC_VALUE) {
-			return Pageable.Direction.ASC;
-		}
-		return Pageable.Direction.DESC;
 	}
 }

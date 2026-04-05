@@ -1,7 +1,7 @@
 package dev.animedia.languageservice.application.service;
 
 import dev.animedia.languageservice.application.dto.LanguageDto;
-import dev.animedia.languageservice.application.dto.Page;
+import dev.animedia.languageservice.domain.model.Page;
 import dev.animedia.languageservice.application.dto.SearchLanguageDto;
 import dev.animedia.languageservice.application.mapper.LanguageApplicationMapper;
 import dev.animedia.languageservice.application.usecase.SearchLanguageUseCase;

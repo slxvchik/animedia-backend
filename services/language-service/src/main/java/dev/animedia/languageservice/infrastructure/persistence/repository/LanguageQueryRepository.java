@@ -1,7 +1,7 @@
 package dev.animedia.languageservice.infrastructure.persistence.repository;
 
-import dev.animedia.languageservice.application.dto.Page;
-import dev.animedia.languageservice.application.dto.Pageable;
+import dev.animedia.languageservice.domain.model.Page;
+import dev.animedia.languageservice.domain.model.Pageable;
 import dev.animedia.languageservice.domain.model.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -61,7 +61,7 @@ public class LanguageQueryRepository implements dev.animedia.languageservice.dom
 
 		Long total = jdbcTemplate.queryForObject(countSql, Long.class, params.toArray());
 
-		String sql = "SELECT code, name, is_active, is_default, sort_order, flag_emoji FROM language" + whereClause + " ORDER BY code LIMIT ? OFFSET ?";
+		String sql = "SELECT code, name, is_active, is_default, sort_order, flag_emoji FROM language" + whereClause + " ORDER BY sort_order DESC LIMIT ? OFFSET ?";
 
 		params.add(pageable.size());
 		Long offset = pageable.size() * pageable.page();

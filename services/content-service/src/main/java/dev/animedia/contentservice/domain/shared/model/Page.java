@@ -1,4 +1,4 @@
-package dev.animedia.languageservice.application.dto;
+package dev.animedia.contentservice.domain.shared.model;
 
 import java.util.List;
 

@@ -34,7 +34,7 @@ message PrivateSearchRequest {
   optional bool active = 13;
   repeated string language_codes = 14;
   repeated int64 genre_ids = 15;
-  optional Sort sort = 16;
+  optional protos.common.Sort sort = 16;
   optional protos.common.PaginationRequest pagination = 17;
 }
 
