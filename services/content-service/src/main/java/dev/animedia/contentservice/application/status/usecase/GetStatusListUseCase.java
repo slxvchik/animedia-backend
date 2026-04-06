@@ -3,6 +3,8 @@ package dev.animedia.contentservice.application.status.usecase;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import jakarta.annotation.Nullable;
 
-public interface GetStatusUseCase {
-    StatusDto get(Long id, @Nullable String languageCode);
+import java.util.List;
+
+public interface GetStatusListUseCase {
+    List<StatusDto> getList(List<Long> idList, @Nullable String languageCode);
 }

@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface StatusTranslationQueryRepository {
     List<StatusTranslation> findByIdList(List<Long> idList);
-    Page<StatusTranslation> search(@Nullable List<String> languageCodeList, @Nullable List<String> nameList, Pageable pageable);
+    Page<StatusTranslation> search(@Nullable List<String> nameList, @Nullable List<String> languageCodeList, Pageable pageable);
 }
