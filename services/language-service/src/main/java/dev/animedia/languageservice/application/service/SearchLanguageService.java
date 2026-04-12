@@ -7,7 +7,6 @@ import dev.animedia.languageservice.application.mapper.LanguageApplicationMapper
 import dev.animedia.languageservice.application.usecase.SearchLanguageUseCase;
 import dev.animedia.languageservice.domain.model.Language;
 import dev.animedia.languageservice.domain.repository.LanguageQueryRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,6 @@ public class SearchLanguageService implements SearchLanguageUseCase {
         this.languageApplicationMapper = languageApplicationMapper;
     }
 
-    @Transactional
     @Override
     public Page<LanguageDto> search(SearchLanguageDto searchDto) {
         Page<Language> languagePage = languageQueryRepository.search(searchDto.codes(), searchDto.names(), searchDto.isActive(), searchDto.pagination());

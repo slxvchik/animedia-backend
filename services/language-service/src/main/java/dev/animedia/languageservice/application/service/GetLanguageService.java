@@ -6,7 +6,6 @@ import dev.animedia.languageservice.application.usecase.GetLanguageUseCase;
 import dev.animedia.languageservice.domain.exception.LanguageNotFoundException;
 import dev.animedia.languageservice.domain.model.Language;
 import dev.animedia.languageservice.domain.repository.LanguageQueryRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ public class GetLanguageService implements GetLanguageUseCase {
         this.languageApplicationMapper = languageApplicationMapper;
     }
 
-    @Transactional
     @Override
     public LanguageDto getByCode(String code) {
         Language language = languageQueryRepository.findByCode(code)

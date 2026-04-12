@@ -4,5 +4,4 @@ public record StatusTranslationDto(
     long id,
     String languageCode,
     String name
-) {
-}
+) {}
