@@ -4,11 +4,11 @@ import dev.animedia.contentservice.domain.status.exception.StatusTranslationLang
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationNameRequiredException;
 
 public class StatusTranslation {
-	private final long id;
+	private final Long id;
 	private final String languageCode;
 	private String name;
 
-	public StatusTranslation(long id, String languageCode, String name) {
+	public StatusTranslation(Long id, String languageCode, String name) {
 		validateLanguageCode(languageCode);
 		validateName(name);
 		this.id = id;
@@ -29,7 +29,7 @@ public class StatusTranslation {
 		if (name == null || name.isBlank()) throw new StatusTranslationNameRequiredException();
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

@@ -4,12 +4,12 @@ import dev.animedia.contentservice.domain.genre.exception.GenreTranslationLangua
 import dev.animedia.contentservice.domain.genre.exception.GenreTranslationNameRequiredException;
 
 public class GenreTranslation {
-    private final long id;
+    private final Long id;
     private final String languageCode;
     private String name;
     private String description;
 
-    public GenreTranslation(long id, String languageCode, String name, String description) {
+    public GenreTranslation(Long id, String languageCode, String name, String description) {
         validateLanguageCode(languageCode);
         validateName(name);
         this.id = id;
@@ -32,7 +32,7 @@ public class GenreTranslation {
         if (name == null || name.isBlank()) throw new GenreTranslationNameRequiredException();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

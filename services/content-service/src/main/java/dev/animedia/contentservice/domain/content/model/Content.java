@@ -4,10 +4,12 @@ import dev.animedia.contentservice.domain.content.exception.ContentInvalidAliasE
 import dev.animedia.contentservice.domain.content.exception.ContentStatusRequiredException;
 import dev.animedia.contentservice.domain.content.exception.ContentTypeRequiredException;
 import dev.animedia.contentservice.domain.genre.model.Genre;
+import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
 import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -93,9 +95,34 @@ public class Content {
 		this.updatedAt = LocalDateTime.now();
 		this.active = active;
 		setSort(sort);
-		this.languageCodeSet = languageCodeSet != null ? languageCodeSet : Set.of();
-		this.genreSet = genreSet != null ? genreSet : Set.of();
-		this.translationSet = translationSet != null ? translationSet : Set.of();
+		if (languageCodeSet != null) {
+			this.languageCodeSet.clear();
+			this.languageCodeSet.addAll(languageCodeSet);
+		}
+		if (genreSet != null) {
+			this.genreSet.clear();
+			this.genreSet.addAll(genreSet);
+		}
+		if (translationSet != null) {
+			this.translationSet.clear();
+			this.translationSet.addAll(translationSet);
+		}
+	}
+
+	public void saveTranslation(ContentTranslation contentTranslation) {
+		this.translationSet.stream()
+			.filter(translation -> translation.getLanguageCode().equals(contentTranslation.getLanguageCode()))
+			.findFirst()
+			.ifPresentOrElse(
+				existing -> existing.update(contentTranslation.getTitle(), contentTranslation.getDescription()),
+				() -> this.translationSet.add(
+					new ContentTranslation(null, contentTranslation.getLanguageCode(), contentTranslation.getTitle(), contentTranslation.getDescription())
+				)
+			);
+	}
+
+	public void removeTranslation(UUID uuid) {
+		this.translationSet.removeIf(translation -> translation.getUuid().equals(uuid));
 	}
 
 	private void setSeason(int season) {
@@ -155,15 +182,15 @@ public class Content {
 	}
 
 	public Set<String> getLanguageCodeSet() {
-		return languageCodeSet;
+		return Collections.unmodifiableSet(languageCodeSet);
 	}
 
 	public Set<Genre> getGenreSet() {
-		return genreSet;
+		return Collections.unmodifiableSet(genreSet);
 	}
 
 	public Set<ContentTranslation> getTranslationSet() {
-		return translationSet;
+		return Collections.unmodifiableSet(translationSet);
 	}
 
 	public static class Builder {
