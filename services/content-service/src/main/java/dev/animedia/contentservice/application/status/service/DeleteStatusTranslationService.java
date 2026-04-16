@@ -23,7 +23,7 @@ public class DeleteStatusTranslationService implements DeleteStatusTranslationUs
     }
 
     @Override
-    public void deleteStatusTranslation(Long statusId, Long statusTranslationId) {
+    public void deleteTranslation(Long statusId, Long statusTranslationId) {
         Status status = statusQueryRepository.findById(statusId, null)
             .orElseThrow(StatusNotFoundException::new);
 

@@ -2,6 +2,6 @@ package dev.animedia.contentservice.application.content.usecase;
 
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 
-public interface CreateContentUseCase {
-	ContentDto create(ContentDto contentDto);
+public interface UpdateContentUseCase {
+	ContentDto update(ContentDto contentDto);
 }

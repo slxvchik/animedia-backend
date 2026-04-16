@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Component
-public class PaginatonApplicationMapper {
+public class PaginationApplicationMapper {
     public <T, K> Page<K> changeContent(Page<T> page, Function<T, K> contentMapper) {
         List<K> newContent = page.content()
             .stream()

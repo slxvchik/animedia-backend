@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LanguageApplicationMapper {
     public Language toDomain(LanguageDto dto) {
+        if (dto == null) return null;
         return new Language(
             dto.code(),
             dto.name(),
@@ -18,6 +19,7 @@ public class LanguageApplicationMapper {
     }
 
     public LanguageDto toDto(Language language) {
+        if (language == null) return null;
         return new LanguageDto(
             language.getCode(),
             language.getName(),

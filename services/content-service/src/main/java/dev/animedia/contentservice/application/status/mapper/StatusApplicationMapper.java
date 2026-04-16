@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Component
 public class StatusApplicationMapper {
     public Status toStatus(StatusDto statusDto) {
+        if (statusDto == null) return null;
         return new Status(
             statusDto.id(),
             statusDto.alias(),
@@ -25,6 +26,7 @@ public class StatusApplicationMapper {
     }
 
     public StatusTranslation toStatusTranslation(StatusTranslationDto statusTranslationDto) {
+        if (statusTranslationDto == null) return null;
         return new StatusTranslation(
             statusTranslationDto.id(),
             statusTranslationDto.languageCode(),
@@ -33,6 +35,7 @@ public class StatusApplicationMapper {
     }
 
     public StatusDto toStatusDto(Status status) {
+        if (status == null) return null;
         return new StatusDto(
             status.getId(),
             status.getAlias(),
@@ -40,11 +43,12 @@ public class StatusApplicationMapper {
             status.getTranslationSet()
                 .stream()
                 .map(this::toStatusTranslationDto)
-                .collect(Collectors.toSet())
+                .collect(Collectors.toUnmodifiableSet())
         );
     }
 
     public StatusTranslationDto toStatusTranslationDto(StatusTranslation statusTranslation) {
+        if (statusTranslation == null) return null;
         return new StatusTranslationDto(
             statusTranslation.getId(),
             statusTranslation.getLanguageCode(),

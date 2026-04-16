@@ -29,13 +29,13 @@ public class SaveStatusTranslationService implements SaveStatusTranslationUseCas
     }
 
     @Override
-    public void saveStatusTranslation(Long statusId, StatusTranslationDto statusTranslationDto) {
+    public void saveTranslation(Long statusId, StatusTranslationDto statusTranslationDto) {
         Status status = statusQueryRepository.findById(statusId, null)
             .orElseThrow(StatusNotFoundException::new);
 
         StatusTranslation statusTranslation = statusApplicationMapper.toStatusTranslation(statusTranslationDto);
 
-        status.setTranslation(statusTranslation);
+        status.saveTranslation(statusTranslation);
 
         statusCommandRepository.update(status);
     }

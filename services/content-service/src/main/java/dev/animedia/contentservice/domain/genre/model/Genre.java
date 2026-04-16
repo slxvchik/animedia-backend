@@ -13,7 +13,7 @@ public class Genre {
     private long sortOrder;
     private Set<GenreTranslation> translationSet;
 
-    private final static Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
+    private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
     public Genre(Long id, String alias, long sortOrder, Set<GenreTranslation> translationSet) {
         validateAlias(alias);

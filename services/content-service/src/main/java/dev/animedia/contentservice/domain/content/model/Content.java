@@ -4,7 +4,6 @@ import dev.animedia.contentservice.domain.content.exception.ContentInvalidAliasE
 import dev.animedia.contentservice.domain.content.exception.ContentStatusRequiredException;
 import dev.animedia.contentservice.domain.content.exception.ContentTypeRequiredException;
 import dev.animedia.contentservice.domain.genre.model.Genre;
-import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
 import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.time.LocalDate;
@@ -27,11 +26,11 @@ public class Content {
 	private LocalDateTime updatedAt;
 	private boolean active;
 	private int sort;
-	private Set<String> languageCodeSet;
-	private Set<Genre> genreSet;
-	private Set<ContentTranslation> translationSet;
+	private final Set<String> languageCodeSet;
+	private final Set<Genre> genreSet;
+	private final Set<ContentTranslation> translationSet;
 
-	private final static Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
+	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
 	private static void validateAlias(String alias) {
 		if (!ALIAS_PATTERN.matcher(alias).hasMatch()) throw new ContentInvalidAliasException();
@@ -68,44 +67,33 @@ public class Content {
 	}
 
 	public void update(
-		String alias,
-		ContentType type,
-		int season,
-		Status status,
-		String coverUrl,
-		String trailerUrl,
-		LocalDate releaseDate,
-		boolean active,
-		int sort,
-		Set<String> languageCodeSet,
-		Set<Genre> genreSet,
-		Set<ContentTranslation> translationSet
+		ContentUpdate contentUpdate
 	) {
-		validateAlias(alias);
-		validateType(type);
-		validateStatus(status);
+		validateAlias(contentUpdate.alias());
+		validateType(contentUpdate.type());
+		validateStatus(contentUpdate.status());
 
-		this.alias = alias;
-		this.type = type;
-		setSeason(season);
-		this.status = status;
-		this.coverUrl = coverUrl;
-		this.trailerUrl = trailerUrl;
-		this.releaseDate = releaseDate;
+		this.alias = contentUpdate.alias();
+		this.type = contentUpdate.type();
+		setSeason(contentUpdate.season());
+		this.status = contentUpdate.status();
+		this.coverUrl = contentUpdate.coverUrl();
+		this.trailerUrl = contentUpdate.trailerUrl();
+		this.releaseDate = contentUpdate.releaseDate();
 		this.updatedAt = LocalDateTime.now();
-		this.active = active;
-		setSort(sort);
-		if (languageCodeSet != null) {
+		this.active = contentUpdate.active();
+		setSort(contentUpdate.sort());
+		if (contentUpdate.languageCodeSet() != null) {
 			this.languageCodeSet.clear();
-			this.languageCodeSet.addAll(languageCodeSet);
+			this.languageCodeSet.addAll(contentUpdate.languageCodeSet());
 		}
-		if (genreSet != null) {
+		if (contentUpdate.genreSet() != null) {
 			this.genreSet.clear();
-			this.genreSet.addAll(genreSet);
+			this.genreSet.addAll(contentUpdate.genreSet());
 		}
-		if (translationSet != null) {
+		if (contentUpdate.translationSet() != null) {
 			this.translationSet.clear();
-			this.translationSet.addAll(translationSet);
+			this.translationSet.addAll(contentUpdate.translationSet());
 		}
 	}
 

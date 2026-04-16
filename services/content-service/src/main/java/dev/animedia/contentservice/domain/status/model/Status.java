@@ -4,7 +4,6 @@ import dev.animedia.contentservice.domain.status.exception.StatusAliasRequiredEx
 import dev.animedia.contentservice.domain.status.exception.StatusInvalidAliasException;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -14,7 +13,7 @@ public class Status {
 	private int sortOrder;
 	private Set<StatusTranslation> translationSet;
 
-	private final static Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
+	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
 	public Status(Long id, String alias, int sortOrder, Set<StatusTranslation> translationSet) {
 		validateAlias(alias);
