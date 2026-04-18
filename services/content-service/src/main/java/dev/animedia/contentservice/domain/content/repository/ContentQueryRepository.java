@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ContentQueryRepository {
-    Optional<Content> findById(UUID uuid, @Nullable String languageCode);
+    Optional<Content> find(UUID uuid, @Nullable String languageCode);
     Optional<Content> find(String alias, ContentType type, @Nullable Integer season, @Nullable String languageCode);
 
     boolean exists(String alias, ContentType type, @Nullable Integer season);

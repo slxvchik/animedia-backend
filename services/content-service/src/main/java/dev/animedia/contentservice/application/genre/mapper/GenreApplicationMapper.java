@@ -2,7 +2,7 @@ package dev.animedia.contentservice.application.genre.mapper;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.dto.GenreTranslationDto;
-import dev.animedia.contentservice.application.genre.dto.SearchGenreDto;
+import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.model.GenreSearchCriteria;
 import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
@@ -56,7 +56,7 @@ public class GenreApplicationMapper {
 		);
 	}
 
-	public GenreSearchCriteria toGenreSearchCriteria(SearchGenreDto searchGenreDto) {
+	public GenreSearchCriteria toGenreSearchCriteria(GenreSearchDto searchGenreDto) {
 		return new GenreSearchCriteria(
 			searchGenreDto.aliasList(),
 			searchGenreDto.nameList(),

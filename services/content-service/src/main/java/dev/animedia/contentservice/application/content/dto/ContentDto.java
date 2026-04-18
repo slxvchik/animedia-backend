@@ -1,11 +1,11 @@
 package dev.animedia.contentservice.application.content.dto;
 
-import dev.animedia.contentservice.domain.content.model.ContentTranslation;
+import dev.animedia.contentservice.application.genre.dto.GenreDto;
+import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.domain.content.model.ContentType;
-import dev.animedia.contentservice.domain.genre.model.Genre;
-import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,13 +14,15 @@ public record ContentDto(
 	String alias,
 	ContentType type,
 	int season,
-	Status status,
+	StatusDto status,
 	String coverUrl,
 	String trailerUrl,
 	LocalDate releaseDate,
+	LocalDateTime createdAt,
+	LocalDateTime updatedAt,
 	boolean active,
 	int sort,
 	Set<String>languageCodeSet,
-	Set<Genre> genreSet,
-	Set<ContentTranslation> translationSet
+	Set<GenreDto> genreSet,
+	Set<ContentTranslationDto> translationSet
 ) {}

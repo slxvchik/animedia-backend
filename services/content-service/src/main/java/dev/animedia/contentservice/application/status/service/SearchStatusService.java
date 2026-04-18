@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.application.status.service;
 
 import dev.animedia.contentservice.application.shared.mapper.PaginationApplicationMapper;
-import dev.animedia.contentservice.application.status.dto.SearchStatusDto;
+import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.application.status.usecase.SearchStatusUseCase;
@@ -31,7 +31,7 @@ public class SearchStatusService implements SearchStatusUseCase {
     }
 
     @Override
-    public Page<StatusDto> search(SearchStatusDto searchStatusDto, Pageable pageable) {
+    public Page<StatusDto> search(StatusSearchDto searchStatusDto, Pageable pageable) {
         StatusSearchCriteria statusSearchCriteria = statusApplicationMapper.toStatusSearchCriteria(searchStatusDto);
         Page<Status> statusPage = statusQueryRepository.search(statusSearchCriteria, pageable);
         return paginatonApplicationMapper.changeContent(statusPage, statusApplicationMapper::toStatusDto);

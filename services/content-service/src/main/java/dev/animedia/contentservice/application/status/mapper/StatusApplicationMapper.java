@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.application.status.mapper;
 
-import dev.animedia.contentservice.application.status.dto.SearchStatusDto;
+import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.dto.StatusTranslationDto;
 import dev.animedia.contentservice.domain.status.model.Status;
@@ -56,7 +56,7 @@ public class StatusApplicationMapper {
         );
     }
 
-    public StatusSearchCriteria toStatusSearchCriteria(SearchStatusDto searchStatusDto) {
+    public StatusSearchCriteria toStatusSearchCriteria(StatusSearchDto searchStatusDto) {
         return new StatusSearchCriteria(
             searchStatusDto.aliasList(),
             searchStatusDto.nameList(),

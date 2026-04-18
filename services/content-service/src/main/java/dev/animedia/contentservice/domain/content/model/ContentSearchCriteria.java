@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.domain.content.model;
 
-import dev.animedia.contentservice.domain.shared.model.Pageable;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
@@ -18,6 +17,5 @@ public record ContentSearchCriteria(
     @Nullable LocalDate releaseDateTo,
     @Nullable Boolean active,
     @Nullable List<String> languageCodeList,
-    @Nullable List<Long> genreIdList,
-    Pageable pageable
+    @Nullable List<Long> genreIdList
 ) {}

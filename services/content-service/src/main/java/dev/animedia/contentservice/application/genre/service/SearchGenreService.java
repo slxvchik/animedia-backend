@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.application.genre.service;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.dto.SearchGenreDto;
+import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.genre.usecase.SearchGenreUseCase;
 import dev.animedia.contentservice.application.shared.mapper.PaginationApplicationMapper;
@@ -31,7 +31,7 @@ public class SearchGenreService implements SearchGenreUseCase {
 	}
 
 	@Override
-	public Page<GenreDto> search(SearchGenreDto searchGenreDto, Pageable pageable) {
+	public Page<GenreDto> search(GenreSearchDto searchGenreDto, Pageable pageable) {
 		GenreSearchCriteria genreSearchCriteria = genreApplicationMapper.toGenreSearchCriteria(searchGenreDto);
 		Page<Genre> genrePage = genreQueryRepository.search(genreSearchCriteria, pageable);
 		return paginatonApplicationMapper.changeContent(genrePage, this.genreApplicationMapper::toGenreDto);
