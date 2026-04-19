@@ -1,7 +1,8 @@
-package dev.animedia.contentservice.old.content.model;
+package dev.animedia.contentservice.infrastructure.content.persistence.model;
 
-import dev.animedia.contentservice.old.status.model.ContentStatus;
-import dev.animedia.contentservice.old.genre.model.Genre;
+import dev.animedia.contentservice.domain.content.model.ContentType;
+import dev.animedia.contentservice.infrastructure.genre.persistence.model.GenreEntity;
+import dev.animedia.contentservice.infrastructure.status.persistence.model.StatusEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Entity
 @Table(
+    name = "content",
     indexes = {
         @Index(name = "idx_content_alias_type", columnList = "alias,type"),
         @Index(name = "idx_content_type", columnList = "type"),
@@ -26,24 +28,24 @@ import java.util.UUID;
         constraint = "season > 0"
     )
 )
-public class Content {
+public class ContentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @Column(nullable = false, length = 512)
+    @Column(name = "alias", nullable = false, length = 512)
     private String alias;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ContentType type;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "content_type", nullable = false)
+    private ContentType contentType;
 
-    @Column
+    @Column(name = "season")
     private Integer season;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private ContentStatus status;
+    @JoinColumn(name = "status_id")
+    private StatusEntity statusEntity;
 
     @Column(name = "cover_url", length = 512)
     private String coverUrl;
@@ -62,16 +64,16 @@ public class Content {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
+    @Column(name = "active", nullable = false)
     private Boolean active = false;
 
-    @Column(nullable = false)
-    private Integer sort;
+    @Column(name = "sort_order", nullable = false)
+    private Integer sortOrder;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_uuid"))
     @Column(name = "language_code")
-    private Set<String> languageCodes = new HashSet<>();
+    private Set<String> languageCodeSet = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -86,10 +88,10 @@ public class Content {
             @Index(name = "idx_content_languages_genre_id", columnList = "genre_id")
         }
     )
-    private Set<Genre> genres = new HashSet<>();
+    private Set<GenreEntity> genreSet = new HashSet<>();
 
     @OneToMany(mappedBy = "content", fetch = FetchType.LAZY)
-    private Set<ContentTranslation> translations = new HashSet<>();
+    private Set<ContentTranslationEntity> translationSet = new HashSet<>();
 
     public UUID getUuid() {
         return uuid;
@@ -107,12 +109,12 @@ public class Content {
         this.alias = alias;
     }
 
-    public ContentType getType() {
-        return type;
+    public ContentType getContentType() {
+        return contentType;
     }
 
-    public void setType(ContentType type) {
-        this.type = type;
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
     }
 
     public Integer getSeason() {
@@ -123,12 +125,12 @@ public class Content {
         this.season = season;
     }
 
-    public ContentStatus getStatus() {
-        return status;
+    public StatusEntity getStatusEntity() {
+        return statusEntity;
     }
 
-    public void setStatus(ContentStatus status) {
-        this.status = status;
+    public void setStatusEntity(StatusEntity statusEntity) {
+        this.statusEntity = statusEntity;
     }
 
     public String getCoverUrl() {
@@ -179,35 +181,35 @@ public class Content {
         this.active = active;
     }
 
-    public Integer getSort() {
-        return sort;
+    public Integer getSortOrder() {
+        return sortOrder;
     }
 
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
-    public Set<String> getLanguageCodes() {
-        return languageCodes;
+    public Set<String> getLanguageCodeSet() {
+        return languageCodeSet;
     }
 
-    public void setLanguageCodes(Set<String> languageCodes) {
-        this.languageCodes = languageCodes;
+    public void setLanguageCodeSet(Set<String> languageCodeSet) {
+        this.languageCodeSet = languageCodeSet;
     }
 
-    public Set<Genre> getGenres() {
-        return genres;
+    public Set<GenreEntity> getGenreSet() {
+        return genreSet;
     }
 
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
+    public void setGenreSet(Set<GenreEntity> genreSet) {
+        this.genreSet = genreSet;
     }
 
-    public Set<ContentTranslation> getTranslations() {
-        return translations;
+    public Set<ContentTranslationEntity> getTranslationSet() {
+        return translationSet;
     }
 
-    public void setTranslations(Set<ContentTranslation> translations) {
-        this.translations = translations;
+    public void setTranslationSet(Set<ContentTranslationEntity> translationSet) {
+        this.translationSet = translationSet;
     }
 }

@@ -9,6 +9,7 @@ import dev.animedia.contentservice.domain.status.model.Status;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -26,9 +27,9 @@ public class Content {
 	private LocalDateTime updatedAt;
 	private boolean active;
 	private int sort;
-	private final Set<String> languageCodeSet;
-	private final Set<Genre> genreSet;
-	private final Set<ContentTranslation> translationSet;
+	private Set<String> languageCodeSet = new HashSet<>();
+	private Set<Genre> genreSet = new HashSet<>();
+	private Set<ContentTranslation> translationSet = new HashSet<>();
 
 	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 

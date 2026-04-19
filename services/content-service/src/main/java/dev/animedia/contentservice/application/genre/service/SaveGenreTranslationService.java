@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.application.genre.service;
 
+import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.dto.GenreTranslationDto;
 import dev.animedia.contentservice.application.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
@@ -29,7 +30,7 @@ public class SaveGenreTranslationService implements SaveGenreTranslationUseCase 
 	}
 
 	@Override
-	public void saveTranslation(Long genreId, GenreTranslationDto genreTranslationDto) {
+	public GenreDto saveTranslation(Long genreId, GenreTranslationDto genreTranslationDto) {
 		Genre genre = genreQueryRepository.findById(genreId, null)
 			.orElseThrow(GenreNotFoundException::new);
 
@@ -37,6 +38,8 @@ public class SaveGenreTranslationService implements SaveGenreTranslationUseCase 
 
 		genre.saveTranslation(translation);
 
-		genreCommandRepository.update(genre);
+		Genre updated = genreCommandRepository.update(genre);
+
+		return genreApplicationMapper.toGenreDto(updated);
 	}
 }

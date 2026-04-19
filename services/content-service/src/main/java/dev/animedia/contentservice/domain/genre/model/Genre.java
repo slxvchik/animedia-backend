@@ -4,6 +4,7 @@ import dev.animedia.contentservice.domain.genre.exception.GenreAliasRequiredExce
 import dev.animedia.contentservice.domain.genre.exception.GenreInvalidAliasException;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -11,7 +12,7 @@ public class Genre {
     private final Long id;
     private String alias;
     private long sortOrder;
-    private Set<GenreTranslation> translationSet;
+    private Set<GenreTranslation> translationSet = new HashSet<>();
 
     private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 

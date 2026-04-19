@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.application.status.service;
 
+import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.dto.StatusTranslationDto;
 import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
@@ -29,7 +30,7 @@ public class SaveStatusTranslationService implements SaveStatusTranslationUseCas
     }
 
     @Override
-    public void saveTranslation(Long statusId, StatusTranslationDto statusTranslationDto) {
+    public StatusDto saveTranslation(Long statusId, StatusTranslationDto statusTranslationDto) {
         Status status = statusQueryRepository.findById(statusId, null)
             .orElseThrow(StatusNotFoundException::new);
 
@@ -37,6 +38,8 @@ public class SaveStatusTranslationService implements SaveStatusTranslationUseCas
 
         status.saveTranslation(statusTranslation);
 
-        statusCommandRepository.update(status);
+        Status updated = statusCommandRepository.update(status);
+
+        return statusApplicationMapper.toStatusDto(updated);
     }
 }
