@@ -13,22 +13,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetContentByDetailsService implements GetContentByDetailsUseCase {
-    private final ContentApplicationMapper contentApplicationMapper;
-    private final ContentQueryRepository contentQueryRepository;
+	private final ContentApplicationMapper contentApplicationMapper;
+	private final ContentQueryRepository contentQueryRepository;
 
-    @Autowired
-    public GetContentByDetailsService(
-        ContentApplicationMapper contentApplicationMapper,
-        ContentQueryRepository contentQueryRepository
-    ) {
-        this.contentApplicationMapper = contentApplicationMapper;
-        this.contentQueryRepository = contentQueryRepository;
-    }
+	@Autowired
+	public GetContentByDetailsService(
+		ContentApplicationMapper contentApplicationMapper,
+		ContentQueryRepository contentQueryRepository
+	) {
+		this.contentApplicationMapper = contentApplicationMapper;
+		this.contentQueryRepository = contentQueryRepository;
+	}
 
-    @Override
-    public ContentDto get(String alias, ContentType type, @Nullable Integer season, @Nullable String languageCode) {
-        Content content = contentQueryRepository.find(alias, type, season, languageCode)
-            .orElseThrow(ContentNotFoundException::new);
-        return contentApplicationMapper.toContentDto(content);
-    }
+	@Override
+	public ContentDto get(String alias, ContentType type, @Nullable Integer season, @Nullable String languageCode) {
+		Content content = contentQueryRepository.find(alias, type, season, languageCode)
+			.orElseThrow(ContentNotFoundException::new);
+		return contentApplicationMapper.toContentDto(content);
+	}
 }
