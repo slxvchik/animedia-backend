@@ -26,4 +26,18 @@ public class PaginationApplicationMapper {
             page.hasPrevious()
         );
     }
+
+    public <T, K> Page<K> changeContent(Page<T> page, List<K> newContent) {
+        return new Page<>(
+            newContent,
+            page.totalElements(),
+            page.totalPages(),
+            page.pageNumber(),
+            page.pageSize(),
+            page.isFirst(),
+            page.isLast(),
+            page.hasNext(),
+            page.hasPrevious()
+        );
+    }
 }

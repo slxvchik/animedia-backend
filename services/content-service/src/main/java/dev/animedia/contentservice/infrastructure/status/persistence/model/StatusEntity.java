@@ -23,7 +23,12 @@ public class StatusEntity {
     @Column(name = "sort_order")
     private Integer sortOrder = 0;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "statusEntity")
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "statusEntity",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     Set<StatusTranslationEntity> translationSet = new HashSet<>();
 
     public Long getId() {

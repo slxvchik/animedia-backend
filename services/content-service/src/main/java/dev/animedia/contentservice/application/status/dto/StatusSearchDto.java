@@ -5,7 +5,7 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 
 public record StatusSearchDto(
-    @Nullable List<String> aliasList,
-    @Nullable List<String> nameList,
-    @Nullable List<String> languageCodeList
+    @Nullable String alias,
+    @Nullable String name,
+    @Nullable String languageCode
 ) {}

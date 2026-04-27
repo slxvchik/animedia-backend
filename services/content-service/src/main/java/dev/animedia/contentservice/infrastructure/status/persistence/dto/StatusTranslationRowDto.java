@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.infrastructure.status.persistence.dto;
 
-public record StatusTranslationRow(
+public record StatusTranslationRowDto(
 	Long id,
 	String alias,
 	Integer sortOrder,
