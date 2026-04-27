@@ -19,36 +19,6 @@ public class StatusPersistenceMapper {
 	private EntityManager entityManager;
 
 	/**
-	 * To one status with translations from db row list
-	 * @param statusTranslationRowDto status with translation row list from db
-	 * @return one domain status with translations
-	 */
-	public Status toStatus(List<StatusTranslationRowDto> statusTranslationRowDto) {
-		if (statusTranslationRowDto.isEmpty()) return null;
-
-		StatusTranslationRowDto first = statusTranslationRowDto.getFirst();
-
-		Set<StatusTranslation> translationSet = statusTranslationRowDto.stream()
-			.map(row -> {
-				if (row.translationId() == null) return null;
-				return new StatusTranslation(
-					row.translationId(),
-					row.languageCode(),
-					row.name()
-				);
-			})
-			.filter(Objects::nonNull)
-			.collect(Collectors.toSet());
-
-		return new Status(
-			first.id(),
-			first.alias(),
-			first.sortOrder(),
-			translationSet
-		);
-	}
-
-	/**
 	 * To multiple status list with translation list from db row list
 	 * @param statusTranslationRowDtoList status with translation row list from db
 	 * @return domain status list with translations
@@ -57,10 +27,10 @@ public class StatusPersistenceMapper {
 		if (statusTranslationRowDtoList.isEmpty()) return List.of();
 
 		// Map by Status id
-		Map<Long, List<StatusTranslationRowDto>> statusMap = statusTranslationRowDtoList.stream()
+		Map<Long, List<StatusTranslationRowDto>> statusRowMap = statusTranslationRowDtoList.stream()
 			.collect(Collectors.groupingBy(StatusTranslationRowDto::id));
 
-		return statusMap.values().stream()
+		return statusRowMap.values().stream()
 			.map(rows -> {
 				StatusTranslationRowDto firstRow = rows.getFirst();
 
@@ -81,6 +51,7 @@ public class StatusPersistenceMapper {
 					translationSet
 				);
 			})
+			.sorted(Comparator.comparing(Status::getSortOrder))
 			.toList();
 	}
 

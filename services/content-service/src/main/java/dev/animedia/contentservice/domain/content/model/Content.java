@@ -4,6 +4,7 @@ import dev.animedia.contentservice.domain.content.exception.ContentInvalidAliasE
 import dev.animedia.contentservice.domain.content.exception.ContentStatusRequiredException;
 import dev.animedia.contentservice.domain.content.exception.ContentTypeRequiredException;
 import dev.animedia.contentservice.domain.genre.model.Genre;
+import dev.animedia.contentservice.domain.shared.model.BaseEntity;
 import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.time.LocalDate;
@@ -14,8 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class Content {
-	private final UUID uuid;
+public class Content extends BaseEntity<UUID> {
 	private String alias;
 	private ContentType type;
 	private int season;
@@ -46,7 +46,7 @@ public class Content {
 	}
 
 	private Content(Builder builder) {
-		this.uuid = builder.uuid;
+		this.id = builder.id;
 		this.alias = builder.alias;
 		this.type = builder.type;
 		setSeason(builder.season);
@@ -110,8 +110,8 @@ public class Content {
 			);
 	}
 
-	public void removeTranslation(UUID uuid) {
-		this.translationSet.removeIf(translation -> translation.getUuid().equals(uuid));
+	public void removeTranslation(UUID id) {
+		this.translationSet.removeIf(translation -> translation.getId().equals(id));
 	}
 
 	private void setSeason(int season) {
@@ -120,10 +120,6 @@ public class Content {
 
 	private void setSort(int sort) {
 		this.sort = Math.max(sort, 0);
-	}
-
-	public UUID getUuid() {
-		return uuid;
 	}
 
 	public String getAlias() {
@@ -183,7 +179,7 @@ public class Content {
 	}
 
 	public static class Builder {
-		private UUID uuid;
+		private UUID id;
 		private String alias;
 		private ContentType type;
 		private int season;
@@ -214,8 +210,8 @@ public class Content {
 			return new Content(this);
 		}
 
-		public Builder uuid(UUID uuid) {
-			this.uuid = uuid;
+		public Builder id(UUID id) {
+			this.id = id;
 			return this;
 		}
 

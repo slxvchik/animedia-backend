@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PaginationInfrastructureMapper {
+public class PaginationPersistenceMapper {
 	public org.springframework.data.domain.Pageable toPageable(int page, int size, String sortField, String direction) {
 		Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
 		return PageRequest.of(page, size, sort);

@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.infrastructure.status.persistence.repository;
 
-import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.infrastructure.status.persistence.mapper.StatusPersistenceMapper;

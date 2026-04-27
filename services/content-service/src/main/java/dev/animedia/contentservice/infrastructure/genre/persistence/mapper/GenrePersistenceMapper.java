@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,16 +24,19 @@ public class GenrePersistenceMapper {
         return genreRowMap.values().stream()
             .map(genreRowList -> {
                 GenreTranslationRowDto first = genreRowList.getFirst();
+
+                Set<GenreTranslation> translationSet = genreRowList.stream().map(row -> new GenreTranslation(
+                    row.translationId(),
+                    row.languageCode(),
+                    row.name(),
+                    row.description())
+                ).collect(Collectors.toSet());
+
                 return new Genre(
                     first.id(),
                     first.alias(),
                     first.sortOrder(),
-                    genreRowList.stream().map(row -> new GenreTranslation(
-                        row.translationId(),
-                        row.languageCode(),
-                        row.name(),
-                        row.description())
-                    ).collect(Collectors.toSet())
+                    translationSet
                 );
             })
             .sorted(Comparator.comparing(Genre::getSortOrder))

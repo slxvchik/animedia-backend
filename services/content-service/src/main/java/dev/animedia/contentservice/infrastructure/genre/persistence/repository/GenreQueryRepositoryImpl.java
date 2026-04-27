@@ -8,6 +8,7 @@ import dev.animedia.contentservice.domain.shared.model.Page;
 import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.infrastructure.genre.persistence.dto.GenreTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.genre.persistence.mapper.GenrePersistenceMapper;
+import dev.animedia.contentservice.infrastructure.shared.mapper.PaginationPersistenceMapper;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,10 +26,13 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
     @Autowired
     public GenreQueryRepositoryImpl(
         GenrePersistenceMapper genrePersistenceMapper,
+        PaginationPersistenceMapper paginationPersistenceMapper,
         JpaGenreRepository jpaGenreRepository,
-        PaginationApplicationMapper paginationApplicationMapper) {
+        PaginationApplicationMapper paginationApplicationMapper
+    ) {
         this.genrePersistenceMapper = genrePersistenceMapper;
-        this.jpaGenreRepository = jpaGenreRepository;
+	    this.paginationPersistenceMapper = paginationPersistenceMapper;
+	    this.jpaGenreRepository = jpaGenreRepository;
         this.paginationApplicationMapper = paginationApplicationMapper;
     }
 

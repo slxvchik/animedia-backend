@@ -2,19 +2,19 @@ package dev.animedia.contentservice.domain.content.model;
 
 import dev.animedia.contentservice.domain.content.exception.ContentTranslationTitleRequiredException;
 import dev.animedia.contentservice.domain.content.exception.ContentTranslationLanguageCodeRequiredException;
+import dev.animedia.contentservice.domain.shared.model.BaseEntity;
 
 import java.util.UUID;
 
-public class ContentTranslation {
-    private final UUID uuid;
+public class ContentTranslation extends BaseEntity<UUID> {
     private final String languageCode;
     private String title;
     private String description;
 
-    public ContentTranslation(UUID uuid, String languageCode, String title, String description) {
+    public ContentTranslation(UUID id, String languageCode, String title, String description) {
         validateLanguageCode(languageCode);
         validateTitle(title);
-        this.uuid = uuid;
+        this.id = id;
         this.languageCode = languageCode;
         this.title = title;
         this.description = description;
@@ -32,10 +32,6 @@ public class ContentTranslation {
 
     private void validateTitle(String title) {
         if (title == null) throw new ContentTranslationTitleRequiredException();
-    }
-
-    public UUID getUuid() {
-        return uuid;
     }
 
     public String getLanguageCode() {

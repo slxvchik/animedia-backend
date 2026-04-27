@@ -1,10 +1,10 @@
 package dev.animedia.contentservice.domain.status.model;
 
+import dev.animedia.contentservice.domain.shared.model.BaseEntity;
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationLanguageCodeRequiredException;
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationNameRequiredException;
 
-public class StatusTranslation {
-	private final Long id;
+public class StatusTranslation extends BaseEntity<Long> {
 	private final String languageCode;
 	private String name;
 
@@ -27,10 +27,6 @@ public class StatusTranslation {
 
 	private void validateName(String name) {
 		if (name == null || name.isBlank()) throw new StatusTranslationNameRequiredException();
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getLanguageCode() {

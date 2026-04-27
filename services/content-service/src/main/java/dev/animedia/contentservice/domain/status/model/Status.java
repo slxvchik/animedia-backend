@@ -1,5 +1,7 @@
 package dev.animedia.contentservice.domain.status.model;
 
+import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
+import dev.animedia.contentservice.domain.shared.model.BaseEntity;
 import dev.animedia.contentservice.domain.status.exception.StatusAliasRequiredException;
 import dev.animedia.contentservice.domain.status.exception.StatusInvalidAliasException;
 
@@ -8,8 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class Status {
-	private final Long id;
+public class Status extends BaseEntity<Long> {
 	private String alias;
 	private int sortOrder;
 	private Set<StatusTranslation> translationSet = new HashSet<>();
@@ -21,35 +22,14 @@ public class Status {
 		this.id = id;
 		this.alias = alias;
 		setSortOrder(sortOrder);
-		if (translationSet != null) {
-			this.translationSet = translationSet;
-		}
+		saveTranslations(translationSet);
 	}
 
 	public void update(String alias, int sortOrder, Set<StatusTranslation> translationSet) {
 		validateAlias(alias);
 		this.alias = alias;
 		setSortOrder(sortOrder);
-		if (translationSet != null) {
-			this.translationSet.clear();
-			this.translationSet.addAll(translationSet);
-		}
-	}
-
-	public void saveTranslation(StatusTranslation statusTranslation) {
-		this.translationSet.stream()
-			.filter(translation -> translation.getLanguageCode().equals(statusTranslation.getLanguageCode()))
-			.findFirst()
-			.ifPresentOrElse(
-				existing -> existing.update(statusTranslation.getName()),
-				() -> this.translationSet.add(
-					new StatusTranslation(null, statusTranslation.getLanguageCode(), statusTranslation.getName())
-				)
-			);
-	}
-
-	public void removeTranslation(Long id) {
-		this.translationSet.removeIf(translation -> translation.getId().equals(id));
+		saveTranslations(translationSet);
 	}
 
 	private void validateAlias(String alias) {
@@ -57,12 +37,21 @@ public class Status {
 		if (!ALIAS_PATTERN.matcher(alias).hasMatch()) throw new StatusInvalidAliasException();
 	}
 
-	private void setSortOrder(int sortOrder) {
-		this.sortOrder = Math.max(sortOrder, 0);
+	public void removeTranslation(Long id) {
+		this.translationSet.removeIf(translation -> translation.getId().equals(id));
 	}
 
-	public Long getId() {
-		return id;
+	private void saveTranslations(Set<StatusTranslation> translationSet) {
+		if (translationSet != null) {
+			this.translationSet.retainAll(translationSet);
+			this.translationSet.addAll(translationSet);
+		} else {
+			this.translationSet.clear();
+		}
+	}
+
+	private void setSortOrder(int sortOrder) {
+		this.sortOrder = Math.max(sortOrder, 0);
 	}
 
 	public String getAlias() {
