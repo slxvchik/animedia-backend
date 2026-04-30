@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class Status extends BaseEntity<Long> {
 	private String alias;
 	private int sortOrder;
-	private Set<StatusTranslation> translationSet = new HashSet<>();
+	private final Set<StatusTranslation> translationSet = new HashSet<>();
 
 	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
@@ -22,14 +22,14 @@ public class Status extends BaseEntity<Long> {
 		this.id = id;
 		this.alias = alias;
 		setSortOrder(sortOrder);
-		saveTranslations(translationSet);
+		setTranslationSet(translationSet);
 	}
 
 	public void update(String alias, int sortOrder, Set<StatusTranslation> translationSet) {
 		validateAlias(alias);
 		this.alias = alias;
 		setSortOrder(sortOrder);
-		saveTranslations(translationSet);
+		setTranslationSet(translationSet);
 	}
 
 	private void validateAlias(String alias) {
@@ -41,7 +41,7 @@ public class Status extends BaseEntity<Long> {
 		this.translationSet.removeIf(translation -> translation.getId().equals(id));
 	}
 
-	private void saveTranslations(Set<StatusTranslation> translationSet) {
+	private void setTranslationSet(Set<StatusTranslation> translationSet) {
 		if (translationSet != null) {
 			this.translationSet.retainAll(translationSet);
 			this.translationSet.addAll(translationSet);

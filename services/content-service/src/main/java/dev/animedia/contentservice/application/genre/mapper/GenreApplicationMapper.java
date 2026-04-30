@@ -8,6 +8,7 @@ import dev.animedia.contentservice.domain.genre.model.GenreSearchCriteria;
 import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,6 +21,7 @@ public class GenreApplicationMapper {
 			genre.getSortOrder(),
 			genre.getTranslationSet().stream()
 				.map(this::toGenreTranslationDto)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toSet())
 		);
 	}
@@ -42,6 +44,7 @@ public class GenreApplicationMapper {
 			genreDto.sortOrder(),
 			genreDto.translationSet().stream()
 				.map(this::toGenreTranslation)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toSet())
 		);
 	}
@@ -58,10 +61,10 @@ public class GenreApplicationMapper {
 
 	public GenreSearchCriteria toGenreSearchCriteria(GenreSearchDto searchGenreDto) {
 		return new GenreSearchCriteria(
-			searchGenreDto.aliasList(),
-			searchGenreDto.nameList(),
+			searchGenreDto.alias(),
+			searchGenreDto.name(),
 			searchGenreDto.description(),
-			searchGenreDto.languageCodeList()
+			searchGenreDto.languageCode()
 		);
 	}
 }

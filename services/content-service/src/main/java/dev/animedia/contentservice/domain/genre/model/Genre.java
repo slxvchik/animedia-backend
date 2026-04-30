@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class Genre extends BaseEntity<Long> {
     private String alias;
     private long sortOrder;
-    private Set<GenreTranslation> translationSet = new HashSet<>();
+    private final Set<GenreTranslation> translationSet = new HashSet<>();
 
     private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
@@ -21,14 +21,14 @@ public class Genre extends BaseEntity<Long> {
         this.id = id;
         this.alias = alias;
         setSortOrder(sortOrder);
-        saveTranslations(translationSet);
+        setTranslationSet(translationSet);
     }
 
     public void update(String alias, long sortOrder, Set<GenreTranslation> translationSet) {
         validateAlias(alias);
         this.alias = alias;
         setSortOrder(sortOrder);
-        saveTranslations(translationSet);
+        setTranslationSet(translationSet);
     }
 
     void validateAlias(String alias) {
@@ -40,7 +40,7 @@ public class Genre extends BaseEntity<Long> {
         this.translationSet.removeIf(translation -> translation.getId().equals(id));
     }
 
-    private void saveTranslations(Set<GenreTranslation> translationSet) {
+    private void setTranslationSet(Set<GenreTranslation> translationSet) {
         if (translationSet != null) {
             this.translationSet.retainAll(translationSet);
             this.translationSet.addAll(translationSet);

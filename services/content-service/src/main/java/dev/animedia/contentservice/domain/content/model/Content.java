@@ -84,18 +84,9 @@ public class Content extends BaseEntity<UUID> {
 		this.updatedAt = LocalDateTime.now();
 		this.active = contentUpdate.active();
 		setSort(contentUpdate.sort());
-		if (contentUpdate.languageCodeSet() != null) {
-			this.languageCodeSet.clear();
-			this.languageCodeSet.addAll(contentUpdate.languageCodeSet());
-		}
-		if (contentUpdate.genreSet() != null) {
-			this.genreSet.clear();
-			this.genreSet.addAll(contentUpdate.genreSet());
-		}
-		if (contentUpdate.translationSet() != null) {
-			this.translationSet.clear();
-			this.translationSet.addAll(contentUpdate.translationSet());
-		}
+		setLanguageCodeSet(contentUpdate.languageCodeSet());
+		setGenreSet(contentUpdate.genreSet());
+		setTranslationSet(contentUpdate.translationSet());
 	}
 
 	public void saveTranslation(ContentTranslation contentTranslation) {
@@ -120,6 +111,27 @@ public class Content extends BaseEntity<UUID> {
 
 	private void setSort(int sort) {
 		this.sort = Math.max(sort, 0);
+	}
+
+	private void setLanguageCodeSet(Set<String> languageCodeSet) {
+		this.languageCodeSet.clear();
+		if (languageCodeSet != null) {
+			this.languageCodeSet.addAll(languageCodeSet);
+		}
+	}
+
+	private void setGenreSet(Set<Genre> genreSet) {
+		this.genreSet.clear();
+		if (genreSet != null) {
+			this.genreSet.addAll(genreSet);
+		}
+	}
+
+	private void setTranslationSet(Set<ContentTranslation> translationSet) {
+		this.translationSet.clear();
+		if (translationSet != null) {
+			this.translationSet.addAll(translationSet);
+		}
 	}
 
 	public String getAlias() {

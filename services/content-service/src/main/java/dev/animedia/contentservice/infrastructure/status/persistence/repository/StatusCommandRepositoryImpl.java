@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.infrastructure.status.persistence.repository;
 
+import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.infrastructure.status.persistence.mapper.StatusPersistenceMapper;
@@ -30,6 +31,13 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 
 	@Override
 	public Status update(Status status) {
+		StatusEntity statusEntity = jpaStatusQueryRepository.findById(status.getId())
+			.orElseThrow(StatusNotFoundException::new);
+
+		/**
+		 * Сначала убираем те
+		 */
+
 		return null;
 	}
 
