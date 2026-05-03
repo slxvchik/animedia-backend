@@ -2,6 +2,8 @@ package dev.animedia.contentservice.infrastructure.genre.persistence.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(
     indexes = {
@@ -18,10 +20,10 @@ public class GenreTranslationEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genre_id", nullable = false)
+    @JoinColumn(name = "genre_id", nullable = false, updatable = false)
     private GenreEntity genreEntity;
 
-    @Column(name = "language_code", nullable = false)
+    @Column(name = "language_code", nullable = false, updatable = false)
     private String languageCode;
 
     @Column(length = 512, nullable = false)
@@ -68,5 +70,16 @@ public class GenreTranslationEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GenreTranslationEntity that)) return false;
+        return genreEntity.getId().equals(that.genreEntity.getId()) && languageCode.equals(that.languageCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(genreEntity.getId(), languageCode);
     }
 }

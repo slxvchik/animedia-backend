@@ -2,10 +2,10 @@ package dev.animedia.contentservice.domain.genre.model;
 
 import dev.animedia.contentservice.domain.genre.exception.GenreTranslationLanguageCodeRequiredException;
 import dev.animedia.contentservice.domain.genre.exception.GenreTranslationNameRequiredException;
-import dev.animedia.contentservice.domain.shared.model.BaseEntity;
+import dev.animedia.contentservice.domain.shared.model.BaseTranslationEntity;
 
-public class GenreTranslation extends BaseEntity<Long> {
-    private final String languageCode;
+public class GenreTranslation extends BaseTranslationEntity {
+    private final Long id;
     private String name;
     private String description;
 
@@ -16,6 +16,18 @@ public class GenreTranslation extends BaseEntity<Long> {
         this.languageCode = languageCode;
         this.name = name;
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void update(String name, String description) {
@@ -30,17 +42,5 @@ public class GenreTranslation extends BaseEntity<Long> {
 
     public void validateName(String name) {
         if (name == null || name.isBlank()) throw new GenreTranslationNameRequiredException();
-    }
-
-    public String getLanguageCode() {
-        return languageCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

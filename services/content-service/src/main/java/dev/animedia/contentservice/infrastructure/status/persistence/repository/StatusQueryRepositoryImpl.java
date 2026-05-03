@@ -19,26 +19,26 @@ import java.util.Optional;
 @Repository
 public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	private final StatusPersistenceMapper statusPersistenceMapper;
-	private final JpaStatusQueryRepository jpaStatusQueryRepository;
+	private final JpaStatusRepository jpaStatusRepository;
 	private final PaginationPersistenceMapper paginationPersistenceMapper;
 	private final PaginationApplicationMapper paginationApplicationMapper;
 
 	@Autowired
 	public StatusQueryRepositoryImpl(
 		StatusPersistenceMapper statusPersistenceMapper,
-		JpaStatusQueryRepository jpaStatusQueryRepository,
+		JpaStatusRepository jpaStatusRepository,
 		PaginationPersistenceMapper paginationPersistenceMapper,
 		PaginationApplicationMapper paginationApplicationMapper
 	) {
 		this.statusPersistenceMapper = statusPersistenceMapper;
-		this.jpaStatusQueryRepository = jpaStatusQueryRepository;
+		this.jpaStatusRepository = jpaStatusRepository;
 		this.paginationPersistenceMapper = paginationPersistenceMapper;
 		this.paginationApplicationMapper = paginationApplicationMapper;
 	}
 
 	@Override
 	public Optional<Status> findById(Long id, @Nullable String languageCode) {
-		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusQueryRepository.findByIdAndLanguageCode(id, languageCode);
+		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdAndLanguageCode(id, languageCode);
 		return Optional.ofNullable(
 			statusPersistenceMapper.toStatusList(statusTranslationRowDtoList).getFirst()
 		);
@@ -46,7 +46,7 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 
 	@Override
 	public List<Status> findByIdList(List<Long> idList, @Nullable String languageCode) {
-		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusQueryRepository.findByIdListAndLanguageCode(idList, languageCode);
+		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdListAndLanguageCode(idList, languageCode);
 		return statusPersistenceMapper.toStatusList(statusTranslationRowDtoList);
 	}
 
@@ -54,7 +54,7 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	public Page<Status> search(StatusSearchCriteria criteria, Pageable pageable) {
 		org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size());
 
-		org.springframework.data.domain.Page<Long> statusIdPage = jpaStatusQueryRepository.search(
+		org.springframework.data.domain.Page<Long> statusIdSpringPage = jpaStatusRepository.search(
 			criteria.alias(),
 			criteria.name(),
 			criteria.languageCode(),
@@ -62,25 +62,25 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 		);
 
 		// Find statuses with translation for page
-		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusQueryRepository.findByIdListAndLanguageCode(
-			statusIdPage.getContent(),
+		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdListAndLanguageCode(
+			statusIdSpringPage.getContent(),
 			criteria.languageCode()
 		);
 
 		List<Status> statusList = statusPersistenceMapper.toStatusList(statusTranslationRowDtoList);
 
-		Page<Long> statusIdDomainPage = paginationPersistenceMapper.toDomainPage(statusIdPage);
+		Page<Long> statusIdDomainPage = paginationPersistenceMapper.toDomainPage(statusIdSpringPage);
 
 		return paginationApplicationMapper.changeContent(statusIdDomainPage, statusList);
 	}
 
 	@Override
 	public boolean existsByAlias(String alias) {
-		return jpaStatusQueryRepository.existsByAlias(alias);
+		return jpaStatusRepository.existsByAlias(alias);
 	}
 
 	@Override
 	public boolean existsByAliasExcludeId(String alias, Long id) {
-		return jpaStatusQueryRepository.existsByAliasAndIdNot(alias, id);
+		return jpaStatusRepository.existsByAliasAndIdNot(alias, id);
 	}
 }

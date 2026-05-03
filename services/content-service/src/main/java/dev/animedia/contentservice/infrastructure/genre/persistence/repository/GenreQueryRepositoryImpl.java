@@ -52,7 +52,7 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
 
     @Override
     public Page<Genre> search(GenreSearchCriteria genreSearchCriteria, Pageable pageable) {
-        org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable();
+        org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size());
 
         org.springframework.data.domain.Page<Long> genreIdSpringPage = jpaGenreRepository.search(
             genreSearchCriteria.alias(),
@@ -69,16 +69,13 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
 
         List<Genre> genreList = genrePersistenceMapper.toGenreList(genreTranslationRowDtoList);
 
-        return paginationApplicationMapper.changeContent(genreIdSpringPage, genreList);
+        Page<Long> genreIdDomainPage = paginationPersistenceMapper.toDomainPage(genreIdSpringPage);
+
+        return paginationApplicationMapper.changeContent(genreIdDomainPage, genreList);
     }
 
     @Override
     public boolean existsByAlias(String alias) {
         return jpaGenreRepository.existsByAlias(alias);
-    }
-
-    @Override
-    public boolean existsByAliasExcludeId(String alias, Long id) {
-        return jpaGenreRepository.existsByAliasAndIdNot(alias, id);
     }
 }

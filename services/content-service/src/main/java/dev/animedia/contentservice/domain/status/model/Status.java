@@ -1,17 +1,17 @@
 package dev.animedia.contentservice.domain.status.model;
 
-import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
-import dev.animedia.contentservice.domain.shared.model.BaseEntity;
 import dev.animedia.contentservice.domain.status.exception.StatusAliasRequiredException;
 import dev.animedia.contentservice.domain.status.exception.StatusInvalidAliasException;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class Status extends BaseEntity<Long> {
-	private String alias;
+public class Status {
+	private final Long id;
+	private final String alias;
 	private int sortOrder;
 	private final Set<StatusTranslation> translationSet = new HashSet<>();
 
@@ -25,9 +25,23 @@ public class Status extends BaseEntity<Long> {
 		setTranslationSet(translationSet);
 	}
 
-	public void update(String alias, int sortOrder, Set<StatusTranslation> translationSet) {
-		validateAlias(alias);
-		this.alias = alias;
+	public Long getId() {
+		return id;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public Set<StatusTranslation> getTranslationSet() {
+		return Collections.unmodifiableSet(translationSet);
+	}
+
+	public void update(int sortOrder, Set<StatusTranslation> translationSet) {
 		setSortOrder(sortOrder);
 		setTranslationSet(translationSet);
 	}
@@ -54,15 +68,14 @@ public class Status extends BaseEntity<Long> {
 		this.sortOrder = Math.max(sortOrder, 0);
 	}
 
-	public String getAlias() {
-		return alias;
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Status status)) return false;
+        return alias.equals(status.alias);
 	}
 
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public Set<StatusTranslation> getTranslationSet() {
-		return Collections.unmodifiableSet(translationSet);
+	@Override
+	public int hashCode() {
+		return Objects.hash(alias);
 	}
 }

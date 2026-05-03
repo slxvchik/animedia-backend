@@ -5,18 +5,16 @@ import dev.animedia.contentservice.domain.status.model.StatusTranslation;
 import dev.animedia.contentservice.infrastructure.status.persistence.dto.StatusTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.status.persistence.model.StatusEntity;
 import dev.animedia.contentservice.infrastructure.status.persistence.model.StatusTranslationEntity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class StatusPersistenceMapper {
-
-	@PersistenceContext
-	private EntityManager entityManager;
 
 	/**
 	 * To multiple status list with translation list from db row list
@@ -61,6 +59,7 @@ public class StatusPersistenceMapper {
 	 * @return domain status
 	 */
 	public Status toStatus(StatusEntity se) {
+		if (se == null) return null;
 		return new Status(
 			se.getId(),
 			se.getAlias(),
@@ -77,6 +76,7 @@ public class StatusPersistenceMapper {
 	 * @return domain status translation
 	 */
 	public StatusTranslation toStatusTranslation(StatusTranslationEntity ste) {
+		if (ste == null) return null;
 		return new StatusTranslation(
 			ste.getId(),
 			ste.getLanguageCode(),
@@ -90,16 +90,19 @@ public class StatusPersistenceMapper {
 	 * @return jpa status entity
 	 */
 	public StatusEntity toStatusEntity(Status status) {
-		StatusEntity se = status.getId() == null ? new StatusEntity() : entityManager.getReference(StatusEntity.class, status.getId());
+		if (status == null) return null;
 
+		StatusEntity se = new StatusEntity();
+
+		se.setId(status.getId());
 		se.setAlias(status.getAlias());
 		se.setSortOrder(status.getSortOrder());
 
-		Set<StatusTranslationEntity> steSet = status.getTranslationSet().stream()
-			.map(ste -> this.toStatusTranslationEntity(ste, se))
-			.collect(Collectors.toSet());
-
-		se.setTranslationSet(steSet);
+		se.setTranslationSet(
+			status.getTranslationSet().stream()
+				.map(ste -> toStatusTranslationEntity(ste, se))
+				.collect(Collectors.toSet())
+		);
 
 		return se;
 	}
@@ -111,13 +114,15 @@ public class StatusPersistenceMapper {
 	 * @return jpa status translation entity
 	 */
 	public StatusTranslationEntity toStatusTranslationEntity(StatusTranslation statusTranslation, StatusEntity statusEntity) {
-		StatusTranslationEntity ste = statusTranslation.getId() == null ? new StatusTranslationEntity() : entityManager.getReference(StatusTranslationEntity.class, statusTranslation.getId());
+		if (statusTranslation == null) return null;
 
+		StatusTranslationEntity ste = new StatusTranslationEntity();
+
+		ste.setId(statusTranslation.getId());
 		ste.setStatusEntity(statusEntity);
-
-		ste.setName(statusTranslation.getName());
 		ste.setLanguageCode(statusTranslation.getLanguageCode());
+		ste.setName(statusTranslation.getName());
 
 		return ste;
-	}
+    }
 }

@@ -30,7 +30,7 @@ public class ContentApplicationMapper {
 
     public Content toContent(ContentDto contentDto) {
         return Content.builder()
-            .uuid(contentDto.uuid())
+            .id(contentDto.id())
             .alias(contentDto.alias())
             .type(contentDto.type())
             .season(contentDto.season())
@@ -69,7 +69,7 @@ public class ContentApplicationMapper {
 
     public ContentDto toContentDto(Content content) {
         return new ContentDto(
-            content.getUuid(),
+            content.getId(),
             content.getAlias(),
             content.getType(),
             content.getSeason(),
@@ -95,7 +95,7 @@ public class ContentApplicationMapper {
 
     public ContentTranslationDto toContentTranslationDto(ContentTranslation contentTranslation) {
         return new ContentTranslationDto(
-            contentTranslation.getUuid(),
+            contentTranslation.getId(),
             contentTranslation.getLanguageCode(),
             contentTranslation.getTitle(),
             contentTranslation.getDescription()

@@ -1,11 +1,11 @@
 package dev.animedia.contentservice.domain.status.model;
 
-import dev.animedia.contentservice.domain.shared.model.BaseEntity;
+import dev.animedia.contentservice.domain.shared.model.BaseTranslationEntity;
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationLanguageCodeRequiredException;
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationNameRequiredException;
 
-public class StatusTranslation extends BaseEntity<Long> {
-	private final String languageCode;
+public class StatusTranslation extends BaseTranslationEntity {
+	private final Long id;
 	private String name;
 
 	public StatusTranslation(Long id, String languageCode, String name) {
@@ -14,6 +14,14 @@ public class StatusTranslation extends BaseEntity<Long> {
 		this.id = id;
 		this.languageCode = languageCode;
 		this.name = name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void update(String name) {
@@ -27,13 +35,5 @@ public class StatusTranslation extends BaseEntity<Long> {
 
 	private void validateName(String name) {
 		if (name == null || name.isBlank()) throw new StatusTranslationNameRequiredException();
-	}
-
-	public String getLanguageCode() {
-		return languageCode;
-	}
-
-	public String getName() {
-		return name;
 	}
 }

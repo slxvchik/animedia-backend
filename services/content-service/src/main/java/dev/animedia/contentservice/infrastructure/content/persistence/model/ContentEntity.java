@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,16 +32,16 @@ import java.util.UUID;
 public class ContentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
 
-    @Column(name = "alias", nullable = false, length = 512)
+    @Column(name = "alias", nullable = false, updatable = false, length = 512)
     private String alias;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "content_type", nullable = false)
+    @Column(name = "content_type", nullable = false, updatable = false)
     private ContentType contentType;
 
-    @Column(name = "season")
+    @Column(name = "season", nullable = false, updatable = false)
     private Integer season;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,12 +94,12 @@ public class ContentEntity {
     @OneToMany(mappedBy = "content", fetch = FetchType.LAZY)
     private Set<ContentTranslationEntity> translationSet = new HashSet<>();
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getId() {
+        return id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getAlias() {
@@ -211,5 +212,57 @@ public class ContentEntity {
 
     public void setTranslationSet(Set<ContentTranslationEntity> translationSet) {
         this.translationSet = translationSet;
+    }
+
+    public void syncLanguageCodeSet(Set<String> newLanguageCodeSet) {
+        if (newLanguageCodeSet == null) {
+            this.languageCodeSet.clear();
+            return;
+        }
+        this.languageCodeSet.retainAll(newLanguageCodeSet);
+        this.languageCodeSet.addAll(newLanguageCodeSet);
+    }
+
+    public void syncGenreSet(Set<GenreEntity> newGenreSet) {
+        if (newGenreSet == null) {
+            this.genreSet.clear();
+            return;
+        }
+        this.genreSet.retainAll(newGenreSet);
+        for (GenreEntity newGe : newGenreSet) {
+            if (newGe.getId() != null) this.genreSet.add(newGe);
+        }
+    }
+
+    public void syncTranslationSet(Set<ContentTranslationEntity> newContentTranslationEntitySet) {
+        if (newContentTranslationEntitySet == null) {
+            this.translationSet.clear();
+            return;
+        }
+        this.translationSet.retainAll(newContentTranslationEntitySet);
+        for (ContentTranslationEntity newCte : newContentTranslationEntitySet) {
+            if (newCte.getId() == null) {
+                this.translationSet.add(newCte);
+            } else {
+                this.translationSet.stream()
+                    .filter(cte -> cte.getId().equals(newCte.getId()))
+                    .findFirst()
+                    .ifPresent(cte -> {
+                        cte.setTitle(newCte.getTitle());
+                        cte.setDescription(newCte.getDescription());
+                    });
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ContentEntity that)) return false;
+        return alias.equals(that.alias) && contentType == that.contentType && season.equals(that.season);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(alias, contentType, season);
     }
 }

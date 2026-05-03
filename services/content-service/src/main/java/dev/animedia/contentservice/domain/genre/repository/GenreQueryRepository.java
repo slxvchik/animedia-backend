@@ -15,5 +15,4 @@ public interface GenreQueryRepository {
     Page<Genre> search(GenreSearchCriteria genreSearchCriteria, Pageable pageable);
 
     boolean existsByAlias(String alias);
-    boolean existsByAliasExcludeId(String alias, Long id);
 }

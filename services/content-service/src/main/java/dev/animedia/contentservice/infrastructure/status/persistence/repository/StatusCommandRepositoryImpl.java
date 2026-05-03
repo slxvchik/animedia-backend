@@ -5,44 +5,57 @@ import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.infrastructure.status.persistence.mapper.StatusPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.status.persistence.model.StatusEntity;
+import dev.animedia.contentservice.infrastructure.status.persistence.model.StatusTranslationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Repository
 public class StatusCommandRepositoryImpl implements StatusCommandRepository {
-	private final JpaStatusQueryRepository jpaStatusQueryRepository;
+	private final JpaStatusRepository jpaStatusRepository;
 	private final StatusPersistenceMapper statusPersistenceMapper;
 
 	@Autowired
 	public StatusCommandRepositoryImpl(
-		JpaStatusQueryRepository jpaStatusQueryRepository,
+		JpaStatusRepository jpaStatusRepository,
 		StatusPersistenceMapper statusPersistenceMapper
 	) {
-		this.jpaStatusQueryRepository = jpaStatusQueryRepository;
+		this.jpaStatusRepository = jpaStatusRepository;
 		this.statusPersistenceMapper = statusPersistenceMapper;
 	}
 
 	@Override
 	public Status create(Status status) {
 		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(status);
-		StatusEntity saved = jpaStatusQueryRepository.save(statusEntity);
+		StatusEntity saved = jpaStatusRepository.save(statusEntity);
 		return statusPersistenceMapper.toStatus(saved);
 	}
 
 	@Override
 	public Status update(Status status) {
-		StatusEntity statusEntity = jpaStatusQueryRepository.findById(status.getId())
+		StatusEntity statusEntity = jpaStatusRepository.findById(status.getId())
 			.orElseThrow(StatusNotFoundException::new);
 
-		/**
-		 * Сначала убираем те
-		 */
+		statusEntity.setAlias(status.getAlias());
+		statusEntity.setSortOrder(status.getSortOrder());
 
-		return null;
+		Set<StatusTranslationEntity> newTranslationEntitySet = status.getTranslationSet().stream()
+			.map(dto -> statusPersistenceMapper.toStatusTranslationEntity(dto, statusEntity))
+			.collect(Collectors.toSet());
+
+		statusEntity.syncTranslationSet(newTranslationEntitySet);
+
+		StatusEntity saved = jpaStatusRepository.save(statusEntity);
+
+		return statusPersistenceMapper.toStatus(saved);
 	}
 
 	@Override
 	public void delete(Long id) {
-
+		jpaStatusRepository.findById(id)
+			.orElseThrow(StatusNotFoundException::new);
+		jpaStatusRepository.deleteById(id);
 	}
 }

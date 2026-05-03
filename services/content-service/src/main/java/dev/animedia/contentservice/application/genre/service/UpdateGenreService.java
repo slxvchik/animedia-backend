@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.application.genre.service;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.exception.GenreAliasExistsException;
 import dev.animedia.contentservice.application.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.genre.usecase.UpdateGenreUseCase;
@@ -35,11 +34,7 @@ public class UpdateGenreService implements UpdateGenreUseCase {
 		Genre genre = genreQueryRepository.findById(genreDto.id(), null)
 			.orElseThrow(GenreNotFoundException::new);
 
-		boolean aliasExists = genreQueryRepository.existsByAliasExcludeId(genre.getAlias(), genre.getId());
-		if (aliasExists) throw new GenreAliasExistsException();
-
 		genre.update(
-			genreDto.alias(),
 			genreDto.sortOrder(),
 			genreDto.translationSet()
 				.stream()

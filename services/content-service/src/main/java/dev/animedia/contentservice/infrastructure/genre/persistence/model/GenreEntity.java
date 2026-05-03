@@ -3,6 +3,7 @@ package dev.animedia.contentservice.infrastructure.genre.persistence.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ public class GenreEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length = 128, nullable = false, unique = true)
+    @Column(length = 128, nullable = false, updatable = false, unique = true)
     private String alias;
 
     @Column(name = "sort_order", nullable = false)
@@ -56,5 +57,35 @@ public class GenreEntity {
 
     public void setTranslationSet(Set<GenreTranslationEntity> translationSet) {
         this.translationSet = translationSet;
+    }
+
+    public void syncTranslationSet(Set<GenreTranslationEntity> newGenreTranslationEntitySet) {
+        // delete translations
+        this.translationSet.removeIf(existing -> !newGenreTranslationEntitySet.contains(existing));
+        // save new && update old translations
+        for (GenreTranslationEntity newGte : newGenreTranslationEntitySet) {
+            if (newGte.getId() == null) {
+                this.translationSet.add(newGte);
+            } else {
+                this.translationSet.stream()
+                    .filter(existing -> existing.getId().equals(newGte.getId()))
+                    .findFirst()
+                    .ifPresent(existing -> {
+                        existing.setName(newGte.getName());
+                        existing.setDescription(newGte.getDescription());
+                    });
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GenreEntity that)) return false;
+        return alias.equals(that.alias);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(alias);
     }
 }

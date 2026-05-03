@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.infrastructure.status.persistence.repository;
 
-import dev.animedia.contentservice.domain.status.model.StatusSearchCriteria;
 import dev.animedia.contentservice.infrastructure.status.persistence.dto.StatusTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.status.persistence.model.StatusEntity;
 import org.jspecify.annotations.Nullable;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JpaStatusQueryRepository extends JpaRepository<StatusEntity, Long> {
+public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 	boolean existsByAlias(String alias);
 	boolean existsByAliasAndIdNot(String alias, Long id);
 

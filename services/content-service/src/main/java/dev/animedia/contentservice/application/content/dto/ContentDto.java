@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public record ContentDto(
-	UUID uuid,
+	UUID id,
 	String alias,
 	ContentType type,
 	int season,

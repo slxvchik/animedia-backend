@@ -41,7 +41,6 @@ public class UpdateStatusService implements UpdateStatusUseCase {
         if (aliasExists) throw new StatusAliasExistsException();
 
         status.update(
-            statusDto.alias(),
             statusDto.sortOrder(),
             statusDto.translationSet()
                 .stream()

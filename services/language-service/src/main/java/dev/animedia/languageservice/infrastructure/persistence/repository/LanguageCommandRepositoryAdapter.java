@@ -9,31 +9,31 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class LanguageCommandRepositoryAdapter implements LanguageCommandRepository {
-    private final LanguageJpaRepository languageJpaRepository;
+    private final JpaLanguageRepository jpaLanguageRepository;
     private final LanguagePersistenceMapper languagePersistenceMapper;
 
     @Autowired
-    public LanguageCommandRepositoryAdapter(LanguageJpaRepository languageJpaRepository, LanguagePersistenceMapper languagePersistenceMapper) {
-        this.languageJpaRepository = languageJpaRepository;
+    public LanguageCommandRepositoryAdapter(JpaLanguageRepository jpaLanguageRepository, LanguagePersistenceMapper languagePersistenceMapper) {
+        this.jpaLanguageRepository = jpaLanguageRepository;
         this.languagePersistenceMapper = languagePersistenceMapper;
     }
 
     @Override
     public Language create(Language language) {
         LanguageEntity entity = languagePersistenceMapper.toEntity(language);
-        LanguageEntity saved = languageJpaRepository.save(entity);
+        LanguageEntity saved = jpaLanguageRepository.save(entity);
         return languagePersistenceMapper.toDomain(saved);
     }
 
     @Override
     public Language update(Language language) {
         LanguageEntity entity = languagePersistenceMapper.toEntity(language);
-        LanguageEntity updated = languageJpaRepository.save(entity);
+        LanguageEntity updated = jpaLanguageRepository.save(entity);
         return languagePersistenceMapper.toDomain(updated);
     }
 
     @Override
     public void delete(String code) {
-        languageJpaRepository.deleteById(code);
+        jpaLanguageRepository.deleteById(code);
     }
 }

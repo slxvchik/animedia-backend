@@ -3,7 +3,9 @@ package dev.animedia.contentservice.infrastructure.status.persistence.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -17,7 +19,7 @@ public class StatusEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length = 512, unique = true, nullable = false)
+    @Column(length = 512, unique = true, nullable = false, updatable = false)
     private String alias;
 
     @Column(name = "sort_order")
@@ -61,5 +63,33 @@ public class StatusEntity {
 
     public void setTranslationSet(Set<StatusTranslationEntity> translationSet) {
         this.translationSet = translationSet;
+    }
+
+    public void syncTranslationSet(Set<StatusTranslationEntity> newStatusTranslationSet) {
+        // delete translations
+        this.translationSet.removeIf(existing -> !newStatusTranslationSet.contains(existing));
+
+        // save new & update old translations
+        for (StatusTranslationEntity newTranslationEntity : newStatusTranslationSet) {
+            if (newTranslationEntity.getId() == null) {
+                this.translationSet.add(newTranslationEntity);
+            } else {
+                this.translationSet.stream()
+                    .filter(existing -> existing.getId().equals(newTranslationEntity.getId()))
+                    .findFirst()
+                    .ifPresent(existing -> existing.setName(newTranslationEntity.getName()));
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof StatusEntity that)) return false;
+        return alias.equals(that.alias);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(alias);
     }
 }

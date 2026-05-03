@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class GetLanguageService implements GetLanguageUseCase {
     private final LanguageQueryRepository languageQueryRepository;
     private final LanguageApplicationMapper languageApplicationMapper;
+
     @Autowired
     public GetLanguageService(
         LanguageQueryRepository languageQueryRepository,

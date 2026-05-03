@@ -4,21 +4,18 @@ import dev.animedia.contentservice.domain.content.exception.ContentInvalidAliasE
 import dev.animedia.contentservice.domain.content.exception.ContentStatusRequiredException;
 import dev.animedia.contentservice.domain.content.exception.ContentTypeRequiredException;
 import dev.animedia.contentservice.domain.genre.model.Genre;
-import dev.animedia.contentservice.domain.shared.model.BaseEntity;
 import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
-public class Content extends BaseEntity<UUID> {
-	private String alias;
-	private ContentType type;
-	private int season;
+public class Content {
+	private final UUID id;
+	private final String alias;
+	private final ContentType type;
+	private final int season;
 	private Status status;
 	private String coverUrl;
 	private String trailerUrl;
@@ -49,7 +46,8 @@ public class Content extends BaseEntity<UUID> {
 		this.id = builder.id;
 		this.alias = builder.alias;
 		this.type = builder.type;
-		setSeason(builder.season);
+		this.season = Math.max(builder().season, 0);
+
 		this.status = builder.status;
 		this.coverUrl = builder.coverUrl;
 		this.trailerUrl = builder.trailerUrl;
@@ -63,75 +61,8 @@ public class Content extends BaseEntity<UUID> {
 		this.translationSet = builder.translationSet;
 	}
 
-	public static Builder builder() {
-		return new Builder();
-	}
-
-	public void update(
-		ContentUpdate contentUpdate
-	) {
-		validateAlias(contentUpdate.alias());
-		validateType(contentUpdate.type());
-		validateStatus(contentUpdate.status());
-
-		this.alias = contentUpdate.alias();
-		this.type = contentUpdate.type();
-		setSeason(contentUpdate.season());
-		this.status = contentUpdate.status();
-		this.coverUrl = contentUpdate.coverUrl();
-		this.trailerUrl = contentUpdate.trailerUrl();
-		this.releaseDate = contentUpdate.releaseDate();
-		this.updatedAt = LocalDateTime.now();
-		this.active = contentUpdate.active();
-		setSort(contentUpdate.sort());
-		setLanguageCodeSet(contentUpdate.languageCodeSet());
-		setGenreSet(contentUpdate.genreSet());
-		setTranslationSet(contentUpdate.translationSet());
-	}
-
-	public void saveTranslation(ContentTranslation contentTranslation) {
-		this.translationSet.stream()
-			.filter(translation -> translation.getLanguageCode().equals(contentTranslation.getLanguageCode()))
-			.findFirst()
-			.ifPresentOrElse(
-				existing -> existing.update(contentTranslation.getTitle(), contentTranslation.getDescription()),
-				() -> this.translationSet.add(
-					new ContentTranslation(null, contentTranslation.getLanguageCode(), contentTranslation.getTitle(), contentTranslation.getDescription())
-				)
-			);
-	}
-
-	public void removeTranslation(UUID id) {
-		this.translationSet.removeIf(translation -> translation.getId().equals(id));
-	}
-
-	private void setSeason(int season) {
-		this.season = Math.max(season, 0);
-	}
-
-	private void setSort(int sort) {
-		this.sort = Math.max(sort, 0);
-	}
-
-	private void setLanguageCodeSet(Set<String> languageCodeSet) {
-		this.languageCodeSet.clear();
-		if (languageCodeSet != null) {
-			this.languageCodeSet.addAll(languageCodeSet);
-		}
-	}
-
-	private void setGenreSet(Set<Genre> genreSet) {
-		this.genreSet.clear();
-		if (genreSet != null) {
-			this.genreSet.addAll(genreSet);
-		}
-	}
-
-	private void setTranslationSet(Set<ContentTranslation> translationSet) {
-		this.translationSet.clear();
-		if (translationSet != null) {
-			this.translationSet.addAll(translationSet);
-		}
+	public UUID getId() {
+		return id;
 	}
 
 	public String getAlias() {
@@ -188,6 +119,83 @@ public class Content extends BaseEntity<UUID> {
 
 	public Set<ContentTranslation> getTranslationSet() {
 		return Collections.unmodifiableSet(translationSet);
+	}
+
+	public void update(
+		ContentUpdate contentUpdate
+	) {
+		this.status = contentUpdate.status();
+		this.coverUrl = contentUpdate.coverUrl();
+		this.trailerUrl = contentUpdate.trailerUrl();
+		this.releaseDate = contentUpdate.releaseDate();
+		this.updatedAt = LocalDateTime.now();
+		this.active = contentUpdate.active();
+		setSort(contentUpdate.sort());
+		setLanguageCodeSet(contentUpdate.languageCodeSet());
+		setGenreSet(contentUpdate.genreSet());
+		setTranslationSet(contentUpdate.translationSet());
+	}
+
+	public void saveTranslation(ContentTranslation contentTranslation) {
+		this.translationSet.stream()
+			.filter(translation -> translation.getLanguageCode().equals(contentTranslation.getLanguageCode()))
+			.findFirst()
+			.ifPresentOrElse(
+				existing -> existing.update(contentTranslation.getTitle(), contentTranslation.getDescription()),
+				() -> this.translationSet.add(
+					new ContentTranslation(null, contentTranslation.getLanguageCode(), contentTranslation.getTitle(), contentTranslation.getDescription())
+				)
+			);
+	}
+
+	public void removeTranslation(UUID id) {
+		this.translationSet.removeIf(translation -> translation.getId().equals(id));
+	}
+
+	private void setSort(int sort) {
+		this.sort = Math.max(sort, 0);
+	}
+
+	private void setLanguageCodeSet(Set<String> languageCodeSet) {
+		if (languageCodeSet != null) {
+			this.languageCodeSet.retainAll(languageCodeSet);
+			this.languageCodeSet.addAll(languageCodeSet);
+		} else {
+			this.languageCodeSet.clear();
+		}
+	}
+
+	private void setGenreSet(Set<Genre> genreSet) {
+		if (genreSet != null) {
+			this.genreSet.retainAll(genreSet);
+			this.genreSet.addAll(genreSet);
+		} else {
+			this.genreSet.clear();
+		}
+	}
+
+	private void setTranslationSet(Set<ContentTranslation> translationSet) {
+		if (translationSet != null) {
+			this.translationSet.retainAll(translationSet);
+			this.translationSet.addAll(translationSet);
+		} else {
+			this.translationSet.clear();
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Content content)) return false;
+        return season == content.season && alias.equals(content.alias) && type.equals(content.type);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(alias, type, season);
+	}
+
+	public static Builder builder() {
+		return new Builder();
 	}
 
 	public static class Builder {

@@ -2,6 +2,7 @@ package dev.animedia.contentservice.infrastructure.content.persistence.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -21,13 +22,13 @@ import java.util.UUID;
 public class ContentTranslationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_uuid", nullable = false)
+    @JoinColumn(name = "content_uuid", nullable = false, updatable = false)
     private ContentEntity contentEntity;
 
-    @Column(name = "language_code", nullable = false)
+    @Column(name = "language_code", nullable = false, updatable = false)
     private String languageCode;
 
     @Column(name = "title", length = 512, nullable = false)
@@ -36,12 +37,12 @@ public class ContentTranslationEntity {
     @Column(name = "description", length = 32768)
     private String description;
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getId() {
+        return id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public ContentEntity getContentEntity() {
@@ -74,5 +75,16 @@ public class ContentTranslationEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ContentTranslationEntity that)) return false;
+        return contentEntity.getId().equals(that.contentEntity.getId()) && languageCode.equals(that.languageCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contentEntity.getId(), languageCode);
     }
 }

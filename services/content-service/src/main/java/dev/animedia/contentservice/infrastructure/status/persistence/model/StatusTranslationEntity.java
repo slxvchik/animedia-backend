@@ -2,6 +2,8 @@ package dev.animedia.contentservice.infrastructure.status.persistence.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(
     name = "status_translation",
@@ -22,10 +24,10 @@ public class StatusTranslationEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id", nullable = false)
+    @JoinColumn(name = "status_id", nullable = false, updatable = false)
     private StatusEntity statusEntity;
 
-    @Column(name = "language_code", nullable = false)
+    @Column(name = "language_code", nullable = false, updatable = false)
     private String languageCode;
 
     @Column(length = 512, nullable = false)
@@ -61,5 +63,16 @@ public class StatusTranslationEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof StatusTranslationEntity that)) return false;
+        return statusEntity.getId().equals(that.statusEntity.getId()) && languageCode.equals(that.languageCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(statusEntity.getId(), languageCode);
     }
 }
