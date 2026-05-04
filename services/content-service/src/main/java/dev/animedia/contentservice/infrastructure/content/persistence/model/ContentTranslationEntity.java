@@ -80,11 +80,11 @@ public class ContentTranslationEntity {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ContentTranslationEntity that)) return false;
-        return contentEntity.getId().equals(that.contentEntity.getId()) && languageCode.equals(that.languageCode);
+        return this.getContentEntity().getId().equals(that.getContentEntity().getId()) && languageCode.equals(that.languageCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(contentEntity.getId(), languageCode);
+        return Objects.hash(this.getContentEntity().getId(), languageCode);
     }
 }

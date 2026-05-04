@@ -38,16 +38,16 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
 
     @Override
     public Optional<Genre> findById(Long id, @Nullable String languageCode) {
-        List<GenreTranslationRowDto> dbRowList = jpaGenreRepository.findById(id, languageCode);
+        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findById(id, languageCode);
         return Optional.ofNullable(
-            genrePersistenceMapper.toGenreList(dbRowList).getFirst()
+            genrePersistenceMapper.toGenreList(genreTranslationDbRowList).getFirst()
         );
     }
 
     @Override
     public List<Genre> findByIdList(List<Long> idList, @Nullable String languageCode) {
-        List<GenreTranslationRowDto> dbRowList = jpaGenreRepository.findByIdListAndLanguageCode(idList, languageCode);
-        return genrePersistenceMapper.toGenreList(dbRowList);
+        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findByIdListAndLanguageCode(idList, languageCode);
+        return genrePersistenceMapper.toGenreList(genreTranslationDbRowList);
     }
 
     @Override

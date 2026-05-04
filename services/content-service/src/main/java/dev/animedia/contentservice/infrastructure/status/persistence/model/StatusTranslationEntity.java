@@ -68,11 +68,11 @@ public class StatusTranslationEntity {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof StatusTranslationEntity that)) return false;
-        return statusEntity.getId().equals(that.statusEntity.getId()) && languageCode.equals(that.languageCode);
+        return this.getStatusEntity().getId().equals(that.getStatusEntity().getId()) && languageCode.equals(that.languageCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(statusEntity.getId(), languageCode);
+        return Objects.hash(this.getStatusEntity().getId(), languageCode);
     }
 }

@@ -91,7 +91,7 @@ public class ContentEntity {
     )
     private Set<GenreEntity> genreSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "content", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "content", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<ContentTranslationEntity> translationSet = new HashSet<>();
 
     public UUID getId() {

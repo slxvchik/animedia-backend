@@ -24,7 +24,7 @@ public class GenreEntity {
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder = 0;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "genreEntity", orphanRemoval = true)
     private Set<GenreTranslationEntity> translationSet = new HashSet<>();
 
     public Long getId() {

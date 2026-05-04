@@ -75,11 +75,11 @@ public class GenreTranslationEntity {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof GenreTranslationEntity that)) return false;
-        return genreEntity.getId().equals(that.genreEntity.getId()) && languageCode.equals(that.languageCode);
+        return this.getGenreEntity().getId().equals(that.getGenreEntity().getId()) && languageCode.equals(that.languageCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(genreEntity.getId(), languageCode);
+        return Objects.hash(this.getGenreEntity().getId(), languageCode);
     }
 }

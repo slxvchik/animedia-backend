@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface ContentCommandRepository {
     Content create(Content content);
     Content update(Content content);
-    void delete(UUID uuid);
+    void delete(UUID id);
 }
