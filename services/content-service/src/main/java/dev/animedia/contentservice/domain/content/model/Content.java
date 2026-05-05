@@ -185,8 +185,10 @@ public class Content {
 
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof Content content)) return false;
-        return season == content.season && alias.equals(content.alias) && type.equals(content.type);
+		if (!(o instanceof Content content)) { return false; }
+        return season == content.season &&
+	        alias.equals(content.alias) &&
+	        type.equals(content.type);
 	}
 
 	@Override
