@@ -1,8 +1,8 @@
 package dev.animedia.contentservice.infrastructure.content.persistence.repository;
 
-import dev.animedia.contentservice.old.content.model.Content;
-import dev.animedia.contentservice.old.content.model.ContentTranslation;
-import dev.animedia.contentservice.old.content.model.ContentType;
+import dev.animedia.contentservice.domain.content.model.ContentType;
+import dev.animedia.contentservice.infrastructure.content.persistence.model.ContentEntity;
+import dev.animedia.contentservice.infrastructure.content.persistence.model.ContentTranslationEntity;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -18,121 +18,123 @@ import java.util.UUID;
 public class ContentSpecification {
 	private ContentSpecification() {}
 
-	public static Specification<Content> hasUuid(UUID uuid) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasUuid(UUID uuid) {
+		return (root, _, cb) ->
 			uuid != null
 				? cb.equal(root.get("uuid"), uuid)
 				: null;
 	}
-	public static Specification<Content> hasAlias(String alias) {
-		return (root, query, cb) ->
-			alias != null && !alias.isBlank()
-				? cb.like(root.get("alias"), "%" + alias + "%")
-				: null;
+	public static Specification<ContentEntity> hasAliases(List<String> aliases) {
+		return (root, _, cb) -> {
+			var cleanAliases = cleanList(aliases);
+			return !cleanAliases.isEmpty() ? root.get("alias").in(aliases) : null;
+		};
 	}
-	public static Specification<Content> hasTypes(List<ContentType> types) {
-		return (root, query, cb) -> {
+	public static Specification<ContentEntity> hasTypes(List<ContentType> types) {
+		return (root, _, cb) -> {
 			var cleanTypes = cleanList(types);
-			return cleanTypes != null ? root.get("type").in(cleanTypes) : null;
+			return !cleanTypes.isEmpty() ? root.get("type").in(cleanTypes) : null;
 		};
 	}
-	public static Specification<Content> hasSeasons(List<Integer> seasons) {
-		return (root, query, cb) -> {
+	public static Specification<ContentEntity> hasSeasons(List<Integer> seasons) {
+		return (root, _, cb) -> {
 			var cleanSeasons = cleanList(seasons);
-			return cleanSeasons != null ? root.get("season").in(cleanSeasons) : null;
+			return !cleanSeasons.isEmpty() ? root.get("season").in(cleanSeasons) : null;
 		};
 	}
-	public static Specification<Content> hasStatuses(List<Long> statuses) {
-		return (root, query, cb) -> {
+	public static Specification<ContentEntity> hasStatuses(List<Long> statuses) {
+		return (root, _, cb) -> {
 			var cleanStatuses = cleanList(statuses);
-			return cleanStatuses != null ? root.get("status").in(cleanStatuses) : null;
+			return !cleanStatuses.isEmpty() ? root.get("status").in(cleanStatuses) : null;
 		};
 	}
-	public static Specification<Content> hasReleaseFrom(LocalDate releaseFrom) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasReleaseFrom(LocalDate releaseFrom) {
+		return (root, _, cb) ->
 			releaseFrom != null
 				? cb.greaterThanOrEqualTo(root.get("releaseDate"), releaseFrom)
 				: null;
 	}
-	public static Specification<Content> hasReleaseTo(LocalDate releaseTo) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasReleaseTo(LocalDate releaseTo) {
+		return (root, _, cb) ->
 			releaseTo != null
 				? cb.lessThanOrEqualTo(root.get("releaseDate"), releaseTo)
 				: null;
 	}
-	public static Specification<Content> hasLanguageCodes(List<String> languageCodes) {
-		return (root, query, cb) -> {
+	public static Specification<ContentEntity> hasLanguageCodes(List<String> languageCodes) {
+		return (root, _, cb) -> {
 			var cleanLanguageCodes = cleanList(languageCodes);
-			return cleanLanguageCodes != null ? root.get("languageCodes").in(cleanLanguageCodes) : null;
+			return !cleanLanguageCodes.isEmpty() ? root.get("languageCodes").in(cleanLanguageCodes) : null;
 		};
 	}
-	public static Specification<Content> hasGenres(List<Long> genreIds) {
-		return (root, query, cb) -> {
+	public static Specification<ContentEntity> hasGenres(List<Long> genreIds) {
+		return (root, _, cb) -> {
 			var cleanGenreIds = cleanList(genreIds);
-			return cleanGenreIds.isEmpty() ? root.join("genres", JoinType.LEFT).get("id").in(cleanGenreIds) : null;
+			return !cleanGenreIds.isEmpty() ? root.join("genres", JoinType.LEFT).get("id").in(cleanGenreIds) : null;
 		};
 	}
-	public static Specification<Content> hasCreatedAtFrom(LocalDateTime createdAtFrom) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasCreatedAtFrom(LocalDateTime createdAtFrom) {
+		return (root, _, cb) ->
 			createdAtFrom != null
 				? cb.lessThanOrEqualTo(root.get("createdAt"), createdAtFrom)
 				: null;
 	}
-	public static Specification<Content> hasCreatedTo(LocalDateTime createdAtTo) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasCreatedTo(LocalDateTime createdAtTo) {
+		return (root, _, cb) ->
 			createdAtTo != null
 				? cb.greaterThanOrEqualTo(root.get("createdAt"), createdAtTo)
 				: null;
 	}
-	public static Specification<Content> hasUpdatedAtFrom(LocalDateTime updatedAtFrom) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasUpdatedAtFrom(LocalDateTime updatedAtFrom) {
+		return (root, _, cb) ->
 			updatedAtFrom != null
 				? cb.lessThanOrEqualTo(root.get("updatedAt"), updatedAtFrom)
 				: null;
 	}
-	public static Specification<Content> hasUpdatedAtTo(LocalDateTime updatedAtTo) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasUpdatedAtTo(LocalDateTime updatedAtTo) {
+		return (root, _, cb) ->
 			updatedAtTo != null
 				? cb.greaterThanOrEqualTo(root.get("updatedAt"), updatedAtTo)
 				: null;
 	}
-	public static Specification<Content> hasActive(Boolean active) {
-		return (root, query, cb) ->
+	public static Specification<ContentEntity> hasActive(Boolean active) {
+		return (root, _, cb) ->
 			active != null
 				? cb.equal(root.get("active"), active)
 				: null;
 	}
 
-	public static Specification<Content> hasTranslationFilters(String title, String languageCode) {
+	public static Specification<ContentEntity> hasTranslationFilters(List<String> titleList, List<String> languageCodeList) {
 		return (root, query, cb) -> {
-			boolean hasTitle = title != null && !title.isBlank();
-			boolean hasLang = languageCode != null && !languageCode.isBlank();
+			var cleanTitles = cleanList(titleList).stream().map(String::toLowerCase).toList();
+			var cleanLanguages = cleanList(languageCodeList).stream().map(String::toLowerCase).toList();
 
-			if (!hasTitle && !hasLang) return null;
+			if (cleanTitles.isEmpty() && cleanLanguages.isEmpty()) return null;
 
-			Join<Content, ContentTranslation> join = root.join("translations");
+			Join<ContentEntity, ContentTranslationEntity> join = root.join("translations");
 			List<Predicate> predicates = new ArrayList<>();
 
-			if (hasTitle) {
+			if (!cleanTitles.isEmpty()) {
+				List<Predicate> titlePredicates = cleanTitles.stream()
+					.map(title -> cb.like(cb.lower(join.get("title")), "%" + title + "%"))
+					.toList();
 				predicates.add(
-					cb.like(
-						cb.lower(
-							join.get("title")
-						),
-						"%" + title.toLowerCase() + "%"
+					cb.or(
+						titlePredicates.toArray(new Predicate[0])
 					)
 				);
 			}
-			if (hasLang) {
-				predicates.add(cb.equal(join.get("languageCode"), languageCode));
+			if (!cleanLanguages.isEmpty()) {
+				predicates.add(cb.lower(join.get("languageCode")).in(cleanLanguages));
 			}
+
+			query.distinct(true);
 
 			return cb.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 
 	private static <T> List<T> cleanList(List<T> list) {
-		if (list == null || list.isEmpty()) return null;
+		if (list == null || list.isEmpty()) return List.of();
 		return list.stream().filter(Objects::nonNull).distinct().toList();
 	}
 }

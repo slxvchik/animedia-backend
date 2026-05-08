@@ -4,6 +4,7 @@ import dev.animedia.contentservice.domain.content.model.ContentType;
 import dev.animedia.contentservice.infrastructure.content.persistence.model.ContentEntity;
 import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID> {
+public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>, JpaSpecificationExecutor<ContentEntity> {
 
 	@Query("SELECT ce " +
 		"FROM ContentEntity ce " +
