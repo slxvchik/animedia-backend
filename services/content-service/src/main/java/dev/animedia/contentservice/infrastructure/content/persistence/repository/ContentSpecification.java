@@ -3,6 +3,7 @@ package dev.animedia.contentservice.infrastructure.content.persistence.repositor
 import dev.animedia.contentservice.domain.content.model.ContentType;
 import dev.animedia.contentservice.infrastructure.content.persistence.model.ContentEntity;
 import dev.animedia.contentservice.infrastructure.content.persistence.model.ContentTranslationEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -25,25 +26,25 @@ public class ContentSpecification {
 				: null;
 	}
 	public static Specification<ContentEntity> hasAliases(List<String> aliases) {
-		return (root, _, cb) -> {
+		return (root, _, _) -> {
 			var cleanAliases = cleanList(aliases);
 			return !cleanAliases.isEmpty() ? root.get("alias").in(aliases) : null;
 		};
 	}
 	public static Specification<ContentEntity> hasTypes(List<ContentType> types) {
-		return (root, _, cb) -> {
+		return (root, _, _) -> {
 			var cleanTypes = cleanList(types);
 			return !cleanTypes.isEmpty() ? root.get("type").in(cleanTypes) : null;
 		};
 	}
 	public static Specification<ContentEntity> hasSeasons(List<Integer> seasons) {
-		return (root, _, cb) -> {
+		return (root, _, _) -> {
 			var cleanSeasons = cleanList(seasons);
 			return !cleanSeasons.isEmpty() ? root.get("season").in(cleanSeasons) : null;
 		};
 	}
 	public static Specification<ContentEntity> hasStatuses(List<Long> statuses) {
-		return (root, _, cb) -> {
+		return (root, _, _) -> {
 			var cleanStatuses = cleanList(statuses);
 			return !cleanStatuses.isEmpty() ? root.get("status").in(cleanStatuses) : null;
 		};
@@ -61,13 +62,13 @@ public class ContentSpecification {
 				: null;
 	}
 	public static Specification<ContentEntity> hasLanguageCodes(List<String> languageCodes) {
-		return (root, _, cb) -> {
+		return (root, _, _) -> {
 			var cleanLanguageCodes = cleanList(languageCodes);
 			return !cleanLanguageCodes.isEmpty() ? root.get("languageCodes").in(cleanLanguageCodes) : null;
 		};
 	}
 	public static Specification<ContentEntity> hasGenres(List<Long> genreIds) {
-		return (root, _, cb) -> {
+		return (root, _, _) -> {
 			var cleanGenreIds = cleanList(genreIds);
 			return !cleanGenreIds.isEmpty() ? root.join("genres", JoinType.LEFT).get("id").in(cleanGenreIds) : null;
 		};
@@ -103,12 +104,16 @@ public class ContentSpecification {
 				: null;
 	}
 
-	public static Specification<ContentEntity> hasTranslationFilters(List<String> titleList, List<String> languageCodeList) {
+	/**
+	 * If language code is NULL, returns all translates
+	 * @param titleList
+	 * @param languageCode
+	 * @return specification with translations
+	 */
+	public static Specification<ContentEntity> hasTranslationFilters(List<String> titleList, @Nullable String languageCode) {
 		return (root, query, cb) -> {
 			var cleanTitles = cleanList(titleList).stream().map(String::toLowerCase).toList();
-			var cleanLanguages = cleanList(languageCodeList).stream().map(String::toLowerCase).toList();
-
-			if (cleanTitles.isEmpty() && cleanLanguages.isEmpty()) return null;
+			var hasLanguageFilter = languageCode != null && !languageCode.isBlank();
 
 			Join<ContentEntity, ContentTranslationEntity> join = root.join("translations");
 			List<Predicate> predicates = new ArrayList<>();
@@ -123,8 +128,8 @@ public class ContentSpecification {
 					)
 				);
 			}
-			if (!cleanLanguages.isEmpty()) {
-				predicates.add(cb.lower(join.get("languageCode")).in(cleanLanguages));
+			if (hasLanguageFilter) {
+				predicates.add(cb.lower(join.get("languageCode")).equalTo(languageCode.toLowerCase()));
 			}
 
 			query.distinct(true);

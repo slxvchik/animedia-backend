@@ -22,5 +22,6 @@ public record ContentSearchCriteria(
 	@Nullable LocalDateTime updatedAtTo,
     @Nullable Boolean active,
     @Nullable List<String> languageCodeList,
-    @Nullable List<Long> genreIdList
+    @Nullable List<Long> genreIdList,
+	@Nullable String translateLanguageCode
 ) {}

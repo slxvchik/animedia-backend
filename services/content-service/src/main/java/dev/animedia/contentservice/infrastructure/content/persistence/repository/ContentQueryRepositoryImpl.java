@@ -2,7 +2,6 @@ package dev.animedia.contentservice.infrastructure.content.persistence.repositor
 
 import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.domain.content.model.Content;
-import dev.animedia.contentservice.domain.content.model.ContentTranslation;
 import dev.animedia.contentservice.domain.content.model.ContentType;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
 import dev.animedia.contentservice.domain.genre.model.Genre;
@@ -17,24 +16,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	private final JpaContentRepository jpaContentRepository;
-	private final GenreQueryRepository genreQueryService;
+	private final GenreQueryRepository genreQueryRepository;
 	private final StatusQueryRepository statusQueryRepository;
 	private final ContentPersistenceMapper contentPersistenceMapper;
 
 	@Autowired
 	public ContentQueryRepositoryImpl(
 		JpaContentRepository jpaContentRepository,
-		GenreQueryRepository genreQueryService,
+		GenreQueryRepository genreQueryRepository,
 		StatusQueryRepository statusQueryRepository,
 		ContentPersistenceMapper contentPersistenceMapper
     ) {
 		this.jpaContentRepository = jpaContentRepository;
-		this.genreQueryService = genreQueryService;
+		this.genreQueryRepository = genreQueryRepository;
 		this.statusQueryRepository = statusQueryRepository;
         this.contentPersistenceMapper = contentPersistenceMapper;
     }
@@ -60,33 +58,13 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 		List<Long> genreIdList = contentEntity.getGenreSet().stream()
 			.map(GenreEntity::getId)
 			.toList();
-		Set<Genre> genreSet = new HashSet<>(genreQueryService.findByIdList(genreIdList, languageCode));
+		Set<Genre> genreSet = new HashSet<>(genreQueryRepository.findByIdList(genreIdList, languageCode));
 
 		Long statusId = contentEntity.getStatusEntity().getId();
 		Status status = statusQueryRepository.findById(statusId, languageCode)
 			.orElseThrow(StatusNotFoundException::new);
 
-		Set<ContentTranslation> translationSet = contentEntity.getTranslationSet().stream()
-			.map(contentPersistenceMapper::toContentTranslation)
-			.collect(Collectors.toSet());
-
-		return new Content.Builder()
-			.id(contentEntity.getId())
-			.alias(contentEntity.getAlias())
-			.type(contentEntity.getContentType())
-			.season(contentEntity.getSeason())
-			.status(status)
-			.coverUrl(contentEntity.getCoverUrl())
-			.trailerUrl(contentEntity.getTrailerUrl())
-			.releaseDate(contentEntity.getReleaseDate())
-			.createdAt(contentEntity.getCreatedAt())
-			.updatedAt(contentEntity.getUpdatedAt())
-			.active(contentEntity.getActive())
-			.sort(contentEntity.getSortOrder())
-			.languageCodeSet(contentEntity.getLanguageCodeSet())
-			.genreSet(genreSet)
-			.translationSet(translationSet)
-			.build();
+		return contentPersistenceMapper.toContent(contentEntity, contentEntity.getTranslationSet(), status, genreSet);
 	}
 
 	@Override
