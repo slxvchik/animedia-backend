@@ -6,5 +6,5 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 
 public interface GetGenreListUseCase {
-	List<GenreDto> getList(List<Long> idList, @Nullable String languageCode);
+	List<GenreDto> getList(List<Long> idList, boolean onlyActive, @Nullable String languageCode);
 }

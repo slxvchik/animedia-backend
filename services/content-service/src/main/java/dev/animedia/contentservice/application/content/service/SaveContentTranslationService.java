@@ -33,7 +33,7 @@ public class SaveContentTranslationService implements SaveContentTranslationUseC
 
     @Override
     public ContentDto saveTranslation(UUID contentUuid, ContentTranslationDto contentTranslationDto) {
-        Content content = contentQueryRepository.find(contentUuid, null)
+        Content content = contentQueryRepository.find(contentUuid, false, null)
             .orElseThrow(ContentNotFoundException::new);
 
         ContentTranslation contentTranslation = contentApplicationMapper.toContentTranslation(contentTranslationDto);

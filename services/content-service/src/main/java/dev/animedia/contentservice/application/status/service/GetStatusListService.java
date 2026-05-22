@@ -26,8 +26,8 @@ public class GetStatusListService implements GetStatusListUseCase {
     }
 
     @Override
-    public List<StatusDto> getList(List<Long> idList, @Nullable String languageCode) {
-        List<Status> statusList = statusQueryRepository.findByIdList(idList, languageCode);
+    public List<StatusDto> getList(List<Long> idList, boolean onlyActive, @Nullable String languageCode) {
+        List<Status> statusList = statusQueryRepository.findByIdList(idList, onlyActive, languageCode);
         return statusList
             .stream()
             .map(statusApplicationMapper::toStatusDto)

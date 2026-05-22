@@ -6,8 +6,11 @@ import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.infrastructure.persistence.content.model.ContentEntity;
 import dev.animedia.contentservice.infrastructure.persistence.content.model.ContentTranslationEntity;
+import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreEntity;
+import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,15 +51,51 @@ public class ContentPersistenceMapper {
         );
     }
 
-    public ContentEntity toContentEntity(Content content) {
+    public ContentEntity toContentEntity(
+        Content content,
+        StatusEntity statusEntity,
+        Set<GenreEntity> genreEntitySet
+    ) {
         if (content == null) return null;
 
-        return null;
+        ContentEntity ce = new ContentEntity();
+        ce.setId(content.getId());
+        ce.setAlias(content.getAlias());
+        ce.setContentType(content.getType());
+        ce.setSeason(content.getSeason());
+        ce.setStatusEntity(statusEntity);
+        ce.setCoverUrl(content.getCoverUrl());
+        ce.setTrailerUrl(content.getTrailerUrl());
+        ce.setReleaseDate(content.getReleaseDate());
+        ce.setCreatedAt(content.getCreatedAt());
+        ce.setUpdatedAt(content.getUpdatedAt());
+        ce.setActive(content.getActive());
+        ce.setSortOrder(content.getSort());
+
+        ce.setLanguageCodeSet(content.getLanguageCodeSet());
+        ce.setGenreSet(genreEntitySet);
+
+        ce.setTranslationSet(
+            content.getTranslationSet() == null ? null
+            : content.getTranslationSet().stream()
+                .map(ct -> toContentTranslationEntity(ct, ce))
+                .collect(Collectors.toSet())
+        );
+
+        return ce;
     }
 
-    public ContentTranslationEntity toContentTranslationEntity(ContentTranslation contentTranslation) {
+    public ContentTranslationEntity toContentTranslationEntity(ContentTranslation contentTranslation, ContentEntity contentEntity) {
         if (contentTranslation == null) return null;
 
-        return null;
+        ContentTranslationEntity cte = new ContentTranslationEntity();
+
+        cte.setId(contentTranslation.getId());
+        cte.setContentEntity(contentEntity);
+        cte.setLanguageCode(contentTranslation.getLanguageCode());
+        cte.setTitle(contentTranslation.getTitle());
+        cte.setDescription(contentTranslation.getDescription());
+
+        return cte;
     }
 }

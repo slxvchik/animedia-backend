@@ -13,15 +13,17 @@ public class Genre {
     private final Long id;
     private final String alias;
     private int sortOrder;
+    private boolean active;
     private final Set<GenreTranslation> translationSet = new HashSet<>();
 
     private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
-    public Genre(Long id, String alias, int sortOrder, Set<GenreTranslation> translationSet) {
+    public Genre(Long id, String alias, int sortOrder, boolean active, Set<GenreTranslation> translationSet) {
         validateAlias(alias);
         this.id = id;
         this.alias = alias;
         setSortOrder(sortOrder);
+        this.active = active;
         setTranslationSet(translationSet);
     }
 
@@ -37,12 +39,17 @@ public class Genre {
         return sortOrder;
     }
 
+    public boolean getActive() {
+        return active;
+    }
+
     public Set<GenreTranslation> getTranslationSet() {
         return Collections.unmodifiableSet(translationSet);
     }
 
-    public void update(int sortOrder, Set<GenreTranslation> translationSet) {
+    public void update(int sortOrder, boolean active, Set<GenreTranslation> translationSet) {
         setSortOrder(sortOrder);
+        this.active = active;
         setTranslationSet(translationSet);
     }
 

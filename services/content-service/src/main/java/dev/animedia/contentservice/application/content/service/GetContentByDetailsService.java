@@ -26,8 +26,8 @@ public class GetContentByDetailsService implements GetContentByDetailsUseCase {
 	}
 
 	@Override
-	public ContentDto get(String alias, ContentType type, @Nullable Integer season, @Nullable String languageCode) {
-		Content content = contentQueryRepository.find(alias, type, season, languageCode)
+	public ContentDto get(String alias, ContentType type, @Nullable Integer season, boolean onlyActive, @Nullable String languageCode) {
+		Content content = contentQueryRepository.find(alias, type, season, onlyActive, languageCode)
 			.orElseThrow(ContentNotFoundException::new);
 		return contentApplicationMapper.toContentDto(content);
 	}

@@ -6,5 +6,6 @@ public record StatusDto(
     Long id,
     String alias,
     int sortOrder,
+	boolean active,
     Set<StatusTranslationDto> translationSet
 ) {}

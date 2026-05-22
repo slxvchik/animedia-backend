@@ -25,8 +25,8 @@ public class GetStatusService implements GetStatusUseCase {
     }
 
     @Override
-    public StatusDto get(Long id, @Nullable String languageCode) {
-        Status status = statusQueryRepository.findById(id, languageCode)
+    public StatusDto get(Long id, boolean onlyActive, @Nullable String languageCode) {
+        Status status = statusQueryRepository.findById(id, onlyActive, languageCode)
             .orElseThrow(StatusNotFoundException::new);
         return statusApplicationMapper.toStatusDto(status);
     }

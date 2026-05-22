@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "language")
 public class LanguageEntity {
     @Id
     @Column(columnDefinition = "VARCHAR(2)", unique = true, nullable = false)

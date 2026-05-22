@@ -1,4 +1,4 @@
-package dev.animedia.languageservice.infrastructure.grpc.mapper;
+package dev.animedia.languageservice.presentation.grpc.mapper;
 
 import com.google.protobuf.Any;
 import dev.animedia.grpc.common.CommonProto;

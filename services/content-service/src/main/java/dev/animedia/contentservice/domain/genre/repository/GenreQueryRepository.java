@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GenreQueryRepository {
-    Optional<Genre> findById(Long id, @Nullable String languageCode);
-    List<Genre> findByIdList(List<Long> idList, @Nullable String languageCode);
+    Optional<Genre> findById(Long id, boolean onlyActive, @Nullable String languageCode);
+    List<Genre> findByIdList(List<Long> idList, boolean onlyActive, @Nullable String languageCode);
     Page<Genre> search(GenreSearchCriteria genreSearchCriteria, Pageable pageable);
 
     boolean existsByAlias(String alias);

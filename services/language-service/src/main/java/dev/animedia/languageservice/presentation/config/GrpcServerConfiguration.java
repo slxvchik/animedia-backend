@@ -1,15 +1,15 @@
-package dev.animedia.languageservice.config;
+package dev.animedia.languageservice.presentation.config;
 
-import dev.animedia.languageservice.infrastructure.exception.GlobalExceptionInterceptor;
-import dev.animedia.languageservice.infrastructure.grpc.interceptor.LanguageInterceptor;
+import dev.animedia.languageservice.presentation.exception.GlobalExceptionInterceptor;
+import dev.animedia.languageservice.presentation.grpc.interceptor.LanguageInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.grpc.server.GlobalServerInterceptor;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import dev.animedia.languageservice.infrastructure.exception.AppExceptionMessageService;
-import dev.animedia.languageservice.infrastructure.grpc.mapper.AppExceptionStatusMapper;
+import dev.animedia.languageservice.presentation.exception.AppExceptionMessageService;
+import dev.animedia.languageservice.presentation.grpc.mapper.AppExceptionStatusMapper;
 import io.grpc.ServerInterceptor;
 
 @Configuration

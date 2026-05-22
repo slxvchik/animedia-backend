@@ -25,8 +25,8 @@ public class GetGenreService implements GetGenreUseCase {
 	}
 
 	@Override
-	public GenreDto get(Long id, @Nullable String languageCode) {
-		Genre genre = genreQueryRepository.findById(id, languageCode)
+	public GenreDto get(Long id, boolean onlyActive, @Nullable String languageCode) {
+		Genre genre = genreQueryRepository.findById(id, onlyActive, languageCode)
 			.orElseThrow(GenreNotFoundException::new);
 		return genreApplicationMapper.toGenreDto(genre);
 	}

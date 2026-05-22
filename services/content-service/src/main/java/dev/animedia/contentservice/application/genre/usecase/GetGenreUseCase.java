@@ -4,5 +4,5 @@ import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import jakarta.annotation.Nullable;
 
 public interface GetGenreUseCase {
-	GenreDto get(Long id, @Nullable String languageCode);
+	GenreDto get(Long id, boolean onlyActive, @Nullable String languageCode);
 }

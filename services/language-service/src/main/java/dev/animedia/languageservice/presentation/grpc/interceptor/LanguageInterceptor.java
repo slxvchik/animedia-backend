@@ -1,4 +1,4 @@
-package dev.animedia.languageservice.infrastructure.grpc.interceptor;
+package dev.animedia.languageservice.presentation.grpc.interceptor;
 
 import io.grpc.*;
 import org.slf4j.Logger;

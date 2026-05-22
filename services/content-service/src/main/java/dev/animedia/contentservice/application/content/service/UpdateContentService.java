@@ -30,7 +30,7 @@ public class UpdateContentService implements UpdateContentUseCase {
 
     @Override
     public ContentDto update(ContentDto contentDto) {
-        Content content = contentQueryRepository.find(contentDto.id(), null)
+        Content content = contentQueryRepository.find(contentDto.id(), false, null)
             .orElseThrow(ContentNotFoundException::new);
 
         ContentUpdate contentUpdate = contentApplicationMapper.toContentUpdate(contentDto);

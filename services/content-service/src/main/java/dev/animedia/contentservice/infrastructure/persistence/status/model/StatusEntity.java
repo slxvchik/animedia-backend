@@ -24,6 +24,9 @@ public class StatusEntity {
     @Column(name = "sort_order")
     private Integer sortOrder = 0;
 
+    @Column(name = "active")
+    private Boolean active = false;
+
     @OneToMany(
         fetch = FetchType.LAZY,
         mappedBy = "statusEntity",
@@ -54,6 +57,14 @@ public class StatusEntity {
 
     public void setSortOrder(Integer sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Set<StatusTranslationEntity> getTranslationSet() {

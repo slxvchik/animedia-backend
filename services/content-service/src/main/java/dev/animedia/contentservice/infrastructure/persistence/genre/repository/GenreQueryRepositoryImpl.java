@@ -33,16 +33,16 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
     }
 
     @Override
-    public Optional<Genre> findById(Long id, @Nullable String languageCode) {
-        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findById(id, languageCode);
+    public Optional<Genre> findById(Long id, boolean onlyActive, @Nullable String languageCode) {
+        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findById(id, onlyActive, languageCode);
         return Optional.ofNullable(
             genrePersistenceMapper.toGenreList(genreTranslationDbRowList).getFirst()
         );
     }
 
     @Override
-    public List<Genre> findByIdList(List<Long> idList, @Nullable String languageCode) {
-        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findByIdListAndLanguageCode(idList, languageCode);
+    public List<Genre> findByIdList(List<Long> idList, boolean onlyActive, @Nullable String languageCode) {
+        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findByIdListAndLanguageCode(idList, onlyActive, languageCode);
         return genrePersistenceMapper.toGenreList(genreTranslationDbRowList);
     }
 
@@ -51,6 +51,7 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
         org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size());
 
         org.springframework.data.domain.Page<Long> genreIdSpringPage = jpaGenreRepository.search(
+            genreSearchCriteria.onlyActive(),
             genreSearchCriteria.alias(),
             genreSearchCriteria.name(),
             genreSearchCriteria.description(),
@@ -60,6 +61,7 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
 
         List<GenreTranslationRowDto> genreTranslationRowDtoList = jpaGenreRepository.findByIdListAndLanguageCode(
             genreIdSpringPage.getContent(),
+            genreSearchCriteria.onlyActive(),
             genreSearchCriteria.languageCode()
         );
 

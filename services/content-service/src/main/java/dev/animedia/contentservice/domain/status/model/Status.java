@@ -13,15 +13,17 @@ public class Status {
 	private final Long id;
 	private final String alias;
 	private int sortOrder;
+	private boolean active;
 	private final Set<StatusTranslation> translationSet = new HashSet<>();
 
 	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
-	public Status(Long id, String alias, int sortOrder, Set<StatusTranslation> translationSet) {
+	public Status(Long id, String alias, int sortOrder, boolean active, Set<StatusTranslation> translationSet) {
 		validateAlias(alias);
 		this.id = id;
 		this.alias = alias;
 		setSortOrder(sortOrder);
+		this.active = active;
 		setTranslationSet(translationSet);
 	}
 
@@ -37,12 +39,17 @@ public class Status {
 		return sortOrder;
 	}
 
+	public boolean getActive() {
+		return active;
+	}
+
 	public Set<StatusTranslation> getTranslationSet() {
 		return Collections.unmodifiableSet(translationSet);
 	}
 
-	public void update(int sortOrder, Set<StatusTranslation> translationSet) {
+	public void update(int sortOrder, boolean active, Set<StatusTranslation> translationSet) {
 		setSortOrder(sortOrder);
+		this.active = active;
 		setTranslationSet(translationSet);
 	}
 

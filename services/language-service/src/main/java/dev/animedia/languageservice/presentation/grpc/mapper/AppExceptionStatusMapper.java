@@ -1,4 +1,4 @@
-package dev.animedia.languageservice.infrastructure.grpc.mapper;
+package dev.animedia.languageservice.presentation.grpc.mapper;
 
 import org.springframework.stereotype.Component;
 

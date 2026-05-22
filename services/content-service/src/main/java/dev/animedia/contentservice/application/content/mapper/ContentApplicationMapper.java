@@ -81,7 +81,7 @@ public class ContentApplicationMapper {
             content.getReleaseDate(),
             content.getCreatedAt(),
             content.getUpdatedAt(),
-            content.isActive(),
+            content.getActive(),
             content.getSort(),
             content.getLanguageCodeSet(),
             content.getGenreSet().stream()

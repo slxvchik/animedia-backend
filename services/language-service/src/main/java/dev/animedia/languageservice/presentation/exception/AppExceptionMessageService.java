@@ -1,6 +1,6 @@
-package dev.animedia.languageservice.infrastructure.exception;
+package dev.animedia.languageservice.presentation.exception;
 
-import dev.animedia.languageservice.infrastructure.grpc.interceptor.LanguageInterceptor;
+import dev.animedia.languageservice.presentation.grpc.interceptor.LanguageInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;

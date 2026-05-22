@@ -79,12 +79,22 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 			allStatusIdSet.add(contentEntity.getStatusEntity().getId());
 		}
 
-		Map<Long, Genre> genreMap = genreQueryRepository.findByIdList(new ArrayList<>(allGenreIdSet), languageCode)
+		boolean onlyActive = Boolean.TRUE.equals(contentSearchCriteria.active());
+
+		Map<Long, Genre> genreMap = genreQueryRepository.findByIdList(
+				new ArrayList<>(allGenreIdSet),
+				onlyActive,
+				languageCode
+			)
 			.stream()
 			.collect(
 				Collectors.toMap(Genre::getId, genre -> genre)
 			);
-		Map<Long, Status> statusMap = statusQueryRepository.findByIdList(new ArrayList<>(allStatusIdSet), languageCode)
+		Map<Long, Status> statusMap = statusQueryRepository.findByIdList(
+				new ArrayList<>(allStatusIdSet),
+				onlyActive,
+				languageCode
+			)
 			.stream()
 			.collect(
 				Collectors.toMap(Status::getId, status -> status)

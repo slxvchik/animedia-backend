@@ -38,9 +38,9 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
     }
 
 	@Override
-	public Optional<Content> find(UUID id, @Nullable String languageCode) {
-		return jpaContentRepository.findById(id, languageCode)
-			.map(contentEntity -> mapToContent(contentEntity, languageCode));
+	public Optional<Content> find(UUID id, boolean onlyActive, @Nullable String languageCode) {
+		return jpaContentRepository.findById(id, onlyActive, languageCode)
+			.map(contentEntity -> mapToContent(contentEntity, onlyActive, languageCode));
 	}
 
 	@Override
@@ -48,20 +48,21 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 		String alias,
 		ContentType type,
 		@Nullable Integer season,
+		boolean onlyActive,
 		@Nullable String languageCode
 	) {
-		return jpaContentRepository.findByAliasAndTypeAndSeason(alias, type, season, languageCode)
-			.map(contentEntity -> mapToContent(contentEntity, languageCode));
+		return jpaContentRepository.findByAliasAndTypeAndSeason(alias, type, season, onlyActive, languageCode)
+			.map(contentEntity -> mapToContent(contentEntity, onlyActive, languageCode));
 	}
 
-	private Content mapToContent(ContentEntity contentEntity, @Nullable String languageCode) {
+	private Content mapToContent(ContentEntity contentEntity, boolean onlyActive, @Nullable String languageCode) {
 		List<Long> genreIdList = contentEntity.getGenreSet().stream()
 			.map(GenreEntity::getId)
 			.toList();
-		Set<Genre> genreSet = new HashSet<>(genreQueryRepository.findByIdList(genreIdList, languageCode));
+		Set<Genre> genreSet = new HashSet<>(genreQueryRepository.findByIdList(genreIdList, onlyActive, languageCode));
 
 		Long statusId = contentEntity.getStatusEntity().getId();
-		Status status = statusQueryRepository.findById(statusId, languageCode)
+		Status status = statusQueryRepository.findById(statusId, onlyActive, languageCode)
 			.orElseThrow(StatusNotFoundException::new);
 
 		return contentPersistenceMapper.toContent(contentEntity, contentEntity.getTranslationSet(), status, genreSet);

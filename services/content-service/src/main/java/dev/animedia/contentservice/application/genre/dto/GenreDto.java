@@ -6,5 +6,6 @@ public record GenreDto(
 	Long id,
 	String alias,
 	int sortOrder,
+	boolean active,
 	Set<GenreTranslationDto> translationSet
 ) {}

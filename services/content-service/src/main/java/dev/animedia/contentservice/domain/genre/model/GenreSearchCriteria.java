@@ -2,9 +2,8 @@ package dev.animedia.contentservice.domain.genre.model;
 
 import jakarta.annotation.Nullable;
 
-import java.util.List;
-
 public record GenreSearchCriteria(
+	boolean onlyActive,
     @Nullable String alias,
     @Nullable String name,
     @Nullable String description,

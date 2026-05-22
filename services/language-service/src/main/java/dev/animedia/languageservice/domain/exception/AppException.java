@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 public class AppException extends RuntimeException {
     private final AppExceptionStatus status;
     private final String code;
-    private final static Logger LOGGER = Logger.getLogger(AppException.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AppException.class.getName());
 
     public AppException(AppExceptionStatus status, String code) {
         LOGGER.log(Level.WARNING, "App exception: {0}", String.format("Code: %s;", code));

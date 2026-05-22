@@ -3,6 +3,7 @@ package dev.animedia.languageservice.infrastructure.persistence.repository;
 import dev.animedia.languageservice.domain.model.Page;
 import dev.animedia.languageservice.domain.model.Pageable;
 import dev.animedia.languageservice.domain.model.Language;
+import dev.animedia.languageservice.domain.repository.LanguageQueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class LanguageQueryRepository implements dev.animedia.languageservice.domain.repository.LanguageQueryRepository {
+public class LanguageQueryRepositoryImpl implements LanguageQueryRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public LanguageQueryRepository(JdbcTemplate jdbcTemplate) {
+	public LanguageQueryRepositoryImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

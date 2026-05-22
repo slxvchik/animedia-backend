@@ -27,8 +27,8 @@ public class GetGenreListService implements GetGenreListUseCase {
 	}
 
 	@Override
-	public List<GenreDto> getList(List<Long> idList, @Nullable String languageCode) {
-		List<Genre> genreList = genreQueryRepository.findByIdList(idList, languageCode);
+	public List<GenreDto> getList(List<Long> idList, boolean onlyActive, @Nullable String languageCode) {
+		List<Genre> genreList = genreQueryRepository.findByIdList(idList, onlyActive, languageCode);
 		return genreList.stream()
 			.map(genreApplicationMapper::toGenreDto)
 			.toList();

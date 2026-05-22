@@ -4,5 +4,5 @@ import dev.animedia.contentservice.application.status.dto.StatusDto;
 import jakarta.annotation.Nullable;
 
 public interface GetStatusUseCase {
-    StatusDto get(Long id, @Nullable String languageCode);
+    StatusDto get(Long id, boolean onlyActive, @Nullable String languageCode);
 }

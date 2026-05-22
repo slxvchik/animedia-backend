@@ -13,7 +13,7 @@ public class Language {
     private boolean isDefault;
     private int sortOrder;
     private String flagEmoji;
-    private final static Pattern CODE_PATTERN = Pattern.compile("^[a-z]{2}$");
+    private static final Pattern CODE_PATTERN = Pattern.compile("^[a-z]{2}$");
 
     public Language(String code, String name, boolean isActive, boolean isDefault, int sortOrder, String flagEmoji) {
         validateCode(code);

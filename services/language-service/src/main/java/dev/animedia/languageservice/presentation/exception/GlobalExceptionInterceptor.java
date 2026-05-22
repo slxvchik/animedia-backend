@@ -1,7 +1,7 @@
-package dev.animedia.languageservice.infrastructure.exception;
+package dev.animedia.languageservice.presentation.exception;
 
 import dev.animedia.languageservice.domain.exception.AppException;
-import dev.animedia.languageservice.infrastructure.grpc.mapper.AppExceptionStatusMapper;
+import dev.animedia.languageservice.presentation.grpc.mapper.AppExceptionStatusMapper;
 import io.grpc.*;
 
 import java.nio.charset.StandardCharsets;

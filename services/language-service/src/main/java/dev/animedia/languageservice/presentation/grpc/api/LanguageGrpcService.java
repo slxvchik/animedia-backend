@@ -1,11 +1,11 @@
-package dev.animedia.languageservice.infrastructure.grpc.api;
+package dev.animedia.languageservice.presentation.grpc.api;
 
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.language.LanguageProto;
 import dev.animedia.grpc.language.LanguageServiceGrpc;
 import dev.animedia.languageservice.application.usecase.*;
-import dev.animedia.languageservice.infrastructure.grpc.mapper.LanguageGrpcMapper;
-import dev.animedia.languageservice.infrastructure.grpc.mapper.PaginationGrpcMapper;
+import dev.animedia.languageservice.presentation.grpc.mapper.LanguageGrpcMapper;
+import dev.animedia.languageservice.presentation.grpc.mapper.PaginationGrpcMapper;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;

@@ -101,7 +101,7 @@ public class Content {
 		return updatedAt;
 	}
 
-	public boolean isActive() {
+	public boolean getActive() {
 		return active;
 	}
 

@@ -31,11 +31,12 @@ public class UpdateGenreService implements UpdateGenreUseCase {
 
 	@Override
 	public GenreDto update(GenreDto genreDto) {
-		Genre genre = genreQueryRepository.findById(genreDto.id(), null)
+		Genre genre = genreQueryRepository.findById(genreDto.id(), false, null)
 			.orElseThrow(GenreNotFoundException::new);
 
 		genre.update(
 			genreDto.sortOrder(),
+			genreDto.active(),
 			genreDto.translationSet()
 				.stream()
 				.map(genreApplicationMapper::toGenreTranslation)

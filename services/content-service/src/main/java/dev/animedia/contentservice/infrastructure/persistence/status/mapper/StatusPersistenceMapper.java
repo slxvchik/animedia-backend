@@ -46,6 +46,7 @@ public class StatusPersistenceMapper {
 					firstRow.id(),
 					firstRow.alias(),
 					firstRow.sortOrder(),
+					firstRow.active(),
 					translationSet
 				);
 			})
@@ -64,6 +65,7 @@ public class StatusPersistenceMapper {
 			se.getId(),
 			se.getAlias(),
 			se.getSortOrder(),
+			se.getActive(),
 			se.getTranslationSet().stream()
 				.map(this::toStatusTranslation)
 				.collect(Collectors.toSet())

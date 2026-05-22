@@ -30,7 +30,7 @@ public class DeleteContentTranslationService implements DeleteContentTranslation
 
     @Override
     public void deleteTranslation(UUID contentUuid, UUID contentTranslationUUID) {
-        Content content = contentQueryRepository.find(contentUuid, null)
+        Content content = contentQueryRepository.find(contentUuid, false, null)
             .orElseThrow(ContentNotFoundException::new);
         content.removeTranslation(contentUuid);
         contentCommandRepository.update(content);

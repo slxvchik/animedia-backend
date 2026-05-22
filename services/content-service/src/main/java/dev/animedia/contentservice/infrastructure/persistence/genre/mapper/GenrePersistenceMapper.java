@@ -36,6 +36,7 @@ public class GenrePersistenceMapper {
                     first.id(),
                     first.alias(),
                     first.sortOrder(),
+                    first.active(),
                     translationSet
                 );
             })
@@ -49,6 +50,7 @@ public class GenrePersistenceMapper {
             genreEntity.getId(),
             genreEntity.getAlias(),
             genreEntity.getSortOrder(),
+            genreEntity.getActive(),
             genreEntity.getTranslationSet().stream()
                 .map(this::toGenreTranslation)
                 .collect(Collectors.toSet())

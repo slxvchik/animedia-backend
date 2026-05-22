@@ -34,7 +34,7 @@ public class UpdateStatusService implements UpdateStatusUseCase {
     @Transactional
     @Override
     public StatusDto update(StatusDto statusDto) {
-        Status status = statusQueryRepository.findById(statusDto.id(), null)
+        Status status = statusQueryRepository.findById(statusDto.id(), false, null)
             .orElseThrow(StatusNotFoundException::new);
 
         boolean aliasExists = statusQueryRepository.existsByAliasExcludeId(statusDto.alias(), statusDto.id());
@@ -42,6 +42,7 @@ public class UpdateStatusService implements UpdateStatusUseCase {
 
         status.update(
             statusDto.sortOrder(),
+            statusDto.active(),
             statusDto.translationSet()
                 .stream()
                 .map(statusApplicationMapper::toStatusTranslation)

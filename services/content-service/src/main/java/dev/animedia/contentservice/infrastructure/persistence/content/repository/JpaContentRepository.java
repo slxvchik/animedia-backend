@@ -20,9 +20,12 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 		"LEFT JOIN FETCH ce.statusEntity se " +
 		"LEFT JOIN FETCH ce.genreSet g " +
 		"LEFT JOIN FETCH ce.translationSet t " +
-		"WHERE ce.id = :id AND (:lang IS NULL OR t.languageCode = :lang)")
+		"WHERE ce.id = :id " +
+		"AND (:lang IS NULL OR t.languageCode = :lang) " +
+		"AND (:onlyActive = false OR ce.active = true)")
 	Optional<ContentEntity> findById(
 		@Param("id") UUID id,
+		@Param("onlyActive") boolean onlyActive,
 		@Param("lang") @Nullable String languageCode
 	);
 
@@ -31,11 +34,16 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 		"LEFT JOIN FETCH ce.statusEntity se " +
 		"LEFT JOIN FETCH ce.genreSet g " +
 		"LEFT JOIN FETCH ce.translationSet t " +
-		"WHERE ce.alias = :alias AND ce.contentType = :type AND ce.season = :season AND (:lang IS NULL OR t.languageCode = :lang)")
+		"WHERE ce.alias = :alias " +
+		"AND ce.contentType = :type " +
+		"AND ce.season = :season " +
+		"AND (:lang IS NULL OR t.languageCode = :lang) " +
+		"AND (:onlyActive = false OR ce.active = true)")
 	Optional<ContentEntity> findByAliasAndTypeAndSeason(
 		@Param("alias") String alias,
 		@Param("type") ContentType type,
 		@Param("season") Integer season,
+		@Param("onlyActive") boolean onlyActive,
 		@Param("lang") @Nullable String languageCode
 	);
 

@@ -27,8 +27,8 @@ public class GetContentByIdService implements GetContentByIdUseCase {
     }
 
     @Override
-    public ContentDto get(UUID uuid, @Nullable String languageCode) {
-        Content content = contentQueryRepository.find(uuid, languageCode)
+    public ContentDto get(UUID uuid, boolean onlyActive, @Nullable String languageCode) {
+        Content content = contentQueryRepository.find(uuid, onlyActive, languageCode)
             .orElseThrow(ContentNotFoundException::new);
         return contentApplicationMapper.toContentDto(content);
     }
