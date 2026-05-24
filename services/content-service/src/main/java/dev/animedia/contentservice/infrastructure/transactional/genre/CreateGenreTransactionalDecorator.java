@@ -1,13 +1,13 @@
-package dev.animedia.contentservice.infrastructure.facade.genre;
+package dev.animedia.contentservice.infrastructure.transactional.genre;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.usecase.CreateGenreUseCase;
 import org.springframework.transaction.annotation.Transactional;
 
-public class CreateGenreFacade implements CreateGenreUseCase {
+public class CreateGenreTransactionalDecorator implements CreateGenreUseCase {
 	private final CreateGenreUseCase createGenreUseCase;
 
-	public CreateGenreFacade(CreateGenreUseCase createGenreUseCase) {
+	public CreateGenreTransactionalDecorator(CreateGenreUseCase createGenreUseCase) {
 		this.createGenreUseCase = createGenreUseCase;
 	}
 

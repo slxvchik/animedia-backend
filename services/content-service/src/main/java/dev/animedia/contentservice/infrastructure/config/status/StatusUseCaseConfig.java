@@ -5,8 +5,8 @@ import dev.animedia.contentservice.application.status.service.*;
 import dev.animedia.contentservice.application.status.usecase.*;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
-import dev.animedia.contentservice.infrastructure.facade.status.CreateStatusFacade;
-import dev.animedia.contentservice.infrastructure.facade.status.UpdateStatusFacade;
+import dev.animedia.contentservice.infrastructure.transactional.status.CreateStatusTransactionalDecorator;
+import dev.animedia.contentservice.infrastructure.transactional.status.UpdateStatusTransactionalDecorator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -31,8 +31,31 @@ public class StatusUseCaseConfig {
 	public CreateStatusUseCase createStatusFacade(
 		CreateStatusUseCase createStatusUseCase
 	) {
-		return new CreateStatusFacade(
+		return new CreateStatusTransactionalDecorator(
 			createStatusUseCase
+		);
+	}
+
+	@Bean("updateStatusUseCase")
+	public UpdateStatusUseCase updateStatusUseCase(
+		StatusApplicationMapper statusApplicationMapper,
+		StatusQueryRepository statusQueryRepository,
+		StatusCommandRepository statusCommandRepository
+	) {
+		return new UpdateStatusService(
+			statusApplicationMapper,
+			statusQueryRepository,
+			statusCommandRepository
+		);
+	}
+
+	@Bean
+	@Primary
+	public UpdateStatusUseCase updateStatusFacade(
+		UpdateStatusUseCase updateStatusUseCase
+	) {
+		return new UpdateStatusTransactionalDecorator(
+			updateStatusUseCase
 		);
 	}
 
@@ -88,29 +111,6 @@ public class StatusUseCaseConfig {
 		return new SearchStatusService(
 			statusApplicationMapper,
 			statusQueryRepository
-		);
-	}
-
-	@Bean("updateStatusUseCase")
-	public UpdateStatusUseCase updateStatusUseCase(
-		StatusApplicationMapper statusApplicationMapper,
-		StatusQueryRepository statusQueryRepository,
-		StatusCommandRepository statusCommandRepository
-	) {
-		return new UpdateStatusService(
-			statusApplicationMapper,
-			statusQueryRepository,
-			statusCommandRepository
-		);
-	}
-
-	@Bean
-	@Primary
-	public UpdateStatusUseCase updateStatusFacade(
-		UpdateStatusUseCase updateStatusUseCase
-	) {
-		return new UpdateStatusFacade(
-			updateStatusUseCase
 		);
 	}
 }

@@ -8,6 +8,9 @@ option java_outer_classname="ContentStatusCommonProto";
 message ContentStatusResponse {
   int64 id = 1;
   string alias = 2;
+  int32 sort_order = 3;
+  bool active = 4;
+  repeated ContentStatusTranslationResponse translations = 5;
 }
 
 message ContentStatusTranslationResponse {
@@ -15,14 +18,4 @@ message ContentStatusTranslationResponse {
   int64 content_status_id = 2;
   string language_code = 3;
   string name = 4;
-}
-
-message ContentStatusWithTranslationResponse {
-  ContentStatusResponse content_status = 1;
-  ContentStatusTranslationResponse translation = 2;
-}
-
-message ContentStatusWithTranslationsResponse {
-  ContentStatusResponse content_status = 1;
-  repeated ContentStatusTranslationResponse translations = 2;
 }

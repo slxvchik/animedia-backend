@@ -19,6 +19,6 @@ message PublicSearchRequest {
 }
 
 message PublicSearchResponse {
-  repeated ContentStatusWithTranslationResponse statuses = 1;
+  repeated ContentStatusResponse statuses = 1;
   common.PaginationResponse pagination = 2;
 }

@@ -1,13 +1,13 @@
-package dev.animedia.contentservice.infrastructure.facade.content;
+package dev.animedia.contentservice.infrastructure.transactional.content;
 
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.usecase.UpdateContentUseCase;
 import org.springframework.transaction.annotation.Transactional;
 
-public class UpdateContentFacade implements UpdateContentUseCase {
+public class UpdateContentTransactionalDecorator implements UpdateContentUseCase {
 	private final UpdateContentUseCase updateContentUseCase;
 
-	public UpdateContentFacade(UpdateContentUseCase updateContentUseCase) {
+	public UpdateContentTransactionalDecorator(UpdateContentUseCase updateContentUseCase) {
 		this.updateContentUseCase = updateContentUseCase;
 	}
 

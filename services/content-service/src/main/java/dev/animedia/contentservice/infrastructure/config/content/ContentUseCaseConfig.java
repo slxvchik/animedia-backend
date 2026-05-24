@@ -11,8 +11,8 @@ import dev.animedia.contentservice.application.status.usecase.UpdateStatusUseCas
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentSearchRepository;
-import dev.animedia.contentservice.infrastructure.facade.content.CreateContentFacade;
-import dev.animedia.contentservice.infrastructure.facade.status.UpdateStatusFacade;
+import dev.animedia.contentservice.infrastructure.transactional.content.CreateContentTransactionalDecorator;
+import dev.animedia.contentservice.infrastructure.transactional.status.UpdateStatusTransactionalDecorator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -45,8 +45,35 @@ public class ContentUseCaseConfig {
 	public CreateContentUseCase createContentFacade(
 		CreateContentUseCase createContentUseCase
 	) {
-		return new CreateContentFacade(
+		return new CreateContentTransactionalDecorator(
 			createContentUseCase
+		);
+	}
+
+	@Bean("updateContentUseCase")
+	public UpdateContentUseCase updateContentUseCase(
+		ContentApplicationMapper contentApplicationMapper,
+		ContentQueryRepository contentQueryRepository,
+		ContentCommandRepository contentCommandRepository,
+		StatusApplicationMapper statusApplicationMapper,
+		GenreApplicationMapper genreApplicationMapper
+	) {
+		return new UpdateContentService(
+			contentApplicationMapper,
+			contentQueryRepository,
+			contentCommandRepository,
+			statusApplicationMapper,
+			genreApplicationMapper
+		);
+	}
+
+	@Bean
+	@Primary
+	public UpdateStatusUseCase updateStatusFacade(
+		UpdateStatusUseCase updateStatusUseCase
+	) {
+		return new UpdateStatusTransactionalDecorator(
+			updateStatusUseCase
 		);
 	}
 
@@ -58,6 +85,23 @@ public class ContentUseCaseConfig {
 		return new DeleteContentService(
 			contentQueryRepository,
 			contentCommandRepository
+		);
+	}
+
+	@Bean
+	public SaveContentTranslationUseCase saveContentTranslationUseCase(
+		ContentApplicationMapper contentApplicationMapper,
+		ContentQueryRepository contentQueryRepository,
+		ContentCommandRepository contentCommandRepository,
+		StatusApplicationMapper statusApplicationMapper,
+		GenreApplicationMapper genreApplicationMapper
+	) {
+		return new SaveContentTranslationService(
+			contentApplicationMapper,
+			contentQueryRepository,
+			contentCommandRepository,
+			statusApplicationMapper,
+			genreApplicationMapper
 		);
 	}
 
@@ -103,23 +147,6 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public SaveContentTranslationUseCase saveContentTranslationUseCase(
-		ContentApplicationMapper contentApplicationMapper,
-		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
-	) {
-		return new SaveContentTranslationService(
-			contentApplicationMapper,
-			contentQueryRepository,
-			contentCommandRepository,
-			statusApplicationMapper,
-			genreApplicationMapper
-		);
-	}
-
-	@Bean
 	public SearchContentUseCase searchContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		ContentSearchRepository contentSearchRepository,
@@ -131,33 +158,6 @@ public class ContentUseCaseConfig {
 			contentSearchRepository,
 			statusApplicationMapper,
 			genreApplicationMapper
-		);
-	}
-
-	@Bean("updateContentUseCase")
-	public UpdateContentUseCase updateContentUseCase(
-		ContentApplicationMapper contentApplicationMapper,
-		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
-	) {
-		return new UpdateContentService(
-			contentApplicationMapper,
-			contentQueryRepository,
-			contentCommandRepository,
-			statusApplicationMapper,
-			genreApplicationMapper
-		);
-	}
-
-	@Bean
-	@Primary
-	public UpdateStatusUseCase updateStatusFacade(
-		UpdateStatusUseCase updateStatusUseCase
-	) {
-		return new UpdateStatusFacade(
-			updateStatusUseCase
 		);
 	}
 }

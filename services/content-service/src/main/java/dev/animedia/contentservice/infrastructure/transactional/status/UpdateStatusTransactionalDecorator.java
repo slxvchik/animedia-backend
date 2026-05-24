@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.infrastructure.facade.status;
+package dev.animedia.contentservice.infrastructure.transactional.status;
 
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.usecase.UpdateStatusUseCase;
@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UpdateStatusFacade implements UpdateStatusUseCase {
+public class UpdateStatusTransactionalDecorator implements UpdateStatusUseCase {
 
 	private final UpdateStatusUseCase updateStatusUseCase;
 
 	@Autowired
-	public UpdateStatusFacade(UpdateStatusUseCase updateStatusUseCase) {
+	public UpdateStatusTransactionalDecorator(UpdateStatusUseCase updateStatusUseCase) {
 		this.updateStatusUseCase = updateStatusUseCase;
 	}
 

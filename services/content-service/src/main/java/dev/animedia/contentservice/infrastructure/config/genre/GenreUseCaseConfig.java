@@ -5,8 +5,8 @@ import dev.animedia.contentservice.application.genre.service.*;
 import dev.animedia.contentservice.application.genre.usecase.*;
 import dev.animedia.contentservice.domain.genre.repository.GenreCommandRepository;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import dev.animedia.contentservice.infrastructure.facade.genre.CreateGenreFacade;
-import dev.animedia.contentservice.infrastructure.facade.genre.UpdateGenreFacade;
+import dev.animedia.contentservice.infrastructure.transactional.genre.CreateGenreTransactionalDecorator;
+import dev.animedia.contentservice.infrastructure.transactional.genre.UpdateGenreTransactionalDecorator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -31,8 +31,31 @@ public class GenreUseCaseConfig {
 	public CreateGenreUseCase createGenreFacade(
 		CreateGenreUseCase createGenreUseCase
 	) {
-		return new CreateGenreFacade(
+		return new CreateGenreTransactionalDecorator(
 			createGenreUseCase
+		);
+	}
+
+	@Bean("updateGenreUseCase")
+	public UpdateGenreUseCase updateGenreUseCase(
+		GenreApplicationMapper genreApplicationMapper,
+		GenreQueryRepository genreQueryRepository,
+		GenreCommandRepository genreCommandRepository
+	) {
+		return new UpdateGenreService(
+			genreApplicationMapper,
+			genreQueryRepository,
+			genreCommandRepository
+		);
+	}
+
+	@Bean
+	@Primary
+	public UpdateGenreUseCase updateGenreFacade(
+		UpdateGenreUseCase updateGenreUseCase
+	) {
+		return new UpdateGenreTransactionalDecorator(
+			updateGenreUseCase
 		);
 	}
 
@@ -88,29 +111,6 @@ public class GenreUseCaseConfig {
 		return new SearchGenreService(
 			genreApplicationMapper,
 			genreQueryRepository
-		);
-	}
-
-	@Bean("updateGenreUseCase")
-	public UpdateGenreUseCase updateGenreUseCase(
-		GenreApplicationMapper genreApplicationMapper,
-		GenreQueryRepository genreQueryRepository,
-		GenreCommandRepository genreCommandRepository
-	) {
-		return new UpdateGenreService(
-			genreApplicationMapper,
-			genreQueryRepository,
-			genreCommandRepository
-		);
-	}
-
-	@Bean
-	@Primary
-	public UpdateGenreUseCase updateGenreFacade(
-		UpdateGenreUseCase updateGenreUseCase
-	) {
-		return new UpdateGenreFacade(
-			updateGenreUseCase
 		);
 	}
 }
