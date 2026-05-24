@@ -7,8 +7,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaginationPersistenceMapper {
-	public org.springframework.data.domain.Pageable toPageable(int page, int size, String sortField, String direction) {
-		Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
+	public org.springframework.data.domain.Pageable toPageable(int page, int size, String sortField, String sortDirection) {
+		if (sortField == null || sortField.isBlank()) {
+			return toPageable(page, size);
+		}
+		
+		Sort.Direction direction = (sortDirection == null || sortDirection.isBlank())
+			? Sort.Direction.DESC
+			: Sort.Direction.fromString(sortDirection);
+
+		Sort sort = Sort.by(direction, sortField);
+
 		return PageRequest.of(page, size, sort);
 	}
 

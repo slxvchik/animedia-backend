@@ -17,16 +17,16 @@ service PublicContentService {
 }
 
 message PublicSearchRequest {
-  optional string alias = 1;
-  optional string title = 2;
-  repeated ContentType type = 3;
+  repeated string aliases = 1;
+  repeated string titles = 2;
+  repeated ContentType types = 3;
   repeated int32 seasons = 4;
   repeated int64 content_status_ids = 5;
   optional protos.common.Date release_date_from = 6;
   optional protos.common.Date release_date_to = 7;
   repeated string language_codes = 8;
   repeated int64 genre_ids = 9;
-  optional Sort sort = 10;
+  optional common.Sort sort = 10;
   optional protos.common.PaginationRequest pagination = 11;
 }
 

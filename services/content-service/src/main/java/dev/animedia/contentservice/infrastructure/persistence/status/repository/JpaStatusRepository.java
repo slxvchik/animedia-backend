@@ -36,7 +36,8 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"ON se.id = ste.statusEntity.id " +
 		"WHERE se.id IN :idList " +
 		"AND (:languageCode IS NULL OR :languageCode = ste.languageCode) " +
-		"AND (:onlyActive = false OR se.active = true)")
+		"AND (:onlyActive = false OR se.active = true) " +
+		"ORDER BY se.sortOrder DESC")
 	List<StatusTranslationRowDto> findByIdListAndLanguageCode(
 		@Param("idList") List<Long> idList,
 		@Param("onlyActive") boolean onlyActive,
@@ -50,7 +51,8 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"WHERE (:alias IS NULL OR LOWER(:alias) LIKE CONCAT('%', LOWER(se.alias), '%')) " +
 		"AND (:name IS NULL OR LOWER(:name) LIKE CONCAT('%', LOWER(ste.name), '%')) " +
 		"AND (:lang IS NULL OR LOWER(:lang) = LOWER(ste.languageCode)) " +
-		"AND (:onlyActive = false OR se.active = true)")
+		"AND (:onlyActive = false OR se.active = true) " +
+		"ORDER BY se.sortOrder DESC")
 	Page<Long> search(
 		@Param("onlyActive") boolean onlyActive,
 		@Param("alias") @Nullable String alias,

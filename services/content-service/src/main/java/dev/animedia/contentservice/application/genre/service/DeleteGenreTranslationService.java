@@ -5,15 +5,11 @@ import dev.animedia.contentservice.application.genre.usecase.DeleteGenreTranslat
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreCommandRepository;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class DeleteGenreTranslationService implements DeleteGenreTranslationUseCase {
 	private final GenreQueryRepository genreQueryRepository;
 	private final GenreCommandRepository genreCommandRepository;
 
-	@Autowired
 	public DeleteGenreTranslationService(
 		GenreQueryRepository genreQueryRepository,
 		GenreCommandRepository genreCommandRepository
@@ -24,8 +20,8 @@ public class DeleteGenreTranslationService implements DeleteGenreTranslationUseC
 
 	@Override
 	public void deleteTranslation(Long genreId, Long genreTranslationId) {
-		Genre genre = genreQueryRepository.findById(genreId, null)
-			.orElseThrow(GenreNotFoundException::new);
+		Genre genre = genreQueryRepository.findById(genreId, false, null)
+			.orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
 
 		genre.removeTranslation(genreTranslationId);
 

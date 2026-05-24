@@ -7,16 +7,12 @@ import dev.animedia.contentservice.application.genre.usecase.CreateGenreUseCase;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreCommandRepository;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class CreateGenreService implements CreateGenreUseCase {
 	private final GenreApplicationMapper genreApplicationMapper;
 	private final GenreQueryRepository genreQueryRepository;
 	private final GenreCommandRepository commandRepository;
 
-	@Autowired
 	public CreateGenreService(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository,

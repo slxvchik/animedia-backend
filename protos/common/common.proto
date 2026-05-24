@@ -24,9 +24,9 @@ message PaginationResponse {
 }
 
 message Date {
-  int32 year = 1;
+  int32 day = 1;
   int32 month = 2;
-  int32 day = 3;
+  int32 year = 3;
 }
 
 message EmptyResponse {}

@@ -2,9 +2,7 @@ package dev.animedia.languageservice.application.mapper;
 
 import dev.animedia.languageservice.application.dto.LanguageDto;
 import dev.animedia.languageservice.domain.model.Language;
-import org.springframework.stereotype.Component;
 
-@Component
 public class LanguageApplicationMapper {
     public Language toDomain(LanguageDto dto) {
         if (dto == null) return null;

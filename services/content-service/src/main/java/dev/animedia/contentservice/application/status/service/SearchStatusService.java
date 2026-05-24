@@ -9,15 +9,11 @@ import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.model.StatusSearchCriteria;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class SearchStatusService implements SearchStatusUseCase {
     private final StatusApplicationMapper statusApplicationMapper;
     private final StatusQueryRepository statusQueryRepository;
 
-    @Autowired
     public SearchStatusService(
         StatusApplicationMapper statusApplicationMapper,
         StatusQueryRepository statusQueryRepository

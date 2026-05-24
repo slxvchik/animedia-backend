@@ -1,46 +1,46 @@
 package dev.animedia.contentservice.infrastructure.persistence.content.repository;
 
-import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.model.ContentType;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
-import dev.animedia.contentservice.domain.genre.model.Genre;
-import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import dev.animedia.contentservice.domain.status.model.Status;
-import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import dev.animedia.contentservice.infrastructure.persistence.content.mapper.ContentPersistenceMapper;
-import dev.animedia.contentservice.infrastructure.persistence.content.model.ContentEntity;
-import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreEntity;
+import dev.animedia.contentservice.infrastructure.persistence.genre.mapper.GenrePersistenceMapper;
+import dev.animedia.contentservice.infrastructure.persistence.status.mapper.StatusPersistenceMapper;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	private final JpaContentRepository jpaContentRepository;
-	private final GenreQueryRepository genreQueryRepository;
-	private final StatusQueryRepository statusQueryRepository;
 	private final ContentPersistenceMapper contentPersistenceMapper;
+	private final StatusPersistenceMapper statusPersistenceMapper;
+	private final GenrePersistenceMapper genrePersistenceMapper;
 
 	@Autowired
 	public ContentQueryRepositoryImpl(
 		JpaContentRepository jpaContentRepository,
-		GenreQueryRepository genreQueryRepository,
-		StatusQueryRepository statusQueryRepository,
-		ContentPersistenceMapper contentPersistenceMapper
-    ) {
+		ContentPersistenceMapper contentPersistenceMapper,
+		StatusPersistenceMapper statusPersistenceMapper,
+		GenrePersistenceMapper genrePersistenceMapper
+	) {
 		this.jpaContentRepository = jpaContentRepository;
-		this.genreQueryRepository = genreQueryRepository;
-		this.statusQueryRepository = statusQueryRepository;
         this.contentPersistenceMapper = contentPersistenceMapper;
-    }
+		this.statusPersistenceMapper = statusPersistenceMapper;
+		this.genrePersistenceMapper = genrePersistenceMapper;
+	}
 
 	@Override
 	public Optional<Content> find(UUID id, boolean onlyActive, @Nullable String languageCode) {
 		return jpaContentRepository.findById(id, onlyActive, languageCode)
-			.map(contentEntity -> mapToContent(contentEntity, onlyActive, languageCode));
+			.map(contentEntity -> contentPersistenceMapper.toContent(
+				contentEntity,
+				statusPersistenceMapper::toStatus,
+				genrePersistenceMapper::toGenre
+			));
 	}
 
 	@Override
@@ -52,20 +52,11 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 		@Nullable String languageCode
 	) {
 		return jpaContentRepository.findByAliasAndTypeAndSeason(alias, type, season, onlyActive, languageCode)
-			.map(contentEntity -> mapToContent(contentEntity, onlyActive, languageCode));
-	}
-
-	private Content mapToContent(ContentEntity contentEntity, boolean onlyActive, @Nullable String languageCode) {
-		List<Long> genreIdList = contentEntity.getGenreSet().stream()
-			.map(GenreEntity::getId)
-			.toList();
-		Set<Genre> genreSet = new HashSet<>(genreQueryRepository.findByIdList(genreIdList, onlyActive, languageCode));
-
-		Long statusId = contentEntity.getStatusEntity().getId();
-		Status status = statusQueryRepository.findById(statusId, onlyActive, languageCode)
-			.orElseThrow(StatusNotFoundException::new);
-
-		return contentPersistenceMapper.toContent(contentEntity, contentEntity.getTranslationSet(), status, genreSet);
+			.map(contentEntity -> contentPersistenceMapper.toContent(
+				contentEntity,
+				statusPersistenceMapper::toStatus,
+				genrePersistenceMapper::toGenre
+			));
 	}
 
 	@Override

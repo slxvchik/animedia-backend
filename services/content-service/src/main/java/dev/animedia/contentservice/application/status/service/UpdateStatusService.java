@@ -8,19 +8,14 @@ import dev.animedia.contentservice.application.status.usecase.UpdateStatusUseCas
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-@Service
 public class UpdateStatusService implements UpdateStatusUseCase {
     private final StatusApplicationMapper statusApplicationMapper;
     private final StatusQueryRepository statusQueryRepository;
     private final StatusCommandRepository statusCommandRepository;
 
-    @Autowired
     public UpdateStatusService(
         StatusApplicationMapper statusApplicationMapper,
         StatusQueryRepository statusQueryRepository,
@@ -31,7 +26,6 @@ public class UpdateStatusService implements UpdateStatusUseCase {
         this.statusCommandRepository = statusCommandRepository;
     }
 
-    @Transactional
     @Override
     public StatusDto update(StatusDto statusDto) {
         Status status = statusQueryRepository.findById(statusDto.id(), false, null)

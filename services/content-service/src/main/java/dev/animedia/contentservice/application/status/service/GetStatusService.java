@@ -7,15 +7,11 @@ import dev.animedia.contentservice.application.status.usecase.GetStatusUseCase;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class GetStatusService implements GetStatusUseCase {
     private final StatusApplicationMapper statusApplicationMapper;
     private final StatusQueryRepository statusQueryRepository;
 
-    @Autowired
     public GetStatusService(
         StatusApplicationMapper statusApplicationMapper,
         StatusQueryRepository statusQueryRepository

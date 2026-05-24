@@ -3,39 +3,33 @@ package dev.animedia.contentservice.application.content.mapper;
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.dto.ContentSearchDto;
 import dev.animedia.contentservice.application.content.dto.ContentTranslationDto;
-import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
-import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
+import dev.animedia.contentservice.application.genre.dto.GenreDto;
+import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.model.ContentSearchCriteria;
 import dev.animedia.contentservice.domain.content.model.ContentTranslation;
 import dev.animedia.contentservice.domain.content.model.ContentUpdate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import dev.animedia.contentservice.domain.genre.model.Genre;
+import dev.animedia.contentservice.domain.status.model.Status;
 
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Component
 public class ContentApplicationMapper {
-    private final StatusApplicationMapper statusApplicationMapper;
-    private final GenreApplicationMapper genreApplicationMapper;
-
-    @Autowired
-    public ContentApplicationMapper(
-        StatusApplicationMapper statusApplicationMapper,
-        GenreApplicationMapper genreApplicationMapper
+    public Content toContent(
+        ContentDto contentDto,
+        Function<StatusDto, Status> statusMapper,
+        Function<GenreDto, Genre> genreMapper
     ) {
-        this.statusApplicationMapper = statusApplicationMapper;
-        this.genreApplicationMapper = genreApplicationMapper;
-    }
-
-    public Content toContent(ContentDto contentDto) {
+        if (contentDto == null) return null;
         return Content.builder()
             .id(contentDto.id())
             .alias(contentDto.alias())
             .type(contentDto.type())
             .season(contentDto.season())
             .status(
-                statusApplicationMapper.toStatus(contentDto.status())
+                statusMapper.apply(contentDto.status())
             )
             .coverUrl(contentDto.coverUrl())
             .trailerUrl(contentDto.trailerUrl())
@@ -46,12 +40,14 @@ public class ContentApplicationMapper {
             .sort(contentDto.sort())
             .languageCodeSet(contentDto.languageCodeSet())
             .genreSet(
-                contentDto.genreSet().stream()
-                    .map(genreApplicationMapper::toGenre)
+                contentDto.genreSet()
+                    .stream()
+                    .map(genreMapper)
                     .collect(Collectors.toSet())
             )
             .translationSet(
-                contentDto.translationSet().stream()
+                contentDto.translationSet() == null ? null
+                : contentDto.translationSet().stream()
                     .map(this::toContentTranslation)
                     .collect(Collectors.toSet())
             )
@@ -59,6 +55,7 @@ public class ContentApplicationMapper {
     }
 
     public ContentTranslation toContentTranslation(ContentTranslationDto contentTranslationDto) {
+        if (contentTranslationDto == null) return null;
         return new ContentTranslation(
             contentTranslationDto.uuid(),
             contentTranslationDto.languageCode(),
@@ -67,15 +64,25 @@ public class ContentApplicationMapper {
         );
     }
 
-    public ContentDto toContentDto(Content content) {
+    public ContentDto toContentDto(
+        Content content,
+        Function<Status, StatusDto> statusMapper,
+        Function<Genre, GenreDto> genreMapper
+    ) {
+        if (content == null) return null;
+
+        StatusDto statusDto = statusMapper.apply(content.getStatus());
+
+        Set<GenreDto> genreDtoSet = content.getGenreSet().stream()
+            .map(genreMapper)
+            .collect(Collectors.toSet());
+
         return new ContentDto(
             content.getId(),
             content.getAlias(),
             content.getType(),
             content.getSeason(),
-            statusApplicationMapper.toStatusDto(
-                content.getStatus()
-            ),
+            statusDto,
             content.getCoverUrl(),
             content.getTrailerUrl(),
             content.getReleaseDate(),
@@ -84,9 +91,7 @@ public class ContentApplicationMapper {
             content.getActive(),
             content.getSort(),
             content.getLanguageCodeSet(),
-            content.getGenreSet().stream()
-                .map(genreApplicationMapper::toGenreDto)
-                .collect(Collectors.toUnmodifiableSet()),
+            genreDtoSet,
             content.getTranslationSet().stream()
                 .map(this::toContentTranslationDto)
                 .collect(Collectors.toUnmodifiableSet())
@@ -94,6 +99,7 @@ public class ContentApplicationMapper {
     }
 
     public ContentTranslationDto toContentTranslationDto(ContentTranslation contentTranslation) {
+        if (contentTranslation == null) return null;
         return new ContentTranslationDto(
             contentTranslation.getId(),
             contentTranslation.getLanguageCode(),
@@ -102,20 +108,26 @@ public class ContentApplicationMapper {
         );
     }
 
-    public ContentUpdate toContentUpdate(ContentDto contentDto) {
+    public ContentUpdate toContentUpdate(
+        ContentDto contentDto,
+        Function<StatusDto, Status> statusMapper,
+        Function<GenreDto, Genre> genreMapper
+    ) {
+        if (contentDto == null) return null;
         return new ContentUpdate(
             contentDto.alias(),
             contentDto.type(),
             contentDto.season(),
-            statusApplicationMapper.toStatus(contentDto.status()),
+            statusMapper.apply(contentDto.status()),
             contentDto.coverUrl(),
             contentDto.trailerUrl(),
             contentDto.releaseDate(),
             contentDto.active(),
             contentDto.sort(),
             contentDto.languageCodeSet(),
-            contentDto.genreSet().stream()
-                .map(genreApplicationMapper::toGenre)
+            contentDto.genreSet()
+                .stream()
+                .map(genreMapper)
                 .collect(Collectors.toSet()),
             contentDto.translationSet().stream()
                 .map(this::toContentTranslation)
@@ -124,8 +136,11 @@ public class ContentApplicationMapper {
     }
 
     public ContentSearchCriteria toContentSearchCriteria(ContentSearchDto contentSearchDto) {
+        if (contentSearchDto == null) {
+            return new ContentSearchCriteria(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        }
         return new ContentSearchCriteria(
-            contentSearchDto.uuidList(),
+            contentSearchDto.uuid(),
             contentSearchDto.aliasList(),
             contentSearchDto.titleList(),
             contentSearchDto.typeList(),
@@ -133,9 +148,14 @@ public class ContentApplicationMapper {
             contentSearchDto.statusIdList(),
             contentSearchDto.releaseDateFrom(),
             contentSearchDto.releaseDateTo(),
+            contentSearchDto.createdAtFrom(),
+            contentSearchDto.createdAtTo(),
+            contentSearchDto.updatedAtFrom(),
+            contentSearchDto.updatedAtTo(),
             contentSearchDto.active(),
             contentSearchDto.languageCodeList(),
-            contentSearchDto.genreIdList()
+            contentSearchDto.genreIdList(),
+            contentSearchDto.translateLanguageCode()
         );
     }
 }

@@ -7,17 +7,12 @@ import dev.animedia.languageservice.domain.exception.LanguageCodeAlreadyExistsEx
 import dev.animedia.languageservice.domain.model.Language;
 import dev.animedia.languageservice.domain.repository.LanguageCommandRepository;
 import dev.animedia.languageservice.domain.repository.LanguageQueryRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class CreateLanguageService implements CreateLanguageUseCase {
     private final LanguageCommandRepository languageCommandRepository;
     private final LanguageQueryRepository languageQueryRepository;
     private final LanguageApplicationMapper languageApplicationMapper;
 
-    @Autowired
     public CreateLanguageService(
         LanguageCommandRepository languageCommandRepository,
         LanguageQueryRepository languageQueryRepository,
@@ -28,7 +23,6 @@ public class CreateLanguageService implements CreateLanguageUseCase {
         this.languageApplicationMapper = languageApplicationMapper;
     }
 
-    @Transactional
     @Override
     public LanguageDto create(LanguageDto request) {
         if(languageQueryRepository.findByCode(request.code()).isPresent()) {

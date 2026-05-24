@@ -44,7 +44,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
 	@Override
 	public Page<Content> search(ContentSearchCriteria contentSearchCriteria, Pageable pageable) {
-		org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size());
+		org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size(), pageable.sortField(), pageable.sortDirection());
 
 		String languageCode = contentSearchCriteria.translateLanguageCode();
 
@@ -104,13 +104,8 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 			.stream()
 			.map(ce -> contentPersistenceMapper.toContent(
 				ce,
-				// already loaded with specs
-				ce.getTranslationSet(),
-				statusMap.getOrDefault(ce.getStatusEntity().getId(), null),
-				ce.getGenreSet()
-					.stream()
-					.map(ceGenre -> genreMap.getOrDefault(ceGenre.getId(), null))
-					.collect(Collectors.toSet())
+				statusEntity -> statusMap.get(statusEntity.getId()),
+				genreEntity -> genreMap.get(genreEntity.getId())
 			))
 			.toList();
 

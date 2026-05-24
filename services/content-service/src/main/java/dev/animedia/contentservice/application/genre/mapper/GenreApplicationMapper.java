@@ -1,17 +1,15 @@
 package dev.animedia.contentservice.application.genre.mapper;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.dto.GenreTranslationDto;
 import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
+import dev.animedia.contentservice.application.genre.dto.GenreTranslationDto;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.model.GenreSearchCriteria;
 import dev.animedia.contentservice.domain.genre.model.GenreTranslation;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Component
 public class GenreApplicationMapper {
 	public GenreDto toGenreDto(Genre genre) {
 		if (genre == null) return null;
@@ -19,6 +17,7 @@ public class GenreApplicationMapper {
 			genre.getId(),
 			genre.getAlias(),
 			genre.getSortOrder(),
+			genre.getActive(),
 			genre.getTranslationSet().stream()
 				.map(this::toGenreTranslationDto)
 				.filter(Objects::nonNull)
@@ -42,6 +41,7 @@ public class GenreApplicationMapper {
 			genreDto.id(),
 			genreDto.alias(),
 			genreDto.sortOrder(),
+			genreDto.active(),
 			genreDto.translationSet().stream()
 				.map(this::toGenreTranslation)
 				.filter(Objects::nonNull)
@@ -61,6 +61,7 @@ public class GenreApplicationMapper {
 
 	public GenreSearchCriteria toGenreSearchCriteria(GenreSearchDto searchGenreDto) {
 		return new GenreSearchCriteria(
+			searchGenreDto.onlyActive(),
 			searchGenreDto.alias(),
 			searchGenreDto.name(),
 			searchGenreDto.description(),

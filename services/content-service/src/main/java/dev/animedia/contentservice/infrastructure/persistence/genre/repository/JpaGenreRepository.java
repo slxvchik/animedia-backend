@@ -36,7 +36,8 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "ON ge.id = gte.genreEntity.id " +
         "WHERE (ge.id IN :idList) " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
-        "AND (:onlyActive = false OR ge.active = true)")
+        "AND (:onlyActive = false OR ge.active = true) " +
+        "ORDER BY ge.sortOrder DESC")
     List<GenreTranslationRowDto> findByIdListAndLanguageCode(
         @Param("idList") List<Long> idList,
         @Param("onlyActive") boolean onlyActive,
@@ -51,7 +52,8 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "AND (:name IS NULL OR :name LIKE CONCAT('%', gte.name, '%')) " +
         "AND (:desc IS NULL OR :desc LIKE CONCAT('%', gte.description, '%')) " +
         "AND (:lang IS NULL OR :lang = gte.languageCode) " +
-        "AND (:onlyActive = false OR ge.active = true)")
+        "AND (:onlyActive = false OR ge.active = true) " +
+        "ORDER BY ge.sortOrder DESC")
     Page<Long> search(
         @Param("onlyActive") boolean onlyActive,
         @Param("alias") @Nullable String alias,

@@ -1,23 +1,19 @@
 package dev.animedia.contentservice.application.status.service;
 
 import dev.animedia.contentservice.application.status.dto.StatusDto;
+import dev.animedia.contentservice.application.status.exception.StatusAliasExistsException;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.application.status.usecase.CreateStatusUseCase;
-import dev.animedia.contentservice.application.status.exception.StatusAliasExistsException;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class CreateStatusService implements CreateStatusUseCase {
     private final StatusApplicationMapper statusApplicationMapper;
     private final StatusCommandRepository statusCommandRepository;
     private final StatusQueryRepository statusQueryRepository;
 
-    @Autowired
     public CreateStatusService(
         StatusApplicationMapper statusApplicationMapper,
         StatusCommandRepository statusCommandRepository,

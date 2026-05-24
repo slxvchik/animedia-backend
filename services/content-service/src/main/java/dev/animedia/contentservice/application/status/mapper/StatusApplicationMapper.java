@@ -1,16 +1,14 @@
 package dev.animedia.contentservice.application.status.mapper;
 
-import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
+import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusTranslationDto;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.model.StatusSearchCriteria;
 import dev.animedia.contentservice.domain.status.model.StatusTranslation;
-import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Component
 public class StatusApplicationMapper {
     public Status toStatus(StatusDto statusDto) {
         if (statusDto == null) return null;
@@ -18,6 +16,7 @@ public class StatusApplicationMapper {
             statusDto.id(),
             statusDto.alias(),
             statusDto.sortOrder(),
+            statusDto.active(),
             statusDto.translationSet()
                 .stream()
                 .map(this::toStatusTranslation)
@@ -40,6 +39,7 @@ public class StatusApplicationMapper {
             status.getId(),
             status.getAlias(),
             status.getSortOrder(),
+            status.getActive(),
             status.getTranslationSet()
                 .stream()
                 .map(this::toStatusTranslationDto)
@@ -58,6 +58,7 @@ public class StatusApplicationMapper {
 
     public StatusSearchCriteria toStatusSearchCriteria(StatusSearchDto searchStatusDto) {
         return new StatusSearchCriteria(
+            searchStatusDto.onlyActive(),
             searchStatusDto.alias(),
             searchStatusDto.name(),
             searchStatusDto.languageCode()

@@ -36,7 +36,7 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
     @Override
     public Genre update(Genre genre) {
         GenreEntity genreEntity = jpaGenreRepository.findById(genre.getId())
-            .orElseThrow(GenreNotFoundException::new);
+            .orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
 
         genreEntity.setAlias(genre.getAlias());
         genreEntity.setSortOrder(genre.getSortOrder());
@@ -55,7 +55,7 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
     @Override
     public void delete(Long id) {
         jpaGenreRepository.findById(id)
-            .orElseThrow(GenreNotFoundException::new);
+            .orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
         jpaGenreRepository.deleteById(id);
     }
 }

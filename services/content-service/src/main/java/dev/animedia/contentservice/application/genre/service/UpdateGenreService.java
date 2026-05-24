@@ -7,18 +7,14 @@ import dev.animedia.contentservice.application.genre.usecase.UpdateGenreUseCase;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreCommandRepository;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
-@Service
 public class UpdateGenreService implements UpdateGenreUseCase {
 	private final GenreApplicationMapper genreApplicationMapper;
 	private final GenreQueryRepository genreQueryRepository;
 	private final GenreCommandRepository genreCommandRepository;
 
-	@Autowired
 	public UpdateGenreService(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository,
@@ -32,7 +28,7 @@ public class UpdateGenreService implements UpdateGenreUseCase {
 	@Override
 	public GenreDto update(GenreDto genreDto) {
 		Genre genre = genreQueryRepository.findById(genreDto.id(), false, null)
-			.orElseThrow(GenreNotFoundException::new);
+			.orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
 
 		genre.update(
 			genreDto.sortOrder(),

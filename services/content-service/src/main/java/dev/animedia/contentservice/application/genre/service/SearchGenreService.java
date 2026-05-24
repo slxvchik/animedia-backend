@@ -9,15 +9,11 @@ import dev.animedia.contentservice.domain.genre.model.GenreSearchCriteria;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 import dev.animedia.contentservice.domain.shared.model.Page;
 import dev.animedia.contentservice.domain.shared.model.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class SearchGenreService implements SearchGenreUseCase {
 	private final GenreApplicationMapper genreApplicationMapper;
 	private final GenreQueryRepository genreQueryRepository;
 
-	@Autowired
 	public SearchGenreService(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository
