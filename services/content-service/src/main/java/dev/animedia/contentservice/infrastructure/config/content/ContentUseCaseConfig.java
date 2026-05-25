@@ -7,12 +7,11 @@ import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapp
 import dev.animedia.contentservice.application.genre.usecase.GetGenreListUseCase;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.application.status.usecase.GetStatusUseCase;
-import dev.animedia.contentservice.application.status.usecase.UpdateStatusUseCase;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentSearchRepository;
 import dev.animedia.contentservice.infrastructure.transactional.content.CreateContentTransactionalDecorator;
-import dev.animedia.contentservice.infrastructure.transactional.status.UpdateStatusTransactionalDecorator;
+import dev.animedia.contentservice.infrastructure.transactional.content.UpdateContentTransactionalDecorator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,8 +25,7 @@ public class ContentUseCaseConfig {
 		GenreApplicationMapper genreApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
-		GetStatusUseCase getStatusUseCase,
-		GetGenreListUseCase getGenreListUseCase
+		CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
@@ -35,8 +33,7 @@ public class ContentUseCaseConfig {
 			genreApplicationMapper,
 			contentQueryRepository,
 			contentCommandRepository,
-			getStatusUseCase,
-			getGenreListUseCase
+			checkContentRelationsExistsUseCase
 		);
 	}
 
@@ -56,24 +53,37 @@ public class ContentUseCaseConfig {
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
 		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
+		GenreApplicationMapper genreApplicationMapper,
+		CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
 			contentQueryRepository,
 			contentCommandRepository,
 			statusApplicationMapper,
-			genreApplicationMapper
+			genreApplicationMapper,
+			checkContentRelationsExistsUseCase
 		);
 	}
 
 	@Bean
 	@Primary
-	public UpdateStatusUseCase updateStatusFacade(
-		UpdateStatusUseCase updateStatusUseCase
+	public UpdateContentUseCase updateContentFacade(
+		UpdateContentUseCase updateContentUseCase
 	) {
-		return new UpdateStatusTransactionalDecorator(
-			updateStatusUseCase
+		return new UpdateContentTransactionalDecorator(
+			updateContentUseCase
+		);
+	}
+
+	@Bean
+	public CheckContentRelationsExistsUseCase checkContentRelationsExistUseCase(
+		GetStatusUseCase getStatusUseCase,
+		GetGenreListUseCase getGenreListUseCase
+	) {
+		return new CheckContentRelationsExistsService(
+			getStatusUseCase,
+			getGenreListUseCase
 		);
 	}
 
@@ -83,34 +93,6 @@ public class ContentUseCaseConfig {
 		ContentCommandRepository contentCommandRepository
 	) {
 		return new DeleteContentService(
-			contentQueryRepository,
-			contentCommandRepository
-		);
-	}
-
-	@Bean
-	public SaveContentTranslationUseCase saveContentTranslationUseCase(
-		ContentApplicationMapper contentApplicationMapper,
-		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
-	) {
-		return new SaveContentTranslationService(
-			contentApplicationMapper,
-			contentQueryRepository,
-			contentCommandRepository,
-			statusApplicationMapper,
-			genreApplicationMapper
-		);
-	}
-
-	@Bean
-	public DeleteContentTranslationUseCase deleteContentTranslationUseCase(
-		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository
-	) {
-		return new DeleteContentTranslationService(
 			contentQueryRepository,
 			contentCommandRepository
 		);

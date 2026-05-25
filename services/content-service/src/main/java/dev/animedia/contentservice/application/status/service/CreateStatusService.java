@@ -29,7 +29,7 @@ public class CreateStatusService implements CreateStatusUseCase {
     public StatusDto create(StatusDto statusDto) {
         boolean aliasExists = statusQueryRepository.existsByAlias(statusDto.alias());
         if (aliasExists) {
-            throw new StatusAliasExistsException();
+            throw new StatusAliasExistsException(statusDto.alias());
         }
 
         Status status = statusApplicationMapper.toStatus(statusDto);

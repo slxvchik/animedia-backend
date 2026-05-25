@@ -29,7 +29,7 @@ public class CreateGenreService implements CreateGenreUseCase {
 		Genre genre = genreApplicationMapper.toGenre(genreDto);
 
 		boolean aliasExists = genreQueryRepository.existsByAlias(genreDto.alias());
-		if (aliasExists) throw new GenreAliasExistsException();
+		if (aliasExists) throw new GenreAliasExistsException(genreDto.alias());
 
 		Genre created = commandRepository.create(genre);
 		return genreApplicationMapper.toGenreDto(created);

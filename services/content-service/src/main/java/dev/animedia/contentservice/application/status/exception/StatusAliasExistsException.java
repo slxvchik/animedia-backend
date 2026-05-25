@@ -4,7 +4,7 @@ import dev.animedia.contentservice.domain.shared.exception.AppException;
 import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class StatusAliasExistsException extends AppException {
-    public StatusAliasExistsException() {
-        super(AppExceptionStatus.ALREADY_EXISTS, "STATUS_ALIAS_EXISTS");
+    public StatusAliasExistsException(String alias) {
+        super(AppExceptionStatus.ALREADY_EXISTS, "status.alias.exists", alias);
     }
 }

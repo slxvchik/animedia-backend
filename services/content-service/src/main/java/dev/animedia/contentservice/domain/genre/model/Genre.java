@@ -53,13 +53,9 @@ public class Genre {
         setTranslationSet(translationSet);
     }
 
-    public void removeTranslation(Long id) {
-        this.translationSet.removeIf(translation -> translation.getId().equals(id));
-    }
-
     private void validateAlias(String alias) {
         if (alias == null || alias.isBlank()) throw new GenreAliasRequiredException();
-        if (ALIAS_PATTERN.matcher(alias).hasMatch()) throw new GenreInvalidAliasException();
+        if (!ALIAS_PATTERN.matcher(alias).hasMatch()) throw new GenreInvalidAliasException();
     }
 
     private void setTranslationSet(Set<GenreTranslation> translationSet) {

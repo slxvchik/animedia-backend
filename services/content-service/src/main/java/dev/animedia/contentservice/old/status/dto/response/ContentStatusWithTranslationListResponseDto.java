@@ -1,9 +1,0 @@
-package dev.animedia.contentservice.old.status.dto.response;
-
-import java.util.List;
-
-public record ContentStatusWithTranslationListResponseDto(
-    Long id,
-    String alias,
-    List<ContentStatusTranslationResponseDto> translations
-) {}

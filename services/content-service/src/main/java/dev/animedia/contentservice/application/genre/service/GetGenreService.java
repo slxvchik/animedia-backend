@@ -23,7 +23,7 @@ public class GetGenreService implements GetGenreUseCase {
 	@Override
 	public GenreDto get(Long id, boolean onlyActive, @Nullable String languageCode) {
 		Genre genre = genreQueryRepository.findById(id, onlyActive, languageCode)
-			.orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
+			.orElseThrow(GenreNotFoundException::new);
 		return genreApplicationMapper.toGenreDto(genre);
 	}
 }

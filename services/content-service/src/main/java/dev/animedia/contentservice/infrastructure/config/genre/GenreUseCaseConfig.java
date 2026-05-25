@@ -71,17 +71,6 @@ public class GenreUseCaseConfig {
 	}
 
 	@Bean
-	public DeleteGenreTranslationUseCase deleteGenreTranslationUseCase(
-		GenreQueryRepository genreQueryRepository,
-		GenreCommandRepository genreCommandRepository
-	) {
-		return new DeleteGenreTranslationService(
-			genreQueryRepository,
-			genreCommandRepository
-		);
-	}
-
-	@Bean
 	public GetGenreListUseCase getGenreListUseCase(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository

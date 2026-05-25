@@ -5,14 +5,16 @@ package protos.services.content.genre;
 option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="GenreCommonProto";
 
+message GenreResponseList {
+    repeated GenreResponse genres = 1;
+}
+
 message GenreResponse {
     int64 id = 1;
     string alias = 2;
-    int64 sort = 3;
-}
-
-message GenreResponseList {
-    repeated GenreResponse genres = 1;
+    int64 sort_order = 3;
+    bool active = 4;
+    repeated GenreTranslationResponse translation = 5;
 }
 
 message GenreTranslationResponse {
@@ -21,14 +23,4 @@ message GenreTranslationResponse {
     string language_code = 3;
     string name = 4;
     string description = 5;
-}
-
-message GenreWithTranslationResponse {
-    GenreResponse genre = 1;
-    GenreTranslationResponse translation = 2;
-}
-
-message GenreWithTranslationsResponse {
-    GenreResponse genre = 1;
-    repeated GenreTranslationResponse translations = 2;
 }

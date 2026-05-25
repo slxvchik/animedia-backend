@@ -46,7 +46,7 @@ public class Content {
 		this.id = builder.id;
 		this.alias = builder.alias;
 		this.type = builder.type;
-		this.season = Math.max(builder().season, 0);
+		this.season = Math.max(builder.season, 0);
 
 		this.status = builder.status;
 		this.coverUrl = builder.coverUrl;

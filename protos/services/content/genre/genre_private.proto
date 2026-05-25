@@ -10,14 +10,9 @@ option java_outer_classname="PrivateGenreProto";
 
 service PrivateGenreService {
     rpc search(PrivateSearchRequest) returns (PrivateSearchResponse);
-
     rpc create(PrivateCreateRequest) returns (GenreResponse);
-    rpc createBatch(PrivateCreateBatchRequest) returns (GenreResponseList);
-
     rpc update(PrivateUpdateRequest) returns (GenreResponse);
-
     rpc delete(PrivateDeleteRequest) returns (common.EmptyResponse);
-    rpc deleteBatch(PrivateDeleteBatchRequest) returns (common.EmptyResponse);
 }
 
 message PrivateSearchResponse {

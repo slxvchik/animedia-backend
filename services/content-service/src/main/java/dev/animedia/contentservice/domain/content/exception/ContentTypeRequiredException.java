@@ -5,6 +5,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class ContentTypeRequiredException extends AppException {
     public ContentTypeRequiredException() {
-        super(AppExceptionStatus.INVALID_ARGUMENT, "CONTENT_TYPE_REQUIRED");
+        super(AppExceptionStatus.INVALID_ARGUMENT, "content.type.required");
     }
 }

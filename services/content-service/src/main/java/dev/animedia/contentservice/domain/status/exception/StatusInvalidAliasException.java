@@ -5,6 +5,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class StatusInvalidAliasException extends AppException {
     public StatusInvalidAliasException() {
-        super(AppExceptionStatus.INVALID_ARGUMENT, "STATUS_INVALID_ALIAS");
+        super(AppExceptionStatus.INVALID_ARGUMENT, "status.invalid.alias");
     }
 }

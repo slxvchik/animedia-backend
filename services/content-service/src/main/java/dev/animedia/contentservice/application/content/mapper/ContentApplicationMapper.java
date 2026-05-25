@@ -115,9 +115,6 @@ public class ContentApplicationMapper {
     ) {
         if (contentDto == null) return null;
         return new ContentUpdate(
-            contentDto.alias(),
-            contentDto.type(),
-            contentDto.season(),
             statusMapper.apply(contentDto.status()),
             contentDto.coverUrl(),
             contentDto.trailerUrl(),

@@ -6,6 +6,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class GenreInvalidAliasException extends AppException {
     public GenreInvalidAliasException() {
-        super(AppExceptionStatus.INVALID_ARGUMENT, "GENRE_INVALID_ALIAS");
+        super(AppExceptionStatus.INVALID_ARGUMENT, "genre.invalid.alias");
     }
 }

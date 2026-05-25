@@ -1,20 +1,21 @@
 package dev.animedia.contentservice.infrastructure.persistence.shared.mapper;
 
 import dev.animedia.contentservice.domain.shared.model.Page;
+import dev.animedia.contentservice.domain.shared.model.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PaginationPersistenceMapper {
-	public org.springframework.data.domain.Pageable toPageable(int page, int size, String sortField, String sortDirection) {
+	public org.springframework.data.domain.Pageable toPageable(int page, int size, String sortField, Pageable.SortDirection sortDirection) {
 		if (sortField == null || sortField.isBlank()) {
 			return toPageable(page, size);
 		}
 		
-		Sort.Direction direction = (sortDirection == null || sortDirection.isBlank())
+		Sort.Direction direction = sortDirection == null
 			? Sort.Direction.DESC
-			: Sort.Direction.fromString(sortDirection);
+			: Sort.Direction.fromString(sortDirection.name());
 
 		Sort sort = Sort.by(direction, sortField);
 

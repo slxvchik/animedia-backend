@@ -7,9 +7,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public record ContentUpdate(
-	String alias,
-	ContentType type,
-	int season,
 	Status status,
 	String coverUrl,
 	String trailerUrl,

@@ -5,6 +5,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class GenreTranslationNameRequiredException extends AppException {
     public GenreTranslationNameRequiredException() {
-        super(AppExceptionStatus.INVALID_ARGUMENT, "GENRE_TRANSLATION_NAME_REQUIRED");
+        super(AppExceptionStatus.INVALID_ARGUMENT, "genre.translation.name.required");
     }
 }

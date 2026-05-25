@@ -31,9 +31,6 @@ public class UpdateStatusService implements UpdateStatusUseCase {
         Status status = statusQueryRepository.findById(statusDto.id(), false, null)
             .orElseThrow(StatusNotFoundException::new);
 
-        boolean aliasExists = statusQueryRepository.existsByAliasExcludeId(statusDto.alias(), statusDto.id());
-        if (aliasExists) throw new StatusAliasExistsException();
-
         status.update(
             statusDto.sortOrder(),
             statusDto.active(),

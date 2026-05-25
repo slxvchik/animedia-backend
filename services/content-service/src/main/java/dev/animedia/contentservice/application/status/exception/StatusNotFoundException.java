@@ -5,6 +5,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class StatusNotFoundException extends AppException {
     public StatusNotFoundException() {
-        super(AppExceptionStatus.NOT_FOUND, "STATUS_NOT_FOUND");
+        super(AppExceptionStatus.NOT_FOUND, "status.not_found");
     }
 }

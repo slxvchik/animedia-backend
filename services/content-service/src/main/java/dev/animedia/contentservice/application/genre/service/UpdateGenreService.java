@@ -28,7 +28,7 @@ public class UpdateGenreService implements UpdateGenreUseCase {
 	@Override
 	public GenreDto update(GenreDto genreDto) {
 		Genre genre = genreQueryRepository.findById(genreDto.id(), false, null)
-			.orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
+			.orElseThrow(GenreNotFoundException::new);
 
 		genre.update(
 			genreDto.sortOrder(),

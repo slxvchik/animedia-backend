@@ -1,11 +1,11 @@
 package dev.animedia.contentservice.infrastructure.persistence.genre.repository;
 
-import dev.animedia.contentservice.application.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreCommandRepository;
 import dev.animedia.contentservice.infrastructure.persistence.genre.mapper.GenrePersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreEntity;
 import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreTranslationEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +36,7 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
     @Override
     public Genre update(Genre genre) {
         GenreEntity genreEntity = jpaGenreRepository.findById(genre.getId())
-            .orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
+            .orElseThrow(EntityNotFoundException::new);
 
         genreEntity.setAlias(genre.getAlias());
         genreEntity.setSortOrder(genre.getSortOrder());
@@ -54,8 +54,6 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
 
     @Override
     public void delete(Long id) {
-        jpaGenreRepository.findById(id)
-            .orElseThrow(() -> new GenreNotFoundException(GenreNotFoundException.CODE.GENRE_NOT_FOUND));
         jpaGenreRepository.deleteById(id);
     }
 }

@@ -1,11 +1,11 @@
 package dev.animedia.contentservice.infrastructure.persistence.status.repository;
 
-import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.infrastructure.persistence.status.mapper.StatusPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusEntity;
 import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusTranslationEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +36,7 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 	@Override
 	public Status update(Status status) {
 		StatusEntity statusEntity = jpaStatusRepository.findById(status.getId())
-			.orElseThrow(StatusNotFoundException::new);
+			.orElseThrow(EntityNotFoundException::new);
 
 		statusEntity.setAlias(status.getAlias());
 		statusEntity.setSortOrder(status.getSortOrder());
@@ -54,8 +54,6 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 
 	@Override
 	public void delete(Long id) {
-		jpaStatusRepository.findById(id)
-			.orElseThrow(StatusNotFoundException::new);
 		jpaStatusRepository.deleteById(id);
 	}
 }

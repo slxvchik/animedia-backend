@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.infrastructure.persistence.content.repository;
 
-import dev.animedia.contentservice.application.content.exception.ContentNotFoundException;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.infrastructure.persistence.content.exception.ContentCreateException;
@@ -11,6 +10,7 @@ import dev.animedia.contentservice.infrastructure.persistence.genre.mapper.Genre
 import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreEntity;
 import dev.animedia.contentservice.infrastructure.persistence.status.mapper.StatusPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -62,7 +62,7 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 	@Override
 	public Content update(Content content) {
 		ContentEntity contentEntity = jpaContentRepository.findById(content.getId(), false, null)
-			.orElseThrow(ContentNotFoundException::new);
+			.orElseThrow(EntityNotFoundException::new);
 
 		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());
 		contentEntity.setStatusEntity(statusEntity);
@@ -100,8 +100,6 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 
 	@Override
 	public void delete(UUID id) {
-		jpaContentRepository.findById(id)
-			.orElseThrow(ContentNotFoundException::new);
 		jpaContentRepository.deleteById(id);
 	}
 }

@@ -19,6 +19,6 @@ message PublicSearchRequest {
 }
 
 message PublicSearchResponse {
-    repeated GenreWithTranslationResponse genres = 1;
+    repeated GenreResponse genres = 1;
     common.PaginationResponse pagination = 2;
 }

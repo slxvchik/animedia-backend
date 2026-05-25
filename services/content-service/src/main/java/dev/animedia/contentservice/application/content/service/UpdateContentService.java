@@ -3,6 +3,7 @@ package dev.animedia.contentservice.application.content.service;
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.exception.ContentNotFoundException;
 import dev.animedia.contentservice.application.content.mapper.ContentApplicationMapper;
+import dev.animedia.contentservice.application.content.usecase.CheckContentRelationsExistsUseCase;
 import dev.animedia.contentservice.application.content.usecase.UpdateContentUseCase;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
@@ -17,25 +18,30 @@ public class UpdateContentService implements UpdateContentUseCase {
     private final ContentCommandRepository contentCommandRepository;
     private final StatusApplicationMapper statusApplicationMapper;
     private final GenreApplicationMapper genreApplicationMapper;
+    private final CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase;
 
     public UpdateContentService(
         ContentApplicationMapper contentApplicationMapper,
         ContentQueryRepository contentQueryRepository,
         ContentCommandRepository contentCommandRepository,
         StatusApplicationMapper statusApplicationMapper,
-        GenreApplicationMapper genreApplicationMapper
+        GenreApplicationMapper genreApplicationMapper,
+	    CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase
     ) {
         this.contentApplicationMapper = contentApplicationMapper;
         this.contentQueryRepository = contentQueryRepository;
         this.contentCommandRepository = contentCommandRepository;
         this.statusApplicationMapper = statusApplicationMapper;
         this.genreApplicationMapper = genreApplicationMapper;
+	    this.checkContentRelationsExistsUseCase = checkContentRelationsExistsUseCase;
     }
 
     @Override
     public ContentDto update(ContentDto contentDto) {
         Content content = contentQueryRepository.find(contentDto.id(), false, null)
             .orElseThrow(ContentNotFoundException::new);
+
+        checkContentRelationsExistsUseCase.check(content);
 
         ContentUpdate contentUpdate = contentApplicationMapper.toContentUpdate(
             contentDto,

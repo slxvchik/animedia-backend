@@ -71,17 +71,6 @@ public class StatusUseCaseConfig {
 	}
 
 	@Bean
-	public DeleteStatusTranslationUseCase deleteStatusTranslationUseCase(
-		StatusQueryRepository statusQueryRepository,
-		StatusCommandRepository statusCommandRepository
-	) {
-		return new DeleteStatusTranslationService(
-			statusQueryRepository,
-			statusCommandRepository
-		);
-	}
-
-	@Bean
 	public GetStatusListUseCase getStatusListUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository

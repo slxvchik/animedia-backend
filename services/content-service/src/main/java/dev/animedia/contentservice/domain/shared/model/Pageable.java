@@ -4,5 +4,10 @@ public record Pageable(
     int page,
     int size,
 	String sortField,
-	String sortDirection
-) {}
+	SortDirection sortDirection
+) {
+	public enum SortDirection {
+		DESC,
+		ASC
+	}
+}

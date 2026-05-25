@@ -7,18 +7,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GenreNotFoundException extends AppException {
-	public enum CODE {
-		GENRE_NOT_FOUND,
-		GENRES_NOT_FOUND,
-		GENRES_NOT_FOUND_ADMIN
-	}
-	public GenreNotFoundException(CODE errorCode) {
-		super(AppExceptionStatus.NOT_FOUND, errorCode.name());
+	public GenreNotFoundException() {
+		super(AppExceptionStatus.NOT_FOUND, "genre.not_found");
 	}
 	public GenreNotFoundException(List<Long> idList) {
 		super(
 			AppExceptionStatus.NOT_FOUND,
-			CODE.GENRES_NOT_FOUND_ADMIN.name(),
+			"genre.not_found.admin",
 			idList == null ? "" : idList.stream().map(String::valueOf).collect(Collectors.joining(", "))
 		);
 	}
