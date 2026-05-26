@@ -9,43 +9,32 @@ option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="PrivateGenreProto";
 
 service PrivateGenreService {
-    rpc search(PrivateSearchRequest) returns (PrivateSearchResponse);
-    rpc create(PrivateCreateRequest) returns (GenreResponse);
-    rpc update(PrivateUpdateRequest) returns (GenreResponse);
-    rpc delete(PrivateDeleteRequest) returns (common.EmptyResponse);
-}
-
-message PrivateSearchResponse {
-    repeated GenreWithTranslationsResponse genres = 1;
-    optional common.PaginationResponse pagination = 2;
+    rpc search(PrivateSearchRequest) returns (SearchGenreResponse);
+    rpc create(CreateGenreRequest) returns (GenreResponse);
+    rpc update(UpdateGenreRequest) returns (GenreResponse);
+    rpc delete(DeleteGenreRequest) returns (common.EmptyResponse);
 }
 
 message PrivateSearchRequest {
-    repeated string alias = 1;
-    repeated string names = 2;
-    repeated string language_codes = 3;
-    optional common.PaginationRequest pagination = 4;
+    bool only_active = 1;
+    optional string alias = 2;
+    optional string name = 3;
+    optional string description = 4;
+    optional string language_code = 5;
+    optional common.PaginationRequest pagination = 6;
 }
 
-message PrivateCreateRequest {
+message CreateGenreRequest {
     string alias = 1;
     int64 sort = 2;
 }
 
-message PrivateCreateBatchRequest {
-    repeated PrivateCreateRequest genres = 1;
-}
-
-message PrivateUpdateRequest {
+message UpdateGenreRequest {
     int64 id = 1;
     string alias = 2;
     int64 sort = 3;
 }
 
-message PrivateDeleteRequest {
+message DeleteGenreRequest {
     int64 id = 1;
-}
-
-message PrivateDeleteBatchRequest {
-    repeated int64 ids = 1;
 }

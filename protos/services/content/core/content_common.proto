@@ -2,23 +2,14 @@ syntax = "proto3";
 
 package protos.services.content.core;
 
-import "common/common.proto";
-
 option java_package="dev.animedia.grpc.core";
 option java_outer_classname="ContentCommonProto";
 
-enum ContentType {
+enum Type {
   MOVIE = 0;
   SERIES = 1;
   COMIC = 2;
   BOOK = 3;
-}
-
-enum SortBy {
-  SORT = 0;
-  RELEASE_DATE = 1;
-  CREATED_AT = 2;
-  UPDATED_AT = 3;
 }
 
 message ContentTranslationResponse {

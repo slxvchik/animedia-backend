@@ -2,20 +2,27 @@ syntax = "proto3";
 
 package protos.services.content.status;
 
+import "common/common.proto";
+
 option java_package="dev.animedia.grpc.status";
 option java_outer_classname="ContentStatusCommonProto";
 
-message ContentStatusResponse {
+message StatusResponse {
   int64 id = 1;
   string alias = 2;
   int32 sort_order = 3;
   bool active = 4;
-  repeated ContentStatusTranslationResponse translations = 5;
+  repeated StatusTranslationResponse translations = 5;
 }
 
-message ContentStatusTranslationResponse {
+message StatusTranslationResponse {
   int64 id = 1;
   int64 content_status_id = 2;
   string language_code = 3;
   string name = 4;
+}
+
+message SearchStatusResponse {
+  repeated StatusResponse statuses = 1;
+  common.PaginationResponse pagination = 2;
 }

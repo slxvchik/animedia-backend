@@ -5,7 +5,7 @@ package protos.services.content.core;
 import "google/protobuf/timestamp.proto";
 import "common/common.proto";
 import "services/content/core/content_common.proto";
-import "services/content/status/content_status_common.proto";
+import "services/content/status/status_common.proto";
 import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.core";
@@ -13,46 +13,43 @@ option java_outer_classname="PublicContentProto";
 
 service PublicContentService {
   rpc search(PublicSearchRequest) returns (PublicSearchResponse);
-  rpc get(PublicGetRequest) returns (PublicContentResponseWithTranslation);
+  rpc get(GetContentRequest) returns (PublicContentResponse);
 }
 
 message PublicSearchRequest {
   repeated string aliases = 1;
   repeated string titles = 2;
-  repeated ContentType types = 3;
+  repeated Type types = 3;
   repeated int32 seasons = 4;
-  repeated int64 content_status_ids = 5;
+  repeated int64 status_ids = 5;
   optional protos.common.Date release_date_from = 6;
   optional protos.common.Date release_date_to = 7;
   repeated string language_codes = 8;
   repeated int64 genre_ids = 9;
-  optional common.Sort sort = 10;
   optional protos.common.PaginationRequest pagination = 11;
 }
 
 message PublicSearchResponse {
-  repeated PublicContentResponseWithTranslation contents = 1;
+  repeated PublicContentResponse contents = 1;
   protos.common.PaginationResponse pagination = 2;
 }
 
-message PublicGetRequest {
+message GetContentRequest {
   string alias = 1;
+  Type type = 2;
+  optional int32 season = 3;
 }
 
 message PublicContentResponse {
   string uuid = 1;
   string alias = 2;
-  ContentType type = 3;
-  int32 season = 4;
-  protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
-  string cover_url = 6;
-  string trailer_url = 7;
-  protos.common.Date release_date = 8;
+  Type type = 3;
+  optional int32 season = 4;
+  protos.services.content.status.StatusResponse status = 5;
+  optional string cover_image_uuid = 6;
+  optional string trailer_video_uuid = 7;
+  optional protos.common.Date release_date = 8;
   repeated string language_codes = 9;
-  repeated protos.services.content.genre.GenreWithTranslationResponse genres = 10;
-}
-
-message PublicContentResponseWithTranslation {
-  PublicContentResponse content = 1;
-  ContentTranslationResponse translation = 2;
+  repeated protos.services.content.genre.GenreResponse genres = 10;
+  repeated ContentTranslationResponse translations = 11;
 }

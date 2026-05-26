@@ -9,16 +9,11 @@ option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="PublicGenreProto";
 
 service PublicGenreService {
-    rpc search(PublicSearchRequest) returns (PublicSearchResponse);
+    rpc search(PublicSearchRequest) returns (SearchGenreResponse);
 }
 
 message PublicSearchRequest {
     repeated string alias = 1;
     repeated string name = 2;
     optional common.PaginationRequest pagination = 3;
-}
-
-message PublicSearchResponse {
-    repeated GenreResponse genres = 1;
-    common.PaginationResponse pagination = 2;
 }

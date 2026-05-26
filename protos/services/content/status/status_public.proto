@@ -3,22 +3,17 @@ syntax = "proto3";
 package protos.services.content.status;
 
 import "common/common.proto";
-import "services/content/status/content_status_common.proto";
+import "services/content/status/status_common.proto";
 
 option java_package="dev.animedia.grpc.status";
 option java_outer_classname="PublicContentStatusProto";
 
 service PublicContentStatusService {
-  rpc search(PublicSearchRequest) returns (PublicSearchResponse);
+  rpc search(PublicSearchStatusRequest) returns (SearchStatusResponse);
 }
 
-message PublicSearchRequest {
+message PublicSearchStatusRequest {
   optional string alias = 1;
   optional string name = 2;
   common.PaginationRequest pagination = 3;
-}
-
-message PublicSearchResponse {
-  repeated ContentStatusResponse statuses = 1;
-  common.PaginationResponse pagination = 2;
 }

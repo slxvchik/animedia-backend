@@ -1,6 +1,5 @@
 package dev.animedia.contentservice.application.content.service;
 
-import dev.animedia.contentservice.application.content.usecase.CheckContentRelationsExistsUseCase;
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.application.genre.usecase.GetGenreListUseCase;

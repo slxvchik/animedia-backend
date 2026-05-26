@@ -3,7 +3,6 @@ package dev.animedia.contentservice.application.content.service;
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.exception.ContentExistsException;
 import dev.animedia.contentservice.application.content.mapper.ContentApplicationMapper;
-import dev.animedia.contentservice.application.content.usecase.CheckContentRelationsExistsUseCase;
 import dev.animedia.contentservice.application.content.usecase.CreateContentUseCase;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
@@ -17,7 +16,7 @@ public class CreateContentService implements CreateContentUseCase {
     private final GenreApplicationMapper genreApplicationMapper;
     private final ContentQueryRepository contentQueryRepository;
     private final ContentCommandRepository contentCommandRepository;
-    private final CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase;
+    private final CheckContentRelationsExistsService checkContentRelationsExistsService;
 
     public CreateContentService(
         ContentApplicationMapper contentApplicationMapper,
@@ -25,14 +24,14 @@ public class CreateContentService implements CreateContentUseCase {
 	    GenreApplicationMapper genreApplicationMapper,
         ContentQueryRepository contentQueryRepository,
         ContentCommandRepository contentCommandRepository,
-        CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase
+	    CheckContentRelationsExistsService checkContentRelationsExistsService
     ) {
         this.contentApplicationMapper = contentApplicationMapper;
 	    this.statusApplicationMapper = statusApplicationMapper;
 	    this.genreApplicationMapper = genreApplicationMapper;
 	    this.contentQueryRepository = contentQueryRepository;
         this.contentCommandRepository = contentCommandRepository;
-	    this.checkContentRelationsExistsUseCase = checkContentRelationsExistsUseCase;
+	    this.checkContentRelationsExistsService = checkContentRelationsExistsService;
     }
 
     @Override
@@ -47,7 +46,7 @@ public class CreateContentService implements CreateContentUseCase {
         boolean contentExists = contentQueryRepository.exists(content.getAlias(), content.getType(), content.getSeason());
         if (contentExists) throw new ContentExistsException(content.getAlias(), content.getType(), content.getSeason());
 
-        checkContentRelationsExistsUseCase.check(content);
+        checkContentRelationsExistsService.check(content);
 
         Content saved = contentCommandRepository.create(content);
 

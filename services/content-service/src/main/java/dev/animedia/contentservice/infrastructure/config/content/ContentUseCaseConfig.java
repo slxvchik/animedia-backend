@@ -25,7 +25,7 @@ public class ContentUseCaseConfig {
 		GenreApplicationMapper genreApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
-		CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase
+		CheckContentRelationsExistsService checkContentRelationsExistsService
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
@@ -33,7 +33,7 @@ public class ContentUseCaseConfig {
 			genreApplicationMapper,
 			contentQueryRepository,
 			contentCommandRepository,
-			checkContentRelationsExistsUseCase
+			checkContentRelationsExistsService
 		);
 	}
 
@@ -54,7 +54,7 @@ public class ContentUseCaseConfig {
 		ContentCommandRepository contentCommandRepository,
 		StatusApplicationMapper statusApplicationMapper,
 		GenreApplicationMapper genreApplicationMapper,
-		CheckContentRelationsExistsUseCase checkContentRelationsExistsUseCase
+		CheckContentRelationsExistsService checkContentRelationsExistsService
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
@@ -62,7 +62,7 @@ public class ContentUseCaseConfig {
 			contentCommandRepository,
 			statusApplicationMapper,
 			genreApplicationMapper,
-			checkContentRelationsExistsUseCase
+			checkContentRelationsExistsService
 		);
 	}
 
@@ -77,7 +77,7 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public CheckContentRelationsExistsUseCase checkContentRelationsExistUseCase(
+	public CheckContentRelationsExistsService checkContentRelationsExistsService(
 		GetStatusUseCase getStatusUseCase,
 		GetGenreListUseCase getGenreListUseCase
 	) {

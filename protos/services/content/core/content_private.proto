@@ -5,26 +5,43 @@ package protos.services.content.core;
 import "google/protobuf/timestamp.proto";
 import "common/common.proto";
 import "services/content/core/content_common.proto";
-import "services/content/status/content_status_common.proto";
+import "services/content/status/status_common.proto";
 import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.core";
 option java_outer_classname="PrivateContentProto";
 
 service PrivateContentService {
-  rpc search(PrivateSearchRequest) returns (PrivateSearchResponse);
-  rpc create(PrivateCreateRequest) returns (PrivateContentResponse);
-  rpc update(PrivateUpdateRequest) returns (PrivateContentResponse);
-  rpc delete(PrivateDeleteRequest) returns (common.EmptyResponse);
+  rpc search(PrivateSearchContentRequest) returns (PrivateSearchContentResponse);
+  rpc create(CreateContentRequest) returns (PrivateContentResponse);
+  rpc update(UpdateContentRequest) returns (PrivateContentResponse);
+  rpc delete(DeleteContentRequest) returns (common.EmptyResponse);
 }
 
-message PrivateSearchRequest {
+message PrivateContentResponse {
+  string uuid = 1;
+  string alias = 2;
+  Type type = 3;
+  optional int32 season = 4;
+  protos.services.content.status.StatusResponse status = 5;
+  optional string cover_image_uuid = 6;
+  optional string trailer_video_uuid = 7;
+  optional protos.common.Date release_date = 8;
+  google.protobuf.Timestamp created_at = 9;
+  optional google.protobuf.Timestamp updated_at = 10;
+  bool active = 11;
+  repeated string language_codes = 12;
+  repeated protos.services.content.genre.GenreResponse genres = 13;
+  repeated ContentTranslationResponse translations = 14;
+}
+
+message PrivateSearchContentRequest {
   optional string uuid = 1;
-  optional string alias = 2;
-  optional string title = 3;
-  repeated ContentType type = 4;
+  repeated string aliases = 2;
+  repeated string titles = 3;
+  repeated Type types = 4;
   repeated int32 seasons = 5;
-  repeated int64 content_status_ids = 6;
+  repeated int64 status_ids = 6;
   optional protos.common.Date release_date_from = 7;
   optional protos.common.Date release_date_to = 8;
   optional google.protobuf.Timestamp created_at_from = 9;
@@ -34,69 +51,40 @@ message PrivateSearchRequest {
   optional bool active = 13;
   repeated string language_codes = 14;
   repeated int64 genre_ids = 15;
-  optional protos.common.Sort sort = 16;
   optional protos.common.PaginationRequest pagination = 17;
 }
 
-message PrivateSearchResponse {
-  repeated PrivateContentResponseWithTranslationList contents = 1;
+message PrivateSearchContentResponse {
+  repeated PrivateContentResponse contents = 1;
   common.PaginationResponse pagination = 2;
 }
 
-message PrivateCreateRequest {
+message CreateContentRequest {
   string alias = 1;
-  ContentType type = 2;
+  Type type = 2;
   int32 season = 3;
-  int64 content_status_id = 4;
-  string cover_url = 5;
-  string trailer_url = 6;
-  protos.common.Date release_date = 7;
-  google.protobuf.Timestamp created_at = 8;
-  google.protobuf.Timestamp updated_at = 9;
+  optional int64 status_id = 4;
+  optional string cover_image_uuid = 5;
+  optional string trailer_video_uuid = 6;
+  optional protos.common.Date release_date = 7;
   bool active = 10;
-  int32 sort = 11;
+  optional int32 sort = 11;
   repeated string language_codes = 12;
   repeated int64 genre_ids = 13;
 }
 
-message PrivateUpdateRequest {
+message UpdateContentRequest {
   string uuid = 1;
-  string alias = 2;
-  ContentType type = 3;
-  int32 season = 4;
-  int64 content_status_id = 5;
-  string cover_url = 6;
-  string trailer_url = 7;
-  protos.common.Date release_date = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
-  bool active = 11;
-  int32 sort = 12;
+  optional int64 status_id = 5;
+  optional string cover_image_uuid = 6;
+  optional string trailer_video_uuid = 7;
+  optional protos.common.Date release_date = 8;
+  optional bool active = 11;
+  optional int32 sort = 12;
   repeated string language_codes = 13;
   repeated int64 genre_ids = 14;
 }
 
-message PrivateDeleteRequest {
+message DeleteContentRequest {
   string uuid = 1;
-}
-
-message PrivateContentResponse {
-  string uuid = 1;
-  string alias = 2;
-  ContentType type = 3;
-  int32 season = 4;
-  protos.services.content.status.ContentStatusWithTranslationResponse status = 5;
-  string cover_url = 6;
-  string trailer_url = 7;
-  protos.common.Date release_date = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
-  bool active = 11;
-  repeated string language_codes = 12;
-  repeated protos.services.content.genre.GenreWithTranslationResponse genres = 13;
-}
-
-message PrivateContentResponseWithTranslationList {
-  PrivateContentResponse content = 1;
-  repeated ContentTranslationResponse translations = 2;
 }

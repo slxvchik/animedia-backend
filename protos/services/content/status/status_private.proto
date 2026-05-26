@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package protos.services.content.status;
+
+import "common/common.proto";
+import "services/content/status/status_common.proto";
+
+option java_package="dev.animedia.grpc.status";
+option java_outer_classname="PrivateContentStatusProto";
+
+service PrivateContentStatusService {
+  rpc search(PrivateSearchStatusRequest) returns (SearchStatusResponse);
+  rpc create(CreateStatusRequest) returns (StatusResponse);
+  rpc update(UpdateStatusRequest) returns (StatusResponse);
+  rpc delete(DeleteStatusRequest) returns (common.EmptyResponse);
+}
+
+message PrivateSearchStatusRequest {
+  bool only_active = 1;
+  optional string alias = 2;
+  optional string name = 3;
+  optional string language_code = 4;
+  optional common.PaginationRequest pagination = 5;
+}
+
+message CreateStatusRequest {
+  string alias = 1;
+  int32 sort_order = 2;
+  bool active = 3;
+  repeated CreateStatusTranslationRequest translations = 4;
+}
+
+message CreateStatusTranslationRequest {
+  string language_code = 1;
+  string name = 2;
+}
+
+message UpdateStatusRequest {
+  int64 id = 1;
+  int32 sort_order = 2;
+  bool active = 3;
+  repeated UpdateStatusTranslationRequest translations = 4;
+}
+
+message UpdateStatusTranslationRequest {
+  int64 id = 1;
+  string language_code = 2;
+  string name = 3;
+}
+
+message DeleteStatusRequest {
+  int64 id = 1;
+}
