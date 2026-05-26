@@ -8,16 +8,16 @@ option java_package="dev.animedia.grpc.common";
 option java_outer_classname="CommonProto";
 
 message PaginationRequest {
-  int64 page = 1;
-  int64 size = 2;
+  int32 page = 1;
+  int32 size = 2;
   Sort sort = 3;
 }
 
 message PaginationResponse {
   repeated google.protobuf.Any content = 1;
-  int64 current_page = 2;
-  int64 page_size = 3;
-  int64 total_pages = 4;
+  int32 current_page = 2;
+  int32 page_size = 3;
+  int32 total_pages = 4;
   int64 total_elements = 5;
   bool has_next = 6;
   bool has_previous = 7;

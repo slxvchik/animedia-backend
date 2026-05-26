@@ -31,7 +31,7 @@ public class PrivateContentStatusGrpcService extends PrivateContentStatusService
 	@Override
 	public void create(
 		PrivateContentStatusProto.CreateStatusRequest request,
-		StreamObserver<ContentStatusCommonProto.ContentStatusResponse> responseObserver
+		StreamObserver<ContentStatusCommonProto.StatusResponse> responseObserver
 	) {
 		super.create(request, responseObserver);
 	}
@@ -39,7 +39,7 @@ public class PrivateContentStatusGrpcService extends PrivateContentStatusService
 	@Override
 	public void update(
 		PrivateContentStatusProto.UpdateStatusRequest request,
-		StreamObserver<ContentStatusCommonProto.ContentStatusResponse> responseObserver
+		StreamObserver<ContentStatusCommonProto.StatusResponse> responseObserver
 	) {
 		super.update(request, responseObserver);
 	}
