@@ -1,9 +1,12 @@
-package dev.animedia.contentservice.presentation.grpc.api.status;
+package dev.animedia.contentservice.presentation.grpc.status.api;
 
-import dev.animedia.contentservice.presentation.grpc.mapper.PaginationMapper;
+import dev.animedia.contentservice.application.status.dto.StatusDto;
+import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
+import dev.animedia.contentservice.application.status.usecase.SearchStatusUseCase;
+import dev.animedia.contentservice.domain.shared.model.Page;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
-import dev.animedia.contentservice.old.status.mapper.GrpcContentStatusMapper;
-import dev.animedia.contentservice.old.status.service.ContentStatusPageService;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
+import dev.animedia.grpc.status.ContentStatusCommonProto;
 import dev.animedia.grpc.status.PublicContentStatusProto;
 import dev.animedia.grpc.status.PublicContentStatusServiceGrpc;
 import io.grpc.stub.StreamObserver;
@@ -12,24 +15,18 @@ import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
 public class PublicContentStatusGrpcService extends PublicContentStatusServiceGrpc.PublicContentStatusServiceImplBase {
-
-
-	private final ContentStatusPageService contentStatusPageService;
 	private final PaginationMapper paginationMapper;
-	private final GrpcContentStatusMapper grpcContentStatusMapper;
+	private final SearchStatusUseCase searchStatusUseCase;
 
 	@Autowired
 	public PublicContentStatusGrpcService(
-		ContentStatusPageService contentStatusPageService,
 		PaginationMapper paginationMapper,
-		GrpcContentStatusMapper grpcContentStatusMapper
+		SearchStatusUseCase searchStatusUseCase
 	) {
-		this.contentStatusPageService = contentStatusPageService;
 		this.paginationMapper = paginationMapper;
-		this.grpcContentStatusMapper = grpcContentStatusMapper;
+		this.searchStatusUseCase = searchStatusUseCase;
 	}
 
-	@Override
 	public void search(
 		PublicContentStatusProto.PublicSearchRequest request,
 		StreamObserver<PublicContentStatusProto.PublicSearchResponse> responseObserver
@@ -41,6 +38,18 @@ public class PublicContentStatusGrpcService extends PublicContentStatusServiceGr
 		var paginationResponse = paginationMapper.toProtoPaginationResponse(contentStatuses);
 
 		var response = grpcContentStatusMapper.toPublicSearchResponse(contentStatuses, paginationResponse);
+
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void search(
+		PublicContentStatusProto.PublicSearchStatusRequest request,
+		StreamObserver<ContentStatusCommonProto.SearchStatusResponse> responseObserver
+	) {
+		StatusSearchDto statusSearchDto =
+		Page<StatusDto> statusDtoPage = searchStatusUseCase.search();
 
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();

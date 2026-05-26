@@ -1,7 +1,7 @@
-package dev.animedia.contentservice.presentation.grpc.api.genre;
+package dev.animedia.contentservice.presentation.grpc.genre.api;
 
 import dev.animedia.contentservice.old.app.FieldValidator;
-import dev.animedia.contentservice.presentation.grpc.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
 import dev.animedia.contentservice.old.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.old.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.old.genre.service.GenreCommandService;

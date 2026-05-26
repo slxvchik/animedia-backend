@@ -48,11 +48,11 @@ public class ContentEntity {
     @JoinColumn(name = "status_id")
     private StatusEntity statusEntity;
 
-    @Column(name = "cover_url", length = 512)
-    private String coverUrl;
+    @Column(name = "cover_image_ud", length = 512)
+    private UUID coverImageId;
 
-    @Column(name = "trailer_url", length = 512)
-    private String trailerUrl;
+    @Column(name = "trailer_video_id", length = 512)
+    private UUID trailerVideoId;
 
     @Column(name = "release_date")
     private LocalDate releaseDate;
@@ -134,20 +134,20 @@ public class ContentEntity {
         this.statusEntity = statusEntity;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
+    public UUID getCoverImageId() {
+        return coverImageId;
     }
 
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
+    public void setCoverImageId(UUID coverImageId) {
+        this.coverImageId = coverImageId;
     }
 
-    public String getTrailerUrl() {
-        return trailerUrl;
+    public UUID getTrailerVideoId() {
+        return trailerVideoId;
     }
 
-    public void setTrailerUrl(String trailerUrl) {
-        this.trailerUrl = trailerUrl;
+    public void setTrailerVideoId(UUID trailerVideoId) {
+        this.trailerVideoId = trailerVideoId;
     }
 
     public LocalDate getReleaseDate() {

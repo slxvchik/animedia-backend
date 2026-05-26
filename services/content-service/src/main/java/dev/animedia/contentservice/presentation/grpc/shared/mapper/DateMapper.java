@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.presentation.grpc.mapper;
+package dev.animedia.contentservice.presentation.grpc.shared.mapper;
 
 import dev.animedia.grpc.common.CommonProto;
 import org.springframework.stereotype.Component;

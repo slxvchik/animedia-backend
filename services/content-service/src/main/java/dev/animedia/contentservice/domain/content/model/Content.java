@@ -17,8 +17,8 @@ public class Content {
 	private final ContentType type;
 	private final int season;
 	private Status status;
-	private String coverUrl;
-	private String trailerUrl;
+	private UUID coverUrl;
+	private UUID trailerUrl;
 	private LocalDate releaseDate;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
@@ -81,11 +81,11 @@ public class Content {
 		return status;
 	}
 
-	public String getCoverUrl() {
+	public UUID getCoverUrl() {
 		return coverUrl;
 	}
 
-	public String getTrailerUrl() {
+	public UUID getTrailerUrl() {
 		return trailerUrl;
 	}
 
@@ -134,22 +134,6 @@ public class Content {
 		setLanguageCodeSet(contentUpdate.languageCodeSet());
 		setGenreSet(contentUpdate.genreSet());
 		setTranslationSet(contentUpdate.translationSet());
-	}
-
-	public void saveTranslation(ContentTranslation contentTranslation) {
-		this.translationSet.stream()
-			.filter(translation -> translation.getLanguageCode().equals(contentTranslation.getLanguageCode()))
-			.findFirst()
-			.ifPresentOrElse(
-				existing -> existing.update(contentTranslation.getTitle(), contentTranslation.getDescription()),
-				() -> this.translationSet.add(
-					new ContentTranslation(null, contentTranslation.getLanguageCode(), contentTranslation.getTitle(), contentTranslation.getDescription())
-				)
-			);
-	}
-
-	public void removeTranslation(UUID id) {
-		this.translationSet.removeIf(translation -> translation.getId().equals(id));
 	}
 
 	private void setSort(int sort) {
@@ -206,8 +190,8 @@ public class Content {
 		private ContentType type;
 		private int season;
 		private Status status;
-		private String coverUrl;
-		private String trailerUrl;
+		private UUID coverUrl;
+		private UUID trailerUrl;
 		private LocalDate releaseDate;
 		private LocalDateTime createdAt;
 		private LocalDateTime updatedAt;
@@ -257,12 +241,12 @@ public class Content {
 			return this;
 		}
 
-		public Builder coverUrl(String coverUrl) {
+		public Builder coverUrl(UUID coverUrl) {
 			this.coverUrl = coverUrl;
 			return this;
 		}
 
-		public Builder trailerUrl(String trailerUrl) {
+		public Builder trailerUrl(UUID trailerUrl) {
 			this.trailerUrl = trailerUrl;
 			return this;
 		}

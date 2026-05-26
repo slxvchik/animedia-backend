@@ -1,8 +1,8 @@
-package dev.animedia.contentservice.presentation.grpc.api.content;
+package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.old.app.FieldValidator;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
-import dev.animedia.contentservice.presentation.grpc.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
 import dev.animedia.contentservice.old.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.old.content.dto.request.PrivateSearchRequestDto;
 import dev.animedia.contentservice.old.content.mapper.ContentSortMapper;

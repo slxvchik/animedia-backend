@@ -5,11 +5,12 @@ import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 public record ContentUpdate(
 	Status status,
-	String coverUrl,
-	String trailerUrl,
+	UUID coverUrl,
+	UUID trailerUrl,
 	LocalDate releaseDate,
 	boolean active,
 	int sort,

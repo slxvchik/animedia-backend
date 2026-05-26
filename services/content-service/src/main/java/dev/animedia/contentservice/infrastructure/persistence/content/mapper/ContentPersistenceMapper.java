@@ -30,8 +30,8 @@ public class ContentPersistenceMapper {
                 ce.getStatusEntity() == null ? null
                 : statusMapper.apply(ce.getStatusEntity())
             )
-            .coverUrl(ce.getCoverUrl())
-            .trailerUrl(ce.getTrailerUrl())
+            .coverUrl(ce.getCoverImageId())
+            .trailerUrl(ce.getTrailerVideoId())
             .releaseDate(ce.getReleaseDate())
             .createdAt(ce.getCreatedAt())
             .updatedAt(ce.getUpdatedAt())
@@ -81,8 +81,8 @@ public class ContentPersistenceMapper {
             content.getStatus() == null ? null
             : statusMapper.apply(content.getStatus())
         );
-        ce.setCoverUrl(content.getCoverUrl());
-        ce.setTrailerUrl(content.getTrailerUrl());
+        ce.setCoverImageId(content.getCoverUrl());
+        ce.setTrailerVideoId(content.getTrailerUrl());
         ce.setReleaseDate(content.getReleaseDate());
         ce.setCreatedAt(content.getCreatedAt());
         ce.setUpdatedAt(content.getUpdatedAt());

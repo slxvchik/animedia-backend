@@ -1,7 +1,7 @@
-package dev.animedia.contentservice.presentation.grpc.api.content;
+package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
-import dev.animedia.contentservice.presentation.grpc.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
 import dev.animedia.contentservice.old.content.dto.request.PublicSearchRequestDto;
 import dev.animedia.contentservice.old.content.mapper.ContentSortMapper;
 import dev.animedia.contentservice.old.content.mapper.GrpcContentMapper;

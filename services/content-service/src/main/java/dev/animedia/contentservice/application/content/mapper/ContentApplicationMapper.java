@@ -31,8 +31,8 @@ public class ContentApplicationMapper {
             .status(
                 statusMapper.apply(contentDto.status())
             )
-            .coverUrl(contentDto.coverUrl())
-            .trailerUrl(contentDto.trailerUrl())
+            .coverUrl(contentDto.coverImageId())
+            .trailerUrl(contentDto.trailerVideoId())
             .releaseDate(contentDto.releaseDate())
             .createdAt(contentDto.createdAt())
             .updatedAt(contentDto.updatedAt())
@@ -116,8 +116,8 @@ public class ContentApplicationMapper {
         if (contentDto == null) return null;
         return new ContentUpdate(
             statusMapper.apply(contentDto.status()),
-            contentDto.coverUrl(),
-            contentDto.trailerUrl(),
+            contentDto.coverImageId(),
+            contentDto.trailerVideoId(),
             contentDto.releaseDate(),
             contentDto.active(),
             contentDto.sort(),

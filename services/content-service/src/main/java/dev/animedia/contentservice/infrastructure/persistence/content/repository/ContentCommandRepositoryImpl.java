@@ -67,8 +67,8 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());
 		contentEntity.setStatusEntity(statusEntity);
 
-		contentEntity.setCoverUrl(content.getCoverUrl());
-		contentEntity.setTrailerUrl(content.getTrailerUrl());
+		contentEntity.setCoverImageId(content.getCoverUrl());
+		contentEntity.setTrailerVideoId(content.getTrailerUrl());
 		contentEntity.setReleaseDate(content.getReleaseDate());
 		contentEntity.setActive(content.getActive());
 		contentEntity.setSortOrder(content.getSort());
