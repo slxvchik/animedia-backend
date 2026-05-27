@@ -13,6 +13,7 @@ option java_outer_classname="PrivateContentProto";
 
 service PrivateContentService {
   rpc search(PrivateSearchContentRequest) returns (PrivateSearchContentResponse);
+  rpc get(GetContentRequest) returns (PrivateContentResponse);
   rpc create(CreateContentRequest) returns (PrivateContentResponse);
   rpc update(UpdateContentRequest) returns (PrivateContentResponse);
   rpc delete(DeleteContentRequest) returns (common.EmptyResponse);
@@ -67,6 +68,10 @@ message PrivateSearchContentResponse {
   common.PaginationResponse pagination = 2;
 }
 
+message GetContentRequest {
+  string uuid = 1;
+}
+
 message CreateContentRequest {
   string alias = 1;
   Type type = 2;
@@ -91,6 +96,13 @@ message UpdateContentRequest {
   optional int32 sort = 12;
   repeated string language_codes = 13;
   repeated int64 genre_ids = 14;
+}
+
+message UpdateContentTranslationRequest {
+  optional string uuid = 1;
+  string language_code = 2;
+  string title = 3;
+  optional string description = 4;
 }
 
 message DeleteContentRequest {

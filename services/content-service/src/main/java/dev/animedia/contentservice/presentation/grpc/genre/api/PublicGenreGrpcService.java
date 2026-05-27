@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.presentation.grpc.genre.api;
 
-import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
 import dev.animedia.contentservice.old.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.old.genre.service.GenrePageService;
@@ -14,25 +14,25 @@ import org.springframework.grpc.server.service.GrpcService;
 public class PublicGenreGrpcService extends PublicGenreServiceGrpc.PublicGenreServiceImplBase {
 
     private final GenrePageService genrePageService;
-    private final PaginationMapper paginationMapper;
+    private final ProtoPaginationMapper protoPaginationMapper;
     private final GrpcGenreMapper grpcGenreMapper;
 
     @Autowired
-    public PublicGenreGrpcService(GenrePageService genrePageService, PaginationMapper paginationMapper,
+    public PublicGenreGrpcService(GenrePageService genrePageService, ProtoPaginationMapper protoPaginationMapper,
                                   GrpcGenreMapper grpcGenreMapper
     ) {
         this.genrePageService = genrePageService;
-        this.paginationMapper = paginationMapper;
+        this.protoPaginationMapper = protoPaginationMapper;
         this.grpcGenreMapper = grpcGenreMapper;
     }
 
     @Override
     public void search(PublicGenreProto.PublicSearchRequest request, StreamObserver<PublicGenreProto.PublicSearchResponse> responseObserver) {
         String languageCode = LanguageInterceptor.getLanguageCode();
-        var pagination = paginationMapper.toPageable(request.getPagination());
+        var pagination = protoPaginationMapper.toPageable(request.getPagination());
         var genresWithTranslationResponseDto = genrePageService.search(request.getAliasList(), request.getNameList(), languageCode, pagination);
 
-        var paginationResponse = paginationMapper.toProtoPaginationResponse(genresWithTranslationResponseDto);
+        var paginationResponse = protoPaginationMapper.toProtoPaginationResponse(genresWithTranslationResponseDto);
         var response = grpcGenreMapper.toPublicSearchResponse(genresWithTranslationResponseDto.getContent(), paginationResponse);
         responseObserver.onNext(response);
         responseObserver.onCompleted();

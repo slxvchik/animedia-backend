@@ -9,6 +9,7 @@ option java_outer_classname="PrivateContentStatusProto";
 
 service PrivateContentStatusService {
   rpc search(PrivateSearchStatusRequest) returns (PrivateSearchStatusResponse);
+  rpc get(GetStatusRequest) returns (PrivateStatusResponse);
   rpc create(CreateStatusRequest) returns (PrivateStatusResponse);
   rpc update(UpdateStatusRequest) returns (PrivateStatusResponse);
   rpc delete(DeleteStatusRequest) returns (common.EmptyResponse);
@@ -42,6 +43,10 @@ message PrivateSearchStatusResponse {
   common.PaginationResponse pagination = 2;
 }
 
+message GetStatusRequest {
+  int64 id = 1;
+}
+
 message CreateStatusRequest {
   string alias = 1;
   int32 sort_order = 2;
@@ -62,7 +67,7 @@ message UpdateStatusRequest {
 }
 
 message UpdateStatusTranslationRequest {
-  int64 id = 1;
+  optional int64 id = 1;
   string language_code = 2;
   string name = 3;
 }

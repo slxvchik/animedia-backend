@@ -13,7 +13,7 @@ option java_outer_classname="PublicContentProto";
 
 service PublicContentService {
   rpc search(PublicSearchRequest) returns (PublicSearchResponse);
-  rpc get(GetContentRequest) returns (PublicContentResponse);
+  rpc get(GetContentByDetailsRequest) returns (PublicContentResponse);
 }
 
 message PublicContentResponse {
@@ -52,7 +52,7 @@ message PublicSearchResponse {
   protos.common.PaginationResponse pagination = 2;
 }
 
-message GetContentRequest {
+message GetContentByDetailsRequest {
   string alias = 1;
   Type type = 2;
   optional int32 season = 3;

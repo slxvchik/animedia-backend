@@ -2,7 +2,7 @@ package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.old.app.FieldValidator;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
-import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.old.content.dto.request.ContentRequestDto;
 import dev.animedia.contentservice.old.content.dto.request.PrivateSearchRequestDto;
 import dev.animedia.contentservice.old.content.mapper.ContentSortMapper;
@@ -24,7 +24,7 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
 
     private final ContentCommandService contentCommandService;
     private final ContentSearchService contentSearchService;
-    private final PaginationMapper paginationMapper;
+    private final ProtoPaginationMapper protoPaginationMapper;
     private final ContentSortMapper contentSortMapper;
     private final GrpcContentMapper grpcContentMapper;
     private final FieldValidator fieldValidator;
@@ -33,14 +33,14 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
     public PrivateContentGrpcService(
         ContentCommandService contentCommandService,
         ContentSearchService contentSearchService,
-        PaginationMapper paginationMapper,
+        ProtoPaginationMapper protoPaginationMapper,
         ContentSortMapper contentSortMapper,
         GrpcContentMapper grpcContentMapper,
 	    FieldValidator fieldValidator
     ) {
         this.contentCommandService = contentCommandService;
         this.contentSearchService = contentSearchService;
-        this.paginationMapper = paginationMapper;
+        this.protoPaginationMapper = protoPaginationMapper;
         this.contentSortMapper = contentSortMapper;
         this.grpcContentMapper = grpcContentMapper;
 	    this.fieldValidator = fieldValidator;
@@ -51,10 +51,10 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
         String languageCode = LanguageInterceptor.getLanguageCode();
         PrivateSearchRequestDto searchRequestDto = grpcContentMapper.toPrivateSearchRequestDto(request);
         Pageable pageable = request.hasSort()
-            ? paginationMapper.toPageableWithSort(request.getPagination(), contentSortMapper.toSort(request.getSort()))
-            : paginationMapper.toPageable(request.getPagination());
+            ? protoPaginationMapper.toPageableWithSort(request.getPagination(), contentSortMapper.toSort(request.getSort()))
+            : protoPaginationMapper.toPageable(request.getPagination());
         var contentsWithTranslations = contentSearchService.search(searchRequestDto, languageCode, pageable);
-        var pagination = paginationMapper.toProtoPaginationResponse(contentsWithTranslations);
+        var pagination = protoPaginationMapper.toProtoPaginationResponse(contentsWithTranslations);
         responseObserver.onNext(grpcContentMapper.toPrivateSearchResponse(contentsWithTranslations.getContent(), pagination));
         responseObserver.onCompleted();
     }

@@ -16,8 +16,6 @@ public abstract class BaseTranslationEntity {
 
 		if (!(o instanceof BaseTranslationEntity that)) return false;
 
-        if (languageCode == null || that.languageCode == null) return false;
-
 		return Objects.equals(languageCode, that.languageCode);
 	}
 

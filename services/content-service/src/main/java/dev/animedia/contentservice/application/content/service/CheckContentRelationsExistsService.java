@@ -9,7 +9,7 @@ import dev.animedia.contentservice.domain.genre.model.Genre;
 
 import java.util.List;
 
-public final class CheckContentRelationsExistsService implements CheckContentRelationsExistsUseCase {
+public final class CheckContentRelationsExistsService {
 	private final GetStatusUseCase getStatusUseCase;
 	private final GetGenreListUseCase getGenreListUseCase;
 
@@ -21,17 +21,16 @@ public final class CheckContentRelationsExistsService implements CheckContentRel
 		this.getGenreListUseCase = getGenreListUseCase;
 	}
 
-	@Override
 	public void check(Content content) {
 
-		getStatusUseCase.get(content.getStatus().getId(), false, null);
+		getStatusUseCase.get(content.getStatus().getId(), null, null);
 
 		List<Long> inputGenreIdList = content.getGenreSet()
 			.stream()
 			.map(Genre::getId)
 			.distinct()
 			.toList();
-		List<Long> foundGenreIdList = getGenreListUseCase.getList(inputGenreIdList, false, null)
+		List<Long> foundGenreIdList = getGenreListUseCase.getList(inputGenreIdList, null, null)
 			.stream()
 			.map(GenreDto::id)
 			.toList();

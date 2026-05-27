@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class PaginationMapper {
+public class ProtoPaginationMapper {
 	public <T> CommonProto.PaginationResponse toProtoPaginationResponse(Page<T> page) {
 		return CommonProto.PaginationResponse.newBuilder()
 			.setCurrentPage(page.pageNumber())

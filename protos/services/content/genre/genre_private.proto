@@ -9,6 +9,7 @@ option java_outer_classname="PrivateGenreProto";
 
 service PrivateGenreService {
     rpc search(PrivateSearchGenreRequest) returns (PrivateSearchGenreResponse);
+    rpc get(GetGenreRequest) returns (PrivateGenreResponse);
     rpc create(CreateGenreRequest) returns (PrivateGenreResponse);
     rpc update(UpdateGenreRequest) returns (PrivateGenreResponse);
     rpc delete(DeleteGenreRequest) returns (common.EmptyResponse);
@@ -44,6 +45,10 @@ message PrivateSearchGenreResponse {
     common.PaginationResponse pagination = 2;
 }
 
+message GetGenreRequest {
+    int64 id = 1;
+}
+
 message CreateGenreRequest {
     string alias = 1;
     int64 sort = 2;
@@ -66,10 +71,10 @@ message UpdateGenreRequest {
 }
 
 message UpdateGenreTranslationRequest {
-    int64 id = 1;
+    optional int64 id = 1;
     string language_code = 2;
     string name = 3;
-    string description = 4;
+    optional string description = 4;
 }
 
 message DeleteGenreRequest {

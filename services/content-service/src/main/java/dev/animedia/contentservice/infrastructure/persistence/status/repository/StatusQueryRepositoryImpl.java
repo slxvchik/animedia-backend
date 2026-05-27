@@ -76,9 +76,4 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	public boolean existsByAlias(String alias) {
 		return jpaStatusRepository.existsByAlias(alias);
 	}
-
-	@Override
-	public boolean existsByAliasExcludeId(String alias, Long id) {
-		return jpaStatusRepository.existsByAliasAndIdNot(alias, id);
-	}
 }

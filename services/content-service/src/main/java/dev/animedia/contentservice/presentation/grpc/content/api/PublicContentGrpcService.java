@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
-import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.old.content.dto.request.PublicSearchRequestDto;
 import dev.animedia.contentservice.old.content.mapper.ContentSortMapper;
 import dev.animedia.contentservice.old.content.mapper.GrpcContentMapper;
@@ -19,7 +19,7 @@ public class PublicContentGrpcService extends PublicContentServiceGrpc.PublicCon
 
     private final ContentSearchService contentSearchService;
     private final GrpcContentMapper grpcContentMapper;
-    private final PaginationMapper paginationMapper;
+    private final ProtoPaginationMapper protoPaginationMapper;
     private final ContentSortMapper contentSortMapper;
     private final ContentQueryService contentQueryService;
 
@@ -27,13 +27,13 @@ public class PublicContentGrpcService extends PublicContentServiceGrpc.PublicCon
 	public PublicContentGrpcService(
         ContentSearchService contentSearchService,
         GrpcContentMapper grpcContentMapper,
-        PaginationMapper paginationMapper,
+        ProtoPaginationMapper protoPaginationMapper,
         ContentSortMapper contentSortMapper,
         ContentQueryService contentQueryService
     ) {
 		this.contentSearchService = contentSearchService;
 	    this.grpcContentMapper = grpcContentMapper;
-        this.paginationMapper = paginationMapper;
+        this.protoPaginationMapper = protoPaginationMapper;
         this.contentSortMapper = contentSortMapper;
         this.contentQueryService = contentQueryService;
     }
@@ -43,10 +43,10 @@ public class PublicContentGrpcService extends PublicContentServiceGrpc.PublicCon
         String languageCode = LanguageInterceptor.getLanguageCode();
         PublicSearchRequestDto searchRequestDto = grpcContentMapper.toPublicSearchRequestDto(request);
         Pageable pageable = request.hasSort()
-            ? paginationMapper.toPageableWithSort(request.getPagination(), contentSortMapper.toSort(request.getSort()))
-            : paginationMapper.toPageable(request.getPagination());
+            ? protoPaginationMapper.toPageableWithSort(request.getPagination(), contentSortMapper.toSort(request.getSort()))
+            : protoPaginationMapper.toPageable(request.getPagination());
         var contentsWithTranslation = contentSearchService.search(searchRequestDto, languageCode, pageable);
-        var pagination = paginationMapper.toProtoPaginationResponse(contentsWithTranslation);
+        var pagination = protoPaginationMapper.toProtoPaginationResponse(contentsWithTranslation);
         responseObserver.onNext(grpcContentMapper.toPublicSearchResponse(contentsWithTranslation.getContent(), pagination));
         responseObserver.onCompleted();
     }

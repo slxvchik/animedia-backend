@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.presentation.grpc.genre.api;
 
 import dev.animedia.contentservice.old.app.FieldValidator;
-import dev.animedia.contentservice.presentation.grpc.shared.mapper.PaginationMapper;
+import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.old.genre.dto.request.GenreRequestDto;
 import dev.animedia.contentservice.old.genre.mapper.GrpcGenreMapper;
 import dev.animedia.contentservice.old.genre.service.GenreCommandService;
@@ -22,7 +22,7 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
     private final GenrePageService genrePageService;
     private final GenreCommandService genreCommandService;
     private final GrpcGenreMapper grpcGenreMapper;
-    private final PaginationMapper paginationMapper;
+    private final ProtoPaginationMapper protoPaginationMapper;
     private final FieldValidator fieldValidator;
 
     @Autowired
@@ -30,22 +30,22 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
         GenrePageService genrePageService,
         GenreCommandService genreCommandService,
         GrpcGenreMapper grpcGenreMapper,
-        PaginationMapper paginationMapper,
+        ProtoPaginationMapper protoPaginationMapper,
         FieldValidator fieldValidator
     ) {
         this.genrePageService = genrePageService;
         this.genreCommandService = genreCommandService;
         this.grpcGenreMapper = grpcGenreMapper;
-        this.paginationMapper = paginationMapper;
+        this.protoPaginationMapper = protoPaginationMapper;
         this.fieldValidator = fieldValidator;
     }
 
     @Override
     public void search(PrivateGenreProto.PrivateSearchRequest request, StreamObserver<PrivateGenreProto.PrivateSearchResponse> responseObserver) {
-        var pageable = paginationMapper.toPageable(request.getPagination());
+        var pageable = protoPaginationMapper.toPageable(request.getPagination());
         var genresWithTranslations = genrePageService.search(request.getAliasList(), request.getNamesList(), request.getLanguageCodesList(), pageable);
 
-        var protoPagination = paginationMapper.toProtoPaginationResponse(genresWithTranslations);
+        var protoPagination = protoPaginationMapper.toProtoPaginationResponse(genresWithTranslations);
         PrivateGenreProto.PrivateSearchResponse response = grpcGenreMapper.toPrivateSearchResponse(genresWithTranslations.getContent(), protoPagination);
 
         responseObserver.onNext(response);

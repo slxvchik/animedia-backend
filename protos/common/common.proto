@@ -14,7 +14,6 @@ message PaginationRequest {
 }
 
 message PaginationResponse {
-  repeated google.protobuf.Any content = 1;
   int32 current_page = 2;
   int32 page_size = 3;
   int32 total_pages = 4;

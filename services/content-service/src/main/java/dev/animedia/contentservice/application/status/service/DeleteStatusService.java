@@ -21,7 +21,7 @@ public class DeleteStatusService implements DeleteStatusUseCase {
     @Transactional
     @Override
     public void delete(Long id) {
-        statusQueryRepository.findById(id, false, null)
+        statusQueryRepository.findById(id, null, null)
             .orElseThrow(StatusNotFoundException::new);
         statusCommandRepository.delete(id);
     }

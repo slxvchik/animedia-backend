@@ -19,7 +19,7 @@ public class DeleteGenreService implements DeleteGenreUseCase {
 
 	@Override
 	public void delete(Long id) {
-		genreQueryRepository.findById(id, false, null)
+		genreQueryRepository.findById(id, null, null)
 			.orElseThrow(GenreNotFoundException::new);
 
 		genreCommandRepository.delete(id);

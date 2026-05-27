@@ -16,5 +16,4 @@ public interface StatusQueryRepository {
     Page<Status> search(StatusSearchCriteria criteria, Pageable pageable);
 
     boolean existsByAlias(String alias);
-    boolean existsByAliasExcludeId(String alias, Long id);
 }

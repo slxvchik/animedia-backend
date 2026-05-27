@@ -28,7 +28,7 @@ public class UpdateStatusService implements UpdateStatusUseCase {
 
     @Override
     public StatusDto update(StatusDto statusDto) {
-        Status status = statusQueryRepository.findById(statusDto.id(), false, null)
+        Status status = statusQueryRepository.findById(statusDto.id(), null, null)
             .orElseThrow(StatusNotFoundException::new);
 
         status.update(
