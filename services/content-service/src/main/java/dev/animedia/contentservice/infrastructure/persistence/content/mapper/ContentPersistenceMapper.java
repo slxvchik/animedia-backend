@@ -37,17 +37,17 @@ public class ContentPersistenceMapper {
             .updatedAt(ce.getUpdatedAt())
             .active(ce.getActive())
             .sort(ce.getSortOrder())
-            .languageCodeSet(ce.getLanguageCodeSet())
+            .languageCodeSet(ce.getLanguageCodes())
             .genreSet(
-                ce.getGenreSet() == null ? null
-                : ce.getGenreSet()
+                ce.getGenres() == null ? null
+                : ce.getGenres()
                     .stream()
                     .map(genreMapper)
                     .collect(Collectors.toSet())
             )
             .translationSet(
-                ce.getTranslationSet() == null ? null
-                : ce.getTranslationSet()
+                ce.getTranslations() == null ? null
+                : ce.getTranslations()
                     .stream()
                     .map(this::toContentTranslation)
                     .collect(Collectors.toSet())
@@ -89,8 +89,8 @@ public class ContentPersistenceMapper {
         ce.setActive(content.getActive());
         ce.setSortOrder(content.getSort());
 
-        ce.setLanguageCodeSet(content.getLanguageCodeSet());
-        ce.setGenreSet(
+        ce.setLanguageCodes(content.getLanguageCodeSet());
+        ce.setGenres(
             content.getGenreSet() == null ? null
             : content.getGenreSet()
                 .stream()
@@ -98,7 +98,7 @@ public class ContentPersistenceMapper {
                 .collect(Collectors.toSet())
         );
 
-        ce.setTranslationSet(
+        ce.setTranslations(
             content.getTranslationSet() == null ? null
             : content.getTranslationSet().stream()
                 .map(ct -> toContentTranslationEntity(ct, ce))

@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.infrastructure.persistence.genre.repository;
 
-import dev.animedia.contentservice.infrastructure.persistence.genre.dto.GenreTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreEntity;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,28 +9,25 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import jakarta.annotation.Nullable;
 import java.util.List;
 
 @Repository
 public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
 
-    @Query("SELECT new dev.animedia.contentservice.infrastructure.persistence.genre.dto.GenreTranslationRowDto(" +
-        "ge.id, ge.alias, ge.sortOrder, ge.active, gte.id, gte.languageCode, gte.name, gte.description) " +
+    @Query("SELECT ge " +
         "FROM GenreEntity AS ge " +
         "LEFT JOIN GenreTranslationEntity AS gte " +
         "ON ge.id = gte.genreEntity.id " +
         "WHERE ge.id = :id " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
         "AND (:active IS NULL OR :active = ge.active)")
-    List<GenreTranslationRowDto> findById(
+    GenreEntity findById(
         @Param("id") Long id,
         @Param("lang") @Nullable String languageCode,
         @Param("active") @Nullable Boolean active
-        );
+    );
 
-    @Query("SELECT new dev.animedia.contentservice.infrastructure.persistence.genre.dto.GenreTranslationRowDto(" +
-        "ge.id, ge.alias, ge.sortOrder, ge.active, gte.id, gte.languageCode, gte.name, gte.description) " +
+    @Query("SELECT ge " +
         "FROM GenreEntity AS ge " +
         "LEFT JOIN GenreTranslationEntity AS gte " +
         "ON ge.id = gte.genreEntity.id " +
@@ -38,13 +35,13 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
         "AND (:active IS NULL OR :active = ge.active) " +
         "ORDER BY ge.sortOrder DESC")
-    List<GenreTranslationRowDto> findByIdListAndLanguageCode(
+    List<GenreEntity> findByIdList(
         @Param("idList") List<Long> idList,
         @Param("lang") @Nullable String languageCode,
         @Param("active") @Nullable Boolean active
-        );
+    );
 
-    @Query("SELECT DISTINCT ge.id " +
+    @Query("SELECT ge " +
         "FROM GenreEntity AS ge " +
         "JOIN GenreTranslationEntity AS gte " +
         "ON ge.id = gte.genreEntity.id " +
@@ -52,9 +49,8 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "AND (:name IS NULL OR :name LIKE CONCAT('%', gte.name, '%')) " +
         "AND (:desc IS NULL OR :desc LIKE CONCAT('%', gte.description, '%')) " +
         "AND (:lang IS NULL OR :lang = gte.languageCode) " +
-        "AND (:active IS NULL OR :active = ge.active) " +
-        "ORDER BY ge.sortOrder DESC")
-    Page<Long> search(
+        "AND (:active IS NULL OR :active = ge.active)")
+    Page<GenreEntity> search(
         @Param("active") @Nullable Boolean active,
         @Param("alias") @Nullable String alias,
         @Param("name") @Nullable String name,

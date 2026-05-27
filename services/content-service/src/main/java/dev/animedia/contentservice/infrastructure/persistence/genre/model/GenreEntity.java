@@ -28,7 +28,7 @@ public class GenreEntity {
     private Boolean active = false;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "genreEntity", orphanRemoval = true)
-    private Set<GenreTranslationEntity> translationSet = new HashSet<>();
+    private Set<GenreTranslationEntity> translations = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -62,23 +62,23 @@ public class GenreEntity {
         this.active = active;
     }
 
-    public Set<GenreTranslationEntity> getTranslationSet() {
-        return translationSet;
+    public Set<GenreTranslationEntity> getTranslations() {
+        return translations;
     }
 
-    public void setTranslationSet(Set<GenreTranslationEntity> translationSet) {
-        this.translationSet = translationSet;
+    public void setTranslations(Set<GenreTranslationEntity> translationSet) {
+        this.translations = translationSet;
     }
 
     public void syncTranslationSet(Set<GenreTranslationEntity> newGenreTranslationEntitySet) {
         // delete translations
-        this.translationSet.removeIf(existing -> !newGenreTranslationEntitySet.contains(existing));
+        this.translations.removeIf(existing -> !newGenreTranslationEntitySet.contains(existing));
         // save new && update old translations
         for (GenreTranslationEntity newGte : newGenreTranslationEntitySet) {
             if (newGte.getId() == null) {
-                this.translationSet.add(newGte);
+                this.translations.add(newGte);
             } else {
-                this.translationSet.stream()
+                this.translations.stream()
                     .filter(existing -> existing.getId().equals(newGte.getId()))
                     .findFirst()
                     .ifPresent(existing -> {

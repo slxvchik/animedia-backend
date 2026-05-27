@@ -74,7 +74,7 @@ public class ContentEntity {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_uuid"))
     @Column(name = "language_code")
-    private Set<String> languageCodeSet = new HashSet<>();
+    private Set<String> languageCodes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -89,10 +89,10 @@ public class ContentEntity {
             @Index(name = "idx_content_languages_genre_id", columnList = "genre_id")
         }
     )
-    private Set<GenreEntity> genreSet = new HashSet<>();
+    private Set<GenreEntity> genres = new HashSet<>();
 
     @OneToMany(mappedBy = "content", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<ContentTranslationEntity> translationSet = new HashSet<>();
+    private Set<ContentTranslationEntity> translations = new HashSet<>();
 
     public UUID getId() {
         return id;
@@ -190,61 +190,61 @@ public class ContentEntity {
         this.sortOrder = sortOrder;
     }
 
-    public Set<String> getLanguageCodeSet() {
-        return languageCodeSet;
+    public Set<String> getLanguageCodes() {
+        return languageCodes;
     }
 
-    public void setLanguageCodeSet(Set<String> languageCodeSet) {
-        this.languageCodeSet = languageCodeSet;
+    public void setLanguageCodes(Set<String> languageCodeSet) {
+        this.languageCodes = languageCodeSet;
     }
 
-    public Set<GenreEntity> getGenreSet() {
-        return genreSet;
+    public Set<GenreEntity> getGenres() {
+        return genres;
     }
 
-    public void setGenreSet(Set<GenreEntity> genreSet) {
-        this.genreSet = genreSet;
+    public void setGenres(Set<GenreEntity> genreSet) {
+        this.genres = genreSet;
     }
 
-    public Set<ContentTranslationEntity> getTranslationSet() {
-        return translationSet;
+    public Set<ContentTranslationEntity> getTranslations() {
+        return translations;
     }
 
-    public void setTranslationSet(Set<ContentTranslationEntity> translationSet) {
-        this.translationSet = translationSet;
+    public void setTranslations(Set<ContentTranslationEntity> translationSet) {
+        this.translations = translationSet;
     }
 
     public void syncLanguageCodeSet(Set<String> newLanguageCodeSet) {
         if (newLanguageCodeSet == null) {
-            this.languageCodeSet.clear();
+            this.languageCodes.clear();
             return;
         }
-        this.languageCodeSet.retainAll(newLanguageCodeSet);
-        this.languageCodeSet.addAll(newLanguageCodeSet);
+        this.languageCodes.retainAll(newLanguageCodeSet);
+        this.languageCodes.addAll(newLanguageCodeSet);
     }
 
     public void syncGenreSet(Set<GenreEntity> newGenreSet) {
         if (newGenreSet == null) {
-            this.genreSet.clear();
+            this.genres.clear();
             return;
         }
-        this.genreSet.retainAll(newGenreSet);
+        this.genres.retainAll(newGenreSet);
         for (GenreEntity newGe : newGenreSet) {
-            if (newGe.getId() != null) this.genreSet.add(newGe);
+            if (newGe.getId() != null) this.genres.add(newGe);
         }
     }
 
     public void syncTranslationSet(Set<ContentTranslationEntity> newContentTranslationEntitySet) {
         if (newContentTranslationEntitySet == null) {
-            this.translationSet.clear();
+            this.translations.clear();
             return;
         }
-        this.translationSet.retainAll(newContentTranslationEntitySet);
+        this.translations.retainAll(newContentTranslationEntitySet);
         for (ContentTranslationEntity newCte : newContentTranslationEntitySet) {
             if (newCte.getId() == null) {
-                this.translationSet.add(newCte);
+                this.translations.add(newCte);
             } else {
-                this.translationSet.stream()
+                this.translations.stream()
                     .filter(cte -> cte.getId().equals(newCte.getId()))
                     .findFirst()
                     .ifPresent(cte -> {

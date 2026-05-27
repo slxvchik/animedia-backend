@@ -21,7 +21,10 @@ public class ProtoPaginationMapper {
 			.build();
 	}
 
-	public Pageable toDomainPageable(CommonProto.PaginationRequest paginationRequest, Set<String> allowedFields) {
+	public Pageable toDomainPageable(
+		CommonProto.PaginationRequest paginationRequest,
+		Set<String> allowedFields
+	) {
 		int page = paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0;
 		int size = paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10;
 

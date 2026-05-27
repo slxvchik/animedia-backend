@@ -8,8 +8,10 @@ import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.presentation.grpc.status.mapper.PublicStatusGrpcMapper;
-import dev.animedia.grpc.common.CommonProto;
-import dev.animedia.grpc.status.PublicContentStatusProto;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
+import dev.animedia.grpc.status.PublicContentStatusProto.PublicSearchStatusRequest;
+import dev.animedia.grpc.status.PublicContentStatusProto.PublicSearchStatusResponse;
+import dev.animedia.grpc.status.PublicContentStatusProto.PublicStatusResponse;
 import dev.animedia.grpc.status.PublicContentStatusServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +39,22 @@ public class PublicStatusGrpcService extends PublicContentStatusServiceGrpc.Publ
 
 	@Override
 	public void search(
-		PublicContentStatusProto.PublicSearchStatusRequest request,
-		StreamObserver<PublicContentStatusProto.PublicSearchStatusResponse> responseObserver
+		PublicSearchStatusRequest request,
+		StreamObserver<PublicSearchStatusResponse> responseObserver
 	) {
 
 		String languageCode = LanguageInterceptor.getLanguageCode();
 
 		StatusSearchDto statusSearchDto = publicStatusGrpcMapper.toPublicStatusSearchDto(request, languageCode);
-		Pageable domainPageable = protoPaginationMapper.toDomainPageable(request.getPagination(), Set.of("alias", "name"));
+		Pageable domainPageable = protoPaginationMapper.toDomainPageable(
+			request.getPagination(),
+			Set.of("alias", "sortOrder", "translations.name")
+		);
 
 		Page<StatusDto> statusDtoPage = searchStatusUseCase.search(statusSearchDto, domainPageable);
 
-		CommonProto.PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(statusDtoPage);
-		List<PublicContentStatusProto.PublicStatusResponse> statusResponseList = statusDtoPage.content() != null
+		PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(statusDtoPage);
+		List<PublicStatusResponse> statusResponseList = statusDtoPage.content() != null
 			? statusDtoPage.content()
 				.stream()
 				.map(publicStatusGrpcMapper::toPublicStatusResponse)
@@ -57,7 +62,7 @@ public class PublicStatusGrpcService extends PublicContentStatusServiceGrpc.Publ
 			: List.of();
 
 		responseObserver.onNext(
-			PublicContentStatusProto.PublicSearchStatusResponse
+			PublicSearchStatusResponse
 				.newBuilder()
 				.addAllStatuses(statusResponseList)
 				.setPagination(paginationResponse)

@@ -2,57 +2,14 @@ package dev.animedia.contentservice.infrastructure.persistence.status.mapper;
 
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.model.StatusTranslation;
-import dev.animedia.contentservice.infrastructure.persistence.status.dto.StatusTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusEntity;
 import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusTranslationEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class StatusPersistenceMapper {
-
-	/**
-	 * To multiple status list with translation list from db row list
-	 * @param statusTranslationRowDtoList status with translation row list from db
-	 * @return domain status list with translations
-	 */
-	public List<Status> toStatusList(List<StatusTranslationRowDto> statusTranslationRowDtoList) {
-		if (statusTranslationRowDtoList == null || statusTranslationRowDtoList.isEmpty()) return List.of();
-
-		// Map by Status id
-		Map<Long, List<StatusTranslationRowDto>> statusRowMap = statusTranslationRowDtoList.stream()
-			.collect(Collectors.groupingBy(StatusTranslationRowDto::id));
-
-		return statusRowMap.values().stream()
-			.map(rows -> {
-				StatusTranslationRowDto firstRow = rows.getFirst();
-
-				Set<StatusTranslation> translationSet = rows.stream()
-					.map(statusTranslationRowDto ->
-						new StatusTranslation(
-							statusTranslationRowDto.translationId(),
-							statusTranslationRowDto.languageCode(),
-							statusTranslationRowDto.name()
-						)
-					)
-					.collect(Collectors.toSet());
-
-				return new Status(
-					firstRow.id(),
-					firstRow.alias(),
-					firstRow.sortOrder(),
-					firstRow.active(),
-					translationSet
-				);
-			})
-			.sorted(Comparator.comparing(Status::getSortOrder))
-			.toList();
-	}
 
 	/**
 	 * To domain status from jpa status entity
@@ -66,7 +23,7 @@ public class StatusPersistenceMapper {
 			se.getAlias(),
 			se.getSortOrder(),
 			se.getActive(),
-			se.getTranslationSet().stream()
+			se.getTranslations().stream()
 				.map(this::toStatusTranslation)
 				.collect(Collectors.toSet())
 		);
@@ -100,7 +57,7 @@ public class StatusPersistenceMapper {
 		se.setAlias(status.getAlias());
 		se.setSortOrder(status.getSortOrder());
 
-		se.setTranslationSet(
+		se.setTranslations(
 			status.getTranslationSet().stream()
 				.map(ste -> toStatusTranslationEntity(ste, se))
 				.collect(Collectors.toSet())

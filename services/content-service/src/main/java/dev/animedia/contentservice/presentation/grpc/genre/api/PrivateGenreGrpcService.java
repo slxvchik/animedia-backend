@@ -1,98 +1,117 @@
 package dev.animedia.contentservice.presentation.grpc.genre.api;
 
-import dev.animedia.contentservice.old.app.FieldValidator;
+import dev.animedia.contentservice.application.genre.dto.GenreDto;
+import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
+import dev.animedia.contentservice.application.genre.usecase.*;
+import dev.animedia.contentservice.domain.shared.model.Page;
+import dev.animedia.contentservice.domain.shared.model.Pageable;
+import dev.animedia.contentservice.presentation.grpc.genre.mapper.PrivateGenreGrpcMapper;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
-import dev.animedia.contentservice.old.genre.dto.request.GenreRequestDto;
-import dev.animedia.contentservice.old.genre.mapper.GrpcGenreMapper;
-import dev.animedia.contentservice.old.genre.service.GenreCommandService;
-import dev.animedia.contentservice.old.genre.service.GenrePageService;
 import dev.animedia.grpc.common.CommonProto;
-import dev.animedia.grpc.genre.GenreCommonProto;
-import dev.animedia.grpc.genre.PrivateGenreProto;
+import dev.animedia.grpc.genre.PrivateGenreProto.*;
 import dev.animedia.grpc.genre.PrivateGenreServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
 import java.util.List;
+import java.util.Set;
 
 @GrpcService
 public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenreServiceImplBase {
-
-    private final GenrePageService genrePageService;
-    private final GenreCommandService genreCommandService;
-    private final GrpcGenreMapper grpcGenreMapper;
+    private final PrivateGenreGrpcMapper privateGenreGrpcMapper;
     private final ProtoPaginationMapper protoPaginationMapper;
-    private final FieldValidator fieldValidator;
+
+    private final SearchGenreUseCase searchGenreUseCase;
+    private final GetGenreUseCase getGenreUseCase;
+    private final CreateGenreUseCase createGenreUseCase;
+    private final UpdateGenreUseCase updateGenreUseCase;
+    private final DeleteGenreUseCase deleteGenreUseCase;
 
     @Autowired
     public PrivateGenreGrpcService(
-        GenrePageService genrePageService,
-        GenreCommandService genreCommandService,
-        GrpcGenreMapper grpcGenreMapper,
+	    PrivateGenreGrpcMapper privateGenreGrpcMapper,
         ProtoPaginationMapper protoPaginationMapper,
-        FieldValidator fieldValidator
+	    SearchGenreUseCase searchGenreUseCase,
+	    GetGenreUseCase getGenreUseCase,
+	    CreateGenreUseCase createGenreUseCase,
+	    UpdateGenreUseCase updateGenreUseCase,
+	    DeleteGenreUseCase deleteGenreUseCase
     ) {
-        this.genrePageService = genrePageService;
-        this.genreCommandService = genreCommandService;
-        this.grpcGenreMapper = grpcGenreMapper;
-        this.protoPaginationMapper = protoPaginationMapper;
-        this.fieldValidator = fieldValidator;
+	    this.privateGenreGrpcMapper = privateGenreGrpcMapper;
+	    this.protoPaginationMapper = protoPaginationMapper;
+	    this.searchGenreUseCase = searchGenreUseCase;
+	    this.getGenreUseCase = getGenreUseCase;
+	    this.createGenreUseCase = createGenreUseCase;
+	    this.updateGenreUseCase = updateGenreUseCase;
+	    this.deleteGenreUseCase = deleteGenreUseCase;
     }
 
     @Override
-    public void search(PrivateGenreProto.PrivateSearchRequest request, StreamObserver<PrivateGenreProto.PrivateSearchResponse> responseObserver) {
-        var pageable = protoPaginationMapper.toPageable(request.getPagination());
-        var genresWithTranslations = genrePageService.search(request.getAliasList(), request.getNamesList(), request.getLanguageCodesList(), pageable);
+    public void search(
+        PrivateSearchGenreRequest request,
+        StreamObserver<PrivateSearchGenreResponse> responseObserver
+    ) {
+        Pageable pageableRequest = protoPaginationMapper.toDomainPageable(
+            request.getPagination(),
+            Set.of("alias", "sortOrder", "active", "translations.name", "translations.languageCode")
+        );
+        GenreSearchDto genreSearchDto = privateGenreGrpcMapper.toGenreSearchDto(request);
 
-        var protoPagination = protoPaginationMapper.toProtoPaginationResponse(genresWithTranslations);
-        PrivateGenreProto.PrivateSearchResponse response = grpcGenreMapper.toPrivateSearchResponse(genresWithTranslations.getContent(), protoPagination);
+        Page<GenreDto> genreDtoPage = searchGenreUseCase.search(genreSearchDto, pageableRequest);
 
-        responseObserver.onNext(response);
+        CommonProto.PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(genreDtoPage);
+        List<PrivateGenreResponse> genreResponseList = genreDtoPage.content() != null
+            ? genreDtoPage.content()
+                .stream()
+                .map(privateGenreGrpcMapper::toPrivateGenreResponse)
+                .toList()
+            : List.of();
+
+        responseObserver.onNext(
+            PrivateSearchGenreResponse
+                .newBuilder()
+                .addAllGenres(genreResponseList)
+                .setPagination(paginationResponse)
+                .build()
+        );
         responseObserver.onCompleted();
     }
 
     @Override
-    public void create(PrivateGenreProto.PrivateCreateRequest request, StreamObserver<GenreCommonProto.GenreResponse> responseObserver) {
-        GenreRequestDto genreRequestDto = grpcGenreMapper.toGenreRequestDto(request);
-        fieldValidator.validate(genreRequestDto);
-        var genreResponseDto = genreCommandService.create(genreRequestDto);
-
-        var response = grpcGenreMapper.toProtoGenre(genreResponseDto);
-        responseObserver.onNext(response);
+    public void get(
+        GetGenreRequest request,
+        StreamObserver<PrivateGenreResponse> responseObserver
+    ) {
+        GenreDto genreDto = getGenreUseCase.get(request.getId(), null, null);
+        responseObserver.onNext(
+            privateGenreGrpcMapper.toPrivateGenreResponse(genreDto)
+        );
         responseObserver.onCompleted();
     }
 
     @Override
-    public void createBatch(PrivateGenreProto.PrivateCreateBatchRequest request, StreamObserver<GenreCommonProto.GenreResponseList> responseObserver) {
-        List<GenreRequestDto> genresRequestDto = grpcGenreMapper.toGenreListRequestDto(request);
-        fieldValidator.validate(genresRequestDto);
-        var genresResponseDto = genreCommandService.create(genresRequestDto);
-
-        var response = grpcGenreMapper.toProtoGenreList(genresResponseDto);
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+    public void create(
+        CreateGenreRequest request,
+        StreamObserver<PrivateGenreResponse> responseObserver
+    ) {
+        super.create(request, responseObserver);
     }
 
     @Override
-    public void update(PrivateGenreProto.PrivateUpdateRequest request, StreamObserver<GenreCommonProto.GenreResponse> responseObserver) {
-        GenreRequestDto genreRequestDto = grpcGenreMapper.toGenreRequestDto(request);
-        var genreResponseDto = genreCommandService.update(request.getId(), genreRequestDto);
-
-        var response = grpcGenreMapper.toProtoGenre(genreResponseDto);
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+    public void update(
+        UpdateGenreRequest request,
+        StreamObserver<PrivateGenreResponse> responseObserver
+    ) {
+        super.update(request, responseObserver);
     }
 
     @Override
-    public void delete(PrivateGenreProto.PrivateDeleteRequest request, StreamObserver<CommonProto.EmptyResponse> responseObserver) {
-        genreCommandService.delete(request.getId());
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void deleteBatch(PrivateGenreProto.PrivateDeleteBatchRequest request, StreamObserver<CommonProto.EmptyResponse> responseObserver) {
-        genreCommandService.delete(request.getIdsList());
+    public void delete(
+        DeleteGenreRequest request,
+        StreamObserver<CommonProto.EmptyResponse> responseObserver
+    ) {
+        deleteGenreUseCase.delete(request.getId());
         responseObserver.onCompleted();
     }
 }

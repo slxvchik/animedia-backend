@@ -7,8 +7,8 @@ import dev.animedia.contentservice.domain.shared.model.Page;
 import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.presentation.grpc.status.mapper.PrivateStatusGrpcMapper;
-import dev.animedia.grpc.common.CommonProto;
-import dev.animedia.grpc.status.PrivateContentStatusProto;
+import dev.animedia.grpc.common.CommonProto.*;
+import dev.animedia.grpc.status.PrivateContentStatusProto.*;
 import dev.animedia.grpc.status.PrivateContentStatusServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +49,19 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 
 	@Override
 	public void search(
-		PrivateContentStatusProto.PrivateSearchStatusRequest request,
-		StreamObserver<PrivateContentStatusProto.PrivateSearchStatusResponse> responseObserver
+		PrivateSearchStatusRequest request,
+		StreamObserver<PrivateSearchStatusResponse> responseObserver
 	) {
-		Pageable pageableRequest = protoPaginationMapper.toDomainPageable(request.getPagination(), Set.of("alias", "name"));
+		Pageable pageableRequest = protoPaginationMapper.toDomainPageable(
+			request.getPagination(),
+			Set.of("alias", "sortOrder", "active", "translations.name", "translations.languageCode")
+		);
 		StatusSearchDto statusSearchDto = privateStatusGrpcMapper.toPrivateStatusSearchDto(request);
 
 		Page<StatusDto> statusDtoPage = searchStatusUseCase.search(statusSearchDto, pageableRequest);
 
-		CommonProto.PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(statusDtoPage);
-		List<PrivateContentStatusProto.PrivateStatusResponse> statusResponseList = statusDtoPage.content() != null
+		PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(statusDtoPage);
+		List<PrivateStatusResponse> statusResponseList = statusDtoPage.content() != null
 			? statusDtoPage.content()
 				.stream()
 				.map(privateStatusGrpcMapper::toPrivateStatusResponse)
@@ -66,7 +69,7 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 			: List.of();
 
 		responseObserver.onNext(
-			PrivateContentStatusProto.PrivateSearchStatusResponse
+			PrivateSearchStatusResponse
 				.newBuilder()
 				.addAllStatuses(statusResponseList)
 				.setPagination(paginationResponse)
@@ -77,8 +80,8 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 
 	@Override
 	public void get(
-		PrivateContentStatusProto.GetStatusRequest request,
-		StreamObserver<PrivateContentStatusProto.PrivateStatusResponse> responseObserver
+		GetStatusRequest request,
+		StreamObserver<PrivateStatusResponse> responseObserver
 	) {
 		StatusDto statusDto = getStatusUseCase.get(request.getId(), null, null);
 		responseObserver.onNext(
@@ -89,26 +92,38 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 
 	@Override
 	public void create(
-		PrivateContentStatusProto.CreateStatusRequest request,
-		StreamObserver<PrivateContentStatusProto.PrivateStatusResponse> responseObserver
+		CreateStatusRequest request,
+		StreamObserver<PrivateStatusResponse> responseObserver
 	) {
-		createStatusUseCase.create();
-		super.create(request, responseObserver);
+		StatusDto statusDto = privateStatusGrpcMapper.toStatusDto(request);
+		StatusDto created = createStatusUseCase.create(statusDto);
+
+		responseObserver.onNext(
+			privateStatusGrpcMapper.toPrivateStatusResponse(created)
+		);
+		responseObserver.onCompleted();
 	}
 
 	@Override
 	public void update(
-		PrivateContentStatusProto.UpdateStatusRequest request,
-		StreamObserver<PrivateContentStatusProto.PrivateStatusResponse> responseObserver
+		UpdateStatusRequest request,
+		StreamObserver<PrivateStatusResponse> responseObserver
 	) {
-		super.update(request, responseObserver);
+		StatusDto statusDto = privateStatusGrpcMapper.toStatusDto(request);
+		StatusDto updated = updateStatusUseCase.update(statusDto);
+
+		responseObserver.onNext(
+			privateStatusGrpcMapper.toPrivateStatusResponse(updated)
+		);
+		responseObserver.onCompleted();
 	}
 
 	@Override
 	public void delete(
-		PrivateContentStatusProto.DeleteStatusRequest request,
-		StreamObserver<CommonProto.EmptyResponse> responseObserver
+		DeleteStatusRequest request,
+		StreamObserver<EmptyResponse> responseObserver
 	) {
-		super.delete(request, responseObserver);
+		deleteStatusUseCase.delete(request.getId());
+		responseObserver.onCompleted();
 	}
 }

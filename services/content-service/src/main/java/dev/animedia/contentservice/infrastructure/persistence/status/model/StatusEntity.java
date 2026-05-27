@@ -33,7 +33,7 @@ public class StatusEntity {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    Set<StatusTranslationEntity> translationSet = new HashSet<>();
+    Set<StatusTranslationEntity> translations = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -67,24 +67,24 @@ public class StatusEntity {
         this.active = active;
     }
 
-    public Set<StatusTranslationEntity> getTranslationSet() {
-        return translationSet;
+    public Set<StatusTranslationEntity> getTranslations() {
+        return translations;
     }
 
-    public void setTranslationSet(Set<StatusTranslationEntity> translationSet) {
-        this.translationSet = translationSet;
+    public void setTranslations(Set<StatusTranslationEntity> translationSet) {
+        this.translations = translationSet;
     }
 
     public void syncTranslationSet(Set<StatusTranslationEntity> newStatusTranslationSet) {
         // delete translations
-        this.translationSet.removeIf(existing -> !newStatusTranslationSet.contains(existing));
+        this.translations.removeIf(existing -> !newStatusTranslationSet.contains(existing));
 
         // save new & update old translations
         for (StatusTranslationEntity newTranslationEntity : newStatusTranslationSet) {
             if (newTranslationEntity.getId() == null) {
-                this.translationSet.add(newTranslationEntity);
+                this.translations.add(newTranslationEntity);
             } else {
-                this.translationSet.stream()
+                this.translations.stream()
                     .filter(existing -> existing.getId().equals(newTranslationEntity.getId()))
                     .findFirst()
                     .ifPresent(existing -> existing.setName(newTranslationEntity.getName()));

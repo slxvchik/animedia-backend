@@ -18,8 +18,8 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 	@Query("SELECT ce " +
 		"FROM ContentEntity ce " +
 		"LEFT JOIN FETCH ce.statusEntity se " +
-		"LEFT JOIN FETCH ce.genreSet g " +
-		"LEFT JOIN FETCH ce.translationSet t " +
+		"LEFT JOIN FETCH ce.genres g " +
+		"LEFT JOIN FETCH ce.translations t " +
 		"WHERE ce.id = :id " +
 		"AND (:lang IS NULL OR t.languageCode = :lang) " +
 		"AND (:active IS NULL OR :active = ce.active)")
@@ -32,8 +32,8 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 	@Query("SELECT ce " +
 		"FROM ContentEntity ce " +
 		"LEFT JOIN FETCH ce.statusEntity se " +
-		"LEFT JOIN FETCH ce.genreSet g " +
-		"LEFT JOIN FETCH ce.translationSet t " +
+		"LEFT JOIN FETCH ce.genres g " +
+		"LEFT JOIN FETCH ce.translations t " +
 		"WHERE ce.alias = :alias " +
 		"AND ce.contentType = :type " +
 		"AND ce.season = :season " +

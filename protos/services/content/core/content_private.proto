@@ -41,7 +41,7 @@ message PrivateContentTranslationResponse {
   string content_uuid = 2;
   string language_code = 3;
   string title = 4;
-  string description = 5;
+  optional string description = 5;
 }
 
 message PrivateSearchContentRequest {
@@ -81,7 +81,7 @@ message CreateContentRequest {
   optional string trailer_video_uuid = 6;
   optional protos.common.Date release_date = 7;
   bool active = 10;
-  optional int32 sort = 11;
+  optional int32 sort_order = 11;
   repeated string language_codes = 12;
   repeated int64 genre_ids = 13;
 }
@@ -92,8 +92,8 @@ message UpdateContentRequest {
   optional string cover_image_uuid = 6;
   optional string trailer_video_uuid = 7;
   optional protos.common.Date release_date = 8;
-  optional bool active = 11;
-  optional int32 sort = 12;
+  bool active = 11;
+  optional int32 sort_order = 12;
   repeated string language_codes = 13;
   repeated int64 genre_ids = 14;
 }

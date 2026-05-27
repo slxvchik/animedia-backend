@@ -73,7 +73,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 		Set<Long> allStatusIdSet = new HashSet<>();
 
 		for (var contentEntity : contentEntitySpringPage.getContent()) {
-			for (var contentGenreEntity : contentEntity.getGenreSet()) {
+			for (var contentGenreEntity : contentEntity.getGenres()) {
 				allGenreIdSet.add(contentGenreEntity.getId());
 			}
 			allStatusIdSet.add(contentEntity.getStatusEntity().getId());
