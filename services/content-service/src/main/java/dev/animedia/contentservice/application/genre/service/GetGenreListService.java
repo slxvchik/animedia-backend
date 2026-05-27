@@ -5,7 +5,7 @@ import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapp
 import dev.animedia.contentservice.application.genre.usecase.GetGenreListUseCase;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ public class GetGenreListService implements GetGenreListUseCase {
 	}
 
 	@Override
-	public List<GenreDto> getList(List<Long> idList, boolean onlyActive, @Nullable String languageCode) {
+	public List<GenreDto> getList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode) {
 		List<Long> distinctIdList = idList.stream().distinct().toList();
-		List<Genre> genreList = genreQueryRepository.findByIdList(distinctIdList, onlyActive, languageCode);
+		List<Genre> genreList = genreQueryRepository.findByIdList(distinctIdList, active, languageCode);
 		return genreList.stream()
 			.map(genreApplicationMapper::toGenreDto)
 			.toList();

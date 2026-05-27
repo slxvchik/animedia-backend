@@ -5,8 +5,8 @@ package protos.services.content.core;
 import "google/protobuf/timestamp.proto";
 import "common/common.proto";
 import "services/content/core/content_common.proto";
-import "services/content/status/status_common.proto";
-import "services/content/genre/genre_common.proto";
+import "services/content/status/status_public.proto";
+import "services/content/genre/genre_public.proto";
 
 option java_package="dev.animedia.grpc.core";
 option java_outer_classname="PublicContentProto";
@@ -14,6 +14,24 @@ option java_outer_classname="PublicContentProto";
 service PublicContentService {
   rpc search(PublicSearchRequest) returns (PublicSearchResponse);
   rpc get(GetContentRequest) returns (PublicContentResponse);
+}
+
+message PublicContentResponse {
+  string alias = 1;
+  Type type = 2;
+  optional int32 season = 3;
+  protos.services.content.status.PublicStatusResponse status = 4;
+  optional string cover_image_uuid = 5;
+  optional string trailer_video_uuid = 6;
+  optional protos.common.Date release_date = 7;
+  repeated string language_codes = 8;
+  repeated protos.services.content.genre.PublicGenreResponse genres = 9;
+  repeated PublicContentTranslationResponse translations = 10;
+}
+
+message PublicContentTranslationResponse {
+  string title = 4;
+  string description = 5;
 }
 
 message PublicSearchRequest {
@@ -38,18 +56,4 @@ message GetContentRequest {
   string alias = 1;
   Type type = 2;
   optional int32 season = 3;
-}
-
-message PublicContentResponse {
-  string uuid = 1;
-  string alias = 2;
-  Type type = 3;
-  optional int32 season = 4;
-  protos.services.content.status.StatusResponse status = 5;
-  optional string cover_image_uuid = 6;
-  optional string trailer_video_uuid = 7;
-  optional protos.common.Date release_date = 8;
-  repeated string language_codes = 9;
-  repeated protos.services.content.genre.GenreResponse genres = 10;
-  repeated ContentTranslationResponse translations = 11;
 }

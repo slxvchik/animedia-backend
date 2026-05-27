@@ -10,7 +10,7 @@ option java_outer_classname="CommonProto";
 message PaginationRequest {
   int32 page = 1;
   int32 size = 2;
-  Sort sort = 3;
+  optional Sort sort = 3;
 }
 
 message PaginationResponse {

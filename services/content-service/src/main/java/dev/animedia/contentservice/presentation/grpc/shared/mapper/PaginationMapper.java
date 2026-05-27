@@ -1,10 +1,9 @@
 package dev.animedia.contentservice.presentation.grpc.shared.mapper;
 
+import dev.animedia.contentservice.domain.shared.model.Page;
+import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.presentation.grpc.shared.exception.SortFieldNotAllowedException;
 import dev.animedia.grpc.common.CommonProto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -13,44 +12,34 @@ import java.util.Set;
 public class PaginationMapper {
 	public <T> CommonProto.PaginationResponse toProtoPaginationResponse(Page<T> page) {
 		return CommonProto.PaginationResponse.newBuilder()
-			.setCurrentPage(page.getNumber())
-			.setPageSize(page.getSize())
-			.setTotalPages(page.getTotalPages())
-			.setTotalElements(page.getTotalElements())
+			.setCurrentPage(page.pageNumber())
+			.setPageSize(page.pageSize())
+			.setTotalPages(page.totalPages())
+			.setTotalElements(page.totalElements())
 			.setHasNext(page.hasNext())
 			.setHasPrevious(page.hasPrevious())
 			.build();
 	}
 
-	public Pageable toPageable(CommonProto.PaginationRequest paginationRequest, Set<String> allowedFields) {
-		if (paginationRequest.hasSort()) {
-			return toPageableWithSort(paginationRequest, allowedFields);
+	public Pageable toDomainPageable(CommonProto.PaginationRequest paginationRequest, Set<String> allowedFields) {
+		int page = paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0;
+		int size = paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10;
+
+		if (!paginationRequest.hasSort()) {
+			return new Pageable(page, size, null, null);
 		}
-		return PageRequest.of(
-			paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0,
-			paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10
-		);
-	}
 
-	private Pageable toPageableWithSort(CommonProto.PaginationRequest paginationRequest, Set<String> allowedFields) {
-		var sort = toSpringSort(paginationRequest.getSort(), allowedFields);
-		return PageRequest.of(
-			paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0,
-			paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10,
-			sort
-		);
-	}
+		CommonProto.Sort sortRequest = paginationRequest.getSort();
+		String field = sortRequest.getField();
 
-	private Sort toSpringSort(CommonProto.Sort sortProto, Set<String> allowedFields) {
-		String property = sortProto.getField();
+		if (field.isBlank() || !allowedFields.contains(field)) {
+			throw new SortFieldNotAllowedException(field);
+		}
 
-		if (property.isBlank() || !allowedFields.contains(property))
-			throw new SortFieldNotAllowedException(property);
+		Pageable.SortDirection direction = (sortRequest.getDirection() == CommonProto.SortDirection.DESC)
+			? Pageable.SortDirection.DESC
+			: Pageable.SortDirection.ASC;
 
-		Sort.Direction springDirection = sortProto.getDirection() == CommonProto.SortDirection.DESC
-			? Sort.Direction.DESC
-			: Sort.Direction.ASC;
-
-		return Sort.by(springDirection, property);
+		return new Pageable(page, size, field, direction);
 	}
 }

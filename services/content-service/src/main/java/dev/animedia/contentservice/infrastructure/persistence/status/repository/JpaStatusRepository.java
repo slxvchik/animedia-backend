@@ -23,10 +23,10 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"ON se.id = ste.statusEntity.id " +
 		"WHERE se.id = :id " +
 		"AND (:languageCode IS NULL OR :languageCode = ste.languageCode) " +
-		"AND (:onlyActive = false OR se.active = true)")
+		"AND (:active IS NULL OR :active = se.active)")
 	List<StatusTranslationRowDto> findByIdAndLanguageCode(
 		@Param("id") Long id,
-		@Param("onlyActive") boolean onlyActive,
+		@Param("active") @Nullable Boolean active,
 		@Param("languageCode") @Nullable String languageCode
 	);
 
@@ -36,11 +36,11 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"ON se.id = ste.statusEntity.id " +
 		"WHERE se.id IN :idList " +
 		"AND (:languageCode IS NULL OR :languageCode = ste.languageCode) " +
-		"AND (:onlyActive = false OR se.active = true) " +
+		"AND (:active IS NULL OR :active = se.active) " +
 		"ORDER BY se.sortOrder DESC")
 	List<StatusTranslationRowDto> findByIdListAndLanguageCode(
 		@Param("idList") List<Long> idList,
-		@Param("onlyActive") boolean onlyActive,
+		@Param("active") @Nullable Boolean active,
 		@Param("languageCode") @Nullable String languageCode
 	);
 
@@ -51,10 +51,10 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"WHERE (:alias IS NULL OR LOWER(:alias) LIKE CONCAT('%', LOWER(se.alias), '%')) " +
 		"AND (:name IS NULL OR LOWER(:name) LIKE CONCAT('%', LOWER(ste.name), '%')) " +
 		"AND (:lang IS NULL OR LOWER(:lang) = LOWER(ste.languageCode)) " +
-		"AND (:onlyActive = false OR se.active = true) " +
+		"AND (:active IS NULL OR :active = se.active) " +
 		"ORDER BY se.sortOrder DESC")
 	Page<Long> search(
-		@Param("onlyActive") boolean onlyActive,
+		@Param("active") @Nullable Boolean active,
 		@Param("alias") @Nullable String alias,
 		@Param("name") @Nullable String name,
 		@Param("lang") @Nullable String languageCode,

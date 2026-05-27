@@ -6,7 +6,7 @@ import dev.animedia.contentservice.domain.content.repository.ContentQueryReposit
 import dev.animedia.contentservice.infrastructure.persistence.content.mapper.ContentPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.genre.mapper.GenrePersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.status.mapper.StatusPersistenceMapper;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -34,8 +34,8 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	}
 
 	@Override
-	public Optional<Content> find(UUID id, boolean onlyActive, @Nullable String languageCode) {
-		return jpaContentRepository.findById(id, onlyActive, languageCode)
+	public Optional<Content> find(UUID id, @Nullable String languageCode, @Nullable Boolean active) {
+		return jpaContentRepository.findById(id, languageCode, active)
 			.map(contentEntity -> contentPersistenceMapper.toContent(
 				contentEntity,
 				statusPersistenceMapper::toStatus,
@@ -48,10 +48,10 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 		String alias,
 		ContentType type,
 		@Nullable Integer season,
-		boolean onlyActive,
-		@Nullable String languageCode
+		@Nullable String languageCode,
+		@Nullable Boolean active
 	) {
-		return jpaContentRepository.findByAliasAndTypeAndSeason(alias, type, season, onlyActive, languageCode)
+		return jpaContentRepository.findByAliasAndTypeAndSeason(alias, type, season, languageCode, active)
 			.map(contentEntity -> contentPersistenceMapper.toContent(
 				contentEntity,
 				statusPersistenceMapper::toStatus,

@@ -5,8 +5,8 @@ package protos.services.content.core;
 import "google/protobuf/timestamp.proto";
 import "common/common.proto";
 import "services/content/core/content_common.proto";
-import "services/content/status/status_common.proto";
-import "services/content/genre/genre_common.proto";
+import "services/content/status/status_private.proto";
+import "services/content/genre/genre_private.proto";
 
 option java_package="dev.animedia.grpc.core";
 option java_outer_classname="PrivateContentProto";
@@ -23,7 +23,7 @@ message PrivateContentResponse {
   string alias = 2;
   Type type = 3;
   optional int32 season = 4;
-  protos.services.content.status.StatusResponse status = 5;
+  protos.services.content.status.PrivateStatusResponse status = 5;
   optional string cover_image_uuid = 6;
   optional string trailer_video_uuid = 7;
   optional protos.common.Date release_date = 8;
@@ -31,8 +31,16 @@ message PrivateContentResponse {
   optional google.protobuf.Timestamp updated_at = 10;
   bool active = 11;
   repeated string language_codes = 12;
-  repeated protos.services.content.genre.GenreResponse genres = 13;
-  repeated ContentTranslationResponse translations = 14;
+  repeated protos.services.content.genre.PrivateGenreResponse genres = 13;
+  repeated PrivateContentTranslationResponse translations = 14;
+}
+
+message PrivateContentTranslationResponse {
+  string uuid = 1;
+  string content_uuid = 2;
+  string language_code = 3;
+  string title = 4;
+  string description = 5;
 }
 
 message PrivateSearchContentRequest {

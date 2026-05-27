@@ -3,17 +3,31 @@ syntax = "proto3";
 package protos.services.content.genre;
 
 import "common/common.proto";
-import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="PublicGenreProto";
 
 service PublicGenreService {
-    rpc search(PublicSearchRequest) returns (SearchGenreResponse);
+    rpc search(PublicSearchGenreRequest) returns (PublicSearchGenreResponse);
 }
 
-message PublicSearchRequest {
-    repeated string alias = 1;
-    repeated string name = 2;
+message PublicGenreResponse {
+    string alias = 1;
+    repeated PublicGenreTranslationResponse translations = 2;
+}
+
+message PublicGenreTranslationResponse {
+    string name = 1;
+    string description = 2;
+}
+
+message PublicSearchGenreRequest {
+    optional string alias = 1;
+    optional string name = 2;
     optional common.PaginationRequest pagination = 3;
+}
+
+message PublicSearchGenreResponse {
+    repeated PublicGenreResponse genres = 1;
+    common.PaginationResponse pagination = 2;
 }

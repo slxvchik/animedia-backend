@@ -61,7 +61,7 @@ public class GenreApplicationMapper {
 
 	public GenreSearchCriteria toGenreSearchCriteria(GenreSearchDto searchGenreDto) {
 		return new GenreSearchCriteria(
-			searchGenreDto.onlyActive(),
+			searchGenreDto.active(),
 			searchGenreDto.alias(),
 			searchGenreDto.name(),
 			searchGenreDto.description(),

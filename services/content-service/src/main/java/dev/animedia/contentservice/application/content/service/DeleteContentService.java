@@ -21,7 +21,7 @@ public class DeleteContentService implements DeleteContentUseCase {
 
     @Override
     public void delete(UUID uuid) {
-        contentQueryRepository.find(uuid, false, null)
+        contentQueryRepository.find(uuid, null, null)
             .orElseThrow(ContentNotFoundException::new);
         contentCommandRepository.delete(uuid);
     }

@@ -22,12 +22,12 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "ON ge.id = gte.genreEntity.id " +
         "WHERE ge.id = :id " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
-        "AND (:onlyActive = false OR ge.active = true)")
+        "AND (:active IS NULL OR :active = ge.active)")
     List<GenreTranslationRowDto> findById(
         @Param("id") Long id,
-        @Param("onlyActive") boolean onlyActive,
-        @Param("lang") @Nullable String languageCode
-    );
+        @Param("lang") @Nullable String languageCode,
+        @Param("active") @Nullable Boolean active
+        );
 
     @Query("SELECT new dev.animedia.contentservice.infrastructure.persistence.genre.dto.GenreTranslationRowDto(" +
         "ge.id, ge.alias, ge.sortOrder, ge.active, gte.id, gte.languageCode, gte.name, gte.description) " +
@@ -36,13 +36,13 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "ON ge.id = gte.genreEntity.id " +
         "WHERE (ge.id IN :idList) " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
-        "AND (:onlyActive = false OR ge.active = true) " +
+        "AND (:active IS NULL OR :active = ge.active) " +
         "ORDER BY ge.sortOrder DESC")
     List<GenreTranslationRowDto> findByIdListAndLanguageCode(
         @Param("idList") List<Long> idList,
-        @Param("onlyActive") boolean onlyActive,
-        @Param("lang") @Nullable String languageCode
-    );
+        @Param("lang") @Nullable String languageCode,
+        @Param("active") @Nullable Boolean active
+        );
 
     @Query("SELECT DISTINCT ge.id " +
         "FROM GenreEntity AS ge " +
@@ -52,10 +52,10 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "AND (:name IS NULL OR :name LIKE CONCAT('%', gte.name, '%')) " +
         "AND (:desc IS NULL OR :desc LIKE CONCAT('%', gte.description, '%')) " +
         "AND (:lang IS NULL OR :lang = gte.languageCode) " +
-        "AND (:onlyActive = false OR ge.active = true) " +
+        "AND (:active IS NULL OR :active = ge.active) " +
         "ORDER BY ge.sortOrder DESC")
     Page<Long> search(
-        @Param("onlyActive") boolean onlyActive,
+        @Param("active") @Nullable Boolean active,
         @Param("alias") @Nullable String alias,
         @Param("name") @Nullable String name,
         @Param("desc") @Nullable String description,
@@ -64,5 +64,4 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
     );
 
     boolean existsByAlias(String alias);
-    boolean existsByAliasAndIdNot(String alias, Long id);
 }

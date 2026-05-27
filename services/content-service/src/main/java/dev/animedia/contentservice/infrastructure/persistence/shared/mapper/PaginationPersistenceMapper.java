@@ -12,10 +12,10 @@ public class PaginationPersistenceMapper {
 		if (sortField == null || sortField.isBlank()) {
 			return toPageable(page, size);
 		}
-		
-		Sort.Direction direction = sortDirection == null
+
+		Sort.Direction direction = (sortDirection == null || sortDirection == Pageable.SortDirection.DESC)
 			? Sort.Direction.DESC
-			: Sort.Direction.fromString(sortDirection.name());
+			: Sort.Direction.ASC;
 
 		Sort sort = Sort.by(direction, sortField);
 

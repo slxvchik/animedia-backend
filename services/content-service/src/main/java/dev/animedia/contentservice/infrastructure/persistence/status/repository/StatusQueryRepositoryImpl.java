@@ -8,7 +8,7 @@ import dev.animedia.contentservice.domain.status.repository.StatusQueryRepositor
 import dev.animedia.contentservice.infrastructure.persistence.shared.mapper.PaginationPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.status.dto.StatusTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.persistence.status.mapper.StatusPersistenceMapper;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,16 +33,16 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	}
 
 	@Override
-	public Optional<Status> findById(Long id, boolean onlyActive, @Nullable String languageCode) {
-		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdAndLanguageCode(id, onlyActive, languageCode);
+	public Optional<Status> findById(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdAndLanguageCode(id, active, languageCode);
 		return Optional.ofNullable(
 			statusPersistenceMapper.toStatusList(statusTranslationRowDtoList).getFirst()
 		);
 	}
 
 	@Override
-	public List<Status> findByIdList(List<Long> idList, boolean onlyActive, @Nullable String languageCode) {
-		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdListAndLanguageCode(idList, onlyActive, languageCode);
+	public List<Status> findByIdList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode) {
+		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdListAndLanguageCode(idList, active, languageCode);
 		return statusPersistenceMapper.toStatusList(statusTranslationRowDtoList);
 	}
 
@@ -51,7 +51,7 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 		org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size());
 
 		org.springframework.data.domain.Page<Long> statusIdSpringPage = jpaStatusRepository.search(
-			criteria.onlyActive(),
+			criteria.active(),
 			criteria.alias(),
 			criteria.name(),
 			criteria.languageCode(),
@@ -61,7 +61,7 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 		// Find statuses with translation for page
 		List<StatusTranslationRowDto> statusTranslationRowDtoList = jpaStatusRepository.findByIdListAndLanguageCode(
 			statusIdSpringPage.getContent(),
-			criteria.onlyActive(),
+			criteria.active(),
 			criteria.languageCode()
 		);
 

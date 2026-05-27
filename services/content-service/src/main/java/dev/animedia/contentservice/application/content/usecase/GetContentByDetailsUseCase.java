@@ -5,5 +5,5 @@ import dev.animedia.contentservice.domain.content.model.ContentType;
 import jakarta.annotation.Nullable;
 
 public interface GetContentByDetailsUseCase {
-	ContentDto get(String alias, ContentType type, @Nullable Integer season, boolean onlyActive, @Nullable String languageCode);
+	ContentDto get(String alias, ContentType type, @Nullable Integer season, @Nullable String languageCode, @Nullable Boolean active);
 }

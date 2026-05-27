@@ -8,7 +8,7 @@ import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapp
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.UUID;
 
@@ -31,8 +31,8 @@ public class GetContentByIdService implements GetContentByIdUseCase {
     }
 
     @Override
-    public ContentDto get(UUID uuid, boolean onlyActive, @Nullable String languageCode) {
-        Content content = contentQueryRepository.find(uuid, onlyActive, languageCode)
+    public ContentDto get(UUID uuid, @Nullable String languageCode, @Nullable Boolean active) {
+        Content content = contentQueryRepository.find(uuid, languageCode, active)
             .orElseThrow(ContentNotFoundException::new);
 
         return contentApplicationMapper.toContentDto(

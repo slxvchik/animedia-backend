@@ -37,7 +37,7 @@ public class UpdateContentService implements UpdateContentUseCase {
 
     @Override
     public ContentDto update(ContentDto contentDto) {
-        Content content = contentQueryRepository.find(contentDto.id(), false, null)
+        Content content = contentQueryRepository.find(contentDto.id(), null, null)
             .orElseThrow(ContentNotFoundException::new);
 
         checkContentRelationsExistsService.check(content);

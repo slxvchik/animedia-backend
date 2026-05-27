@@ -79,11 +79,11 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 			allStatusIdSet.add(contentEntity.getStatusEntity().getId());
 		}
 
-		boolean onlyActive = Boolean.TRUE.equals(contentSearchCriteria.active());
+		Boolean active = contentSearchCriteria.active();
 
 		Map<Long, Genre> genreMap = genreQueryRepository.findByIdList(
 				new ArrayList<>(allGenreIdSet),
-				onlyActive,
+				active,
 				languageCode
 			)
 			.stream()
@@ -92,7 +92,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 			);
 		Map<Long, Status> statusMap = statusQueryRepository.findByIdList(
 				new ArrayList<>(allStatusIdSet),
-				onlyActive,
+				active,
 				languageCode
 			)
 			.stream()

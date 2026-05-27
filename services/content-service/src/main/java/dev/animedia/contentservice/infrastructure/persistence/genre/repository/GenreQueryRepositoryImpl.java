@@ -8,7 +8,7 @@ import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.infrastructure.persistence.genre.dto.GenreTranslationRowDto;
 import dev.animedia.contentservice.infrastructure.persistence.genre.mapper.GenrePersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.shared.mapper.PaginationPersistenceMapper;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,16 +33,16 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
     }
 
     @Override
-    public Optional<Genre> findById(Long id, boolean onlyActive, @Nullable String languageCode) {
-        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findById(id, onlyActive, languageCode);
+    public Optional<Genre> findById(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findById(id, languageCode, active);
         return Optional.ofNullable(
             genrePersistenceMapper.toGenreList(genreTranslationDbRowList).getFirst()
         );
     }
 
     @Override
-    public List<Genre> findByIdList(List<Long> idList, boolean onlyActive, @Nullable String languageCode) {
-        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findByIdListAndLanguageCode(idList, onlyActive, languageCode);
+    public List<Genre> findByIdList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode) {
+        List<GenreTranslationRowDto> genreTranslationDbRowList = jpaGenreRepository.findByIdListAndLanguageCode(idList, languageCode, active);
         return genrePersistenceMapper.toGenreList(genreTranslationDbRowList);
     }
 
@@ -51,7 +51,7 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
         org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(pageable.page(), pageable.size());
 
         org.springframework.data.domain.Page<Long> genreIdSpringPage = jpaGenreRepository.search(
-            genreSearchCriteria.onlyActive(),
+            genreSearchCriteria.active(),
             genreSearchCriteria.alias(),
             genreSearchCriteria.name(),
             genreSearchCriteria.description(),
@@ -61,8 +61,8 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
 
         List<GenreTranslationRowDto> genreTranslationRowDtoList = jpaGenreRepository.findByIdListAndLanguageCode(
             genreIdSpringPage.getContent(),
-            genreSearchCriteria.onlyActive(),
-            genreSearchCriteria.languageCode()
+            genreSearchCriteria.languageCode(),
+            genreSearchCriteria.active()
         );
 
         List<Genre> genreList = genrePersistenceMapper.toGenreList(genreTranslationRowDtoList);

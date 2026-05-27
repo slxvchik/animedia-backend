@@ -6,7 +6,7 @@ import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapp
 import dev.animedia.contentservice.application.genre.usecase.GetGenreUseCase;
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 
 public class GetGenreService implements GetGenreUseCase {
 	private final GenreApplicationMapper genreApplicationMapper;
@@ -21,8 +21,8 @@ public class GetGenreService implements GetGenreUseCase {
 	}
 
 	@Override
-	public GenreDto get(Long id, boolean onlyActive, @Nullable String languageCode) {
-		Genre genre = genreQueryRepository.findById(id, onlyActive, languageCode)
+	public GenreDto get(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+		Genre genre = genreQueryRepository.findById(id, active, languageCode)
 			.orElseThrow(GenreNotFoundException::new);
 		return genreApplicationMapper.toGenreDto(genre);
 	}

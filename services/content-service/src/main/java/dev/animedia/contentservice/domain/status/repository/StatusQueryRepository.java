@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StatusQueryRepository {
-    Optional<Status> findById(Long id, boolean onlyActive, @Nullable String languageCode);
-    List<Status> findByIdList(List<Long> idList, boolean onlyActive, @Nullable String languageCode);
+    Optional<Status> findById(Long id, @Nullable Boolean active, @Nullable String languageCode);
+    List<Status> findByIdList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode);
 
     Page<Status> search(StatusSearchCriteria criteria, Pageable pageable);
 

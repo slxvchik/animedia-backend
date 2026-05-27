@@ -9,7 +9,7 @@ import dev.animedia.contentservice.application.status.mapper.StatusApplicationMa
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.model.ContentType;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
-import org.jspecify.annotations.Nullable;
+import jakarta.annotation.Nullable;
 
 public class GetContentByDetailsService implements GetContentByDetailsUseCase {
 	private final ContentApplicationMapper contentApplicationMapper;
@@ -30,8 +30,8 @@ public class GetContentByDetailsService implements GetContentByDetailsUseCase {
 	}
 
 	@Override
-	public ContentDto get(String alias, ContentType type, @Nullable Integer season, boolean onlyActive, @Nullable String languageCode) {
-		Content content = contentQueryRepository.find(alias, type, season, onlyActive, languageCode)
+	public ContentDto get(String alias, ContentType type, @Nullable Integer season, @Nullable String languageCode,  @Nullable Boolean active) {
+		Content content = contentQueryRepository.find(alias, type, season, languageCode, active)
 			.orElseThrow(ContentNotFoundException::new);
 
 		return contentApplicationMapper.toContentDto(

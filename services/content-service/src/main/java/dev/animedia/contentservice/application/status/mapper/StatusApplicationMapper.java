@@ -58,7 +58,7 @@ public class StatusApplicationMapper {
 
     public StatusSearchCriteria toStatusSearchCriteria(StatusSearchDto searchStatusDto) {
         return new StatusSearchCriteria(
-            searchStatusDto.onlyActive(),
+            searchStatusDto.active(),
             searchStatusDto.alias(),
             searchStatusDto.name(),
             searchStatusDto.languageCode()

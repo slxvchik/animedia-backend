@@ -11,11 +11,3 @@ enum Type {
   COMIC = 2;
   BOOK = 3;
 }
-
-message ContentTranslationResponse {
-  string uuid = 1;
-  string content_uuid = 2;
-  string language_code = 3;
-  string title = 4;
-  string description = 5;
-}

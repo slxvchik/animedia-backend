@@ -3,20 +3,35 @@ syntax = "proto3";
 package protos.services.content.genre;
 
 import "common/common.proto";
-import "services/content/genre/genre_common.proto";
 
 option java_package="dev.animedia.grpc.genre";
 option java_outer_classname="PrivateGenreProto";
 
 service PrivateGenreService {
-    rpc search(PrivateSearchRequest) returns (SearchGenreResponse);
-    rpc create(CreateGenreRequest) returns (GenreResponse);
-    rpc update(UpdateGenreRequest) returns (GenreResponse);
+    rpc search(PrivateSearchGenreRequest) returns (PrivateSearchGenreResponse);
+    rpc create(CreateGenreRequest) returns (PrivateGenreResponse);
+    rpc update(UpdateGenreRequest) returns (PrivateGenreResponse);
     rpc delete(DeleteGenreRequest) returns (common.EmptyResponse);
 }
 
-message PrivateSearchRequest {
-    bool only_active = 1;
+message PrivateGenreResponse {
+    int64 id = 1;
+    string alias = 2;
+    int64 sort_order = 3;
+    bool active = 4;
+    repeated PrivateGenreTranslationResponse translations = 5;
+}
+
+message PrivateGenreTranslationResponse {
+    int64 id = 1;
+    int64 genre_id = 2;
+    string language_code = 3;
+    string name = 4;
+    string description = 5;
+}
+
+message PrivateSearchGenreRequest {
+    optional bool active = 1;
     optional string alias = 2;
     optional string name = 3;
     optional string description = 4;
@@ -24,15 +39,37 @@ message PrivateSearchRequest {
     optional common.PaginationRequest pagination = 6;
 }
 
+message PrivateSearchGenreResponse {
+    repeated PrivateGenreResponse genres = 1;
+    common.PaginationResponse pagination = 2;
+}
+
 message CreateGenreRequest {
     string alias = 1;
     int64 sort = 2;
+    bool active = 3;
+    repeated CreateGenreTranslationRequest translations = 4;
+}
+
+message CreateGenreTranslationRequest {
+    string language_code = 1;
+    string name = 2;
+    string description = 3;
 }
 
 message UpdateGenreRequest {
     int64 id = 1;
     string alias = 2;
     int64 sort = 3;
+    bool active = 4;
+    repeated UpdateGenreTranslationRequest translations = 5;
+}
+
+message UpdateGenreTranslationRequest {
+    int64 id = 1;
+    string language_code = 2;
+    string name = 3;
+    string description = 4;
 }
 
 message DeleteGenreRequest {

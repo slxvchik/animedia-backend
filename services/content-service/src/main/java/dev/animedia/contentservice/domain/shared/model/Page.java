@@ -6,9 +6,9 @@ import java.util.function.Function;
 public record Page<T>(
     List<T> content,
     long totalElements,
-    long totalPages,
-    long pageNumber,
-    long pageSize,
+    int totalPages,
+    int pageNumber,
+    int pageSize,
     boolean isFirst,
     boolean isLast,
     boolean hasNext,
