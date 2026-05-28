@@ -7,4 +7,7 @@ public class StatusNotFoundException extends AppException {
     public StatusNotFoundException() {
         super(AppExceptionStatus.NOT_FOUND, "status.not_found");
     }
+    public StatusNotFoundException(Long statusId) {
+        super(AppExceptionStatus.NOT_FOUND, "status.not_found.admin", statusId.toString());
+    }
 }

@@ -42,10 +42,10 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 	Optional<ContentEntity> findByAliasAndTypeAndSeason(
 		@Param("alias") String alias,
 		@Param("type") ContentType type,
-		@Param("season") Integer season,
+		@Param("season") int season,
 		@Param("lang") @Nullable String languageCode,
 		@Param("active") @Nullable Boolean active
 	);
 
-	boolean existsByAliasAndContentTypeAndSeason(String alias, ContentType type, Integer season);
+	boolean existsByAliasAndContentTypeAndSeason(String alias, ContentType type, int season);
 }

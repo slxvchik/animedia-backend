@@ -81,8 +81,8 @@ public class ContentPersistenceMapper {
             content.getStatus() == null ? null
             : statusMapper.apply(content.getStatus())
         );
-        ce.setCoverImageId(content.getCoverUrl());
-        ce.setTrailerVideoId(content.getTrailerUrl());
+        ce.setCoverImageId(content.getCoverImageId());
+        ce.setTrailerVideoId(content.getTrailerVideoId());
         ce.setReleaseDate(content.getReleaseDate());
         ce.setCreatedAt(content.getCreatedAt());
         ce.setUpdatedAt(content.getUpdatedAt());

@@ -3,57 +3,90 @@ package dev.animedia.contentservice.application.content.service;
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.exception.ContentNotFoundException;
 import dev.animedia.contentservice.application.content.mapper.ContentApplicationMapper;
+import dev.animedia.contentservice.application.content.resolver.GenreDomainResolver;
+import dev.animedia.contentservice.application.content.resolver.StatusDomainResolver;
 import dev.animedia.contentservice.application.content.usecase.UpdateContentUseCase;
+import dev.animedia.contentservice.application.genre.dto.GenreDto;
+import dev.animedia.contentservice.application.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
+import dev.animedia.contentservice.application.status.dto.StatusDto;
+import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.model.ContentUpdate;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
+import dev.animedia.contentservice.domain.genre.model.Genre;
+import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
+import dev.animedia.contentservice.domain.status.model.Status;
+import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UpdateContentService implements UpdateContentUseCase {
     private final ContentApplicationMapper contentApplicationMapper;
-    private final ContentQueryRepository contentQueryRepository;
-    private final ContentCommandRepository contentCommandRepository;
     private final StatusApplicationMapper statusApplicationMapper;
     private final GenreApplicationMapper genreApplicationMapper;
-    private final CheckContentRelationsExistsService checkContentRelationsExistsService;
 
-    public UpdateContentService(
-        ContentApplicationMapper contentApplicationMapper,
-        ContentQueryRepository contentQueryRepository,
-        ContentCommandRepository contentCommandRepository,
-        StatusApplicationMapper statusApplicationMapper,
-        GenreApplicationMapper genreApplicationMapper,
-	    CheckContentRelationsExistsService checkContentRelationsExistsService
-    ) {
-        this.contentApplicationMapper = contentApplicationMapper;
-        this.contentQueryRepository = contentQueryRepository;
-        this.contentCommandRepository = contentCommandRepository;
-        this.statusApplicationMapper = statusApplicationMapper;
-        this.genreApplicationMapper = genreApplicationMapper;
-	    this.checkContentRelationsExistsService = checkContentRelationsExistsService;
-    }
+    private final StatusDomainResolver statusDomainResolver;
+    private final GenreDomainResolver genreDomainResolver;
 
-    @Override
+    private final ContentQueryRepository contentQueryRepository;
+    private final ContentCommandRepository contentCommandRepository;
+
+	public UpdateContentService(
+		ContentApplicationMapper contentApplicationMapper,
+		StatusApplicationMapper statusApplicationMapper,
+		GenreApplicationMapper genreApplicationMapper,
+		StatusDomainResolver statusDomainResolver,
+		GenreDomainResolver genreDomainResolver,
+		ContentQueryRepository contentQueryRepository,
+		ContentCommandRepository contentCommandRepository
+	) {
+		this.contentApplicationMapper = contentApplicationMapper;
+		this.statusApplicationMapper = statusApplicationMapper;
+		this.genreApplicationMapper = genreApplicationMapper;
+		this.statusDomainResolver = statusDomainResolver;
+		this.genreDomainResolver = genreDomainResolver;
+		this.contentQueryRepository = contentQueryRepository;
+		this.contentCommandRepository = contentCommandRepository;
+	}
+
+	@Override
     public ContentDto update(ContentDto contentDto) {
         Content content = contentQueryRepository.find(contentDto.id(), null, null)
             .orElseThrow(ContentNotFoundException::new);
 
-        checkContentRelationsExistsService.check(content);
+        Long statusId = contentDto.status().id();
+        Status status = statusDomainResolver.resolve(statusId);
+
+        Set<Long> requestedGenreIdSet = contentDto.genreSet().stream()
+            .map(GenreDto::id)
+            .collect(Collectors.toSet());
+        Set<Genre> genreSet = genreDomainResolver.resolve(requestedGenreIdSet);
 
         ContentUpdate contentUpdate = contentApplicationMapper.toContentUpdate(
             contentDto,
-            statusApplicationMapper::toStatus,
-            genreApplicationMapper::toGenre
+            status,
+            genreSet
         );
         content.update(contentUpdate);
         Content updated = contentCommandRepository.update(content);
 
+        StatusDto updatedStatusDto = statusApplicationMapper.toStatusDto(updated.getStatus());
+        Set<GenreDto> updatedGenreDtoSet = updated.getGenreSet() != null
+            ? content.getGenreSet().stream()
+                .map(genreApplicationMapper::toGenreDto)
+                .collect(Collectors.toSet())
+            : Set.of();
+
         return contentApplicationMapper.toContentDto(
             updated,
-            statusApplicationMapper::toStatusDto,
-            genreApplicationMapper::toGenreDto
+            updatedStatusDto,
+            updatedGenreDtoSet
         );
     }
 }

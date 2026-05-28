@@ -3,9 +3,11 @@ package dev.animedia.contentservice.presentation.grpc.genre.mapper;
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
 import dev.animedia.contentservice.application.genre.dto.GenreTranslationDto;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
 import dev.animedia.grpc.genre.PublicGenreProto.PublicGenreResponse;
 import dev.animedia.grpc.genre.PublicGenreProto.PublicGenreTranslationResponse;
 import dev.animedia.grpc.genre.PublicGenreProto.PublicSearchGenreRequest;
+import dev.animedia.grpc.genre.PublicGenreProto.PublicSearchGenreResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +25,17 @@ public class PublicGenreGrpcMapper {
 			null,
 			languageCode
 		);
+	}
+
+	public PublicSearchGenreResponse toPublicSearchGenreResponse(
+		List<PublicGenreResponse> genreResponseList,
+		PaginationResponse paginationResponse
+	) {
+		return PublicSearchGenreResponse
+			.newBuilder()
+			.addAllGenres(genreResponseList)
+			.setPagination(paginationResponse)
+			.build();
 	}
 
 	public PublicGenreResponse toPublicGenreResponse(

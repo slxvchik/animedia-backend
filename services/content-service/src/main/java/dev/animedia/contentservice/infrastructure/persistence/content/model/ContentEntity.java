@@ -45,10 +45,10 @@ public class ContentEntity {
     private Integer season;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private StatusEntity statusEntity;
 
-    @Column(name = "cover_image_ud", length = 512)
+    @Column(name = "cover_image_id", length = 512)
     private UUID coverImageId;
 
     @Column(name = "trailer_video_id", length = 512)
@@ -58,7 +58,7 @@ public class ContentEntity {
     private LocalDate releaseDate;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp

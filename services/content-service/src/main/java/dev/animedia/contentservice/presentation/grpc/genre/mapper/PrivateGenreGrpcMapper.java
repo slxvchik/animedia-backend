@@ -3,11 +3,14 @@ package dev.animedia.contentservice.presentation.grpc.genre.mapper;
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
 import dev.animedia.contentservice.application.genre.dto.GenreTranslationDto;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
 import dev.animedia.grpc.genre.PrivateGenreProto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class PrivateGenreGrpcMapper {
@@ -30,16 +33,17 @@ public class PrivateGenreGrpcMapper {
 	) {
 		if (request == null) return null;
 
-		List<CreateGenreTranslationRequest> translations =
+		Set<GenreTranslationDto> translations =
 			request.getTranslationsList()
 				.stream()
 				.map(this::toGenreTranslationDto)
-				.toList();
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 
 		return new GenreDto(
 			null,
 			request.getAlias(),
-			request.getSort(),
+			request.getSortOrder(),
 			request.getActive(),
 			translations
 		);
@@ -48,7 +52,58 @@ public class PrivateGenreGrpcMapper {
 	private GenreTranslationDto toGenreTranslationDto(
 		CreateGenreTranslationRequest request
 	) {
-		return null;
+		if (request == null) return null;
+
+		return new GenreTranslationDto(
+			null,
+			request.getLanguageCode(),
+			request.getName(),
+			request.getDescription()
+		);
+	}
+
+	public GenreDto toGenreDto(
+		UpdateGenreRequest request
+	) {
+		if (request == null) return null;
+
+		Set<GenreTranslationDto> translations =
+			request.getTranslationsList()
+				.stream()
+				.map(this::toGenreTranslationDto)
+				.collect(Collectors.toSet());
+
+		return new GenreDto(
+			request.getId(),
+			null,
+			request.getSortOrder(),
+			request.getActive(),
+			translations
+		);
+	}
+
+	private GenreTranslationDto toGenreTranslationDto(
+		UpdateGenreTranslationRequest request
+	) {
+		if (request == null) return null;
+
+		return new GenreTranslationDto(
+			request.hasId() ? request.getId() : null,
+			request.getLanguageCode(),
+			request.getName(),
+			request.hasDescription() ? request.getDescription() : null
+		);
+	}
+
+	public PrivateSearchGenreResponse toPrivateSearchGenreResponse(
+		List<PrivateGenreResponse> genreResponseList,
+		PaginationResponse paginationResponse
+	) {
+		return PrivateSearchGenreResponse
+			.newBuilder()
+			.addAllGenres(genreResponseList)
+			.setPagination(paginationResponse)
+			.build();
 	}
 
 	public PrivateGenreResponse toPrivateGenreResponse(

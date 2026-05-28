@@ -62,11 +62,10 @@ public class PublicStatusGrpcService extends PublicContentStatusServiceGrpc.Publ
 			: List.of();
 
 		responseObserver.onNext(
-			PublicSearchStatusResponse
-				.newBuilder()
-				.addAllStatuses(statusResponseList)
-				.setPagination(paginationResponse)
-				.build()
+			publicStatusGrpcMapper.toPublicSearchStatusResponse(
+				statusResponseList,
+				paginationResponse
+			)
 		);
 		responseObserver.onCompleted();
 	}

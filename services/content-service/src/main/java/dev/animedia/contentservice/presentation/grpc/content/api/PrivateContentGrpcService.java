@@ -1,31 +1,96 @@
 package dev.animedia.contentservice.presentation.grpc.content.api;
 
+import dev.animedia.contentservice.application.content.dto.ContentDto;
+import dev.animedia.contentservice.application.content.dto.ContentSearchDto;
+import dev.animedia.contentservice.application.content.usecase.*;
+import dev.animedia.contentservice.domain.shared.model.Page;
+import dev.animedia.contentservice.domain.shared.model.Pageable;
+import dev.animedia.contentservice.presentation.grpc.content.mapper.PrivateContentCommandGrpcMapper;
+import dev.animedia.contentservice.presentation.grpc.content.mapper.PrivateContentCommonGrpcMapper;
+import dev.animedia.contentservice.presentation.grpc.content.mapper.PrivateContentQueryGrpcMapper;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.grpc.common.CommonProto;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
 import dev.animedia.grpc.core.PrivateContentProto;
+import dev.animedia.grpc.core.PrivateContentProto.PrivateContentResponse;
+import dev.animedia.grpc.core.PrivateContentProto.PrivateSearchContentRequest;
+import dev.animedia.grpc.core.PrivateContentProto.PrivateSearchContentResponse;
 import dev.animedia.grpc.core.PrivateContentServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 @GrpcService
 public class PrivateContentGrpcService extends PrivateContentServiceGrpc.PrivateContentServiceImplBase {
-
     private final ProtoPaginationMapper protoPaginationMapper;
+    private final PrivateContentCommonGrpcMapper privateContentCommonGrpcMapper;
+    private final PrivateContentQueryGrpcMapper privateContentQueryGrpcMapper;
+    private final PrivateContentCommandGrpcMapper privateContentCommandGrpcMapper;
+
+    private final SearchContentUseCase searchContentUseCase;
+    private final GetContentByIdUseCase getContentByIdUseCase;
+    private final CreateContentUseCase createContentUseCase;
+    private final UpdateContentUseCase updateContentUseCase;
+    private final DeleteContentUseCase deleteContentUseCase;
 
     @Autowired
-    public PrivateContentGrpcService(
-        ProtoPaginationMapper protoPaginationMapper
-    ) {
-        this.protoPaginationMapper = protoPaginationMapper;
-    }
+	public PrivateContentGrpcService(
+		ProtoPaginationMapper protoPaginationMapper,
+		PrivateContentCommonGrpcMapper privateContentCommonGrpcMapper,
+		PrivateContentQueryGrpcMapper privateContentQueryGrpcMapper,
+		PrivateContentCommandGrpcMapper privateContentCommandGrpcMapper,
 
-    @Override
+		SearchContentUseCase searchContentUseCase,
+		GetContentByIdUseCase getContentByIdUseCase,
+		CreateContentUseCase createContentUseCase,
+		UpdateContentUseCase updateContentUseCase,
+		DeleteContentUseCase deleteContentUseCase
+	) {
+		this.protoPaginationMapper = protoPaginationMapper;
+		this.privateContentCommonGrpcMapper = privateContentCommonGrpcMapper;
+		this.privateContentQueryGrpcMapper = privateContentQueryGrpcMapper;
+		this.privateContentCommandGrpcMapper = privateContentCommandGrpcMapper;
+
+		this.searchContentUseCase = searchContentUseCase;
+		this.getContentByIdUseCase = getContentByIdUseCase;
+		this.createContentUseCase = createContentUseCase;
+		this.updateContentUseCase = updateContentUseCase;
+		this.deleteContentUseCase = deleteContentUseCase;
+	}
+
+
+	@Override
     public void search(
-        PrivateContentProto.PrivateSearchContentRequest request,
-        StreamObserver<PrivateContentProto.PrivateSearchContentResponse> responseObserver
+        PrivateSearchContentRequest request,
+        StreamObserver<PrivateSearchContentResponse> responseObserver
     ) {
-        super.search(request, responseObserver);
+        ContentSearchDto contentSearchDto = privateContentQueryGrpcMapper.toContentSearchDto(
+            request
+        );
+        Pageable domainPageable = protoPaginationMapper.toDomainPageable(
+            request.getPagination(),
+            Set.of("alias", "season", "releaseDate", "createdAt", "updatedAt", "active", "sortOrder", "translations.title")
+        );
+
+        Page<ContentDto> contentDtoPage = searchContentUseCase.search(contentSearchDto, domainPageable);
+
+        PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(contentDtoPage);
+        List<PrivateContentResponse> contentResponseList = contentDtoPage.content()
+            .stream()
+            .map(privateContentCommonGrpcMapper::toPrivateContentResponse)
+            .toList();
+
+        responseObserver.onNext(
+            privateContentQueryGrpcMapper.toPrivateSearchContentResponse(
+                contentResponseList,
+                paginationResponse
+            )
+        );
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -33,7 +98,15 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
         PrivateContentProto.GetContentRequest request,
         StreamObserver<PrivateContentProto.PrivateContentResponse> responseObserver
     ) {
-        super.get(request, responseObserver);
+        ContentDto contentDto = getContentByIdUseCase.get(
+            UUID.fromString(request.getUuid()),
+            null,
+            null
+        );
+        responseObserver.onNext(
+            privateContentCommonGrpcMapper.toPrivateContentResponse(contentDto)
+        );
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -41,7 +114,12 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
         PrivateContentProto.CreateContentRequest request,
         StreamObserver<PrivateContentProto.PrivateContentResponse> responseObserver
     ) {
-        super.create(request, responseObserver);
+		ContentDto contentDto = privateContentCommandGrpcMapper.toContentDto(request);
+		ContentDto created = createContentUseCase.create(contentDto);
+		responseObserver.onNext(
+			privateContentCommonGrpcMapper.toPrivateContentResponse(created)
+		);
+		responseObserver.onCompleted();
     }
 
     @Override
@@ -49,7 +127,12 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
         PrivateContentProto.UpdateContentRequest request,
         StreamObserver<PrivateContentProto.PrivateContentResponse> responseObserver
     ) {
-        super.update(request, responseObserver);
+	    ContentDto contentDto = privateContentCommandGrpcMapper.toContentDto(request);
+	    ContentDto updated = updateContentUseCase.update(contentDto);
+	    responseObserver.onNext(
+		    privateContentCommonGrpcMapper.toPrivateContentResponse(updated)
+	    );
+	    responseObserver.onCompleted();
     }
 
     @Override
@@ -57,6 +140,12 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
         PrivateContentProto.DeleteContentRequest request,
         StreamObserver<CommonProto.EmptyResponse> responseObserver
     ) {
-        super.delete(request, responseObserver);
+        deleteContentUseCase.delete(
+            UUID.fromString(request.getUuid())
+        );
+        responseObserver.onNext(
+            CommonProto.EmptyResponse.newBuilder().build()
+        );
+        responseObserver.onCompleted();
     }
 }

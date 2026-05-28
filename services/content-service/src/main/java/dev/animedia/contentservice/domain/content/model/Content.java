@@ -17,8 +17,8 @@ public class Content {
 	private final ContentType type;
 	private final int season;
 	private Status status;
-	private UUID coverUrl;
-	private UUID trailerUrl;
+	private UUID coverImageId;
+	private UUID trailerVideoId;
 	private LocalDate releaseDate;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
@@ -49,8 +49,8 @@ public class Content {
 		this.season = Math.max(builder.season, 0);
 
 		this.status = builder.status;
-		this.coverUrl = builder.coverUrl;
-		this.trailerUrl = builder.trailerUrl;
+		this.coverImageId = builder.coverUrl;
+		this.trailerVideoId = builder.trailerUrl;
 		this.releaseDate = builder.releaseDate;
 		this.createdAt = builder.createdAt;
 		this.updatedAt = builder.updatedAt;
@@ -81,12 +81,12 @@ public class Content {
 		return status;
 	}
 
-	public UUID getCoverUrl() {
-		return coverUrl;
+	public UUID getCoverImageId() {
+		return coverImageId;
 	}
 
-	public UUID getTrailerUrl() {
-		return trailerUrl;
+	public UUID getTrailerVideoId() {
+		return trailerVideoId;
 	}
 
 	public LocalDate getReleaseDate() {
@@ -125,8 +125,8 @@ public class Content {
 		ContentUpdate contentUpdate
 	) {
 		this.status = contentUpdate.status();
-		this.coverUrl = contentUpdate.coverUrl();
-		this.trailerUrl = contentUpdate.trailerUrl();
+		this.coverImageId = contentUpdate.coverImageId();
+		this.trailerVideoId = contentUpdate.trailerVideoId();
 		this.releaseDate = contentUpdate.releaseDate();
 		this.updatedAt = LocalDateTime.now();
 		this.active = contentUpdate.active();

@@ -13,14 +13,13 @@ import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ContentApplicationMapper {
     public Content toContent(
         ContentDto contentDto,
-        Function<StatusDto, Status> statusMapper,
-        Function<GenreDto, Genre> genreMapper
+        Status status,
+        Set<Genre> genreSet
     ) {
         if (contentDto == null) return null;
         return Content.builder()
@@ -29,7 +28,7 @@ public class ContentApplicationMapper {
             .type(contentDto.type())
             .season(contentDto.season())
             .status(
-                statusMapper.apply(contentDto.status())
+                status
             )
             .coverUrl(contentDto.coverImageId())
             .trailerUrl(contentDto.trailerVideoId())
@@ -37,13 +36,10 @@ public class ContentApplicationMapper {
             .createdAt(contentDto.createdAt())
             .updatedAt(contentDto.updatedAt())
             .active(contentDto.active())
-            .sort(contentDto.sort())
+            .sort(contentDto.sortOrder())
             .languageCodeSet(contentDto.languageCodeSet())
             .genreSet(
-                contentDto.genreSet()
-                    .stream()
-                    .map(genreMapper)
-                    .collect(Collectors.toSet())
+                genreSet
             )
             .translationSet(
                 contentDto.translationSet() == null ? null
@@ -57,7 +53,7 @@ public class ContentApplicationMapper {
     public ContentTranslation toContentTranslation(ContentTranslationDto contentTranslationDto) {
         if (contentTranslationDto == null) return null;
         return new ContentTranslation(
-            contentTranslationDto.uuid(),
+            contentTranslationDto.id(),
             contentTranslationDto.languageCode(),
             contentTranslationDto.title(),
             contentTranslationDto.description()
@@ -66,25 +62,18 @@ public class ContentApplicationMapper {
 
     public ContentDto toContentDto(
         Content content,
-        Function<Status, StatusDto> statusMapper,
-        Function<Genre, GenreDto> genreMapper
+        StatusDto statusDto,
+        Set<GenreDto> genreDtoSet
     ) {
         if (content == null) return null;
-
-        StatusDto statusDto = statusMapper.apply(content.getStatus());
-
-        Set<GenreDto> genreDtoSet = content.getGenreSet().stream()
-            .map(genreMapper)
-            .collect(Collectors.toSet());
-
         return new ContentDto(
             content.getId(),
             content.getAlias(),
             content.getType(),
             content.getSeason(),
             statusDto,
-            content.getCoverUrl(),
-            content.getTrailerUrl(),
+            content.getCoverImageId(),
+            content.getTrailerVideoId(),
             content.getReleaseDate(),
             content.getCreatedAt(),
             content.getUpdatedAt(),
@@ -110,22 +99,19 @@ public class ContentApplicationMapper {
 
     public ContentUpdate toContentUpdate(
         ContentDto contentDto,
-        Function<StatusDto, Status> statusMapper,
-        Function<GenreDto, Genre> genreMapper
+        Status status,
+        Set<Genre> genreSet
     ) {
         if (contentDto == null) return null;
         return new ContentUpdate(
-            statusMapper.apply(contentDto.status()),
+            status,
             contentDto.coverImageId(),
             contentDto.trailerVideoId(),
             contentDto.releaseDate(),
             contentDto.active(),
-            contentDto.sort(),
+            contentDto.sortOrder(),
             contentDto.languageCodeSet(),
-            contentDto.genreSet()
-                .stream()
-                .map(genreMapper)
-                .collect(Collectors.toSet()),
+            genreSet,
             contentDto.translationSet().stream()
                 .map(this::toContentTranslation)
                 .collect(Collectors.toSet())

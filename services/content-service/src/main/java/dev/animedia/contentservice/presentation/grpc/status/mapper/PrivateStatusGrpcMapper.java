@@ -3,6 +3,7 @@ package dev.animedia.contentservice.presentation.grpc.status.mapper;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusTranslationDto;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
 import dev.animedia.grpc.status.PrivateContentStatusProto.*;
 import org.springframework.stereotype.Component;
 
@@ -83,10 +84,21 @@ public class PrivateStatusGrpcMapper {
 		if (request == null) return null;
 
 		return new StatusTranslationDto(
-			request.getId(),
+			request.hasId() ? request.getId() : null,
 			request.getLanguageCode(),
 			request.getName()
 		);
+	}
+
+	public PrivateSearchStatusResponse toPrivateSearchStatusResponse(
+		List<PrivateStatusResponse> statusResponseList,
+		PaginationResponse paginationResponse
+	) {
+		return PrivateSearchStatusResponse
+			.newBuilder()
+			.addAllStatuses(statusResponseList)
+			.setPagination(paginationResponse)
+			.build();
 	}
 
 	public PrivateStatusResponse toPrivateStatusResponse(

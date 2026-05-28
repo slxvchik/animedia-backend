@@ -7,6 +7,7 @@ import dev.animedia.contentservice.domain.shared.model.Page;
 import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.contentservice.presentation.grpc.status.mapper.PrivateStatusGrpcMapper;
+import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.common.CommonProto.*;
 import dev.animedia.grpc.status.PrivateContentStatusProto.*;
 import dev.animedia.grpc.status.PrivateContentStatusServiceGrpc;
@@ -69,11 +70,7 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 			: List.of();
 
 		responseObserver.onNext(
-			PrivateSearchStatusResponse
-				.newBuilder()
-				.addAllStatuses(statusResponseList)
-				.setPagination(paginationResponse)
-				.build()
+			privateStatusGrpcMapper.toPrivateSearchStatusResponse(statusResponseList, paginationResponse)
 		);
 		responseObserver.onCompleted();
 	}
@@ -124,6 +121,9 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 		StreamObserver<EmptyResponse> responseObserver
 	) {
 		deleteStatusUseCase.delete(request.getId());
+		responseObserver.onNext(
+			CommonProto.EmptyResponse.newBuilder().build()
+		);
 		responseObserver.onCompleted();
 	}
 }

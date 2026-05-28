@@ -24,7 +24,7 @@ public class GenreEntity {
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder = 0;
 
-    @Column(name = "active")
+    @Column(name = "active", nullable = false)
     private Boolean active = false;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "genreEntity", orphanRemoval = true)

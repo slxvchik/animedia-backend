@@ -18,7 +18,7 @@ service PrivateGenreService {
 message PrivateGenreResponse {
     int64 id = 1;
     string alias = 2;
-    optional int32 sort_order = 3;
+    int32 sort_order = 3;
     bool active = 4;
     repeated PrivateGenreTranslationResponse translations = 5;
 }
@@ -51,7 +51,7 @@ message GetGenreRequest {
 
 message CreateGenreRequest {
     string alias = 1;
-    optional int32 sort_order = 2;
+    int32 sort_order = 2;
     bool active = 3;
     repeated CreateGenreTranslationRequest translations = 4;
 }
@@ -64,7 +64,7 @@ message CreateGenreTranslationRequest {
 
 message UpdateGenreRequest {
     int64 id = 1;
-    optional int32 sort_order = 3;
+    int32 sort_order = 3;
     bool active = 4;
     repeated UpdateGenreTranslationRequest translations = 5;
 }

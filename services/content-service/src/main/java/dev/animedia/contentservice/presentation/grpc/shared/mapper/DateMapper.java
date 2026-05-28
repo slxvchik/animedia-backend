@@ -34,7 +34,7 @@ public class DateMapper {
         return LocalDateTime.ofInstant(inst, ZoneId.systemDefault());
     }
 
-    public com.google.protobuf.Timestamp toTimestamp(LocalDateTime localDateTime) {
+    public com.google.protobuf.Timestamp toGrpcTimestamp(LocalDateTime localDateTime) {
         return com.google.protobuf.Timestamp.newBuilder()
             .setSeconds(localDateTime.getSecond())
             .setNanos(localDateTime.getNano())

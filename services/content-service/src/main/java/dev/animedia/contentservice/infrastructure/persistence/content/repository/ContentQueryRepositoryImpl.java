@@ -47,7 +47,7 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	public Optional<Content> find(
 		String alias,
 		ContentType type,
-		@Nullable Integer season,
+		int season,
 		@Nullable String languageCode,
 		@Nullable Boolean active
 	) {
@@ -60,7 +60,7 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	}
 
 	@Override
-	public boolean exists(String alias, ContentType type, Integer season) {
+	public boolean exists(String alias, ContentType type, int season) {
 		return jpaContentRepository.existsByAliasAndContentTypeAndSeason(alias, type, season);
 	}
 }

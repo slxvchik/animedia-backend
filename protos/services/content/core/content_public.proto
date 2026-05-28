@@ -19,7 +19,7 @@ service PublicContentService {
 message PublicContentResponse {
   string alias = 1;
   Type type = 2;
-  optional int32 season = 3;
+  int32 season = 3;
   protos.services.content.status.PublicStatusResponse status = 4;
   optional string cover_image_uuid = 5;
   optional string trailer_video_uuid = 6;
@@ -55,5 +55,5 @@ message PublicSearchResponse {
 message GetContentByDetailsRequest {
   string alias = 1;
   Type type = 2;
-  optional int32 season = 3;
+  int32 season = 3;
 }

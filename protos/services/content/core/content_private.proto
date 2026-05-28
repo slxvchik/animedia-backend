@@ -23,7 +23,7 @@ message PrivateContentResponse {
   string uuid = 1;
   string alias = 2;
   Type type = 3;
-  optional int32 season = 4;
+  int32 season = 4;
   protos.services.content.status.PrivateStatusResponse status = 5;
   optional string cover_image_uuid = 6;
   optional string trailer_video_uuid = 7;
@@ -76,26 +76,34 @@ message CreateContentRequest {
   string alias = 1;
   Type type = 2;
   int32 season = 3;
-  optional int64 status_id = 4;
+  int64 status_id = 4;
   optional string cover_image_uuid = 5;
   optional string trailer_video_uuid = 6;
   optional protos.common.Date release_date = 7;
   bool active = 10;
-  optional int32 sort_order = 11;
+  int32 sort_order = 11;
   repeated string language_codes = 12;
   repeated int64 genre_ids = 13;
+  repeated CreateContentTranslationRequest translations = 14;
+}
+
+message CreateContentTranslationRequest {
+  string language_code = 1;
+  string title = 2;
+  optional string description = 3;
 }
 
 message UpdateContentRequest {
   string uuid = 1;
-  optional int64 status_id = 5;
-  optional string cover_image_uuid = 6;
-  optional string trailer_video_uuid = 7;
-  optional protos.common.Date release_date = 8;
-  bool active = 11;
-  optional int32 sort_order = 12;
-  repeated string language_codes = 13;
-  repeated int64 genre_ids = 14;
+  int64 status_id = 2;
+  optional string cover_image_uuid = 3;
+  optional string trailer_video_uuid = 4;
+  optional protos.common.Date release_date = 5;
+  bool active = 6;
+  int32 sort_order = 7;
+  repeated string language_codes = 8;
+  repeated int64 genre_ids = 9;
+  repeated UpdateContentTranslationRequest translations = 10;
 }
 
 message UpdateContentTranslationRequest {

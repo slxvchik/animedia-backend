@@ -5,7 +5,7 @@ import java.util.Set;
 public record GenreDto(
 	Long id,
 	String alias,
-	int sortOrder,
-	boolean active,
+	Integer sortOrder,
+	Boolean active,
 	Set<GenreTranslationDto> translationSet
 ) {}

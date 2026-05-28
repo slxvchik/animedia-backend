@@ -1,15 +1,17 @@
 package dev.animedia.contentservice.infrastructure.config.content;
 
 import dev.animedia.contentservice.application.content.mapper.ContentApplicationMapper;
+import dev.animedia.contentservice.application.content.resolver.GenreDomainResolver;
+import dev.animedia.contentservice.application.content.resolver.StatusDomainResolver;
 import dev.animedia.contentservice.application.content.service.*;
 import dev.animedia.contentservice.application.content.usecase.*;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
-import dev.animedia.contentservice.application.genre.usecase.GetGenreListUseCase;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
-import dev.animedia.contentservice.application.status.usecase.GetStatusUseCase;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentSearchRepository;
+import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
+import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import dev.animedia.contentservice.infrastructure.transactional.content.CreateContentTransactionalDecorator;
 import dev.animedia.contentservice.infrastructure.transactional.content.UpdateContentTransactionalDecorator;
 import org.springframework.context.annotation.Bean;
@@ -23,17 +25,19 @@ public class ContentUseCaseConfig {
 		ContentApplicationMapper contentApplicationMapper,
 		StatusApplicationMapper statusApplicationMapper,
 		GenreApplicationMapper genreApplicationMapper,
+		StatusDomainResolver statusDomainResolver,
+		GenreDomainResolver genreDomainResolver,
 		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository,
-		CheckContentRelationsExistsService checkContentRelationsExistsService
+		ContentCommandRepository contentCommandRepository
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
 			statusApplicationMapper,
 			genreApplicationMapper,
+			statusDomainResolver,
+			genreDomainResolver,
 			contentQueryRepository,
-			contentCommandRepository,
-			checkContentRelationsExistsService
+			contentCommandRepository
 		);
 	}
 
@@ -50,19 +54,21 @@ public class ContentUseCaseConfig {
 	@Bean("updateContentUseCase")
 	public UpdateContentUseCase updateContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository,
 		StatusApplicationMapper statusApplicationMapper,
 		GenreApplicationMapper genreApplicationMapper,
-		CheckContentRelationsExistsService checkContentRelationsExistsService
+		StatusDomainResolver statusDomainResolver,
+		GenreDomainResolver genreDomainResolver,
+		ContentQueryRepository contentQueryRepository,
+		ContentCommandRepository contentCommandRepository
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
-			contentQueryRepository,
-			contentCommandRepository,
 			statusApplicationMapper,
 			genreApplicationMapper,
-			checkContentRelationsExistsService
+			statusDomainResolver,
+			genreDomainResolver,
+			contentQueryRepository,
+			contentCommandRepository
 		);
 	}
 
@@ -77,13 +83,20 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public CheckContentRelationsExistsService checkContentRelationsExistsService(
-		GetStatusUseCase getStatusUseCase,
-		GetGenreListUseCase getGenreListUseCase
+	public StatusDomainResolver statusDomainResolver(
+		StatusQueryRepository statusQueryRepository
 	) {
-		return new CheckContentRelationsExistsService(
-			getStatusUseCase,
-			getGenreListUseCase
+		return new StatusDomainResolver(
+			statusQueryRepository
+		);
+	}
+
+	@Bean
+	public GenreDomainResolver genreDomainResolver(
+		GenreQueryRepository genreQueryRepository
+	) {
+		return new GenreDomainResolver(
+			genreQueryRepository
 		);
 	}
 

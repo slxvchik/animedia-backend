@@ -8,6 +8,8 @@ import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.presentation.grpc.genre.mapper.PrivateGenreGrpcMapper;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
 import dev.animedia.grpc.common.CommonProto;
+import dev.animedia.grpc.common.CommonProto.EmptyResponse;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
 import dev.animedia.grpc.genre.PrivateGenreProto.*;
 import dev.animedia.grpc.genre.PrivateGenreServiceGrpc;
 import io.grpc.stub.StreamObserver;
@@ -60,7 +62,7 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
 
         Page<GenreDto> genreDtoPage = searchGenreUseCase.search(genreSearchDto, pageableRequest);
 
-        CommonProto.PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(genreDtoPage);
+        PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(genreDtoPage);
         List<PrivateGenreResponse> genreResponseList = genreDtoPage.content() != null
             ? genreDtoPage.content()
                 .stream()
@@ -69,11 +71,10 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
             : List.of();
 
         responseObserver.onNext(
-            PrivateSearchGenreResponse
-                .newBuilder()
-                .addAllGenres(genreResponseList)
-                .setPagination(paginationResponse)
-                .build()
+	        privateGenreGrpcMapper.toPrivateSearchGenreResponse(
+				genreResponseList,
+		        paginationResponse
+	        )
         );
         responseObserver.onCompleted();
     }
@@ -95,7 +96,12 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
         CreateGenreRequest request,
         StreamObserver<PrivateGenreResponse> responseObserver
     ) {
-        super.create(request, responseObserver);
+		GenreDto genreDto = privateGenreGrpcMapper.toGenreDto(request);
+		GenreDto created = createGenreUseCase.create(genreDto);
+		responseObserver.onNext(
+			privateGenreGrpcMapper.toPrivateGenreResponse(created)
+		);
+		responseObserver.onCompleted();
     }
 
     @Override
@@ -103,15 +109,23 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
         UpdateGenreRequest request,
         StreamObserver<PrivateGenreResponse> responseObserver
     ) {
-        super.update(request, responseObserver);
+		GenreDto genreDto = privateGenreGrpcMapper.toGenreDto(request);
+		GenreDto updated = updateGenreUseCase.update(genreDto);
+		responseObserver.onNext(
+			privateGenreGrpcMapper.toPrivateGenreResponse(updated)
+		);
+		responseObserver.onCompleted();
     }
 
     @Override
     public void delete(
         DeleteGenreRequest request,
-        StreamObserver<CommonProto.EmptyResponse> responseObserver
+        StreamObserver<EmptyResponse> responseObserver
     ) {
         deleteGenreUseCase.delete(request.getId());
-        responseObserver.onCompleted();
+	    responseObserver.onNext(
+		    CommonProto.EmptyResponse.newBuilder().build()
+	    );
+		responseObserver.onCompleted();
     }
 }

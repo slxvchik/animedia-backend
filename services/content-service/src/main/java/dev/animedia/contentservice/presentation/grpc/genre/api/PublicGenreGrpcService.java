@@ -8,9 +8,11 @@ import dev.animedia.contentservice.domain.shared.model.Pageable;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
 import dev.animedia.contentservice.presentation.grpc.genre.mapper.PublicGenreGrpcMapper;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
-import dev.animedia.grpc.genre.PublicGenreProto;
+import dev.animedia.grpc.common.CommonProto.PaginationResponse;
+import dev.animedia.grpc.genre.PublicGenreProto.PublicGenreResponse;
+import dev.animedia.grpc.genre.PublicGenreProto.PublicSearchGenreRequest;
+import dev.animedia.grpc.genre.PublicGenreProto.PublicSearchGenreResponse;
 import dev.animedia.grpc.genre.PublicGenreServiceGrpc;
-import dev.animedia.grpc.common.CommonProto;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
@@ -38,8 +40,8 @@ public class PublicGenreGrpcService extends PublicGenreServiceGrpc.PublicGenreSe
 
     @Override
     public void search(
-        PublicGenreProto.PublicSearchGenreRequest request,
-        StreamObserver<PublicGenreProto.PublicSearchGenreResponse> responseObserver
+        PublicSearchGenreRequest request,
+        StreamObserver<PublicSearchGenreResponse> responseObserver
     ) {
         String languageCode = LanguageInterceptor.getLanguageCode();
 
@@ -51,8 +53,8 @@ public class PublicGenreGrpcService extends PublicGenreServiceGrpc.PublicGenreSe
 
         Page<GenreDto> genreDtoPage = searchGenreUseCase.search(genreSearchDto, domainPageable);
 
-        CommonProto.PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(genreDtoPage);
-        List<PublicGenreProto.PublicGenreResponse> genreResponseList = genreDtoPage.content() != null
+        PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(genreDtoPage);
+        List<PublicGenreResponse> genreResponseList = genreDtoPage.content() != null
             ? genreDtoPage.content()
                 .stream()
                 .map(publicGenreGrpcMapper::toPublicGenreResponse)
@@ -60,11 +62,10 @@ public class PublicGenreGrpcService extends PublicGenreServiceGrpc.PublicGenreSe
             : List.of();
 
         responseObserver.onNext(
-            PublicGenreProto.PublicSearchGenreResponse
-                .newBuilder()
-                .addAllGenres(genreResponseList)
-                .setPagination(paginationResponse)
-                .build()
+            publicGenreGrpcMapper.toPublicSearchGenreResponse(
+                genreResponseList,
+                paginationResponse
+            )
         );
         responseObserver.onCompleted();
     }

@@ -3,7 +3,7 @@ package dev.animedia.contentservice.application.content.dto;
 import java.util.UUID;
 
 public record ContentTranslationDto(
-	UUID uuid,
+	UUID id,
 	String languageCode,
 	String title,
 	String description

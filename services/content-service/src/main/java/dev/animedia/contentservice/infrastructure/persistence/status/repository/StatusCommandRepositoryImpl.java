@@ -38,7 +38,6 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 		StatusEntity statusEntity = jpaStatusRepository.findById(status.getId())
 			.orElseThrow(EntityNotFoundException::new);
 
-		statusEntity.setAlias(status.getAlias());
 		statusEntity.setSortOrder(status.getSortOrder());
 
 		Set<StatusTranslationEntity> newTranslationEntitySet = status.getTranslationSet().stream()
