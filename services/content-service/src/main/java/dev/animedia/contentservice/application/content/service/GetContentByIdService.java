@@ -37,7 +37,7 @@ public class GetContentByIdService implements GetContentByIdUseCase {
     @Override
     public ContentDto get(UUID uuid, @Nullable String languageCode, @Nullable Boolean active) {
         Content content = contentQueryRepository.find(uuid, languageCode, active)
-            .orElseThrow(ContentNotFoundException::new);
+            .orElseThrow(() -> new ContentNotFoundException(uuid));
 
         StatusDto statusDto = statusApplicationMapper.toStatusDto(content.getStatus());
         Set<GenreDto> genreDtoSet = content.getGenreSet() != null

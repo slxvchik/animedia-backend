@@ -27,7 +27,11 @@ public class GenreEntity {
     @Column(name = "active", nullable = false)
     private Boolean active = false;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "genreEntity", orphanRemoval = true)
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "genreEntity",
+        orphanRemoval = true
+    )
     private Set<GenreTranslationEntity> translations = new HashSet<>();
 
     public Long getId() {

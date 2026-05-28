@@ -1,19 +1,17 @@
 package dev.animedia.contentservice.domain.genre.model;
 
-import dev.animedia.contentservice.domain.genre.exception.GenreTranslationLanguageCodeRequiredException;
 import dev.animedia.contentservice.domain.genre.exception.GenreTranslationNameRequiredException;
-import dev.animedia.contentservice.domain.shared.model.BaseTranslationEntity;
+import dev.animedia.contentservice.domain.shared.translation.model.BaseTranslation;
 
-public class GenreTranslation extends BaseTranslationEntity {
+public class GenreTranslation extends BaseTranslation {
     private final Long id;
     private String name;
     private String description;
 
     public GenreTranslation(Long id, String languageCode, String name, String description) {
-        validateLanguageCode(languageCode);
         validateName(name);
         this.id = id;
-        this.languageCode = languageCode;
+        setLanguageCode(languageCode);
         this.name = name;
         this.description = description;
     }
@@ -34,10 +32,6 @@ public class GenreTranslation extends BaseTranslationEntity {
         validateName(name);
         this.name = name;
         this.description = description;
-    }
-
-    public void validateLanguageCode(String languageCode) {
-        if (languageCode == null || languageCode.isBlank()) throw new GenreTranslationLanguageCodeRequiredException();
     }
 
     public void validateName(String name) {

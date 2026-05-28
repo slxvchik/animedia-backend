@@ -20,8 +20,8 @@ import java.util.UUID;
 @Table(
     name = "content",
     indexes = {
-        @Index(name = "idx_content_alias_type", columnList = "alias,type"),
-        @Index(name = "idx_content_type", columnList = "type"),
+        @Index(name = "idx_content_alias_type", columnList = "alias,content_type"),
+        @Index(name = "idx_content_type", columnList = "content_type"),
         @Index(name = "idx_content_release_date", columnList = "release_date"),
     },
     check = @CheckConstraint(
@@ -91,7 +91,11 @@ public class ContentEntity {
     )
     private Set<GenreEntity> genres = new HashSet<>();
 
-    @OneToMany(mappedBy = "content", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "contentEntity",
+        fetch = FetchType.LAZY,
+        orphanRemoval = true
+    )
     private Set<ContentTranslationEntity> translations = new HashSet<>();
 
     public UUID getId() {

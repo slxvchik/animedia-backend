@@ -2,8 +2,8 @@ package dev.animedia.contentservice.domain.genre.repository;
 
 import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.model.GenreSearchCriteria;
-import dev.animedia.contentservice.domain.shared.model.Page;
-import dev.animedia.contentservice.domain.shared.model.Pageable;
+import dev.animedia.contentservice.domain.shared.pagination.Page;
+import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import jakarta.annotation.Nullable;
 
 import java.util.List;

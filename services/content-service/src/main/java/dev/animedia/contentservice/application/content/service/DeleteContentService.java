@@ -22,7 +22,7 @@ public class DeleteContentService implements DeleteContentUseCase {
     @Override
     public void delete(UUID uuid) {
         contentQueryRepository.find(uuid, null, null)
-            .orElseThrow(ContentNotFoundException::new);
+            .orElseThrow(() -> new ContentNotFoundException(uuid));
         contentCommandRepository.delete(uuid);
     }
 }

@@ -16,8 +16,7 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 
 	@Query("SELECT se " +
 		"FROM StatusEntity se " +
-		"LEFT JOIN StatusTranslationEntity ste " +
-		"ON se.id = ste.statusEntity.id " +
+		"LEFT JOIN FETCH se.translations ste " +
 		"WHERE se.id = :id " +
 		"AND (:languageCode IS NULL OR :languageCode = ste.languageCode) " +
 		"AND (:active IS NULL OR :active = se.active)")
@@ -27,10 +26,9 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		@Param("languageCode") @Nullable String languageCode
 	);
 
-	@Query("SELECT se " +
+	@Query("SELECT DISTINCT se " +
 		"FROM StatusEntity se " +
-		"LEFT JOIN StatusTranslationEntity ste " +
-		"ON se.id = ste.statusEntity.id " +
+		"LEFT JOIN FETCH se.translations ste " +
 		"WHERE se.id IN :idList " +
 		"AND (:languageCode IS NULL OR :languageCode = ste.languageCode) " +
 		"AND (:active IS NULL OR :active = se.active) " +
@@ -41,13 +39,12 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		@Param("languageCode") @Nullable String languageCode
 	);
 
-	@Query("SELECT se " +
+	@Query("SELECT DISTINCT se " +
 		"FROM StatusEntity se " +
-		"JOIN StatusTranslationEntity ste " +
-		"ON se.id = ste.statusEntity.id " +
-		"WHERE (:alias IS NULL OR LOWER(:alias) LIKE CONCAT('%', LOWER(se.alias), '%')) " +
-		"AND (:name IS NULL OR LOWER(:name) LIKE CONCAT('%', LOWER(ste.name), '%')) " +
-		"AND (:lang IS NULL OR LOWER(:lang) = LOWER(ste.languageCode)) " +
+		"JOIN FETCH se.translations ste " +
+		"WHERE (CAST(:alias AS string) IS NULL OR LOWER(CAST(:alias AS string)) LIKE CONCAT('%', LOWER(se.alias), '%')) " +
+		"AND (CAST(:name AS string) IS NULL OR LOWER(CAST(:name AS string)) LIKE CONCAT('%', LOWER(ste.name), '%')) " +
+		"AND (CAST(:lang AS string) IS NULL OR LOWER(CAST(:lang AS string)) = LOWER(ste.languageCode)) " +
 		"AND (:active IS NULL OR :active = se.active)")
 	Page<StatusEntity> search(
 		@Param("active") @Nullable Boolean active,

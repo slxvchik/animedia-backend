@@ -5,6 +5,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class GenreAliasExistsException extends AppException {
 	public GenreAliasExistsException(String alias) {
-		super(AppExceptionStatus.NOT_FOUND, "genre.alias.exists", alias);
+		super(AppExceptionStatus.NOT_FOUND, "genre.alias.exists.extra", alias);
 	}
 }

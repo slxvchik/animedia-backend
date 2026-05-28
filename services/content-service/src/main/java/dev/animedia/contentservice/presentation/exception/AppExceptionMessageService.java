@@ -36,7 +36,7 @@ public class AppExceptionMessageService {
     public String getExceptionMessage(
         String exceptionCode,
         String languageCode,
-        Object... args
+        String[] args
     ) {
         Map<String, String> errorMessages = readErrorFile(getFilePath(languageCode));
         String errorMessage = errorMessages.getOrDefault(
@@ -49,7 +49,7 @@ public class AppExceptionMessageService {
 
         if (args != null && args.length > 0) {
             try {
-                return MessageFormat.format(errorMessage, args);
+                return MessageFormat.format(errorMessage, (Object[]) args);
             } catch (IllegalArgumentException e) {
                 return errorMessage;
             }

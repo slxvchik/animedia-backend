@@ -5,6 +5,6 @@ import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 public class ContentCreateException extends AppException {
 	public ContentCreateException() {
-		super(AppExceptionStatus.INTERNAL_ERROR, "CONTENT_CREATE_EXCEPTION");
+		super(AppExceptionStatus.INTERNAL_ERROR, "content.create");
 	}
 }

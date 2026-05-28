@@ -49,7 +49,7 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 		ContentEntity saved = jpaContentRepository.saveAndFlush(ce);
 
 		// fetch with all relations
-		ContentEntity savedResponse = jpaContentRepository.findById(saved.getId(), false, null)
+		ContentEntity savedResponse = jpaContentRepository.findById(saved.getId(), null, null)
 			.orElseThrow(ContentCreateException::new);
 
 		return contentPersistenceMapper.toContent(
@@ -61,7 +61,7 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 
 	@Override
 	public Content update(Content content) {
-		ContentEntity contentEntity = jpaContentRepository.findById(content.getId(), false, null)
+		ContentEntity contentEntity = jpaContentRepository.findById(content.getId(), null, null)
 			.orElseThrow(EntityNotFoundException::new);
 
 		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());

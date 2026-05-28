@@ -13,7 +13,7 @@ public class GenreNotFoundException extends AppException {
 	public GenreNotFoundException(List<Long> idList) {
 		super(
 			AppExceptionStatus.NOT_FOUND,
-			"genre.not_found.admin",
+			"genre.not_found.extra",
 			idList == null ? "" : idList.stream().map(String::valueOf).collect(Collectors.joining(", "))
 		);
 	}

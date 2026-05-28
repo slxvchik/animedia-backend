@@ -55,20 +55,12 @@ public class Status {
 
 	private void validateAlias(String alias) {
 		if (alias == null || alias.isBlank()) throw new StatusAliasRequiredException();
-		if (!ALIAS_PATTERN.matcher(alias).hasMatch()) throw new StatusInvalidAliasException();
-	}
-
-	public void removeTranslation(Long id) {
-		this.translationSet.removeIf(translation -> translation.getId().equals(id));
+		if (!ALIAS_PATTERN.matcher(alias).matches()) throw new StatusInvalidAliasException();
 	}
 
 	private void setTranslationSet(Set<StatusTranslation> translationSet) {
-		if (translationSet != null) {
-			this.translationSet.retainAll(translationSet);
-			this.translationSet.addAll(translationSet);
-		} else {
-			this.translationSet.clear();
-		}
+		this.translationSet.clear();
+		this.translationSet.addAll(translationSet);
 	}
 
 	private void setSortOrder(int sortOrder) {

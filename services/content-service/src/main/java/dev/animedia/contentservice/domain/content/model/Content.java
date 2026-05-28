@@ -31,7 +31,7 @@ public class Content {
 	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
 
 	private static void validateAlias(String alias) {
-		if (!ALIAS_PATTERN.matcher(alias).hasMatch()) throw new ContentInvalidAliasException();
+		if (!ALIAS_PATTERN.matcher(alias).matches()) throw new ContentInvalidAliasException();
 	}
 
 	private static void validateType(ContentType type) {
@@ -159,12 +159,8 @@ public class Content {
 	}
 
 	private void setTranslationSet(Set<ContentTranslation> translationSet) {
-		if (translationSet != null) {
-			this.translationSet.retainAll(translationSet);
-			this.translationSet.addAll(translationSet);
-		} else {
-			this.translationSet.clear();
-		}
+		this.translationSet.clear();
+		this.translationSet.addAll(translationSet);
 	}
 
 	@Override

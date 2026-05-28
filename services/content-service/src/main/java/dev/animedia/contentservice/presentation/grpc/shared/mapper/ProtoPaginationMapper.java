@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.presentation.grpc.shared.mapper;
 
-import dev.animedia.contentservice.domain.shared.model.Page;
-import dev.animedia.contentservice.domain.shared.model.Pageable;
+import dev.animedia.contentservice.domain.shared.pagination.Page;
+import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.presentation.grpc.shared.exception.SortFieldNotAllowedException;
 import dev.animedia.grpc.common.CommonProto;
 import org.springframework.stereotype.Component;

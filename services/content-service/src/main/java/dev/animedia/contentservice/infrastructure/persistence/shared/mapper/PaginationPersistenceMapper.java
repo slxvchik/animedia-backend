@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.infrastructure.persistence.shared.mapper;
 
-import dev.animedia.contentservice.domain.shared.model.Page;
-import dev.animedia.contentservice.domain.shared.model.Pageable;
+import dev.animedia.contentservice.domain.shared.pagination.Page;
+import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;

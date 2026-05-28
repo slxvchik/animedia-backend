@@ -1,18 +1,16 @@
 package dev.animedia.contentservice.domain.status.model;
 
-import dev.animedia.contentservice.domain.shared.model.BaseTranslationEntity;
-import dev.animedia.contentservice.domain.status.exception.StatusTranslationLanguageCodeRequiredException;
+import dev.animedia.contentservice.domain.shared.translation.model.BaseTranslation;
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationNameRequiredException;
 
-public class StatusTranslation extends BaseTranslationEntity {
+public class StatusTranslation extends BaseTranslation {
 	private final Long id;
 	private String name;
 
 	public StatusTranslation(Long id, String languageCode, String name) {
-		validateLanguageCode(languageCode);
 		validateName(name);
 		this.id = id;
-		this.languageCode = languageCode;
+		setLanguageCode(languageCode);
 		this.name = name;
 	}
 
@@ -27,10 +25,6 @@ public class StatusTranslation extends BaseTranslationEntity {
 	public void update(String name) {
 		validateName(name);
 		this.name = name;
-	}
-
-	private void validateLanguageCode(String languageCode) {
-		if (languageCode == null || languageCode.isBlank()) throw new StatusTranslationLanguageCodeRequiredException();
 	}
 
 	private void validateName(String name) {

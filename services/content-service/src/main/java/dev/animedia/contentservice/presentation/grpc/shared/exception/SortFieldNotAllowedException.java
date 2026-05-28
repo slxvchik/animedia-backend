@@ -7,6 +7,6 @@ public class SortFieldNotAllowedException extends AppException {
 	public SortFieldNotAllowedException(
 		String field
 	) {
-		super(AppExceptionStatus.INVALID_ARGUMENT, "sort.field.not_allowed", field);
+		super(AppExceptionStatus.INVALID_ARGUMENT, "sort.field.not_allowed.extra", field);
 	}
 }

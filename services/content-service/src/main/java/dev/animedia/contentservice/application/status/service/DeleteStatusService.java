@@ -22,7 +22,7 @@ public class DeleteStatusService implements DeleteStatusUseCase {
     @Override
     public void delete(Long id) {
         statusQueryRepository.findById(id, null, null)
-            .orElseThrow(StatusNotFoundException::new);
+            .orElseThrow(() -> new StatusNotFoundException(id));
         statusCommandRepository.delete(id);
     }
 }

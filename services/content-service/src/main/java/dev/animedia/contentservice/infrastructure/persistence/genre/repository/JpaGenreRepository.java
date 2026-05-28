@@ -15,9 +15,8 @@ import java.util.List;
 public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
 
     @Query("SELECT ge " +
-        "FROM GenreEntity AS ge " +
-        "LEFT JOIN GenreTranslationEntity AS gte " +
-        "ON ge.id = gte.genreEntity.id " +
+        "FROM GenreEntity ge " +
+        "LEFT JOIN FETCH ge.translations gte " +
         "WHERE ge.id = :id " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
         "AND (:active IS NULL OR :active = ge.active)")
@@ -28,9 +27,8 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
     );
 
     @Query("SELECT ge " +
-        "FROM GenreEntity AS ge " +
-        "LEFT JOIN GenreTranslationEntity AS gte " +
-        "ON ge.id = gte.genreEntity.id " +
+        "FROM GenreEntity ge " +
+        "LEFT JOIN FETCH ge.translations gte " +
         "WHERE (ge.id IN :idList) " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
         "AND (:active IS NULL OR :active = ge.active) " +
@@ -42,9 +40,8 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
     );
 
     @Query("SELECT ge " +
-        "FROM GenreEntity AS ge " +
-        "JOIN GenreTranslationEntity AS gte " +
-        "ON ge.id = gte.genreEntity.id " +
+        "FROM GenreEntity ge " +
+        "JOIN FETCH ge.translations gte " +
         "WHERE (:alias IS NULL OR :alias LIKE CONCAT('%', ge.alias, '%')) " +
         "AND (:name IS NULL OR :name LIKE CONCAT('%', gte.name, '%')) " +
         "AND (:desc IS NULL OR :desc LIKE CONCAT('%', gte.description, '%')) " +

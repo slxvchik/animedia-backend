@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.infrastructure.persistence.status.repository;
 
-import dev.animedia.contentservice.domain.shared.model.Page;
-import dev.animedia.contentservice.domain.shared.model.Pageable;
+import dev.animedia.contentservice.domain.shared.pagination.Page;
+import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.model.StatusSearchCriteria;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;

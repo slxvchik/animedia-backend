@@ -59,7 +59,7 @@ public class GlobalExceptionInterceptor implements ServerInterceptor {
 			String errorMessage = appExceptionMessageService.getExceptionMessage(
 				appException.getCode(),
 				languageCode,
-				(Object) appException.getArgs()
+				appException.getArgs()
 			);
 
 			Metadata metadata = new Metadata();

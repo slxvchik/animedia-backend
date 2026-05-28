@@ -55,16 +55,12 @@ public class Genre {
 
     private void validateAlias(String alias) {
         if (alias == null || alias.isBlank()) throw new GenreAliasRequiredException();
-        if (!ALIAS_PATTERN.matcher(alias).hasMatch()) throw new GenreInvalidAliasException();
+        if (!ALIAS_PATTERN.matcher(alias).matches()) throw new GenreInvalidAliasException();
     }
 
     private void setTranslationSet(Set<GenreTranslation> translationSet) {
-        if (translationSet != null) {
-            this.translationSet.retainAll(translationSet);
-            this.translationSet.addAll(translationSet);
-        } else {
-            this.translationSet.clear();
-        }
+        this.translationSet.clear();
+        this.translationSet.addAll(translationSet);
     }
 
     private void setSortOrder(int sortOrder) {

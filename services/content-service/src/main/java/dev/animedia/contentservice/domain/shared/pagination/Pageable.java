@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.domain.shared.model;
+package dev.animedia.contentservice.domain.shared.pagination;
 
 public record Pageable(
     int page,
