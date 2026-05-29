@@ -8,6 +8,8 @@ import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import jakarta.annotation.Nullable;
 
+import java.util.UUID;
+
 public class GetStatusService implements GetStatusUseCase {
     private final StatusApplicationMapper statusApplicationMapper;
     private final StatusQueryRepository statusQueryRepository;
@@ -21,7 +23,7 @@ public class GetStatusService implements GetStatusUseCase {
     }
 
     @Override
-    public StatusDto get(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+    public StatusDto get(UUID id, @Nullable Boolean active, @Nullable String languageCode) {
         Status status = statusQueryRepository.findById(id, active, languageCode)
             .orElseThrow(StatusNotFoundException::new);
         return statusApplicationMapper.toStatusDto(status);

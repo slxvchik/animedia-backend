@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -15,8 +16,14 @@ import java.util.Set;
 )
 public class GenreEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
+
+    @PrePersist
+    private void generateId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 
     @Column(length = 128, nullable = false, updatable = false, unique = true)
     private String alias;
@@ -34,11 +41,11 @@ public class GenreEntity {
     )
     private Set<GenreTranslationEntity> translations = new HashSet<>();
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -75,32 +82,42 @@ public class GenreEntity {
     }
 
     public void syncTranslationSet(Set<GenreTranslationEntity> newGenreTranslationEntitySet) {
+        if (newGenreTranslationEntitySet == null || newGenreTranslationEntitySet.isEmpty()) {
+            this.translations.clear();
+            return;
+        }
+
         // delete translations
         this.translations.removeIf(existing -> !newGenreTranslationEntitySet.contains(existing));
+
         // save new && update old translations
         for (GenreTranslationEntity newGte : newGenreTranslationEntitySet) {
-            if (newGte.getId() == null) {
-                this.translations.add(newGte);
-            } else {
-                this.translations.stream()
-                    .filter(existing -> existing.getId().equals(newGte.getId()))
-                    .findFirst()
-                    .ifPresent(existing -> {
-                        existing.setName(newGte.getName());
-                        existing.setDescription(newGte.getDescription());
-                    });
-            }
+            this.translations.stream()
+                .filter(existing -> existing.equals(newGte))
+                .findFirst()
+                .ifPresentOrElse(
+                    existing -> existing.setName(newGte.getName()),
+                    () -> {
+                        newGte.setId(null);
+                        newGte.setGenreEntity(this);
+                        this.translations.add(newGte);
+                    }
+                );
         }
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (!(o instanceof GenreEntity that)) return false;
-        return alias.equals(that.alias);
+
+        if (this.id == null || that.id == null) return false;
+
+        return this.id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(alias);
+        return Objects.hashCode(this.id);
     }
 }

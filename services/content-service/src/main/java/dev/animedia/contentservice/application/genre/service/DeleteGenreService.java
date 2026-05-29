@@ -5,6 +5,8 @@ import dev.animedia.contentservice.application.genre.usecase.DeleteGenreUseCase;
 import dev.animedia.contentservice.domain.genre.repository.GenreCommandRepository;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 
+import java.util.UUID;
+
 public class DeleteGenreService implements DeleteGenreUseCase {
 	private final GenreQueryRepository genreQueryRepository;
 	private final GenreCommandRepository genreCommandRepository;
@@ -18,7 +20,7 @@ public class DeleteGenreService implements DeleteGenreUseCase {
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(UUID id) {
 		genreQueryRepository.findById(id, null, null)
 			.orElseThrow(GenreNotFoundException::new);
 

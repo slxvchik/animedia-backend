@@ -43,7 +43,7 @@ public class ContentSpecification {
 			return !cleanSeasons.isEmpty() ? root.get("season").in(cleanSeasons) : null;
 		};
 	}
-	public static Specification<ContentEntity> hasStatuses(List<Long> statuses) {
+	public static Specification<ContentEntity> hasStatuses(List<UUID> statuses) {
 		return (root, _, _) -> {
 			var cleanStatuses = cleanList(statuses);
 			return !cleanStatuses.isEmpty() ? root.get("status").in(cleanStatuses) : null;
@@ -67,7 +67,7 @@ public class ContentSpecification {
 			return !cleanLanguageCodes.isEmpty() ? root.get("languageCodes").in(cleanLanguageCodes) : null;
 		};
 	}
-	public static Specification<ContentEntity> hasGenres(List<Long> genreIds) {
+	public static Specification<ContentEntity> hasGenres(List<UUID> genreIds) {
 		return (root, _, _) -> {
 			var cleanGenreIds = cleanList(genreIds);
 			return !cleanGenreIds.isEmpty() ? root.join("genres", JoinType.LEFT).get("id").in(cleanGenreIds) : null;

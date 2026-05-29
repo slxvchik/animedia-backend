@@ -17,6 +17,7 @@ import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.status.model.Status;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CreateContentService implements CreateContentUseCase {
@@ -51,10 +52,10 @@ public class CreateContentService implements CreateContentUseCase {
     @Override
     public ContentDto create(ContentDto contentDto) {
 
-	    Long statusId = contentDto.status().id();
+	    UUID statusId = contentDto.status().id();
 	    Status status = statusDomainResolver.resolve(statusId);
 
-	    Set<Long> requestedGenreIdSet = contentDto.genreSet().stream()
+	    Set<UUID> requestedGenreIdSet = contentDto.genreSet().stream()
 		    .map(GenreDto::id)
 		    .collect(Collectors.toSet());
 	    Set<Genre> genreSet = genreDomainResolver.resolve(requestedGenreIdSet);

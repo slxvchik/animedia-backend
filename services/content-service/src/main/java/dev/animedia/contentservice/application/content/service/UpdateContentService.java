@@ -7,23 +7,18 @@ import dev.animedia.contentservice.application.content.resolver.GenreDomainResol
 import dev.animedia.contentservice.application.content.resolver.StatusDomainResolver;
 import dev.animedia.contentservice.application.content.usecase.UpdateContentUseCase;
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.exception.GenreNotFoundException;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
-import dev.animedia.contentservice.application.status.exception.StatusNotFoundException;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.model.ContentUpdate;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
 import dev.animedia.contentservice.domain.genre.model.Genre;
-import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 import dev.animedia.contentservice.domain.status.model.Status;
-import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UpdateContentService implements UpdateContentUseCase {
@@ -60,10 +55,10 @@ public class UpdateContentService implements UpdateContentUseCase {
         Content content = contentQueryRepository.find(contentDto.id(), null, null)
             .orElseThrow(() -> new ContentNotFoundException(contentDto.id()));
 
-        Long statusId = contentDto.status().id();
+        UUID statusId = contentDto.status().id();
         Status status = statusDomainResolver.resolve(statusId);
 
-        Set<Long> requestedGenreIdSet = contentDto.genreSet().stream()
+        Set<UUID> requestedGenreIdSet = contentDto.genreSet().stream()
             .map(GenreDto::id)
             .collect(Collectors.toSet());
         Set<Genre> genreSet = genreDomainResolver.resolve(requestedGenreIdSet);

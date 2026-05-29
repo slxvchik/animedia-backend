@@ -3,6 +3,7 @@ package dev.animedia.contentservice.infrastructure.persistence.status.model;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -20,8 +21,8 @@ import java.util.Objects;
 )
 public class StatusTranslationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id", nullable = false, updatable = false)
@@ -33,11 +34,11 @@ public class StatusTranslationEntity {
     @Column(length = 512, nullable = false)
     private String name;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

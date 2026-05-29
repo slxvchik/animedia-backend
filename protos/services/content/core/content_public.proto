@@ -39,11 +39,11 @@ message PublicSearchRequest {
   repeated string titles = 2;
   repeated Type types = 3;
   repeated int32 seasons = 4;
-  repeated int64 status_ids = 5;
+  repeated string status_uuids = 5;
   optional protos.common.Date release_date_from = 6;
   optional protos.common.Date release_date_to = 7;
   repeated string language_codes = 8;
-  repeated int64 genre_ids = 9;
+  repeated string genre_uuids = 9;
   optional protos.common.PaginationRequest pagination = 11;
 }
 

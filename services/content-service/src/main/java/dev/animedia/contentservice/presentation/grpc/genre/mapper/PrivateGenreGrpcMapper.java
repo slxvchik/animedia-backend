@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,7 +75,7 @@ public class PrivateGenreGrpcMapper {
 				.collect(Collectors.toSet());
 
 		return new GenreDto(
-			request.getId(),
+			UUID.fromString(request.getUuid()),
 			null,
 			request.getSortOrder(),
 			request.getActive(),
@@ -88,7 +89,7 @@ public class PrivateGenreGrpcMapper {
 		if (request == null) return null;
 
 		return new GenreTranslationDto(
-			request.hasId() ? request.getId() : null,
+			request.hasUuid() ? UUID.fromString(request.getUuid()) : null,
 			request.getLanguageCode(),
 			request.getName(),
 			request.hasDescription() ? request.getDescription() : null
@@ -121,7 +122,7 @@ public class PrivateGenreGrpcMapper {
 
 		return PrivateGenreResponse
 			.newBuilder()
-			.setId(genreDto.id())
+			.setUuid(String.valueOf(genreDto.id()))
 			.setAlias(genreDto.alias())
 			.setSortOrder(genreDto.sortOrder())
 			.setActive(genreDto.active())
@@ -131,14 +132,14 @@ public class PrivateGenreGrpcMapper {
 
 	private PrivateGenreTranslationResponse toPrivateGenreTranslationResponse(
 		GenreTranslationDto genreTranslationDto,
-		Long genreId
+		UUID genreId
 	) {
 		if (genreTranslationDto == null) return null;
 
 		return PrivateGenreTranslationResponse
 			.newBuilder()
-			.setId(genreTranslationDto.id())
-			.setGenreId(genreId)
+			.setUuid(String.valueOf(genreTranslationDto.id()))
+			.setGenreUuid(String.valueOf(genreId))
 			.setLanguageCode(genreTranslationDto.languageCode())
 			.setName(genreTranslationDto.name())
 			.setDescription(genreTranslationDto.description())

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /// TODO: create unique index in flywawy migration: ALTER TABLE content ADD CONSTRAINT uidx_content_alias_type_season UNIQUE NULLS NOT DISTINCT (alias, type, season);
 
@@ -31,8 +32,14 @@ import java.util.UUID;
 )
 public class ContentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @PrePersist
+    private void generateId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 
     @Column(name = "alias", nullable = false, updatable = false, length = 512)
     private String alias;
@@ -219,7 +226,7 @@ public class ContentEntity {
     }
 
     public void syncLanguageCodeSet(Set<String> newLanguageCodeSet) {
-        if (newLanguageCodeSet == null) {
+        if (newLanguageCodeSet == null || newLanguageCodeSet.isEmpty()) {
             this.languageCodes.clear();
             return;
         }
@@ -228,45 +235,58 @@ public class ContentEntity {
     }
 
     public void syncGenreSet(Set<GenreEntity> newGenreSet) {
-        if (newGenreSet == null) {
+        if (newGenreSet == null || newGenreSet.isEmpty()) {
             this.genres.clear();
             return;
         }
-        this.genres.retainAll(newGenreSet);
+
+        Set<UUID> newGenreIds = newGenreSet.stream()
+            .map(GenreEntity::getId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+
+        this.genres.removeIf(existing -> !newGenreIds.contains(existing.getId()));
+
         for (GenreEntity newGe : newGenreSet) {
             if (newGe.getId() != null) this.genres.add(newGe);
         }
     }
 
     public void syncTranslationSet(Set<ContentTranslationEntity> newContentTranslationEntitySet) {
-        if (newContentTranslationEntitySet == null) {
+        if (newContentTranslationEntitySet == null || newContentTranslationEntitySet.isEmpty()) {
             this.translations.clear();
             return;
         }
-        this.translations.retainAll(newContentTranslationEntitySet);
+
+        this.translations.removeIf(existing -> !newContentTranslationEntitySet.contains(existing));
+
         for (ContentTranslationEntity newCte : newContentTranslationEntitySet) {
-            if (newCte.getId() == null) {
-                this.translations.add(newCte);
-            } else {
-                this.translations.stream()
-                    .filter(cte -> cte.getId().equals(newCte.getId()))
-                    .findFirst()
-                    .ifPresent(cte -> {
-                        cte.setTitle(newCte.getTitle());
-                        cte.setDescription(newCte.getDescription());
-                    });
-            }
+            this.translations.stream()
+                .filter(existing -> existing.equals(newCte))
+                .findFirst()
+                .ifPresentOrElse(
+                    existing -> {
+                        existing.setTitle(newCte.getTitle());
+                        existing.setDescription(newCte.getDescription());
+                    },
+                    () -> {
+                        newCte.setId(null);
+                        newCte.setContentEntity(this);
+                        this.translations.add(newCte);
+                    }
+                );
         }
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (!(o instanceof ContentEntity that)) return false;
-        return alias.equals(that.alias) && contentType == that.contentType && season.equals(that.season);
+        return this.id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(alias, contentType, season);
+        return Objects.hashCode(this.id);
     }
 }

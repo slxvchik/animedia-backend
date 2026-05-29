@@ -3,18 +3,20 @@ package dev.animedia.contentservice.domain.status.model;
 import dev.animedia.contentservice.domain.shared.translation.model.BaseTranslation;
 import dev.animedia.contentservice.domain.status.exception.StatusTranslationNameRequiredException;
 
+import java.util.UUID;
+
 public class StatusTranslation extends BaseTranslation {
-	private final Long id;
+	private final UUID id;
 	private String name;
 
-	public StatusTranslation(Long id, String languageCode, String name) {
+	public StatusTranslation(UUID id, String languageCode, String name) {
 		validateName(name);
 		this.id = id;
 		setLanguageCode(languageCode);
 		this.name = name;
 	}
 
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 

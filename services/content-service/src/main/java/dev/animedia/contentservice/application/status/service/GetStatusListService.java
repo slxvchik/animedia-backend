@@ -8,6 +8,7 @@ import dev.animedia.contentservice.domain.status.repository.StatusQueryRepositor
 import jakarta.annotation.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public class GetStatusListService implements GetStatusListUseCase {
     private final StatusApplicationMapper statusApplicationMapper;
@@ -22,8 +23,8 @@ public class GetStatusListService implements GetStatusListUseCase {
     }
 
     @Override
-    public List<StatusDto> getList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode) {
-        List<Long> distinctIdList = idList.stream().distinct().toList();
+    public List<StatusDto> getList(List<UUID> idList, @Nullable Boolean active, @Nullable String languageCode) {
+        List<UUID> distinctIdList = idList.stream().distinct().toList();
         List<Status> statusList = statusQueryRepository.findByIdList(distinctIdList, active, languageCode);
         return statusList
             .stream()

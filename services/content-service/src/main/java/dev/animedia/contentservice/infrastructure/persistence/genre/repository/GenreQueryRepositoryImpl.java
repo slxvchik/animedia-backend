@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class GenreQueryRepositoryImpl implements GenreQueryRepository {
@@ -33,7 +34,7 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
     }
 
     @Override
-    public Optional<Genre> findById(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+    public Optional<Genre> findById(UUID id, @Nullable Boolean active, @Nullable String languageCode) {
         GenreEntity genreEntity = jpaGenreRepository.findById(id, languageCode, active);
         return Optional.ofNullable(
             genrePersistenceMapper.toGenre(genreEntity)
@@ -41,7 +42,7 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
     }
 
     @Override
-    public List<Genre> findByIdList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode) {
+    public List<Genre> findByIdList(List<UUID> idList, @Nullable Boolean active, @Nullable String languageCode) {
         List<GenreEntity> genreEntityList = jpaGenreRepository.findByIdList(idList, languageCode, active);
         return genreEntityList.stream()
             .map(genrePersistenceMapper::toGenre)

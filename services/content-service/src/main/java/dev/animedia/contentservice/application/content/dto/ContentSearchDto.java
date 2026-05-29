@@ -14,7 +14,7 @@ public record ContentSearchDto(
 	@Nullable List<String> titleList,
 	@Nullable List<ContentType> typeList,
 	@Nullable List<Integer> seasonList,
-	@Nullable List<Long> statusIdList,
+	@Nullable List<UUID> statusIdList,
 	@Nullable LocalDate releaseDateFrom,
 	@Nullable LocalDate releaseDateTo,
 	@Nullable LocalDateTime createdAtFrom,
@@ -23,6 +23,6 @@ public record ContentSearchDto(
 	@Nullable LocalDateTime updatedAtTo,
 	@Nullable Boolean active,
 	@Nullable List<String> languageCodeList,
-	@Nullable List<Long> genreIdList,
+	@Nullable List<UUID> genreIdList,
 	@Nullable String translateLanguageCode
 ) {}

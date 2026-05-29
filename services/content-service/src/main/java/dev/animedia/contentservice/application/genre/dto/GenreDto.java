@@ -1,9 +1,10 @@
 package dev.animedia.contentservice.application.genre.dto;
 
 import java.util.Set;
+import java.util.UUID;
 
 public record GenreDto(
-	Long id,
+	UUID id,
 	String alias,
 	Integer sortOrder,
 	Boolean active,

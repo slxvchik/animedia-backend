@@ -4,6 +4,8 @@ import dev.animedia.contentservice.application.status.exception.StatusNotFoundEx
 import dev.animedia.contentservice.domain.status.model.Status;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 
+import java.util.UUID;
+
 public class StatusDomainResolver {
 	private final StatusQueryRepository statusQueryRepository;
 
@@ -11,7 +13,7 @@ public class StatusDomainResolver {
 		this.statusQueryRepository = statusQueryRepository;
 	}
 
-	public Status resolve(Long statusId) {
+	public Status resolve(UUID statusId) {
 		return statusQueryRepository.findById(statusId, null, null)
 			.orElseThrow(() -> new StatusNotFoundException(statusId));
 	}

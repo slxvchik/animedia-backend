@@ -6,6 +6,8 @@ import dev.animedia.contentservice.domain.status.repository.StatusCommandReposit
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import jakarta.transaction.Transactional;
 
+import java.util.UUID;
+
 public class DeleteStatusService implements DeleteStatusUseCase {
     private final StatusQueryRepository statusQueryRepository;
     private final StatusCommandRepository statusCommandRepository;
@@ -20,7 +22,7 @@ public class DeleteStatusService implements DeleteStatusUseCase {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         statusQueryRepository.findById(id, null, null)
             .orElseThrow(() -> new StatusNotFoundException(id));
         statusCommandRepository.delete(id);

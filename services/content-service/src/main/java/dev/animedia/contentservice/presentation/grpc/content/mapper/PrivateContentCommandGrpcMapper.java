@@ -38,7 +38,7 @@ public class PrivateContentCommandGrpcMapper {
 				request.getType()
 			),
 			request.getSeason(),
-			toStatusDto(request.getStatusId()),
+			toStatusDto(UUID.fromString(request.getStatusUuid())),
 			request.hasCoverImageUuid() ? UUID.fromString(request.getCoverImageUuid()) : null,
 			request.hasTrailerVideoUuid() ? UUID.fromString(request.getTrailerVideoUuid()) : null,
 			request.hasReleaseDate() ? dateMapper.toLocalDate(request.getReleaseDate()) : null,
@@ -47,7 +47,7 @@ public class PrivateContentCommandGrpcMapper {
 			request.getActive(),
 			request.getSortOrder(),
 			request.getLanguageCodesCount() > 0 ? new HashSet<>(request.getLanguageCodesList()) : null,
-			request.getGenreIdsCount() > 0 ? request.getGenreIdsList().stream().map(this::toGenreDto).collect(Collectors.toSet()) : null,
+			request.getGenreUuidsCount() > 0 ? request.getGenreUuidsList().stream().map(uuid -> toGenreDto(UUID.fromString(uuid))).collect(Collectors.toSet()) : null,
 			request.getTranslationsCount() > 0 ? request.getTranslationsList().stream().map(this::toContentTranslationDto).collect(Collectors.toSet()) : null
 		);
 	}
@@ -71,7 +71,7 @@ public class PrivateContentCommandGrpcMapper {
 			null,
 			null,
 			null,
-			toStatusDto(request.getStatusId()),
+			toStatusDto(UUID.fromString(request.getStatusUuid())),
 			request.hasCoverImageUuid() ? UUID.fromString(request.getCoverImageUuid()) : null,
 			request.hasTrailerVideoUuid() ? UUID.fromString(request.getTrailerVideoUuid()) : null,
 			request.hasReleaseDate() ? dateMapper.toLocalDate(request.getReleaseDate()) : null,
@@ -80,7 +80,7 @@ public class PrivateContentCommandGrpcMapper {
 			request.getActive(),
 			request.getSortOrder(),
 			request.getLanguageCodesCount() > 0 ? new HashSet<>(request.getLanguageCodesList()) : null,
-			request.getGenreIdsCount() > 0 ? request.getGenreIdsList().stream().map(this::toGenreDto).collect(Collectors.toSet()) : null,
+			request.getGenreUuidsCount() > 0 ? request.getGenreUuidsList().stream().map(uuid -> toGenreDto(UUID.fromString(uuid))).collect(Collectors.toSet()) : null,
 			request.getTranslationsCount() > 0 ? request.getTranslationsList().stream().map(this::toContentTranslationDto).collect(Collectors.toSet()) : null
 		);
 	}
@@ -96,7 +96,7 @@ public class PrivateContentCommandGrpcMapper {
 		);
 	}
 
-	private StatusDto toStatusDto(Long statusId) {
+	private StatusDto toStatusDto(UUID statusId) {
 		return new StatusDto(
 			statusId,
 			null,
@@ -106,7 +106,7 @@ public class PrivateContentCommandGrpcMapper {
 		);
 	}
 
-	private GenreDto toGenreDto(Long genreId) {
+	private GenreDto toGenreDto(UUID genreId) {
 		return new GenreDto(
 			genreId,
 			null,

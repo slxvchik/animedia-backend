@@ -69,8 +69,8 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 		Page<ContentEntity> contentEntityDomainPage = paginationPersistenceMapper.toDomainPage(contentEntitySpringPage);
 
 		// fetch all genres and statuses on page
-		Set<Long> allGenreIdSet = new HashSet<>();
-		Set<Long> allStatusIdSet = new HashSet<>();
+		Set<UUID> allGenreIdSet = new HashSet<>();
+		Set<UUID> allStatusIdSet = new HashSet<>();
 
 		for (var contentEntity : contentEntitySpringPage.getContent()) {
 			for (var contentGenreEntity : contentEntity.getGenres()) {
@@ -81,7 +81,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
 		Boolean active = contentSearchCriteria.active();
 
-		Map<Long, Genre> genreMap = genreQueryRepository.findByIdList(
+		Map<UUID, Genre> genreMap = genreQueryRepository.findByIdList(
 				new ArrayList<>(allGenreIdSet),
 				active,
 				languageCode
@@ -90,7 +90,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 			.collect(
 				Collectors.toMap(Genre::getId, genre -> genre)
 			);
-		Map<Long, Status> statusMap = statusQueryRepository.findByIdList(
+		Map<UUID, Status> statusMap = statusQueryRepository.findByIdList(
 				new ArrayList<>(allStatusIdSet),
 				active,
 				languageCode

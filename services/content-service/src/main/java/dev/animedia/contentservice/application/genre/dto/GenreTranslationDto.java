@@ -1,7 +1,9 @@
 package dev.animedia.contentservice.application.genre.dto;
 
+import java.util.UUID;
+
 public record GenreTranslationDto(
-	Long id,
+	UUID id,
 	String languageCode,
 	String name,
 	String description

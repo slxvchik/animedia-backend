@@ -6,6 +6,7 @@ import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class GenreDomainResolver {
@@ -15,7 +16,7 @@ public class GenreDomainResolver {
 		this.genreQueryRepository = genreQueryRepository;
 	}
 
-	public Set<Genre> resolve(Set<Long> requestedGenreIds) {
+	public Set<Genre> resolve(Set<UUID> requestedGenreIds) {
 		if (requestedGenreIds == null || requestedGenreIds.isEmpty()) {
 			return Set.of();
 		}
@@ -27,11 +28,11 @@ public class GenreDomainResolver {
 		);
 
 		if (genreList.size() != requestedGenreIds.size()) {
-			Set<Long> foundGenreIds = genreList.stream()
+			Set<UUID> foundGenreIds = genreList.stream()
 				.map(Genre::getId)
 				.collect(Collectors.toSet());
 
-			List<Long> notFoundIds = requestedGenreIds.stream()
+			List<UUID> notFoundIds = requestedGenreIds.stream()
 				.filter(id -> !foundGenreIds.contains(id))
 				.toList();
 

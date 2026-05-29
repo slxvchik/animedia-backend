@@ -10,9 +10,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
+public interface JpaStatusRepository extends JpaRepository<StatusEntity, UUID> {
 
 	@Query("SELECT se " +
 		"FROM StatusEntity se " +
@@ -21,7 +22,7 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"AND (:languageCode IS NULL OR :languageCode = ste.languageCode) " +
 		"AND (:active IS NULL OR :active = se.active)")
 	StatusEntity findById(
-		@Param("id") Long id,
+		@Param("id") UUID id,
 		@Param("active") @Nullable Boolean active,
 		@Param("languageCode") @Nullable String languageCode
 	);
@@ -34,7 +35,7 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, Long> {
 		"AND (:active IS NULL OR :active = se.active) " +
 		"ORDER BY se.sortOrder DESC")
 	List<StatusEntity> findByIdList(
-		@Param("idList") List<Long> idList,
+		@Param("idList") List<UUID> idList,
 		@Param("active") @Nullable Boolean active,
 		@Param("languageCode") @Nullable String languageCode
 	);

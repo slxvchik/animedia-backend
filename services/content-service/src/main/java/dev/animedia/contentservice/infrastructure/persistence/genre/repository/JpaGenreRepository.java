@@ -10,9 +10,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
+public interface JpaGenreRepository extends JpaRepository<GenreEntity, UUID> {
 
     @Query("SELECT ge " +
         "FROM GenreEntity ge " +
@@ -21,7 +22,7 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
         "AND (:active IS NULL OR :active = ge.active)")
     GenreEntity findById(
-        @Param("id") Long id,
+        @Param("id") UUID id,
         @Param("lang") @Nullable String languageCode,
         @Param("active") @Nullable Boolean active
     );
@@ -34,7 +35,7 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, Long> {
         "AND (:active IS NULL OR :active = ge.active) " +
         "ORDER BY ge.sortOrder DESC")
     List<GenreEntity> findByIdList(
-        @Param("idList") List<Long> idList,
+        @Param("idList") List<UUID> idList,
         @Param("lang") @Nullable String languageCode,
         @Param("active") @Nullable Boolean active
     );

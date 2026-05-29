@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Component
 public class PublicContentGrpcMapper {
@@ -55,7 +56,7 @@ public class PublicContentGrpcMapper {
 					.toList()
 				: null,
 			request.getSeasonsCount() > 0 ? request.getSeasonsList() : null,
-			request.getStatusIdsCount() > 0 ? request.getStatusIdsList() : null,
+			request.getStatusUuidsCount() > 0 ? request.getStatusUuidsList().stream().map(UUID::fromString).toList() : null,
 			request.hasReleaseDateFrom() ? dateMapper.toLocalDate(request.getReleaseDateFrom()) : null,
 			request.hasReleaseDateTo() ? dateMapper.toLocalDate(request.getReleaseDateFrom()) : null,
 			null,
@@ -64,7 +65,7 @@ public class PublicContentGrpcMapper {
 			null,
 			true,
 			request.getLanguageCodesCount() > 0 ? request.getLanguageCodesList() : null,
-			request.getGenreIdsCount() > 0 ? request.getGenreIdsList() : null,
+			request.getGenreUuidsCount() > 0 ? request.getGenreUuidsList().stream().map(UUID::fromString).toList() : null,
 			translateLanguageCode
 		);
 	}

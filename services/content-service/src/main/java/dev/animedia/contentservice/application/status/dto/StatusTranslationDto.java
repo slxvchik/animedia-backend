@@ -1,7 +1,9 @@
 package dev.animedia.contentservice.application.status.dto;
 
+import java.util.UUID;
+
 public record StatusTranslationDto(
-    Long id,
+	UUID id,
     String languageCode,
     String name
 ) {}

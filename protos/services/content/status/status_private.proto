@@ -16,7 +16,7 @@ service PrivateContentStatusService {
 }
 
 message PrivateStatusResponse {
-  int64 id = 1;
+  string uuid = 1;
   string alias = 2;
   int32 sort_order = 3;
   bool active = 4;
@@ -24,8 +24,8 @@ message PrivateStatusResponse {
 }
 
 message PrivateStatusTranslationResponse {
-  int64 id = 1;
-  int64 content_status_id = 2;
+  string uuid = 1;
+  string content_status_uuid = 2;
   string language_code = 3;
   string name = 4;
 }
@@ -44,7 +44,7 @@ message PrivateSearchStatusResponse {
 }
 
 message GetStatusRequest {
-  int64 id = 1;
+  string uuid = 1;
 }
 
 message CreateStatusRequest {
@@ -60,18 +60,18 @@ message CreateStatusTranslationRequest {
 }
 
 message UpdateStatusRequest {
-  int64 id = 1;
+  string uuid = 1;
   int32 sort_order = 2;
   bool active = 3;
   repeated UpdateStatusTranslationRequest translations = 4;
 }
 
 message UpdateStatusTranslationRequest {
-  optional int64 id = 1;
+  optional string uuid = 1;
   string language_code = 2;
   string name = 3;
 }
 
 message DeleteStatusRequest {
-  int64 id = 1;
+  string uuid = 1;
 }

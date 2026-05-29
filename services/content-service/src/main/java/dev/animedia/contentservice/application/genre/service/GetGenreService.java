@@ -8,6 +8,8 @@ import dev.animedia.contentservice.domain.genre.model.Genre;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 import jakarta.annotation.Nullable;
 
+import java.util.UUID;
+
 public class GetGenreService implements GetGenreUseCase {
 	private final GenreApplicationMapper genreApplicationMapper;
 	private final GenreQueryRepository genreQueryRepository;
@@ -21,7 +23,7 @@ public class GetGenreService implements GetGenreUseCase {
 	}
 
 	@Override
-	public GenreDto get(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+	public GenreDto get(UUID id, @Nullable Boolean active, @Nullable String languageCode) {
 		Genre genre = genreQueryRepository.findById(id, active, languageCode)
 			.orElseThrow(GenreNotFoundException::new);
 		return genreApplicationMapper.toGenreDto(genre);

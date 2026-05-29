@@ -8,10 +8,11 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface GenreQueryRepository {
-    Optional<Genre> findById(Long id, @Nullable Boolean active, @Nullable String languageCode);
-    List<Genre> findByIdList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode);
+    Optional<Genre> findById(UUID id, @Nullable Boolean active, @Nullable String languageCode);
+    List<Genre> findByIdList(List<UUID> idList, @Nullable Boolean active, @Nullable String languageCode);
     Page<Genre> search(GenreSearchCriteria genreSearchCriteria, Pageable pageable);
 
     boolean existsByAlias(String alias);

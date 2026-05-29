@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -70,7 +71,7 @@ public class PrivateStatusGrpcMapper {
 			.collect(Collectors.toSet());
 
 		return new StatusDto(
-			request.getId(),
+			UUID.fromString(request.getUuid()),
 			null,
 			request.getSortOrder(),
 			request.getActive(),
@@ -84,7 +85,7 @@ public class PrivateStatusGrpcMapper {
 		if (request == null) return null;
 
 		return new StatusTranslationDto(
-			request.hasId() ? request.getId() : null,
+			request.hasUuid() ? UUID.fromString(request.getUuid()) : null,
 			request.getLanguageCode(),
 			request.getName()
 		);
@@ -117,7 +118,7 @@ public class PrivateStatusGrpcMapper {
 
 		return PrivateStatusResponse
 			.newBuilder()
-			.setId(statusDto.id())
+			.setUuid(String.valueOf(statusDto.id()))
 			.setAlias(statusDto.alias())
 			.setActive(statusDto.active())
 			.setSortOrder(statusDto.sortOrder())
@@ -127,14 +128,14 @@ public class PrivateStatusGrpcMapper {
 
 	private PrivateStatusTranslationResponse toPrivateStatusTranslationResponse(
 		StatusTranslationDto statusTranslationDto,
-		Long statusId
+		UUID statusId
 	) {
 		if (statusTranslationDto == null) return null;
 
 		return PrivateStatusTranslationResponse
 			.newBuilder()
-			.setId(statusTranslationDto.id())
-			.setContentStatusId(statusId)
+			.setUuid(String.valueOf(statusTranslationDto.id()))
+			.setContentStatusUuid(String.valueOf(statusId))
 			.setLanguageCode(statusTranslationDto.languageCode())
 			.setName(statusTranslationDto.name())
 			.build();

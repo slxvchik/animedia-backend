@@ -18,6 +18,7 @@ import org.springframework.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @GrpcService
 public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenreServiceImplBase {
@@ -84,7 +85,7 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
         GetGenreRequest request,
         StreamObserver<PrivateGenreResponse> responseObserver
     ) {
-        GenreDto genreDto = getGenreUseCase.get(request.getId(), null, null);
+        GenreDto genreDto = getGenreUseCase.get(UUID.fromString(request.getUuid()), null, null);
         responseObserver.onNext(
             privateGenreGrpcMapper.toPrivateGenreResponse(genreDto)
         );
@@ -122,7 +123,7 @@ public class PrivateGenreGrpcService extends PrivateGenreServiceGrpc.PrivateGenr
         DeleteGenreRequest request,
         StreamObserver<EmptyResponse> responseObserver
     ) {
-        deleteGenreUseCase.delete(request.getId());
+        deleteGenreUseCase.delete(UUID.fromString(request.getUuid()));
 	    responseObserver.onNext(
 		    CommonProto.EmptyResponse.newBuilder().build()
 	    );

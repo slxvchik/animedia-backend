@@ -4,13 +4,14 @@ import dev.animedia.contentservice.domain.shared.exception.AppException;
 import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class GenreNotFoundException extends AppException {
 	public GenreNotFoundException() {
 		super(AppExceptionStatus.NOT_FOUND, "genre.not_found");
 	}
-	public GenreNotFoundException(List<Long> idList) {
+	public GenreNotFoundException(List<UUID> idList) {
 		super(
 			AppExceptionStatus.NOT_FOUND,
 			"genre.not_found.extra",

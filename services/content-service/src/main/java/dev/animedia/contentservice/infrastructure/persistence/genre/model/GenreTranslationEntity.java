@@ -3,6 +3,7 @@ package dev.animedia.contentservice.infrastructure.persistence.genre.model;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -16,8 +17,8 @@ import java.util.Objects;
 )
 public class GenreTranslationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false, updatable = false)
@@ -32,11 +33,11 @@ public class GenreTranslationEntity {
     @Column(length = 2048)
     private String description;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

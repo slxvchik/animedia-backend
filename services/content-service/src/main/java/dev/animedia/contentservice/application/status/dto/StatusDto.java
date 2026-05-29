@@ -1,9 +1,10 @@
 package dev.animedia.contentservice.application.status.dto;
 
 import java.util.Set;
+import java.util.UUID;
 
 public record StatusDto(
-    Long id,
+	UUID id,
     String alias,
     Integer sortOrder,
 	Boolean active,

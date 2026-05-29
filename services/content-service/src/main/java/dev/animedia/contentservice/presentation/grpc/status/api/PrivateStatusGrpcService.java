@@ -17,6 +17,7 @@ import org.springframework.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @GrpcService
 public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.PrivateContentStatusServiceImplBase {
@@ -80,7 +81,7 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 		GetStatusRequest request,
 		StreamObserver<PrivateStatusResponse> responseObserver
 	) {
-		StatusDto statusDto = getStatusUseCase.get(request.getId(), null, null);
+		StatusDto statusDto = getStatusUseCase.get(UUID.fromString(request.getUuid()), null, null);
 		responseObserver.onNext(
 			privateStatusGrpcMapper.toPrivateStatusResponse(statusDto)
 		);
@@ -120,7 +121,7 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 		DeleteStatusRequest request,
 		StreamObserver<EmptyResponse> responseObserver
 	) {
-		deleteStatusUseCase.delete(request.getId());
+		deleteStatusUseCase.delete(UUID.fromString(request.getUuid()));
 		responseObserver.onNext(
 			CommonProto.EmptyResponse.newBuilder().build()
 		);

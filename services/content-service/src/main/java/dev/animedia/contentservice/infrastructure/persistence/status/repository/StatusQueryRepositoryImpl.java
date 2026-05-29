@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class StatusQueryRepositoryImpl implements StatusQueryRepository {
@@ -33,7 +34,7 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	}
 
 	@Override
-	public Optional<Status> findById(Long id, @Nullable Boolean active, @Nullable String languageCode) {
+	public Optional<Status> findById(UUID id, @Nullable Boolean active, @Nullable String languageCode) {
 		StatusEntity statusEntity = jpaStatusRepository.findById(id, active, languageCode);
 		return Optional.ofNullable(
 			statusPersistenceMapper.toStatus(statusEntity)
@@ -41,7 +42,7 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	}
 
 	@Override
-	public List<Status> findByIdList(List<Long> idList, @Nullable Boolean active, @Nullable String languageCode) {
+	public List<Status> findByIdList(List<UUID> idList, @Nullable Boolean active, @Nullable String languageCode) {
 		List<StatusEntity> statusEntityList = jpaStatusRepository.findByIdList(idList, active, languageCode);
 		return statusEntityList.stream()
 			.map(statusPersistenceMapper::toStatus)

@@ -41,7 +41,7 @@ public class PrivateContentQueryGrpcMapper {
 				.toList()
 				: null,
 			request.getSeasonsCount() > 0 ? request.getSeasonsList() : null,
-			request.getStatusIdsCount() > 0 ? request.getStatusIdsList() : null,
+			request.getStatusUuidsCount() > 0 ? request.getStatusUuidsList().stream().map(UUID::fromString).toList() : null,
 			request.hasReleaseDateFrom()
 				? dateMapper.toLocalDate(request.getReleaseDateFrom())
 				: null,
@@ -64,8 +64,8 @@ public class PrivateContentQueryGrpcMapper {
 			request.getLanguageCodesCount() > 0
 				? request.getLanguageCodesList()
 				: null,
-			request.getGenreIdsCount() > 0
-				? request.getGenreIdsList()
+			request.getGenreUuidsCount() > 0
+				? request.getGenreUuidsList().stream().map(UUID::fromString).toList()
 				: null,
 			null
 		);

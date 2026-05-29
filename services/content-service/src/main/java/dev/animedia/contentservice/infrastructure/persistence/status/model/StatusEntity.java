@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -15,8 +16,14 @@ import java.util.Set;
 )
 public class StatusEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
+
+    @PrePersist
+    private void generateId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 
     @Column(length = 512, unique = true, nullable = false, updatable = false)
     private String alias;
@@ -35,11 +42,11 @@ public class StatusEntity {
     )
     Set<StatusTranslationEntity> translations = new HashSet<>();
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -76,30 +83,42 @@ public class StatusEntity {
     }
 
     public void syncTranslationSet(Set<StatusTranslationEntity> newStatusTranslationSet) {
+        if (newStatusTranslationSet == null || newStatusTranslationSet.isEmpty()) {
+            this.translations.clear();
+            return;
+        }
+
         // delete translations
         this.translations.removeIf(existing -> !newStatusTranslationSet.contains(existing));
 
         // save new & update old translations
-        for (StatusTranslationEntity newTranslationEntity : newStatusTranslationSet) {
-            if (newTranslationEntity.getId() == null) {
-                this.translations.add(newTranslationEntity);
-            } else {
-                this.translations.stream()
-                    .filter(existing -> existing.getId().equals(newTranslationEntity.getId()))
-                    .findFirst()
-                    .ifPresent(existing -> existing.setName(newTranslationEntity.getName()));
-            }
+        for (StatusTranslationEntity newSte : newStatusTranslationSet) {
+            this.translations.stream()
+                .filter(existing -> existing.equals(newSte))
+                .findFirst()
+                .ifPresentOrElse(
+                    existing -> existing.setName(newSte.getName()),
+                    () -> {
+                        newSte.setId(null);
+                        newSte.setStatusEntity(this);
+                        this.translations.add(newSte);
+                    }
+                );
         }
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (!(o instanceof StatusEntity that)) return false;
-        return alias.equals(that.alias);
+
+        if (this.id == null || that.id == null) return false;
+
+        return this.id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(alias);
+        return Objects.hashCode(this.id);
     }
 }

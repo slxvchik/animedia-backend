@@ -3,12 +3,14 @@ package dev.animedia.contentservice.domain.genre.model;
 import dev.animedia.contentservice.domain.genre.exception.GenreTranslationNameRequiredException;
 import dev.animedia.contentservice.domain.shared.translation.model.BaseTranslation;
 
+import java.util.UUID;
+
 public class GenreTranslation extends BaseTranslation {
-    private final Long id;
+    private final UUID id;
     private String name;
     private String description;
 
-    public GenreTranslation(Long id, String languageCode, String name, String description) {
+    public GenreTranslation(UUID id, String languageCode, String name, String description) {
         validateName(name);
         this.id = id;
         setLanguageCode(languageCode);
@@ -16,7 +18,7 @@ public class GenreTranslation extends BaseTranslation {
         this.description = description;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
