@@ -18,4 +18,3 @@ volumes:
 
 networks:
   animedia_content_service:
-
