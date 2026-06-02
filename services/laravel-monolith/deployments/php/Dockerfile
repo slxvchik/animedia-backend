@@ -15,9 +15,13 @@ RUN docker-php-ext-install \
 
 COPY --from=composer:2.10 /usr/bin/composer /usr/local/bin/composer
 
-RUN composer global require laravel/installer
-
 WORKDIR /var/www
+
+COPY ../src /var/www/
+
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --optimize-autloloader
+
+RUN php artisan key:generate
 
 EXPOSE 9000
 
