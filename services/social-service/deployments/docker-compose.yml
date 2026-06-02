@@ -1,0 +1,51 @@
+name: animedia_social
+
+services:
+
+  web_social:
+    image: nginx:1.31
+    container_name: animedia_social_service_server
+    environment:
+      - NGINX_HOST=${NGINX_HOST}
+      - NGINX_PORT=${NGINX_PORT}
+    volumes:
+      - ./nginx:/etc/nginx/templates/
+      - ../src:/var/www/
+    ports:
+      - "${NGINX_PORT}:81"
+    networks:
+      - animedia_social_service
+
+  php_social:
+    build:
+      context: ./php
+      dockerfile: ./Dockerfile
+    container_name: animedia_social_service_php_fpm
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../src:/var/www/
+    ports:
+      - "9030:9000"
+    networks:
+      - animedia_social_service
+
+  db_social:
+    container_name: animedia_social_service_database
+    image: postgres:18.0
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - db_data_social:/var/lib/postgresql
+    networks:
+      - animedia_social_service
+
+volumes:
+  db_data_social:
+
+networks:
+  animedia_social_service:
