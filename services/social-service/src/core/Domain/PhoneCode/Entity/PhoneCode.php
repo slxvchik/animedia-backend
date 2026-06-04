@@ -3,40 +3,21 @@
 namespace Core\Domain\PhoneCode\Entity;
 
 use Core\Domain\Country\Entity\Country;
-use Core\Domain\PhoneNumber\Exception\InvalidPhoneNumberException;
+use Core\Domain\UserProfile\Exception\InvalidPhoneNumberException;
 
-class PhoneCode
+readonly class PhoneCode
 {
     public function __construct(
-        private Country $country,
-        private string $phoneCode
+        public Country $country,
+        public string $phoneCode,
+        public bool $isActive = false
     ) {
         $this->assertPhoneCode($this->phoneCode);
     }
 
     private function assertPhoneCode(string $phoneCode): void
     {
-        if (mb_strlen(trim($phoneCode)) === 0)
+        if (!preg_match('/^+[0-9]{1,4}$/', $phoneCode))
             throw new InvalidPhoneNumberException($phoneCode);
-    }
-
-    public function getCountry(): Country
-    {
-        return $this->country;
-    }
-
-    public function setCountry(Country $country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getPhoneCode(): string
-    {
-        return $this->phoneCode;
-    }
-
-    public function setPhoneCode(string $phoneCode): void
-    {
-        $this->phoneCode = $phoneCode;
     }
 }

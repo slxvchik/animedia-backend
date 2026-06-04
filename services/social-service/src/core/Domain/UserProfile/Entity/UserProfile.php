@@ -3,26 +3,49 @@
 namespace Core\Domain\UserProfile\Entity;
 
 use Core\Domain\Country\Entity\Country;
-use Core\Domain\PhoneNumber\Entity\PhoneNumber;
+use Core\Domain\Language\Entity\Language;
+use Core\Domain\PhoneCode\Entity\PhoneCode;
+use Core\Domain\UserProfile\Exception\InvalidPhoneNumberException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileIdException;
+use Core\Domain\UserProfile\Exception\InvalidUserProfileLanguageException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameCodeException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameException;
+use Core\Domain\UserProfile\Validator\PhoneValidatorInterface;
+use Core\Domain\UserProfile\ValueObject\PhoneNumber;
 
 class UserProfile
 {
+    /**
+     * @param string $userUuid
+     * @param string $username
+     * @param string $usernameCode
+     * @param Country|null $country
+     * @param Language[]|null $languages
+     * @param PhoneNumber|null $phone
+     * @param string|null $imageUuid
+     * @param string|null $color
+     * @param string|null $description
+     */
     public function __construct(
-        private readonly string $userUuid,
-        private string          $username,
-        private string          $usernameCode,
-        private ?Country        $country,
-        private ?PhoneNumber    $phone,
-        private ?string         $imageUuid,
-        private ?string         $color,
-        private ?string         $description
+        public readonly string $userUuid,
+        private string $username,
+        private string $usernameCode,
+        private ?array $languages,
+        private ?PhoneNumber $phone,
+        public ?Country $country,
+        public ?string $imageUuid,
+        public ?string $color,
+        public ?string $description
     ) {
-        $this->assertUserUuid(trim($userUuid));
-        $this->assertUsername(trim($username));
-        $this->assertUsernameCode(trim($usernameCode));
+        $this->assertUserUuid($this->userUuid);
+
+        $this->username = trim($this->username);
+        $this->assertUsername($this->username);
+
+        $this->usernameCode = trim($this->usernameCode);
+        $this->assertUsernameCode($this->usernameCode);
+
+        $this->assertLanguages($this->languages);
     }
 
     private function assertUserUuid(string $userUuid): void
@@ -43,19 +66,15 @@ class UserProfile
             throw new InvalidUserProfileNicknameCodeException();
     }
 
-    public function getCountry(): ?Country
+    /**
+     * @param Language[]|null $languages
+     */
+    private function assertLanguages(?array $languages): void
     {
-        return $this->country;
-    }
-
-    public function setCountry(?Country $country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getUserUuid(): string
-    {
-        return $this->userUuid;
+        if (empty($languages)) return;
+        foreach ($languages as $language)
+            if (!($language instanceof Language))
+                throw new InvalidUserProfileLanguageException();
     }
 
     public function getUsername(): string
@@ -67,7 +86,7 @@ class UserProfile
     {
         $cleanedUsername = trim($username);
         $this->assertUsername($cleanedUsername);
-        $this->username = $username;
+        $this->username = $cleanedUsername;
     }
 
     public function getUsernameCode(): string
@@ -82,43 +101,38 @@ class UserProfile
         $this->usernameCode = $cleanedUsernameCode;
     }
 
+    public function getLanguages(): ?array
+    {
+        return $this->languages;
+    }
+
+    public function setLanguages(?array $languages): void
+    {
+        $this->assertLanguages($languages);
+        $this->languages = $languages;
+    }
+
     public function getPhone(): ?PhoneNumber
     {
         return $this->phone;
     }
 
-    public function setPhone(?PhoneNumber $phone): void
-    {
-        $this->phone = $phone;
-    }
+    public function setPhone(
+        ?PhoneCode $code,
+        ?string $number,
+        PhoneValidatorInterface $validator
+    ): void {
 
-    public function getImageUuid(): ?string
-    {
-        return $this->imageUuid;
-    }
+        if ($code === null || $number === null || trim($number) === '') {
+            $this->phone = null;
+            return;
+        }
 
-    public function setImageUuid(?string $imageUuid): void
-    {
-        $this->imageUuid = $imageUuid;
-    }
+        $cleanedNumber = trim($number);
 
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
+        if (!$validator->isValid($code, $cleanedNumber))
+            throw new InvalidPhoneNumberException($cleanedNumber);
 
-    public function setColor(?string $color): void
-    {
-        $this->color = $color;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
+        $this->phone = new PhoneNumber($code, $number, false);
     }
 }

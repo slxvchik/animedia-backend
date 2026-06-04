@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Domain\PhoneNumber\Exception;
+namespace Core\Domain\UserProfile\Exception;
 
 use Core\Domain\Shared\Exception\AppException;
 use Core\Domain\Shared\Exception\AppExceptionStatus;

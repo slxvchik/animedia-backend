@@ -2,37 +2,26 @@
 
 namespace Core\Domain\Country\Entity;
 
-use Core\Domain\Country\Exception\InvalidIsoCodeException;
+use Core\Domain\Country\Exception\InvalidCountryIsoCodeException;
 
 class Country
 {
     public function __construct(
         private readonly string $countryIsoCode,
-        private string $name
+        public string $name,
+        public bool $active = false,
     ) {
         $this->assertCountryIsoCode($this->countryIsoCode);
     }
 
     private function assertCountryIsoCode(string $countryIsoCode): void
     {
-        $upperIsoCode = strtoupper($countryIsoCode);
-        $cleanIsoCode = preg_replace('/[^A-Z]/', '', $upperIsoCode);
-        if (mb_strlen($cleanIsoCode) !== 2)
-            throw new InvalidIsoCodeException($countryIsoCode);
+        if (preg_match('/^[A-Z]{2}$/', $countryIsoCode))
+            throw new InvalidCountryIsoCodeException($countryIsoCode);
     }
 
     public function getCountryIsoCode(): string
     {
         return $this->countryIsoCode;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
     }
 }

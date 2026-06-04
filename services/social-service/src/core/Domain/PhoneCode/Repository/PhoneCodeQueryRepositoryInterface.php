@@ -11,6 +11,6 @@ interface PhoneCodeQueryRepositoryInterface
      * @param string[] $countryIsoCodeList
      * @return PhoneCode[]
      */
-    public function findByCountryIsoCodeList(array $countryIsoCodeList): array;
+    public function findByCountryIsoCodeList(array $countryIsoCodeList, ?bool $isActive): array;
     public function existsByPhoneCode(string $phoneCode): bool;
 }

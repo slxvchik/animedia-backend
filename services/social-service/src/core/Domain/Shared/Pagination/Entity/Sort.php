@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Domain\Pagination\Entity;
+namespace Core\Domain\Shared\Pagination\Entity;
 
 readonly class Sort
 {
