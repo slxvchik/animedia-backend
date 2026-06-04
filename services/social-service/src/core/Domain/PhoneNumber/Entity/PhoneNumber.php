@@ -9,9 +9,10 @@ use Core\Domain\PhoneNumber\Validator\PhoneValidatorInterface;
 class PhoneNumber
 {
     public function __construct(
+        private readonly PhoneValidatorInterface $validator,
         private PhoneCode $code,
         private string $number,
-        private readonly PhoneValidatorInterface $validator
+        private bool $confirmed = false
     ) {
         $this->assertNumberIsValid($this->code, $this->number);
     }
@@ -49,5 +50,15 @@ class PhoneNumber
         $cleanNumber = $this->getCleanNumber($number);
         $this->assertNumberIsValid($this->code, $cleanNumber);
         $this->number = $number;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): void
+    {
+        $this->confirmed = $confirmed;
     }
 }

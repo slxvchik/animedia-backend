@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Domain\User\Repository;
+namespace Core\Domain\UserProfile\Repository;
 
-use Core\Domain\User\Entity\UserProfile;
+use Core\Domain\UserProfile\Entity\UserProfile;
 
 interface UserProfileCommandRepositoryInterface
 {

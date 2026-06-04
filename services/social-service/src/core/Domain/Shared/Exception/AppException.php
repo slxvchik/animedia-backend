@@ -12,9 +12,9 @@ class AppException extends RuntimeException
      * @param string[] $args
      */
     public function __construct(
-        private readonly AppExceptionStatus $appExceptionStatus,
-        private readonly string             $errorCode,
-        private readonly array              $args = []
+        private readonly AppExceptionStatus $appExceptionStatus = AppExceptionStatus::INTERNAL_ERROR,
+        private readonly string $errorCode = 'app.internal_error',
+        private readonly array $args = []
     ) {
         parent::__construct(message: "AppException: $errorCode");
     }

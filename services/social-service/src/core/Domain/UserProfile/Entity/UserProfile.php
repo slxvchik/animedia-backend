@@ -1,12 +1,12 @@
 <?php
 
-namespace Core\Domain\User\Entity;
+namespace Core\Domain\UserProfile\Entity;
 
 use Core\Domain\Country\Entity\Country;
-use Core\Domain\Phone\Entity\PhoneNumber;
-use Core\Domain\User\Exception\InvalidUserProfileIdException;
-use Core\Domain\User\Model\InvalidUserProfileNicknameCodeException;
-use Core\Domain\User\Model\InvalidUserProfileNicknameException;
+use Core\Domain\PhoneNumber\Entity\PhoneNumber;
+use Core\Domain\UserProfile\Exception\InvalidUserProfileIdException;
+use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameCodeException;
+use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameException;
 
 class UserProfile
 {

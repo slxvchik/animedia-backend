@@ -1,14 +1,14 @@
 <?php
 
-namespace Core\Domain\User\Repository;
+namespace Core\Domain\UserProfile\Repository;
 
 
-use Core\Domain\User\Entity\UserProfile;
+use Core\Domain\UserProfile\Entity\UserProfile;
 
 interface UserProfileQueryRepositoryInterface
 {
-    public function find(string $userUuid): UserProfile;
-    public function findByUsername(string $username, string $usernameCode): UserProfile;
-    public function existsByUsername(string $username, string $usernameCode): bool;
-    public function existsByPhone(string $phoneCode, string $phoneNumber): bool;
+    public function findByUserUuid(string $userUuid): ?UserProfile;
+    public function findByUsernameAndUsernameCode(string $username, string $usernameCode): ?UserProfile;
+    public function existsByUsernameAndUsernameCode(string $username, string $usernameCode): bool;
+    public function existsByPhoneAndPhoneNumber(string $phoneCode, string $phoneNumber): bool;
 }

@@ -3,13 +3,13 @@
 namespace Core\Domain\PhoneCode\Entity;
 
 use Core\Domain\Country\Entity\Country;
-use Core\Domain\Phone\Exception\InvalidPhoneNumberException;
+use Core\Domain\PhoneNumber\Exception\InvalidPhoneNumberException;
 
 class PhoneCode
 {
     public function __construct(
-        private string $phoneCode,
-        private Country $country
+        private Country $country,
+        private string $phoneCode
     ) {
         $this->assertPhoneCode($this->phoneCode);
     }
@@ -20,16 +20,6 @@ class PhoneCode
             throw new InvalidPhoneNumberException($phoneCode);
     }
 
-    public function getPhoneCode(): string
-    {
-        return $this->phoneCode;
-    }
-
-    public function setPhoneCode(string $phoneCode): void
-    {
-        $this->phoneCode = $phoneCode;
-    }
-
     public function getCountry(): Country
     {
         return $this->country;
@@ -38,5 +28,15 @@ class PhoneCode
     public function setCountry(Country $country): void
     {
         $this->country = $country;
+    }
+
+    public function getPhoneCode(): string
+    {
+        return $this->phoneCode;
+    }
+
+    public function setPhoneCode(string $phoneCode): void
+    {
+        $this->phoneCode = $phoneCode;
     }
 }
