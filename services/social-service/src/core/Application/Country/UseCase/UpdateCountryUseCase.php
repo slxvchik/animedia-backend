@@ -4,7 +4,7 @@ namespace Core\Application\Country\UseCase;
 
 use Core\Application\Country\DTO\CountryDto;
 
-interface GetCountryUseCase
+interface UpdateCountryUseCase
 {
-    public function execute(string $countryIsoCode): CountryDto;
+    public function execute(CountryDto $countryDto): CountryDto;
 }

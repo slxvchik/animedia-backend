@@ -6,6 +6,7 @@ use Core\Domain\Country\Entity\Country;
 use Core\Domain\Language\Entity\Language;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
 use Core\Domain\UserProfile\Exception\InvalidPhoneNumberException;
+use Core\Domain\UserProfile\Exception\InvalidUserProfileEmailException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileIdException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileLanguageException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameCodeException;
@@ -16,26 +17,23 @@ use Core\Domain\UserProfile\ValueObject\PhoneNumber;
 class UserProfile
 {
     /**
-     * @param string $userUuid
-     * @param string $username
-     * @param string $usernameCode
-     * @param Country|null $country
      * @param Language[]|null $languages
-     * @param PhoneNumber|null $phone
-     * @param string|null $imageUuid
-     * @param string|null $color
-     * @param string|null $description
      */
     public function __construct(
         public readonly string $userUuid,
         private string $username,
         private string $usernameCode,
+        private string $email,
+        public ?string $firstName,
+        public ?string $lastName,
+        public ?string $middleName,
         private ?array $languages,
         private ?PhoneNumber $phone,
         public ?Country $country,
         public ?string $imageUuid,
         public ?string $color,
-        public ?string $description
+        public ?string $description,
+        public bool $emailConfirmed = false
     ) {
         $this->assertUserUuid($this->userUuid);
 
@@ -44,6 +42,9 @@ class UserProfile
 
         $this->usernameCode = trim($this->usernameCode);
         $this->assertUsernameCode($this->usernameCode);
+
+        $this->email = trim($this->email);
+        $this->assertEmail($this->email);
 
         $this->assertLanguages($this->languages);
     }
@@ -56,14 +57,20 @@ class UserProfile
 
     private function assertUsername(string $username): void
     {
-        if (empty($username))
+        if (empty($username) || mb_strlen($username) > 32)
             throw new InvalidUserProfileNicknameException();
     }
 
     private function assertUsernameCode(string $usernameCode): void
     {
-        if (empty($usernameCode))
+        if (empty($usernameCode) || mb_strlen($usernameCode) > 10)
             throw new InvalidUserProfileNicknameCodeException();
+    }
+
+    private function assertEmail(string $email): void
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            throw new InvalidUserProfileEmailException($email);
     }
 
     /**
@@ -99,6 +106,17 @@ class UserProfile
         $cleanedUsernameCode = trim($usernameCode);
         $this->assertUsernameCode($cleanedUsernameCode);
         $this->usernameCode = $cleanedUsernameCode;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->assertEmail($email);
+        $this->email = $email;
     }
 
     public function getLanguages(): ?array
