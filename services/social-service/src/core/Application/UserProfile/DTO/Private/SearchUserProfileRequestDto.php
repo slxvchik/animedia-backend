@@ -1,0 +1,16 @@
+<?php
+
+namespace Code\Application\UserProfile\DTO\Private;
+
+final readonly class SearchUserProfileRequestDto
+{
+    public function __construct(
+        public ?string $userUuid,
+        public ?string $email,
+        public ?string $username,
+        public ?string $usernameCode,
+        public ?string $firstName,
+        public ?string $lastName,
+        public ?string $countryIsoCode
+    ) {}
+}

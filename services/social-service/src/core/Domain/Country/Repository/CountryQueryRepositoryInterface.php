@@ -17,5 +17,6 @@ interface CountryQueryRepositoryInterface
     /**
      * @return Page<Country>
      */
-    public function search(?string $name, ?bool $isActive, Pageable $pageable): Page;
+    public function search(?string $countryIsoCode, ?string $name, ?bool $isActive, Pageable $pageable): Page;
+    public function existsByIsoCode(string $isoCode): bool;
 }
