@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Language\Repository;
 
 use Core\Domain\Language\Entity\Language;
@@ -12,5 +14,6 @@ interface LanguageQueryRepositoryInterface
     /**
      * @return Page<Language>
      */
-    public function search(?string $name, ?bool $isActive, Pageable $pageable): Page;
+    public function search(Pageable $pageable, ?bool $active, ?string $languageIsoCode = null, ?string $name = null): Page;
+    public function existsByIsoCode(string $languageIsoCode): bool;
 }

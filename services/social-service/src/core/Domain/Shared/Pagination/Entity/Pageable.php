@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Shared\Pagination\Entity;
 
-readonly class Pageable
+final readonly class Pageable
 {
     public function __construct(
         public int $page,
         public int $perPage,
-        public ?Sort $sort
+        public ?Sort $sort = null
     ) {}
 }

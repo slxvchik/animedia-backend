@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\PhoneCode\DTO\Public;
 
-use Core\Application\Country\DTO\Private\CountryDto;
+use Core\Application\Country\DTO\Public\CountryResponseDto;
 
 final readonly class PhoneCodeResponseDto
 {
     public function __construct(
-        public CountryDto $country,
-        public string     $phoneCode
+        public string $phoneCode,
+        public CountryResponseDto $country
     ) {}
 }

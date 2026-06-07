@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Country\Repository;
 
 use Core\Domain\Country\Entity\Country;
@@ -13,10 +15,10 @@ interface CountryQueryRepositoryInterface
      * @param string[] $isoCodeList
      * @return Country[]
      */
-    public function findByIsoCodeList(array $isoCodeList): array;
+    public function findByIsoCodeList(array $isoCodeList, ?bool $active = null): array;
     /**
      * @return Page<Country>
      */
-    public function search(?string $countryIsoCode, ?string $name, ?bool $isActive, Pageable $pageable): Page;
+    public function search(Pageable $pageable, ?bool $active, ?string $countryIsoCode = null, ?string $name = null): Page;
     public function existsByIsoCode(string $isoCode): bool;
 }

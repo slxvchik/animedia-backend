@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Shared\Pagination\Entity;
 
 /**
  * @template T
  */
-readonly class Page
+final readonly class Page
 {
     /**
      * @param T[] $content

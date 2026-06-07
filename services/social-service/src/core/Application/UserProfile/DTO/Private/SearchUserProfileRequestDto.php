@@ -1,6 +1,8 @@
 <?php
 
-namespace Code\Application\UserProfile\DTO\Private;
+declare(strict_types=1);
+
+namespace Core\Application\UserProfile\DTO\Private;
 
 final readonly class SearchUserProfileRequestDto
 {

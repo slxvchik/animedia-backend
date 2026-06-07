@@ -1,9 +1,11 @@
 <?php
 
-namespace Code\Application\UserProfile\UseCase\Public;
+declare(strict_types=1);
 
-use Code\Application\UserProfile\DTO\Public\UserProfileResponseDto;
-use Code\Application\UserProfile\DTO\Public\UserProfileSearchRequestDto;
+namespace Core\Application\UserProfile\UseCase\Public;
+
+use Core\Application\UserProfile\DTO\Public\UserProfileResponseDto;
+use Core\Application\UserProfile\DTO\Public\UserProfileSearchRequestDto;
 use Core\Domain\Shared\Pagination\Entity\Page;
 
 interface SearchUserProfileUseCase

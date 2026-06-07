@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Language\Repository;
 
 use Core\Domain\Language\Entity\Language;

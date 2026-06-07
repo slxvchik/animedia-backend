@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\Country\UseCase\Public;
 
 use Core\Application\Country\DTO\Public\CountryResponseDto;

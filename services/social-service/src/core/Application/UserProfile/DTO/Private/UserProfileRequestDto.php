@@ -1,8 +1,10 @@
 <?php
 
-namespace Code\Application\UserProfile\DTO\Private;
+declare(strict_types=1);
 
-use Code\Application\UserProfile\DTO\PhoneNumberDto;
+namespace Core\Application\UserProfile\DTO\Private;
+
+use Core\Application\UserProfile\DTO\PhoneNumberDto;
 
 final readonly class UserProfileRequestDto
 {

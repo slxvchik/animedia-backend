@@ -1,6 +1,8 @@
 <?php
 
-namespace Code\Application\UserProfile\DTO\Public;
+declare(strict_types=1);
+
+namespace Core\Application\UserProfile\DTO\Public;
 
 use Core\Application\Country\DTO\Public\CountryResponseDto;
 use Core\Application\Language\DTO\Public\LanguageResponseDto;

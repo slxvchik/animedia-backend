@@ -1,8 +1,10 @@
 <?php
 
-namespace Code\Application\UserProfile\UseCase\Public;
+declare(strict_types=1);
 
-use Code\Application\UserProfile\DTO\Public\UserProfileResponseDto;
+namespace Core\Application\UserProfile\UseCase\Public;
+
+use Core\Application\UserProfile\DTO\Public\UserProfileResponseDto;
 
 interface GetGuestUserProfileUseCase
 {

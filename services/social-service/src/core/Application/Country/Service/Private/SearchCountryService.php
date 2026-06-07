@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\Country\Service\Private;
 
 use Core\Application\Country\DTO\Private\CountryDto;
-use Core\Application\Country\Mapper\CountryApplicationMapper;
+use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\Country\UseCase\Private\SearchCountryUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
 use Core\Domain\Shared\Pagination\Entity\Page;
@@ -13,27 +15,27 @@ final readonly class SearchCountryService implements SearchCountryUseCase
 {
     public function __construct(
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private CountryApplicationMapper $countryApplicationMapper
+        private CountryApplicationMapperInterface $countryApplicationMapper
     ) {}
 
     /**
      * @return Page<CountryDto>
      */
+    #[\Override]
     public function execute(?string $countryIsoCode, ?string $name, ?bool $isActive, Pageable $pageable): Page
     {
-        $pageCountryEntityList = $this->countryQueryRepository->search(
-            $countryIsoCode,
-            $name,
-            $isActive,
-            $pageable
+        $countryPage = $this->countryQueryRepository->search(
+            pageable: $pageable,
+            active: $isActive,
+            countryIsoCode: $countryIsoCode,
+            name: $name
         );
 
         $countryDtoList = [];
-        $countryEntityList = $pageCountryEntityList->content;
-        foreach ($countryEntityList as $countryEntity) {
-            $countryDtoList[] = $this->countryApplicationMapper->toCountryDto($countryEntity);
+        foreach ($countryPage->content as $countryEntity) {
+            $countryDtoList[] = $this->countryApplicationMapper->toPrivateCountryDto($countryEntity);
         }
 
-        return $pageCountryEntityList->changeContent($countryDtoList);
+        return $countryPage->changeContent($countryDtoList);
     }
 }

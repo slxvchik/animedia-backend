@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\Country\Service\Private;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
@@ -14,11 +16,13 @@ final readonly class DeleteCountryService implements DeleteCountryUseCase
         private CountryCommandRepositoryInterface $countryCommandRepository
     ) {}
 
+    #[\Override]
     public function execute(string $countryIsoCode): void
     {
         $exists = $this->countryQueryRepository->existsByIsoCode($countryIsoCode);
-        if (!$exists)
+        if (!$exists) {
             throw new CountryNotFoundException($countryIsoCode);
+        }
 
         $this->countryCommandRepository->delete($countryIsoCode);
     }

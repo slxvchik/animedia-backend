@@ -1,8 +1,10 @@
 <?php
 
-namespace Code\Application\UserProfile\UseCase\Private;
+declare(strict_types=1);
 
-use Code\Application\UserProfile\DTO\Private\UserProfileResponseDto;
+namespace Core\Application\UserProfile\UseCase\Private;
+
+use Core\Application\UserProfile\DTO\Private\UserProfileResponseDto;
 
 interface GetUserProfileUseCase
 {

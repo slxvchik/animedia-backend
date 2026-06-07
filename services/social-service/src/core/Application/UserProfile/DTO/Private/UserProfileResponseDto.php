@@ -1,10 +1,10 @@
 <?php
 
-namespace Code\Application\UserProfile\DTO\Private;
+declare(strict_types=1);
 
-use Code\Application\UserProfile\DTO\PhoneNumberDto;
-use Core\Application\Country\DTO\Public\CountryResponseDto;
-use Core\Application\Language\DTO\Public\LanguageResponseDto;
+namespace Core\Application\UserProfile\DTO\Private;
+
+use Core\Application\UserProfile\DTO\PhoneNumberDto;
 
 final readonly class UserProfileResponseDto
 {

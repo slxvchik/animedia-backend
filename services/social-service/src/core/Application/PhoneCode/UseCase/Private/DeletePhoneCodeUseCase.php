@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\PhoneCode\UseCase\Private;
 
 interface DeletePhoneCodeUseCase
 {
-    public function execute(string $phoneCode): void;
+    public function execute(string $countryIsoCode): void;
 }
