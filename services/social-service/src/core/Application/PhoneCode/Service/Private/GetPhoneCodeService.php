@@ -21,9 +21,12 @@ final readonly class GetPhoneCodeService implements GetPhoneCodeUseCase
     ) {}
 
     #[\Override]
-    public function execute(string $countryIsoCode): PhoneCodeResponseDto
+    public function execute(string $countryIsoCode, string $phoneIsoCode): PhoneCodeResponseDto
     {
-        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCode($countryIsoCode);
+        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCodeAndPhoneIsoCode(
+            countryIsoCode: $countryIsoCode,
+            phoneIsoCode: $phoneIsoCode
+        );
         if ($phoneCode === null) {
             throw new PhoneCodeNotFoundException($countryIsoCode);
         }

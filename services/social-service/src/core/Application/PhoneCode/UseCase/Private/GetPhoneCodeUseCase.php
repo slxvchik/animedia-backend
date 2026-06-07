@@ -8,5 +8,5 @@ use Core\Application\PhoneCode\DTO\Private\PhoneCodeResponseDto;
 
 interface GetPhoneCodeUseCase
 {
-    public function execute(string $countryIsoCode): PhoneCodeResponseDto;
+    public function execute(string $countryIsoCode, string $phoneIsoCode): PhoneCodeResponseDto;
 }

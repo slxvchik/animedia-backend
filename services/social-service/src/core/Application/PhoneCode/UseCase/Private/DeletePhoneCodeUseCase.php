@@ -6,5 +6,5 @@ namespace Core\Application\PhoneCode\UseCase\Private;
 
 interface DeletePhoneCodeUseCase
 {
-    public function execute(string $countryIsoCode): void;
+    public function execute(string $countryIsoCode, string $phoneIsoCode): void;
 }

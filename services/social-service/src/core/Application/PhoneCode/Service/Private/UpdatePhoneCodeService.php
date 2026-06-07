@@ -26,7 +26,10 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
     #[\Override]
     public function execute(PhoneCodeRequestDto $phoneCodeRequestDto): PhoneCodeResponseDto
     {
-        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCode($phoneCodeRequestDto->countryIsoCode);
+        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCodeAndPhoneIsoCode(
+            countryIsoCode: $phoneCodeRequestDto->countryIsoCode,
+            phoneIsoCode: $phoneCodeRequestDto->phoneCode
+        );
         if ($phoneCode === null) {
             throw new PhoneCodeNotFoundException($phoneCodeRequestDto->countryIsoCode);
         }
@@ -37,7 +40,6 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
         }
 
         $phoneCode->update(
-            phoneCode: $phoneCodeRequestDto->phoneCode,
             active: $phoneCodeRequestDto->isActive
         );
 

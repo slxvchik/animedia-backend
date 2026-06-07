@@ -14,7 +14,7 @@ interface PhoneCodeQueryRepositoryInterface
      * @return PhoneCode[]
      */
     public function findAll(): array;
-    public function findByCountryIsoCode(string $countryIsoCode): ?PhoneCode;
+    public function findByCountryIsoCodeAndPhoneIsoCode(string $countryIsoCode, string $phoneIsoCode): ?PhoneCode;
     /**
      * @param string[] $countryIsoCodeList
      * @return PhoneCode[]

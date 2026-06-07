@@ -9,7 +9,7 @@ use Core\Domain\PhoneCode\Exception\InvalidPhoneCodeException;
 final class PhoneCode
 {
     public readonly string $countryIsoCode;
-    public private(set) string $code;
+    public readonly string $code;
     public private(set) bool $active;
 
     public function __construct(
@@ -32,10 +32,8 @@ final class PhoneCode
     }
 
     public function update(
-        string $phoneCode,
         bool $active = false
     ): void {
-        $this->code = $phoneCode;
         $this->active = $active;
     }
 }
