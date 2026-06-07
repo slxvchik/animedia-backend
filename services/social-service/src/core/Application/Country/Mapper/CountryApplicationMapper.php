@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Country\Mapper;
 
-use Core\Application\Country\DTO\Private\CountryDto;
-use Core\Application\Country\DTO\Public\CountryResponseDto;
+use Core\Application\Country\DTO\CountryDto;
+use Core\Application\Country\DTO\CountryPublicResponseDto;
 use Core\Domain\Country\Entity\Country;
 
 final readonly class CountryApplicationMapper implements CountryApplicationMapperInterface
@@ -31,9 +31,9 @@ final readonly class CountryApplicationMapper implements CountryApplicationMappe
     }
 
     #[\Override]
-    public function toPublicCountryResponseDto(Country $country): CountryResponseDto
+    public function toPublicCountryResponseDto(Country $country): CountryPublicResponseDto
     {
-        return new CountryResponseDto(
+        return new CountryPublicResponseDto(
             countryIsoCode: $country->isoCode,
             name: $country->name
         );

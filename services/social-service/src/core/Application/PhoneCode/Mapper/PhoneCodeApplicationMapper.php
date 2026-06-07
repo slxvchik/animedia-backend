@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Mapper;
 
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
-use Core\Application\PhoneCode\DTO\Private\PhoneCodeRequestDto;
-use Core\Application\PhoneCode\DTO\Private\PhoneCodeResponseDto as PrivatePhoneCodeResponseDto;
-use Core\Application\PhoneCode\DTO\Public\PhoneCodeResponseDto as PublicPhoneCodeResponseDto;
+use Core\Application\PhoneCode\DTO\PhoneCodePrivateResponseDto as PrivatePhoneCodeResponseDto;
+use Core\Application\PhoneCode\DTO\CommandPhoneCodeRequestDto;
+use Core\Application\PhoneCode\DTO\PhoneCodePublicResponseDto as PublicPhoneCodeResponseDto;
 use Core\Domain\Country\Entity\Country;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
 
@@ -18,7 +18,7 @@ final readonly class PhoneCodeApplicationMapper implements PhoneCodeApplicationM
     ) {}
 
     #[\Override]
-    public function toPhoneCode(PhoneCodeRequestDto $phoneCodeRequestDto): PhoneCode
+    public function toPhoneCode(CommandPhoneCodeRequestDto $phoneCodeRequestDto): PhoneCode
     {
         return new PhoneCode(
             countryIsoCode: $phoneCodeRequestDto->countryIsoCode,

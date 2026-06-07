@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Language\Mapper;
 
-use Core\Application\Language\DTO\Private\LanguageDto;
-use Core\Application\Language\DTO\Public\LanguageResponseDto;
+use Core\Application\Language\DTO\LanguageDto;
+use Core\Application\Language\DTO\LanguagePublicResponseDto;
 use Core\Domain\Language\Entity\Language;
 
 class LanguageApplicationMapper implements LanguageApplicationMapperInterface
@@ -31,9 +31,9 @@ class LanguageApplicationMapper implements LanguageApplicationMapperInterface
     }
 
     #[\Override]
-    public function toPublicLanguageResponseDto(Language $language): LanguageResponseDto
+    public function toPublicLanguageResponseDto(Language $language): LanguagePublicResponseDto
     {
-        return new LanguageResponseDto(
+        return new LanguagePublicResponseDto(
             languageIsoCode: $language->isoCode,
             name: $language->name
         );

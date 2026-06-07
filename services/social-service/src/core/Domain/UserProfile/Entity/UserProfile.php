@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Domain\UserProfile\Entity;
 
+use Core\Domain\Shared\Eventable\Eventable;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileEmailException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileIdException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileLanguageException;
@@ -13,6 +14,8 @@ use Core\Domain\UserProfile\ValueObject\PhoneNumber;
 
 final class UserProfile
 {
+    use Eventable;
+
     public readonly string $userUuid;
     public private(set) string $username
     {
@@ -54,6 +57,7 @@ final class UserProfile
     public private(set) ?string $color;
     public private(set) ?string $description;
     public private(set) bool $emailConfirmed;
+
     /**
      * @param string[]|null $languageIsoCodeList
      */
@@ -72,7 +76,8 @@ final class UserProfile
         ?string      $color,
         ?string      $description,
         bool         $emailConfirmed = false
-    ) {
+    )
+    {
         $this->assertUserUuid($userUuid);
         $this->userUuid = $userUuid;
 
@@ -134,8 +139,23 @@ final class UserProfile
         }
     }
 
-    public function update(): void
-    {
-
+    public function update(
+        string       $userUuid,
+        string       $username,
+        string       $usernameCode,
+        ?string      $firstName,
+        ?string      $lastName,
+        ?string      $middleName,
+        ?array       $languageIsoCodeList,
+        ?PhoneNumber $phone,
+        ?string      $countryIsoCode,
+        ?string      $imageUuid,
+        ?string      $color,
+        ?string      $description,
+        ?string      $email,
+        ?string      $verificationToken = null,
+        ?string      $plainPassword = null,
+        ?string      $currentPassword = null
+    ): void {
     }
 }
