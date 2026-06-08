@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Core\Application\Language\Service\Query;
 
-use Core\Application\Language\DTO\LanguagePublicResponseDto;
+use Core\Application\Language\DTO\LanguageResponseDto;
 use Core\Application\Language\Mapper\LanguageApplicationMapperInterface;
-use Core\Application\Language\UseCase\Query\SearchLanguageUserUseCase;
+use Core\Application\Language\UseCase\Query\GetAllLanguageForIndexUseCase;
 use Core\Domain\Language\Repository\LanguageQueryRepositoryInterface;
 use Core\Domain\Shared\Pagination\Entity\Page;
 use Core\Domain\Shared\Pagination\Entity\Pageable;
 
-final readonly class SearchLanguageUserService implements SearchLanguageUserUseCase
+final readonly class GetAllLanguageForIndexService implements GetAllLanguageForIndexUseCase
 {
     public function __construct(
         private LanguageQueryRepositoryInterface $languageQueryRepository,
@@ -19,21 +19,18 @@ final readonly class SearchLanguageUserService implements SearchLanguageUserUseC
     ) {}
 
     /**
-     * @return Page<LanguagePublicResponseDto>
+     * @return Page<LanguageResponseDto>
      */
     #[\Override]
-    public function execute(?string $languageIsoCode, ?string $name, Pageable $pageable): Page
+    public function execute(Pageable $pageable): Page
     {
-        $languagePage = $this->languageQueryRepository->search(
-            pageable: $pageable,
-            active: true,
-            languageIsoCode: $languageIsoCode,
-            name: $name
+        $languagePage = $this->languageQueryRepository->findAll(
+            pageable: $pageable
         );
 
         $languageResponseDtoList = [];
         foreach ($languagePage->content as $language) {
-            $languageResponseDtoList[] = $this->languageApplicationMapper->toPublicLanguageResponseDto($language);
+            $languageResponseDtoList[] = $this->languageApplicationMapper->toLanguageResponseDto($language);
         }
 
         return $languagePage->changeContent($languageResponseDtoList);

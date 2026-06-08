@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Core\Application\PhoneCode\Service\Query;
 
-use Core\Application\PhoneCode\DTO\PhoneCodePrivateResponseDto;
+use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
-use Core\Application\PhoneCode\UseCase\Query\SearchPhoneCodeUseCase;
+use Core\Application\PhoneCode\UseCase\Query\GetPhoneCodeListUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
 use Core\Domain\PhoneCode\Repository\PhoneCodeQueryRepositoryInterface;
-use Core\Domain\Shared\Pagination\Entity\Page;
-use Core\Domain\Shared\Pagination\Entity\Pageable;
 
-final readonly class SearchPhoneCodeService implements SearchPhoneCodeUseCase
+final readonly class GetPhoneCodeListService implements GetPhoneCodeListUseCase
 {
     public function __construct(
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
@@ -22,25 +20,22 @@ final readonly class SearchPhoneCodeService implements SearchPhoneCodeUseCase
     ) {}
 
     /**
-     * @return Page<PhoneCodePrivateResponseDto>
+     * @param string[] $phoneCodeUuidList
+     * @return PhoneCodeResponseDto[]
      */
     #[\Override]
-    public function execute(?string $phoneCode, ?bool $isActive, Pageable $pageable): Page
+    public function execute(array $phoneCodeUuidList): array
     {
-        $phoneCodesPage = $this->phoneCodeQueryRepository->search(
-            pageable: $pageable,
-            active: $isActive,
-            phoneCode: $phoneCode
-        );
+        $phoneCodes = $this->phoneCodeQueryRepository->findByPhoneCodeUuidList($phoneCodeUuidList);
 
-        if (empty($phoneCodesPage->content)) {
-            return $phoneCodesPage;
+        if (empty($phoneCodes)) {
+            return $phoneCodes;
         }
 
         $countryIsoCodes = array_unique(
             array_map(
                 static fn (PhoneCode $code) => $code->countryIsoCode,
-                $phoneCodesPage->content
+                $phoneCodes
             )
         );
 
@@ -54,14 +49,14 @@ final readonly class SearchPhoneCodeService implements SearchPhoneCodeUseCase
         }
 
         $phoneCodeResponseDtoList = [];
-        foreach ($phoneCodesPage->content as $phoneCode) {
+        foreach ($phoneCodes as $phoneCode) {
             $countryOrNull = $countriesByIsoCodeMap[$phoneCode->countryIsoCode] ?? null;
-            $phoneCodeResponseDtoList[] = $this->phoneCodeApplicationMapper->toPrivatePhoneCodeResponseDto(
+            $phoneCodeResponseDtoList[] = $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
                 phoneCode: $phoneCode,
                 country: $countryOrNull
             );
         }
 
-        return $phoneCodesPage->changeContent($phoneCodeResponseDtoList);
+        return $phoneCodeResponseDtoList;
     }
 }

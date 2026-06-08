@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Language\Service\Command;
 
-use Core\Application\Language\DTO\LanguageDto;
+use Core\Application\Language\DTO\LanguageCommandDto;
+use Core\Application\Language\DTO\LanguageResponseDto;
 use Core\Application\Language\Exception\LanguageNotFoundException;
 use Core\Application\Language\Mapper\LanguageApplicationMapperInterface;
 use Core\Application\Language\UseCase\Command\UpdateLanguageUseCase;
@@ -20,9 +21,9 @@ final readonly class UpdateLanguageService implements UpdateLanguageUseCase
     ) {}
 
     #[\Override]
-    public function execute(LanguageDto $languageDto): LanguageDto
+    public function execute(LanguageCommandDto $languageDto): LanguageResponseDto
     {
-        $language = $this->languageQueryRepository->findByCode($languageDto->languageIsoCode);
+        $language = $this->languageQueryRepository->findByIsoCode($languageDto->languageIsoCode);
         if ($language === null) {
             throw new LanguageNotFoundException($languageDto->languageIsoCode);
         }
@@ -34,6 +35,6 @@ final readonly class UpdateLanguageService implements UpdateLanguageUseCase
 
         $updated = $this->languageCommandRepository->update($language);
 
-        return $this->languageApplicationMapper->toPrivateLanguageDto($updated);
+        return $this->languageApplicationMapper->toLanguageResponseDto($updated);
     }
 }

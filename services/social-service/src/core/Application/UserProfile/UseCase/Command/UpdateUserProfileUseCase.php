@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Core\Application\UserProfile\UseCase\Command;
 
-use Core\Application\UserProfile\DTO\CommandUserProfileRequestDto;
-use Core\Application\UserProfile\DTO\UserProfilePrivateResponseDto;
+use Core\Application\UserProfile\DTO\CreateUserProfileCommandDto;
+use Core\Application\UserProfile\DTO\UserProfileResponseDto;
 
 interface UpdateUserProfileUseCase
 {
-    public function execute(CommandUserProfileRequestDto $userProfileDto): UserProfilePrivateResponseDto;
+    public function execute(CreateUserProfileCommandDto $userProfileDto): UserProfileResponseDto;
 }

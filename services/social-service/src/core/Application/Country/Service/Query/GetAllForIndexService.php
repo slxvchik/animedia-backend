@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Core\Application\Country\Service\Query;
 
-use Core\Application\Country\DTO\CountryDto;
+use Core\Application\Country\DTO\CountryCommandDto;
+use Core\Application\Country\DTO\CountryResponseDto;
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
-use Core\Application\Country\UseCase\Query\SearchCountryAdminUseCase;
+use Core\Application\Country\UseCase\Query\GetAllForIndexUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
 use Core\Domain\Shared\Pagination\Entity\Page;
 use Core\Domain\Shared\Pagination\Entity\Pageable;
 
-final readonly class SearchCountryAdminService implements SearchCountryAdminUseCase
+final readonly class GetAllForIndexService implements GetAllForIndexUseCase
 {
     public function __construct(
         private CountryQueryRepositoryInterface $countryQueryRepository,
@@ -19,21 +20,18 @@ final readonly class SearchCountryAdminService implements SearchCountryAdminUseC
     ) {}
 
     /**
-     * @return Page<CountryDto>
+     * @return Page<CountryResponseDto>
      */
     #[\Override]
-    public function execute(?string $countryIsoCode, ?string $name, ?bool $isActive, Pageable $pageable): Page
+    public function execute(Pageable $pageable): Page
     {
-        $countryPage = $this->countryQueryRepository->search(
-            pageable: $pageable,
-            active: $isActive,
-            countryIsoCode: $countryIsoCode,
-            name: $name
+        $countryPage = $this->countryQueryRepository->findAll(
+            pageable: $pageable
         );
 
         $countryDtoList = [];
         foreach ($countryPage->content as $countryEntity) {
-            $countryDtoList[] = $this->countryApplicationMapper->toCountryDto($countryEntity);
+            $countryDtoList[] = $this->countryApplicationMapper->toCountryResponseDto($countryEntity);
         }
 
         return $countryPage->changeContent($countryDtoList);

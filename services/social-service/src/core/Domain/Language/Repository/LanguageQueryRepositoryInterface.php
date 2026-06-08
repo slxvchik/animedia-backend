@@ -10,10 +10,19 @@ use Core\Domain\Shared\Pagination\Entity\Pageable;
 
 interface LanguageQueryRepositoryInterface
 {
-    public function findByCode(string $languageIsoCode): ?Language;
     /**
+     * @param Pageable<Language> $pageable
      * @return Page<Language>
      */
-    public function search(Pageable $pageable, ?bool $active, ?string $languageIsoCode = null, ?string $name = null): Page;
+    public function findAll(Pageable $pageable): Page;
+
+    public function findByIsoCode(string $isoCode): ?Language;
+
+    /**
+     * @param string[] $isoCodeList
+     * @return Language[]
+     */
+    public function findByIsoCodeList(array $isoCodeList): array;
+
     public function existsByIsoCode(string $languageIsoCode): bool;
 }

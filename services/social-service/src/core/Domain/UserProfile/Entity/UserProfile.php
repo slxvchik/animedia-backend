@@ -18,26 +18,27 @@ final class UserProfile
 
     public readonly string $userUuid;
     public private(set) string $username
-    {
-        set {
-            $this->username = trim($value);
-            $this->assertUsername($this->username);
+        {
+            set {
+                $this->username = trim($value);
+                $this->assertUsername($this->username);
+            }
         }
-    }
     public private(set) string $usernameCode
-    {
-        set {
-            $this->usernameCode = trim($value);
-            $this->assertUsernameCode($this->usernameCode);
+        {
+            set {
+                $this->usernameCode = trim($value);
+                $this->assertUsernameCode($this->usernameCode);
+            }
         }
-    }
     public private(set) string $email
-    {
-        set {
-            $this->email = trim($value);
-            $this->assertEmail($this->email);
+        {
+            set {
+                $this->email = trim($value);
+                $this->assertEmail($this->email);
+            }
         }
-    }
+    public private(set) bool $emailConfirmed;
     public private(set) ?string $firstName;
     public private(set) ?string $lastName;
     public private(set) ?string $middleName;
@@ -45,27 +46,27 @@ final class UserProfile
      * @var string[]|null
      */
     public private(set) ?array $languageIsoCodeList
-    {
-        set {
-            $this->languageIsoCodeList = $value;
-            $this->assertLanguageIsoCodes($this->languageIsoCodeList);
+        {
+            set {
+                $this->languageIsoCodeList = $value;
+                $this->assertLanguageIsoCodes($this->languageIsoCodeList);
+            }
         }
-    }
     public private(set) ?PhoneNumber $phone;
     public private(set) ?string $countryIsoCode;
     public private(set) ?string $imageUuid;
     public private(set) ?string $color;
     public private(set) ?string $description;
-    public private(set) bool $emailConfirmed;
 
     /**
      * @param string[]|null $languageIsoCodeList
      */
     public function __construct(
-        string       $userUuid,
+        ?string      $userUuid,
         string       $username,
         string       $usernameCode,
         string       $email,
+        bool         $emailConfirmed,
         ?string      $firstName,
         ?string      $lastName,
         ?string      $middleName,
@@ -74,8 +75,7 @@ final class UserProfile
         ?string      $countryIsoCode,
         ?string      $imageUuid,
         ?string      $color,
-        ?string      $description,
-        bool         $emailConfirmed = false
+        ?string      $description
     ) {
         $this->assertUserUuid($userUuid);
         $this->userUuid = $userUuid;
@@ -83,6 +83,7 @@ final class UserProfile
         $this->username = $username;
         $this->usernameCode = $usernameCode;
         $this->email = $email;
+        $this->emailConfirmed = $emailConfirmed;
         $this->languageIsoCodeList = $languageIsoCodeList;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -92,11 +93,13 @@ final class UserProfile
         $this->imageUuid = $imageUuid;
         $this->color = $color;
         $this->description = $description;
-        $this->emailConfirmed = $emailConfirmed;
     }
 
-    private function assertUserUuid(string $userUuid): void
+    private function assertUserUuid(?string $userUuid): void
     {
+        if ($userUuid === null) {
+            return;
+        }
         if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $userUuid)) {
             throw new InvalidUserProfileIdException();
         }
@@ -138,10 +141,10 @@ final class UserProfile
         }
     }
 
+    /**
+     * @param string[]|null $languageIsoCodeList
+     */
     public function update(
-        string       $userUuid,
-        string       $username,
-        string       $usernameCode,
         ?string      $firstName,
         ?string      $lastName,
         ?string      $middleName,
@@ -150,11 +153,24 @@ final class UserProfile
         ?string      $countryIsoCode,
         ?string      $imageUuid,
         ?string      $color,
-        ?string      $description,
-        ?string      $email,
-        ?string      $verificationToken = null,
-        ?string      $plainPassword = null,
-        ?string      $currentPassword = null
+        ?string      $description
     ): void {
+    }
+
+    //TODO: generate event - confirm email
+    public function updateEmail(string $email): void
+    {
+
+    }
+
+    public function confirmEmail(string $email, string $token): void
+    {
+
+    }
+
+    //TODO: generate event - confirm phone
+    public function updatePhoneNumber(?PhoneNumber $phoneNumber): void
+    {
+
     }
 }

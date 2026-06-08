@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\UserProfile\DTO;
 
-final readonly class CommandUserProfileRequestDto
+final readonly class
+UpdateUserProfileCommandDto
 {
     /**
      * @param string[]|null $languageIsoCodeList

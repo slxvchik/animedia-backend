@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Command;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
-use Core\Application\PhoneCode\DTO\PhoneCodePrivateResponseDto;
-use Core\Application\PhoneCode\DTO\CommandPhoneCodeRequestDto;
+use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
+use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeNotFoundException;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
 use Core\Application\PhoneCode\UseCase\Command\UpdatePhoneCodeUseCase;
@@ -24,11 +24,10 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
     ) {}
 
     #[\Override]
-    public function execute(CommandPhoneCodeRequestDto $phoneCodeRequestDto): PhoneCodePrivateResponseDto
+    public function execute(UpdatePhoneCodeCommandDto $phoneCodeRequestDto): PhoneCodeResponseDto
     {
-        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCodeAndPhoneIsoCode(
-            countryIsoCode: $phoneCodeRequestDto->countryIsoCode,
-            phoneIsoCode: $phoneCodeRequestDto->phoneCode
+        $phoneCode = $this->phoneCodeQueryRepository->findByPhoneCodeUuid(
+            phoneCodeUuid: $phoneCodeRequestDto->uuid
         );
         if ($phoneCode === null) {
             throw new PhoneCodeNotFoundException($phoneCodeRequestDto->countryIsoCode);
@@ -45,7 +44,7 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
 
         $updated = $this->phoneCodeCommandRepository->update($phoneCode);
 
-        return $this->phoneCodeApplicationMapper->toPrivatePhoneCodeResponseDto(
+        return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
             phoneCode: $updated,
             country: $country
         );

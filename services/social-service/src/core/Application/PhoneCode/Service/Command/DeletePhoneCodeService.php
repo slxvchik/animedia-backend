@@ -17,15 +17,14 @@ final readonly class DeletePhoneCodeService implements DeletePhoneCodeUseCase
     ) {}
 
     #[\Override]
-    public function execute(string $countryIsoCode, string $phoneIsoCode): void
+    public function execute(string $phoneCodeUuid): void
     {
-        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCodeAndPhoneIsoCode(
-            countryIsoCode: $countryIsoCode,
-            phoneIsoCode: $phoneIsoCode
+        $phoneCode = $this->phoneCodeQueryRepository->findByPhoneCodeUuid(
+            phoneCodeUuid: $phoneCodeUuid
         );
         if ($phoneCode === null) {
-            throw new PhoneCodeNotFoundException($countryIsoCode);
+            throw new PhoneCodeNotFoundException($phoneCodeUuid);
         }
-        $this->phoneCodeCommandRepository->delete($countryIsoCode);
+        $this->phoneCodeCommandRepository->delete($phoneCodeUuid);
     }
 }

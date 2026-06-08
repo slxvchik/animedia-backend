@@ -10,5 +10,5 @@ interface PhoneCodeCommandRepositoryInterface
 {
     public function create(PhoneCode $phoneCode): PhoneCode;
     public function update(PhoneCode $phoneCode): PhoneCode;
-    public function delete(string $phoneCode): void;
+    public function delete(string $phoneCodeUuid): void;
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Mapper;
 
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
-use Core\Application\PhoneCode\DTO\PhoneCodePrivateResponseDto as PrivatePhoneCodeResponseDto;
-use Core\Application\PhoneCode\DTO\CommandPhoneCodeRequestDto;
-use Core\Application\PhoneCode\DTO\PhoneCodePublicResponseDto as PublicPhoneCodeResponseDto;
+use Core\Application\PhoneCode\DTO\CreatePhoneCodeCommandDto;
+use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
+use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 use Core\Domain\Country\Entity\Country;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
 
@@ -18,32 +18,35 @@ final readonly class PhoneCodeApplicationMapper implements PhoneCodeApplicationM
     ) {}
 
     #[\Override]
-    public function toPhoneCode(CommandPhoneCodeRequestDto $phoneCodeRequestDto): PhoneCode
+    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto): PhoneCode
     {
         return new PhoneCode(
-            countryIsoCode: $phoneCodeRequestDto->countryIsoCode,
-            phoneCode: $phoneCodeRequestDto->phoneCode,
-            active: $phoneCodeRequestDto->isActive
+            null,
+            countryIsoCode: $phoneCodeCommandDto->countryIsoCode,
+            phoneCode: $phoneCodeCommandDto->phoneCode,
+            active: $phoneCodeCommandDto->isActive
         );
     }
 
     #[\Override]
-    public function toPrivatePhoneCodeResponseDto(PhoneCode $phoneCode, ?Country $country): PrivatePhoneCodeResponseDto
+    public function fromUpdatePhoneCodeCommandDto(UpdatePhoneCodeCommandDto $phoneCodeCommandDto): PhoneCode
     {
-        $countryDtoOrNull = $country !== null ? $this->countryApplicationMapper->toCountryDto($country) : null;
-        return new PrivatePhoneCodeResponseDto(
+        return new PhoneCode(
+            uuid: $phoneCodeCommandDto->uuid,
+            countryIsoCode: $phoneCodeCommandDto->countryIsoCode,
+            phoneCode: $phoneCodeCommandDto->phoneCode,
+            active: $phoneCodeCommandDto->isActive
+        );
+    }
+
+    #[\Override]
+    public function toPhoneCodeResponseDto(PhoneCode $phoneCode, Country $country): PhoneCodeResponseDto
+    {
+        return new PhoneCodeResponseDto(
+            uuid: $phoneCode->uuid,
             phoneCode: $phoneCode->code,
             isActive: $phoneCode->active,
-            country: $countryDtoOrNull,
-        );
-    }
-
-    #[\Override]
-    public function toPublicPhoneCodeResponseDto(PhoneCode $phoneCode, Country $country): PublicPhoneCodeResponseDto
-    {
-        return new PublicPhoneCodeResponseDto(
-            phoneCode: $phoneCode->code,
-            country: $this->countryApplicationMapper->toPublicCountryResponseDto($country),
+            country: $this->countryApplicationMapper->toCountryResponseDto($country)
         );
     }
 }

@@ -11,19 +11,18 @@ use Core\Domain\Shared\Pagination\Entity\Pageable;
 interface PhoneCodeQueryRepositoryInterface
 {
     /**
-     * @return PhoneCode[]
-     */
-    public function findAll(): array;
-    public function findByCountryIsoCodeAndPhoneIsoCode(string $countryIsoCode, string $phoneIsoCode): ?PhoneCode;
-    /**
-     * @param string[] $countryIsoCodeList
-     * @return PhoneCode[]
-     */
-    public function findByCountryIsoCodeList(array $countryIsoCodeList, ?bool $active = null): array;
-
-    /**
+     * @param Pageable<PhoneCode> $pageable
      * @return Page<PhoneCode>
      */
-    public function search(Pageable $pageable, ?bool $active, ?string $phoneCode = null): Page;
+    public function findAll(Pageable $pageable): Page;
+
+    public function findByPhoneCodeUuid(string $phoneCodeUuid): ?PhoneCode;
+
+    /**
+     * @param string[] $phoneCodeUuidList
+     * @return PhoneCode[]
+     */
+    public function findByPhoneCodeUuidList(array $phoneCodeUuidList): array;
+
     public function existsByCountryIsoCodeAndPhoneCode(string $countryIsoCode, string $phoneCode): bool;
 }

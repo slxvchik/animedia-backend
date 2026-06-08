@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace Core\Domain\UserProfile\ValueObject;
 
-use Core\Domain\PhoneCode\Entity\PhoneCode;
 use Core\Domain\UserProfile\Exception\InvalidPhoneNumberException;
 use Core\Domain\UserProfile\Validator\PhoneValidatorInterface;
 
 readonly class PhoneNumber
 {
     private function __construct(
-        public PhoneCode $code,
+        public string $code,
         public string $number,
         public bool $confirmed = false
     ) {}
 
     public static function create(
-        ?PhoneCode $code,
+        ?string $code,
         ?string $number,
         PhoneValidatorInterface $validator
     ): ?self {

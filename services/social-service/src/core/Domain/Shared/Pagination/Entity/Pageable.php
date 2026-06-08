@@ -8,7 +8,6 @@ final readonly class Pageable
 {
     public function __construct(
         public int $page,
-        public int $perPage,
-        public ?Sort $sort = null
+        public int $perPage
     ) {}
 }

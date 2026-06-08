@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Query;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
-use Core\Application\PhoneCode\DTO\PhoneCodePrivateResponseDto;
+use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeNotFoundException;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
 use Core\Application\PhoneCode\UseCase\Query\GetPhoneCodeUseCase;
@@ -21,22 +21,21 @@ final readonly class GetPhoneCodeService implements GetPhoneCodeUseCase
     ) {}
 
     #[\Override]
-    public function execute(string $countryIsoCode, string $phoneIsoCode): PhoneCodePrivateResponseDto
+    public function execute(string $phoneCodeUuid): PhoneCodeResponseDto
     {
-        $phoneCode = $this->phoneCodeQueryRepository->findByCountryIsoCodeAndPhoneIsoCode(
-            countryIsoCode: $countryIsoCode,
-            phoneIsoCode: $phoneIsoCode
+        $phoneCode = $this->phoneCodeQueryRepository->findByPhoneCodeUuid(
+            phoneCodeUuid: $phoneCodeUuid
         );
         if ($phoneCode === null) {
-            throw new PhoneCodeNotFoundException($countryIsoCode);
+            throw new PhoneCodeNotFoundException($phoneCodeUuid);
         }
 
-        $country = $this->countryQueryRepository->findByIsoCode($countryIsoCode);
+        $country = $this->countryQueryRepository->findByIsoCode($phoneCodeUuid);
         if ($country === null) {
-            throw new CountryNotFoundException($countryIsoCode);
+            throw new CountryNotFoundException($phoneCodeUuid);
         }
 
-        return $this->phoneCodeApplicationMapper->toPrivatePhoneCodeResponseDto(
+        return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
             phoneCode: $phoneCode,
             country: $country
         );

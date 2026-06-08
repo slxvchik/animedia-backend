@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Application\PhoneCode\DTO;
 
-final readonly class CommandPhoneCodeRequestDto
+final readonly class CreatePhoneCodeCommandDto
 {
     public function __construct(
         public string $countryIsoCode,

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Language\Service\Command;
 
-use Core\Application\Language\DTO\LanguageDto;
+use Core\Application\Language\DTO\LanguageCommandDto;
+use Core\Application\Language\DTO\LanguageResponseDto;
 use Core\Application\Language\Exception\LanguageExistsException;
 use Core\Application\Language\Mapper\LanguageApplicationMapperInterface;
 use Core\Application\Language\UseCase\Command\CreateLanguageUseCase;
@@ -20,7 +21,7 @@ final readonly class CreateLanguageService implements CreateLanguageUseCase
     ) {}
 
     #[\Override]
-    public function execute(LanguageDto $languageDto): LanguageDto
+    public function execute(LanguageCommandDto $languageDto): LanguageResponseDto
     {
         $exists = $this->languageQueryRepository->existsByIsoCode($languageDto->languageIsoCode);
         if ($exists) {
@@ -30,6 +31,6 @@ final readonly class CreateLanguageService implements CreateLanguageUseCase
         $language = $this->languageApplicationMapper->toLanguage($languageDto);
         $created = $this->languageCommandRepository->create($language);
 
-        return $this->languageApplicationMapper->toPrivateLanguageDto($created);
+        return $this->languageApplicationMapper->toLanguageResponseDto($created);
     }
 }

@@ -10,15 +10,19 @@ use Core\Domain\Shared\Pagination\Entity\Pageable;
 
 interface CountryQueryRepositoryInterface
 {
+    /**
+     * @param Pageable<Country> $pageable
+     * @return Page<Country>
+     */
+    public function findAll(Pageable $pageable): Page;
+
     public function findByIsoCode(string $isoCode): ?Country;
+
     /**
      * @param string[] $isoCodeList
      * @return Country[]
      */
-    public function findByIsoCodeList(array $isoCodeList, ?bool $active = null): array;
-    /**
-     * @return Page<Country>
-     */
-    public function search(Pageable $pageable, ?bool $active, ?string $countryIsoCode = null, ?string $name = null): Page;
+    public function findByIsoCodeList(array $isoCodeList): array;
+
     public function existsByIsoCode(string $isoCode): bool;
 }

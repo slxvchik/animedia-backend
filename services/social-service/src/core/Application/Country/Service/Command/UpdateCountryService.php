@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Country\Service\Command;
 
-use Core\Application\Country\DTO\CountryDto;
+use Core\Application\Country\DTO\CountryCommandDto;
+use Core\Application\Country\DTO\CountryResponseDto;
 use Core\Application\Country\Exception\CountryNotFoundException;
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\Country\UseCase\Command\UpdateCountryUseCase;
@@ -20,7 +21,7 @@ final readonly class UpdateCountryService implements UpdateCountryUseCase
     ) {}
 
     #[\Override]
-    public function execute(CountryDto $countryDto): CountryDto
+    public function execute(CountryCommandDto $countryDto): CountryResponseDto
     {
         $foundCountry = $this->countryQueryRepository->findByIsoCode($countryDto->countryIsoCode);
         if ($foundCountry === null) {
@@ -34,6 +35,6 @@ final readonly class UpdateCountryService implements UpdateCountryUseCase
 
         $updated = $this->countryCommandRepository->update($foundCountry);
 
-        return $this->countryApplicationMapper->toCountryDto($updated);
+        return $this->countryApplicationMapper->toCountryResponseDto($updated);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Core\Application\UserProfile\Service;
 
-use Core\Application\UserProfile\DTO\UserProfilePrivateResponseDto;
+use Core\Application\UserProfile\DTO\UserProfileResponseDto;
 use Core\Application\UserProfile\Mapper\UserProfileApplicationMapperInterface;
 use Core\Application\UserProfile\UseCase\Command\CreateUserProfileUseCase;
 use Core\Domain\UserProfile\Repository\UserProfileCommandRepositoryInterface;
@@ -17,7 +17,7 @@ final readonly class CreateUserProfileService implements CreateUserProfileUseCas
     ) {}
 
     #[\Override]
-    public function execute(UserProfilePrivateResponseDto $userProfileDto): UserProfilePrivateResponseDto
+    public function execute(UserProfileResponseDto $userProfileDto): UserProfileResponseDto
     {
         // TODO: Implement execute() method.
     }
