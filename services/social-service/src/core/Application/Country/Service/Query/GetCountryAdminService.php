@@ -25,6 +25,6 @@ final readonly class GetCountryAdminService implements GetCountryAdminUseCase
             throw new CountryNotFoundException($countryIsoCode);
         }
 
-        return $this->countryApplicationMapper->toPrivateCountryDto($country);
+        return $this->countryApplicationMapper->toCountryDto($country);
     }
 }

@@ -34,6 +34,6 @@ final readonly class UpdateCountryService implements UpdateCountryUseCase
 
         $updated = $this->countryCommandRepository->update($foundCountry);
 
-        return $this->countryApplicationMapper->toPrivateCountryDto($updated);
+        return $this->countryApplicationMapper->toCountryDto($updated);
     }
 }

@@ -76,8 +76,7 @@ final class UserProfile
         ?string      $color,
         ?string      $description,
         bool         $emailConfirmed = false
-    )
-    {
+    ) {
         $this->assertUserUuid($userUuid);
         $this->userUuid = $userUuid;
 

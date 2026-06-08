@@ -29,6 +29,6 @@ final readonly class CreateCountryService implements CreateCountryUseCase
         $country = $this->countryApplicationMapper->toCountry($countryDto);
         $created = $this->countryCommandRepository->create($country);
 
-        return $this->countryApplicationMapper->toPrivateCountryDto($created);
+        return $this->countryApplicationMapper->toCountryDto($created);
     }
 }

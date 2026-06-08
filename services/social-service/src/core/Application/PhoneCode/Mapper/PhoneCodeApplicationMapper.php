@@ -30,7 +30,7 @@ final readonly class PhoneCodeApplicationMapper implements PhoneCodeApplicationM
     #[\Override]
     public function toPrivatePhoneCodeResponseDto(PhoneCode $phoneCode, ?Country $country): PrivatePhoneCodeResponseDto
     {
-        $countryDtoOrNull = $country !== null ? $this->countryApplicationMapper->toPrivateCountryDto($country) : null;
+        $countryDtoOrNull = $country !== null ? $this->countryApplicationMapper->toCountryDto($country) : null;
         return new PrivatePhoneCodeResponseDto(
             phoneCode: $phoneCode->code,
             isActive: $phoneCode->active,

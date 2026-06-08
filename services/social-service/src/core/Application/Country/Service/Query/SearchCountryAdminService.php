@@ -33,7 +33,7 @@ final readonly class SearchCountryAdminService implements SearchCountryAdminUseC
 
         $countryDtoList = [];
         foreach ($countryPage->content as $countryEntity) {
-            $countryDtoList[] = $this->countryApplicationMapper->toPrivateCountryDto($countryEntity);
+            $countryDtoList[] = $this->countryApplicationMapper->toCountryDto($countryEntity);
         }
 
         return $countryPage->changeContent($countryDtoList);
