@@ -21,8 +21,9 @@ class LanguageApplicationMapper implements LanguageApplicationMapperInterface
     }
 
     #[\Override]
-    public function toLanguageResponseDto(Language $language): LanguageResponseDto
+    public function toLanguageResponseDto(?Language $language): ?LanguageResponseDto
     {
+        if (null === $language) { return null; }
         return new LanguageResponseDto(
             languageIsoCode: $language->isoCode,
             name: $language->name,

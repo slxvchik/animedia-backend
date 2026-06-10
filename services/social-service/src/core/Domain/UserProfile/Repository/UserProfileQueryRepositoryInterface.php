@@ -19,5 +19,7 @@ interface UserProfileQueryRepositoryInterface
 
     public function existsByUsernameAndUsernameCode(string $username, string $usernameCode): bool;
 
+    public function existsByEmail(string $email): bool;
+
     public function existsByPhoneAndPhoneNumber(string $phoneCode, string $phoneNumber): bool;
 }

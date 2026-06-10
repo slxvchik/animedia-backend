@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Command;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
+use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeNotFoundException;
@@ -19,8 +20,9 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
     public function __construct(
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
         private PhoneCodeCommandRepositoryInterface $phoneCodeCommandRepository,
+        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper
+        private CountryApplicationMapperInterface $countryApplicationMapper
     ) {}
 
     #[\Override]
@@ -44,9 +46,11 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
 
         $updated = $this->phoneCodeCommandRepository->update($phoneCode);
 
+        $countryResponseDto = $this->countryApplicationMapper->toCountryResponseDto($country);
+
         return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
             phoneCode: $updated,
-            country: $country
+            countryResponseDto: $countryResponseDto
         );
     }
 }

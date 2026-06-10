@@ -2,7 +2,10 @@
 
 namespace Core\Application\UserProfile\Mapper;
 
+use Core\Application\Country\DTO\CountryResponseDto;
+use Core\Application\Language\DTO\LanguageResponseDto;
 use Core\Application\UserProfile\DTO\CreateUserProfileCommandDto;
+use Core\Application\UserProfile\DTO\PhoneNumberResponseDto;
 use Core\Application\UserProfile\DTO\UpdateUserProfileCommandDto;
 use Core\Application\UserProfile\DTO\UserProfileResponseDto;
 use Core\Domain\Country\Entity\Country;
@@ -14,5 +17,8 @@ interface UserProfileApplicationMapperInterface
 
     public function fromUpdateUserProfileCommandDto(UpdateUserProfileCommandDto $userProfileRequestDto): UserProfile;
 
-    public function toUserProfileResponseDto(UserProfile $userProfile, ?Country $country): UserProfileResponseDto;
+    /**
+     * @param LanguageResponseDto[]|null $languageResponseDtoList
+     */
+    public function toUserProfileResponseDto(?UserProfile $userProfile, ?PhoneNumberResponseDto $phoneNumberResponseDto = null, ?array $languageResponseDtoList = null, ?CountryResponseDto $countryResponseDto = null): ?UserProfileResponseDto;
 }

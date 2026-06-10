@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Core\Domain\UserProfile\Entity;
 
-use Core\Domain\Shared\Eventable\Eventable;
+use Core\Domain\Shared\Event\Eventable;
+use Core\Domain\Shared\IdentityGenerator\AssertUuidField;
 use Core\Domain\UserProfile\Events\SendUserEmailConfirmEvent;
+use Core\Domain\UserProfile\Exception\EmailAlreadyConfirmedException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileEmailException;
-use Core\Domain\UserProfile\Exception\InvalidUserProfileIdException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileLanguageException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameCodeException;
 use Core\Domain\UserProfile\Exception\InvalidUserProfileNicknameException;
@@ -17,6 +18,7 @@ use DateTimeImmutable;
 final class UserProfile
 {
     use Eventable;
+    use AssertUuidField;
 
     public readonly string $userUuid;
     public private(set) string $username
@@ -85,7 +87,7 @@ final class UserProfile
         ?string           $color = null,
         ?string           $description = null
     ) {
-        $this->assertUserUuid($userUuid);
+        $this->assertUuid($userUuid);
         $this->userUuid = $userUuid;
 
         // required fields
@@ -109,13 +111,13 @@ final class UserProfile
     }
 
     public static function createNew(
-        string $userUuid,
-        string $username,
-        string $usernameCode,
-        string $email,
-        bool   $emailConfirmed
+        string  $userUuid,
+        string  $username,
+        string  $usernameCode,
+        string  $email,
+        bool    $emailConfirmed
     ): UserProfile {
-        $newProfile = new self(
+        return new self(
             userUuid: $userUuid,
             username: $username,
             usernameCode: $usernameCode,
@@ -124,16 +126,6 @@ final class UserProfile
             createdAt: new DateTimeImmutable('now'),
             updatedAt: new DateTimeImmutable('now')
         );
-
-        if (!$emailConfirmed) {
-            $newProfile->recordEvent(
-                new SendUserEmailConfirmEvent(
-                    $email
-                )
-            );
-        }
-
-        return $newProfile;
     }
 
     public static function fromDatabase(
@@ -174,13 +166,6 @@ final class UserProfile
             color: $color,
             description: $description
         );
-    }
-
-    private function assertUserUuid(string $userUuid): void
-    {
-        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $userUuid)) {
-            throw new InvalidUserProfileIdException();
-        }
     }
 
     private function assertUsername(string $username): void
@@ -246,7 +231,7 @@ final class UserProfile
         $this->updatedAt = new DateTimeImmutable('now');
     }
 
-    public function updateEmail(string $newEmail): void
+    public function updateEmail(string $newEmail, string $generatedToken): void
     {
         $this->assertEmail($newEmail);
 
@@ -261,12 +246,26 @@ final class UserProfile
         $this->recordEvent(
             new SendUserEmailConfirmEvent(
                 $this->email,
-                'test'
+                $generatedToken
             )
         );
     }
 
-    public function confirmEmail(string $token): void
+    public function initiateEmailConfirmation(string $token): void
+    {
+        if ($this->emailConfirmed) {
+            throw new EmailAlreadyConfirmedException($this->email);
+        }
+
+        $this->recordEvent(
+            new SendUserEmailConfirmEvent(
+                email: $this->email,
+                token: $token
+            )
+        );
+    }
+
+    public function confirmEmail(): void
     {
         if ($this->emailConfirmed) {
             return;

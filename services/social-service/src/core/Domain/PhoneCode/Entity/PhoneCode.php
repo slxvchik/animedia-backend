@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Core\Domain\PhoneCode\Entity;
 
 use Core\Domain\PhoneCode\Exception\InvalidPhoneCodeException;
-use Core\Domain\PhoneCode\Exception\InvalidPhoneCodeUuidException;
+use Core\Domain\Shared\IdentityGenerator\AssertUuidField;
 
 final class PhoneCode
 {
+    use AssertUuidField;
+
     public readonly string $uuid;
     public readonly string $countryIsoCode;
     public readonly string $code;
@@ -20,7 +22,7 @@ final class PhoneCode
         string $phoneCode,
         bool $active = false,
     ) {
-        $this->assertPhoneCodeUuid($uuid);
+        $this->assertUuid($uuid);
         $this->uuid = $uuid;
 
         $this->assertPhoneCode($phoneCode);
@@ -28,13 +30,6 @@ final class PhoneCode
 
         $this->countryIsoCode = $countryIsoCode;
         $this->active = $active;
-    }
-
-    private function assertPhoneCodeUuid(string $phoneCodeUuid): void
-    {
-        if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $phoneCodeUuid)) {
-            throw new InvalidPhoneCodeUuidException();
-        }
     }
 
     private function assertPhoneCode(string $phoneCode): void

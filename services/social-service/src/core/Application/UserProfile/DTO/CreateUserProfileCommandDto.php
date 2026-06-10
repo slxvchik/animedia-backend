@@ -7,7 +7,6 @@ namespace Core\Application\UserProfile\DTO;
 final readonly class CreateUserProfileCommandDto
 {
     public function __construct(
-        public string $userUuid,
         public string $username,
         public string $usernameCode,
         public string $email,

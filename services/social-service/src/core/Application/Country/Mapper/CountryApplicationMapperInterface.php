@@ -11,5 +11,5 @@ use Core\Domain\Country\Entity\Country;
 interface CountryApplicationMapperInterface
 {
     public function toCountry(CountryCommandDto $countryDto): Country;
-    public function toCountryResponseDto(Country $country): CountryResponseDto;
+    public function toCountryResponseDto(?Country $country): ?CountryResponseDto;
 }

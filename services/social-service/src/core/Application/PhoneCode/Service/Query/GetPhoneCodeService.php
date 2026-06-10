@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Query;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
+use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeNotFoundException;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
@@ -16,8 +17,9 @@ final readonly class GetPhoneCodeService implements GetPhoneCodeUseCase
 {
     public function __construct(
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
+        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper
+        private CountryApplicationMapperInterface $countryApplicationMapper
     ) {}
 
     #[\Override]
@@ -37,7 +39,7 @@ final readonly class GetPhoneCodeService implements GetPhoneCodeUseCase
 
         return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
             phoneCode: $phoneCode,
-            country: $country
+            countryResponseDto: $this->countryApplicationMapper->toCountryResponseDto($country)
         );
     }
 }

@@ -11,5 +11,5 @@ use Core\Domain\Language\Entity\Language;
 interface LanguageApplicationMapperInterface
 {
     public function toLanguage(LanguageCommandDto $languageDto): Language;
-    public function toLanguageResponseDto(Language $language): LanguageResponseDto;
+    public function toLanguageResponseDto(?Language $language): ?LanguageResponseDto;
 }

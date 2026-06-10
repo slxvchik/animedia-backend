@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Command;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
-use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
+use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\PhoneCode\DTO\CreatePhoneCodeCommandDto;
+use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeExistsException;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
 use Core\Application\PhoneCode\UseCase\Command\CreatePhoneCodeUseCase;
@@ -20,8 +21,9 @@ final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
     public function __construct(
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
         private PhoneCodeCommandRepositoryInterface $phoneCodeCommandRepository,
-        private CountryQueryRepositoryInterface $countryQueryRepository,
         private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
+        private CountryQueryRepositoryInterface $countryQueryRepository,
+        private CountryApplicationMapperInterface $countryApplicationMapper,
         private IdentityGeneratorInterface $identityGenerator
     ) {}
 
@@ -46,6 +48,11 @@ final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
         $phoneCode = $this->phoneCodeApplicationMapper->fromCreatePhoneCodeCommandDto($phoneCodeRequestDto, $phoneUuid);
         $created = $this->phoneCodeCommandRepository->create($phoneCode);
 
-        return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto($created, $country);
+        $countryResponseDto = $this->countryApplicationMapper->toCountryResponseDto($country);
+
+        return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
+            phoneCode: $created,
+            countryResponseDto: $countryResponseDto
+        );
     }
 }

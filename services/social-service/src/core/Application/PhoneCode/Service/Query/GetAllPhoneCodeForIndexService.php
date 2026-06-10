@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Application\PhoneCode\Service\Query;
 
+use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
 use Core\Application\PhoneCode\UseCase\Query\GetAllPhoneCodeForIndexUseCase;
@@ -17,8 +18,9 @@ final readonly class GetAllPhoneCodeForIndexService implements GetAllPhoneCodeFo
 {
     public function __construct(
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
+        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper
+        private CountryApplicationMapperInterface $countryApplicationMapper
     ) {}
 
     /**
@@ -53,10 +55,10 @@ final readonly class GetAllPhoneCodeForIndexService implements GetAllPhoneCodeFo
 
         $phoneCodeResponseDtoList = [];
         foreach ($phoneCodesPage->content as $phoneCode) {
-            $countryOrNull = $countriesByIsoCodeMap[$phoneCode->countryIsoCode] ?? null;
+            $countryResponseDtoOrNull = $this->countryApplicationMapper->toCountryResponseDto($countriesByIsoCodeMap[$phoneCode->countryIsoCode]);
             $phoneCodeResponseDtoList[] = $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
                 phoneCode: $phoneCode,
-                country: $countryOrNull
+                countryResponseDto: $countryResponseDtoOrNull
             );
         }
 

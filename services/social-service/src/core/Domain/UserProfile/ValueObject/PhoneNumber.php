@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Core\Domain\UserProfile\ValueObject;
 
 use Core\Domain\UserProfile\Exception\InvalidPhoneNumberException;
-use Core\Domain\UserProfile\Validator\PhoneValidatorInterface;
+use Core\Domain\UserProfile\Service\PhoneValidatorInterface;
 
 readonly class PhoneNumber
 {

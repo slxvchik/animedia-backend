@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Domain\UserProfile\Validator;
+namespace Core\Domain\UserProfile\Service;
 
 interface PhoneValidatorInterface
 {

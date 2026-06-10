@@ -21,8 +21,9 @@ final readonly class CountryApplicationMapper implements CountryApplicationMappe
     }
 
     #[\Override]
-    public function toCountryResponseDto(Country $country): CountryResponseDto
+    public function toCountryResponseDto(?Country $country): ?CountryResponseDto
     {
+        if ($country === null) { return null; }
         return new CountryResponseDto(
             countryIsoCode: $country->isoCode,
             name: $country->name,

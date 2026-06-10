@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Domain\Shared\Eventable;
+namespace Core\Domain\Shared\Event;
 
 trait Eventable
 {
