@@ -6,7 +6,7 @@ namespace Core\Application\UserProfile\UseCase\Query;
 
 use Core\Application\UserProfile\DTO\UserProfileResponseDto;
 
-interface GetUserProfileAdminUseCase
+interface GetUserProfileUseCase
 {
-    public function execute(string $username, string $usernameCode): UserProfileResponseDto;
+    public function execute(string $userUuid): UserProfileResponseDto;
 }

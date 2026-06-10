@@ -11,8 +11,7 @@ readonly class PhoneNumber
 {
     private function __construct(
         public string $code,
-        public string $number,
-        public bool $confirmed = false
+        public string $number
     ) {}
 
     public static function create(
@@ -31,10 +30,5 @@ readonly class PhoneNumber
         }
 
         return new self($code, $cleanedNumber, false);
-    }
-
-    public function confirm(): self
-    {
-        return new self($this->code, $this->number, true);
     }
 }

@@ -12,7 +12,7 @@ use Core\Domain\PhoneCode\Entity\PhoneCode;
 
 interface PhoneCodeApplicationMapperInterface
 {
-    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto): PhoneCode;
+    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto, string $generatedUuid): PhoneCode;
 
     public function fromUpdatePhoneCodeCommandDto(UpdatePhoneCodeCommandDto $phoneCodeCommandDto): PhoneCode;
 

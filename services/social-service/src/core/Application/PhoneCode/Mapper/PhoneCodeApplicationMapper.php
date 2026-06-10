@@ -18,10 +18,10 @@ final readonly class PhoneCodeApplicationMapper implements PhoneCodeApplicationM
     ) {}
 
     #[\Override]
-    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto): PhoneCode
+    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto, string $generatedUuid): PhoneCode
     {
         return new PhoneCode(
-            null,
+            uuid: $generatedUuid,
             countryIsoCode: $phoneCodeCommandDto->countryIsoCode,
             phoneCode: $phoneCodeCommandDto->phoneCode,
             active: $phoneCodeCommandDto->isActive

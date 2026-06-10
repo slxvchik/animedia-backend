@@ -15,7 +15,7 @@ final class PhoneCode
     public private(set) bool $active;
 
     public function __construct(
-        ?string $uuid,
+        string $uuid,
         string $countryIsoCode,
         string $phoneCode,
         bool $active = false,
@@ -30,11 +30,8 @@ final class PhoneCode
         $this->active = $active;
     }
 
-    private function assertPhoneCodeUuid(?string $phoneCodeUuid): void
+    private function assertPhoneCodeUuid(string $phoneCodeUuid): void
     {
-        if ($phoneCodeUuid === null) {
-            return;
-        }
         if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $phoneCodeUuid)) {
             throw new InvalidPhoneCodeUuidException();
         }

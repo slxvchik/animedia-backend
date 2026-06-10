@@ -13,6 +13,7 @@ use Core\Application\PhoneCode\UseCase\Command\CreatePhoneCodeUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
 use Core\Domain\PhoneCode\Repository\PhoneCodeCommandRepositoryInterface;
 use Core\Domain\PhoneCode\Repository\PhoneCodeQueryRepositoryInterface;
+use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 
 final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
 {
@@ -20,7 +21,8 @@ final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
         private PhoneCodeCommandRepositoryInterface $phoneCodeCommandRepository,
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper
+        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
+        private IdentityGeneratorInterface $identityGenerator
     ) {}
 
     #[\Override]
@@ -39,7 +41,9 @@ final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
             throw new PhoneCodeExistsException();
         }
 
-        $phoneCode = $this->phoneCodeApplicationMapper->fromCreatePhoneCodeCommandDto($phoneCodeRequestDto);
+        $phoneUuid = $this->identityGenerator->generate();
+
+        $phoneCode = $this->phoneCodeApplicationMapper->fromCreatePhoneCodeCommandDto($phoneCodeRequestDto, $phoneUuid);
         $created = $this->phoneCodeCommandRepository->create($phoneCode);
 
         return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto($created, $country);
