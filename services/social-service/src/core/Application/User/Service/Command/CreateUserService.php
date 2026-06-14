@@ -30,6 +30,7 @@ final readonly class CreateUserService implements CreateUserUseCase
             usernameCode: $userDto->usernameCode,
             email: $userDto->email,
             emailConfirmed: $userDto->emailConfirmed,
+            localeLanguageIsoCode: $userDto->localeLanguageIsoCode,
             identityGenerator: $this->identityGenerator
         );
 

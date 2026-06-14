@@ -6,5 +6,8 @@ use Core\Domain\Shared\ValueObject\PhoneNumber;
 
 interface SmsSenderInterface
 {
-    public function send(PhoneNumber $phoneNumber, string $message): void;
+    /**
+     * @param array<string, string> $vars
+     */
+    public function send(PhoneNumber $toPhone, string $template, string $localeLanguageIsoCode, array $vars = []): void;
 }

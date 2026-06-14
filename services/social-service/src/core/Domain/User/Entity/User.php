@@ -23,7 +23,7 @@ final class User
     use Eventable;
     use AssertUuidField;
 
-    public readonly string $userUuid;
+    public readonly string $uuid;
     public private(set) string $username
     {
         set {
@@ -46,9 +46,9 @@ final class User
         }
     }
     public private(set) bool $emailConfirmed;
+    public private(set) string $localeLanguageIsoCode;
     public private(set) ?PhoneNumber $phone;
     public private(set) bool $phoneConfirmed;
-    public private(set) string $localeLanguageIsoCode;
     public private(set) DateTimeImmutable $createdAt;
     public private(set) DateTimeImmutable $updatedAt;
     public private(set) ?string $firstName;
@@ -73,13 +73,14 @@ final class User
      * @param string[]|null $languageIsoCodeList
      */
     private function __construct(
-        string            $userUuid,
+        string            $uuid,
         string            $username,
         string            $usernameCode,
         string            $email,
         bool              $emailConfirmed,
         DateTimeImmutable $createdAt,
         DateTimeImmutable $updatedAt,
+        string            $localeLanguageIsoCode,
         ?PhoneNumber      $phone = null,
         bool              $phoneConfirmed = false,
         ?string           $firstName = null,
@@ -91,8 +92,8 @@ final class User
         ?string           $color = null,
         ?string           $description = null
     ) {
-        $this->assertUuid($userUuid);
-        $this->userUuid = $userUuid;
+        $this->assertUuid($uuid);
+        $this->uuid = $uuid;
 
         // required fields
         $this->username = $username;
@@ -101,6 +102,7 @@ final class User
         $this->emailConfirmed = $emailConfirmed;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->localeLanguageIsoCode = $localeLanguageIsoCode;
 
         $this->phone = $phone;
         $this->phoneConfirmed = $phoneConfirmed;
@@ -119,29 +121,32 @@ final class User
         string                     $usernameCode,
         string                     $email,
         bool                       $emailConfirmed,
+        string                     $localeLanguageIsoCode,
         IdentityGeneratorInterface $identityGenerator
     ): User
     {
-        $userUuid = $identityGenerator->generate();
+        $uuid = $identityGenerator->generate();
         return new self(
-            userUuid: $userUuid,
+            uuid: $uuid,
             username: $username,
             usernameCode: $usernameCode,
             email: $email,
             emailConfirmed: $emailConfirmed,
             createdAt: new DateTimeImmutable('now'),
-            updatedAt: new DateTimeImmutable('now')
+            updatedAt: new DateTimeImmutable('now'),
+            localeLanguageIsoCode: $localeLanguageIsoCode
         );
     }
 
     public static function fromDatabase(
-        string            $userUuid,
+        string            $uuid,
         string            $username,
         string            $usernameCode,
         string            $email,
         bool              $emailConfirmed,
         DateTimeImmutable $createdAt,
         DateTimeImmutable $updatedAt,
+        string            $localeLanguageIsoCode,
         ?PhoneNumber      $phone = null,
         bool              $phoneConfirmed = false,
         ?string           $firstName = null,
@@ -155,13 +160,14 @@ final class User
     ): User
     {
         return new self(
-            userUuid: $userUuid,
+            uuid: $uuid,
             username: $username,
             usernameCode: $usernameCode,
             email: $email,
             emailConfirmed: $emailConfirmed,
             createdAt: $createdAt,
             updatedAt: $updatedAt,
+            localeLanguageIsoCode: $localeLanguageIsoCode,
             phone: $phone,
             phoneConfirmed: $phoneConfirmed,
             firstName: $firstName,
@@ -215,6 +221,7 @@ final class User
      * @param string[]|null $languageIsoCodeList
      */
     public function update(
+        string  $localeLanguageIsoCode,
         ?string $firstName,
         ?string $lastName,
         ?string $middleName,
@@ -227,6 +234,7 @@ final class User
     {
         $this->assertLanguageIsoCodes($languageIsoCodeList);
 
+        $this->localeLanguageIsoCode = $localeLanguageIsoCode;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->middleName = $middleName;
@@ -266,10 +274,7 @@ final class User
 
         $this->recordEvent(
             new UserEmailChangedEvent(
-                new UserEmail(
-                    userUuid: $this->userUuid,
-                    email: $this->email
-                )
+                userUuid: $this->uuid
             )
         );
     }
@@ -300,8 +305,7 @@ final class User
 
         $this->recordEvent(
             new UserPhoneChangedEvent(
-                userUuid: $this->userUuid,
-                phone: $this->phone
+                userUuid: $this->uuid
             )
         );
     }

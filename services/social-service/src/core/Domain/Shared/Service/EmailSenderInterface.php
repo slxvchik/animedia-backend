@@ -7,5 +7,5 @@ interface EmailSenderInterface
     /**
      * @param array<string, string> $vars
      */
-    public function send(string $toEmail, string $template, string $locale, array $vars = []): void;
+    public function send(string $toEmail, string $template, string $localeLanguageIsoCode, array $vars = []): void;
 }

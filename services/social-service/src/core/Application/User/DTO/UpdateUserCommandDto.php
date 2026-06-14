@@ -10,6 +10,7 @@ final readonly class UpdateUserCommandDto
      * @param string[]|null $languageIsoCodeList
      */
     public function __construct(
+        public string                 $localeLanguageIsoCode,
         public string                 $userUuid,
         public string                 $username,
         public string                 $usernameCode,

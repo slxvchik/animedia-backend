@@ -49,6 +49,7 @@ final readonly class UpdateUserService implements UpdateUserUseCase
         );
 
         $user->update(
+            localeLanguageIsoCode: $userDto->localeLanguageIsoCode,
             firstName: $userDto->firstName,
             lastName: $userDto->lastName,
             middleName: $userDto->middleName,
@@ -76,7 +77,7 @@ final readonly class UpdateUserService implements UpdateUserUseCase
             return;
         }
 
-        $emailExists = $this->userQueryRepository->existsByEmailExcludeUserUuid($userDto->email, $user->userUuid);
+        $emailExists = $this->userQueryRepository->existsByEmailExcludeUserUuid($userDto->email, $user->uuid);
         if ($emailExists) {
             throw new UserEmailExistsException(
                 email: $userDto->email
@@ -117,7 +118,7 @@ final readonly class UpdateUserService implements UpdateUserUseCase
         $phoneExists = $this->userQueryRepository->existsByPhoneAndPhoneNumberExcludeUserUuid(
             phoneCode: $newPhoneNumber->phoneCode,
             phoneNumber: $newPhoneNumber->phoneNumber,
-            userUuid: $user->userUuid
+            userUuid: $user->uuid
         );
         if ($phoneExists) {
             throw new UserPhoneNumberExistsException(

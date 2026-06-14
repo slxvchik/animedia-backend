@@ -14,8 +14,7 @@ final readonly class ConfirmUserPhoneService implements ConfirmUserPhoneUseCase
     public function __construct(
         private UserQueryRepositoryInterface $userQueryRepository,
         private UserCommandRepositoryInterface $userCommandRepository,
-        private PhoneVerificationTokenQueryRepository $phoneVerificationTokenQueryRepository,
-        private IdentityGeneratorInterface $identityGenerator
+        private PhoneVerificationTokenQueryRepository $phoneVerificationTokenQueryRepository
     ) {}
 
     #[\Override]

@@ -7,16 +7,19 @@ use Core\Application\User\Exception\UserNotFoundException;
 use Core\Application\User\UseCase\Command\SendUserEmailConfirmMailUseCase;
 use Core\Domain\Shared\Service\EmailSenderInterface;
 use Core\Domain\User\Repository\UserQueryRepositoryInterface;
+use Core\Domain\User\Service\EmailTokenGenerator;
+use Core\Domain\User\ValueObject\UserEmail;
 
 final readonly class SendUserEmailConfirmMailService implements SendUserEmailConfirmMailUseCase
 {
     public function __construct(
         private UserQueryRepositoryInterface $userQueryRepository,
+        private EmailTokenGenerator $emailTokenGenerator,
         private EmailSenderInterface $emailSender
     ) {}
 
     #[\Override]
-    public function execute(string $userUuid, string $email, string $generatedToken): void
+    public function execute(string $userUuid): void
     {
         $user = $this->userQueryRepository->findByUserUuid($userUuid);
         if ($user === null) {
@@ -27,17 +30,19 @@ final readonly class SendUserEmailConfirmMailService implements SendUserEmailCon
             return;
         }
 
-        if ($user->email !== $email) {
-            throw new UserConfirmEmailException(
-                curEmail: $user->email,
-                tokenEmail: $email
-            );
-        }
+        $userEmail = new UserEmail(
+            userUuid: $user->uuid,
+            email: $user->email
+        );
+
+        $generatedToken = $this->emailTokenGenerator->generate(
+            email: $userEmail
+        );
 
         $this->emailSender->send(
-            toEmail: $email,
-            template: 'email_confirmation',
-            locale: $user->localeLanguageIsoCode,
+            toEmail: $user->email,
+            template: 'user_email_confirmation',
+            localeLanguageIsoCode: $user->localeLanguageIsoCode,
             vars: ['token' => $generatedToken]
         );
     }

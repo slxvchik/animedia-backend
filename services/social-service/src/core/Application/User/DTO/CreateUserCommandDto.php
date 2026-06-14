@@ -10,6 +10,7 @@ final readonly class CreateUserCommandDto
         public string $username,
         public string $usernameCode,
         public string $email,
-        public bool   $emailConfirmed
+        public bool   $emailConfirmed,
+        public string $localeLanguageIsoCode
     ) {}
 }
