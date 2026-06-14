@@ -9,10 +9,11 @@ use Core\Application\PhoneCode\DTO\CreatePhoneCodeCommandDto;
 use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
+use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 
 interface PhoneCodeApplicationMapperInterface
 {
-    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto, string $generatedUuid): PhoneCode;
+    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto, IdentityGeneratorInterface $identityGenerator): PhoneCode;
 
     public function fromUpdatePhoneCodeCommandDto(UpdatePhoneCodeCommandDto $phoneCodeCommandDto): PhoneCode;
 

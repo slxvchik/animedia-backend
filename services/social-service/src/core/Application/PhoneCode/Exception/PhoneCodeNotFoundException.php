@@ -9,8 +9,8 @@ use Core\Domain\Shared\Exception\AppExceptionStatus;
 
 class PhoneCodeNotFoundException extends AppException
 {
-    public function __construct(string $countryIsoCode)
+    public function __construct(string $phoneCodeUuid)
     {
-        parent::__construct(AppExceptionStatus::ALREADY_EXISTS, 'phone_code.not_found', [$countryIsoCode]);
+        parent::__construct(AppExceptionStatus::ALREADY_EXISTS, 'phone_code.not_found', [$phoneCodeUuid]);
     }
 }

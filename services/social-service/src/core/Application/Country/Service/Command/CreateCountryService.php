@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Core\Application\Country\Service\Command;
 
 use Core\Application\Country\DTO\CountryCommandDto;
-use Core\Application\Country\DTO\CountryResponseDto;
 use Core\Application\Country\Exception\CountryIsoCodeExistsException;
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\Country\UseCase\Command\CreateCountryUseCase;
@@ -21,15 +20,14 @@ final readonly class CreateCountryService implements CreateCountryUseCase
     ) {}
 
     #[\Override]
-    public function execute(CountryCommandDto $countryDto): CountryResponseDto
+    public function execute(CountryCommandDto $countryDto): string
     {
         if ($this->countryQueryRepository->existsByIsoCode($countryDto->countryIsoCode)) {
             throw new CountryIsoCodeExistsException($countryDto->countryIsoCode);
         }
 
         $country = $this->countryApplicationMapper->toCountry($countryDto);
-        $created = $this->countryCommandRepository->create($country);
 
-        return $this->countryApplicationMapper->toCountryResponseDto($created);
+        return $this->countryCommandRepository->create($country);
     }
 }

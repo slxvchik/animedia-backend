@@ -9,17 +9,18 @@ use Core\Application\PhoneCode\DTO\CreatePhoneCodeCommandDto;
 use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
+use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 
 final readonly class PhoneCodeApplicationMapper implements PhoneCodeApplicationMapperInterface
 {
     #[\Override]
-    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto, string $generatedUuid): PhoneCode
+    public function fromCreatePhoneCodeCommandDto(CreatePhoneCodeCommandDto $phoneCodeCommandDto, IdentityGeneratorInterface $identityGenerator): PhoneCode
     {
-        return new PhoneCode(
-            uuid: $generatedUuid,
+        return PhoneCode::createNew(
             countryIsoCode: $phoneCodeCommandDto->countryIsoCode,
             phoneCode: $phoneCodeCommandDto->phoneCode,
-            active: $phoneCodeCommandDto->isActive
+            active: $phoneCodeCommandDto->isActive,
+            identityGenerator: $identityGenerator
         );
     }
 

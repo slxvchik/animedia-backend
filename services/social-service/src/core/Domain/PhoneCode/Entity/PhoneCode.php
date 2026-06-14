@@ -6,6 +6,7 @@ namespace Core\Domain\PhoneCode\Entity;
 
 use Core\Domain\PhoneCode\Exception\InvalidPhoneCodeException;
 use Core\Domain\Shared\IdentityGenerator\AssertUuidField;
+use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 
 final class PhoneCode
 {
@@ -30,6 +31,21 @@ final class PhoneCode
 
         $this->countryIsoCode = $countryIsoCode;
         $this->active = $active;
+    }
+
+    public static function createNew(
+        string $countryIsoCode,
+        string $phoneCode,
+        bool $active,
+        IdentityGeneratorInterface $identityGenerator
+    ): PhoneCode {
+        $uuid = $identityGenerator->generate();
+        return new self(
+            uuid: $uuid,
+            countryIsoCode: $countryIsoCode,
+            phoneCode: $phoneCode,
+            active: $active
+        );
     }
 
     private function assertPhoneCode(string $phoneCode): void

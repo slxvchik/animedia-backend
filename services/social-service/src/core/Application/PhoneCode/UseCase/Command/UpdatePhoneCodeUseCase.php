@@ -9,5 +9,5 @@ use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 
 interface UpdatePhoneCodeUseCase
 {
-    public function execute(UpdatePhoneCodeCommandDto $phoneCodeRequestDto): PhoneCodeResponseDto;
+    public function execute(UpdatePhoneCodeCommandDto $phoneCodeRequestDto): void;
 }

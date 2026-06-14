@@ -21,7 +21,7 @@ final readonly class CreateLanguageService implements CreateLanguageUseCase
     ) {}
 
     #[\Override]
-    public function execute(LanguageCommandDto $languageDto): LanguageResponseDto
+    public function execute(LanguageCommandDto $languageDto): string
     {
         $exists = $this->languageQueryRepository->existsByIsoCode($languageDto->languageIsoCode);
         if ($exists) {
@@ -29,8 +29,7 @@ final readonly class CreateLanguageService implements CreateLanguageUseCase
         }
 
         $language = $this->languageApplicationMapper->toLanguage($languageDto);
-        $created = $this->languageCommandRepository->create($language);
 
-        return $this->languageApplicationMapper->toLanguageResponseDto($created);
+        return $this->languageCommandRepository->create($language);
     }
 }

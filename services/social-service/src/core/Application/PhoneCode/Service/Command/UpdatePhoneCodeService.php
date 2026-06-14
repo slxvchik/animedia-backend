@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Command;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
-use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
-use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\DTO\UpdatePhoneCodeCommandDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeNotFoundException;
-use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
 use Core\Application\PhoneCode\UseCase\Command\UpdatePhoneCodeUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
 use Core\Domain\PhoneCode\Repository\PhoneCodeCommandRepositoryInterface;
@@ -20,19 +17,17 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
     public function __construct(
         private PhoneCodeQueryRepositoryInterface $phoneCodeQueryRepository,
         private PhoneCodeCommandRepositoryInterface $phoneCodeCommandRepository,
-        private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private CountryApplicationMapperInterface $countryApplicationMapper
     ) {}
 
     #[\Override]
-    public function execute(UpdatePhoneCodeCommandDto $phoneCodeRequestDto): PhoneCodeResponseDto
+    public function execute(UpdatePhoneCodeCommandDto $phoneCodeRequestDto): void
     {
         $phoneCode = $this->phoneCodeQueryRepository->findByPhoneCodeUuid(
             phoneCodeUuid: $phoneCodeRequestDto->uuid
         );
         if ($phoneCode === null) {
-            throw new PhoneCodeNotFoundException($phoneCodeRequestDto->countryIsoCode);
+            throw new PhoneCodeNotFoundException($phoneCodeRequestDto->uuid);
         }
 
         $country = $this->countryQueryRepository->findByIsoCode($phoneCodeRequestDto->countryIsoCode);
@@ -44,13 +39,6 @@ final readonly class UpdatePhoneCodeService implements UpdatePhoneCodeUseCase
             active: $phoneCodeRequestDto->isActive
         );
 
-        $updated = $this->phoneCodeCommandRepository->update($phoneCode);
-
-        $countryResponseDto = $this->countryApplicationMapper->toCountryResponseDto($country);
-
-        return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
-            phoneCode: $updated,
-            countryResponseDto: $countryResponseDto
-        );
+        $this->phoneCodeCommandRepository->update($phoneCode);
     }
 }

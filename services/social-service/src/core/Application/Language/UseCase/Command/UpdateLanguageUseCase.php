@@ -9,5 +9,5 @@ use Core\Application\Language\DTO\LanguageResponseDto;
 
 interface UpdateLanguageUseCase
 {
-    public function execute(LanguageCommandDto $languageDto): LanguageResponseDto;
+    public function execute(LanguageCommandDto $languageDto): void;
 }

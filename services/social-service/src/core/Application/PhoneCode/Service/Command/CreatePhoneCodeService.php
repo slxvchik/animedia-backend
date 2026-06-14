@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Core\Application\PhoneCode\Service\Command;
 
 use Core\Application\Country\Exception\CountryNotFoundException;
-use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\PhoneCode\DTO\CreatePhoneCodeCommandDto;
-use Core\Application\PhoneCode\DTO\PhoneCodeResponseDto;
 use Core\Application\PhoneCode\Exception\PhoneCodeExistsException;
 use Core\Application\PhoneCode\Mapper\PhoneCodeApplicationMapperInterface;
 use Core\Application\PhoneCode\UseCase\Command\CreatePhoneCodeUseCase;
@@ -23,12 +21,11 @@ final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
         private PhoneCodeCommandRepositoryInterface $phoneCodeCommandRepository,
         private PhoneCodeApplicationMapperInterface $phoneCodeApplicationMapper,
         private CountryQueryRepositoryInterface $countryQueryRepository,
-        private CountryApplicationMapperInterface $countryApplicationMapper,
         private IdentityGeneratorInterface $identityGenerator
     ) {}
 
     #[\Override]
-    public function execute(CreatePhoneCodeCommandDto $phoneCodeRequestDto): PhoneCodeResponseDto
+    public function execute(CreatePhoneCodeCommandDto $phoneCodeRequestDto): string
     {
         $country = $this->countryQueryRepository->findByIsoCode($phoneCodeRequestDto->countryIsoCode);
         if ($country === null) {
@@ -43,16 +40,8 @@ final readonly class CreatePhoneCodeService implements CreatePhoneCodeUseCase
             throw new PhoneCodeExistsException();
         }
 
-        $phoneUuid = $this->identityGenerator->generate();
+        $phoneCode = $this->phoneCodeApplicationMapper->fromCreatePhoneCodeCommandDto($phoneCodeRequestDto, $this->identityGenerator);
 
-        $phoneCode = $this->phoneCodeApplicationMapper->fromCreatePhoneCodeCommandDto($phoneCodeRequestDto, $phoneUuid);
-        $created = $this->phoneCodeCommandRepository->create($phoneCode);
-
-        $countryResponseDto = $this->countryApplicationMapper->toCountryResponseDto($country);
-
-        return $this->phoneCodeApplicationMapper->toPhoneCodeResponseDto(
-            phoneCode: $created,
-            countryResponseDto: $countryResponseDto
-        );
+        return $this->phoneCodeCommandRepository->create($phoneCode);
     }
 }

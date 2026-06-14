@@ -9,5 +9,5 @@ use Core\Application\PhoneCode\DTO\CreatePhoneCodeCommandDto;
 
 interface CreatePhoneCodeUseCase
 {
-    public function execute(CreatePhoneCodeCommandDto $phoneCodeRequestDto): PhoneCodeResponseDto;
+    public function execute(CreatePhoneCodeCommandDto $phoneCodeRequestDto): string;
 }

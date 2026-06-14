@@ -8,7 +8,7 @@ use Core\Domain\Country\Entity\Country;
 
 interface CountryCommandRepositoryInterface
 {
-    public function create(Country $country): Country;
-    public function update(Country $country): Country;
+    public function create(Country $country): string;
+    public function update(Country $country): void;
     public function delete(string $isoCode): void;
 }

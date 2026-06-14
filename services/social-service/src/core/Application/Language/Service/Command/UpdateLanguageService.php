@@ -16,12 +16,11 @@ final readonly class UpdateLanguageService implements UpdateLanguageUseCase
 {
     public function __construct(
         private LanguageQueryRepositoryInterface $languageQueryRepository,
-        private LanguageCommandRepositoryInterface $languageCommandRepository,
-        private LanguageApplicationMapperInterface $languageApplicationMapper
+        private LanguageCommandRepositoryInterface $languageCommandRepository
     ) {}
 
     #[\Override]
-    public function execute(LanguageCommandDto $languageDto): LanguageResponseDto
+    public function execute(LanguageCommandDto $languageDto): void
     {
         $language = $this->languageQueryRepository->findByIsoCode($languageDto->languageIsoCode);
         if ($language === null) {
@@ -33,8 +32,6 @@ final readonly class UpdateLanguageService implements UpdateLanguageUseCase
             active: $languageDto->isActive
         );
 
-        $updated = $this->languageCommandRepository->update($language);
-
-        return $this->languageApplicationMapper->toLanguageResponseDto($updated);
+        $this->languageCommandRepository->update($language);
     }
 }

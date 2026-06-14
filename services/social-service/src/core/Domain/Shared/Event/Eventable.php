@@ -4,7 +4,7 @@ namespace Core\Domain\Shared\Event;
 
 trait Eventable
 {
-    protected array $events = [];
+    private array $events = [];
 
     public function recordEvent(object $event): void
     {
