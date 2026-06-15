@@ -11,6 +11,6 @@ class UserInvalidLanguageException extends AppException
 {
     public function __construct()
     {
-        parent::__construct(AppExceptionStatus::INVALID_ARGUMENT, "user_profile.invalid.language");
+        parent::__construct(AppExceptionStatus::INVALID_ARGUMENT, "user.invalid.language");
     }
 }

@@ -4,6 +4,7 @@ namespace Core\Application\User\Service\Command;
 
 use Core\Application\User\Exception\UserNotFoundException;
 use Core\Application\User\Exception\UserPhoneAbsentException;
+use Core\Application\User\Exception\UserPhoneConfirmTokenLimitException;
 use Core\Application\User\UseCase\Command\SendUserPhoneConfirmSmsUseCase;
 use Core\Domain\PhoneVerificationToken\Entity\PhoneVerificationToken;
 use Core\Domain\PhoneVerificationToken\Repository\PhoneVerificationTokenCommandRepository;
@@ -11,16 +12,19 @@ use Core\Domain\PhoneVerificationToken\Repository\PhoneVerificationTokenQueryRep
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 use Core\Domain\Shared\Service\SmsSenderInterface;
 use Core\Domain\User\Repository\UserQueryRepositoryInterface;
+use DateTimeImmutable;
 
 final readonly class SendUserPhoneConfirmSmsService implements SendUserPhoneConfirmSmsUseCase
 {
     public function __construct(
-        private UserQueryRepositoryInterface $userQueryRepository,
-        private PhoneVerificationTokenQueryRepository $phoneVerificationTokenQueryRepository,
+        private UserQueryRepositoryInterface            $userQueryRepository,
+        private PhoneVerificationTokenQueryRepository   $phoneVerificationTokenQueryRepository,
         private PhoneVerificationTokenCommandRepository $phoneVerificationTokenCommandRepository,
-        private IdentityGeneratorInterface $identityGenerator,
-        private SmsSenderInterface $smsSender
-    ) {}
+        private IdentityGeneratorInterface              $identityGenerator,
+        private SmsSenderInterface                      $smsSender
+    )
+    {
+    }
 
     #[\Override]
     public function execute(string $userUuid): void
@@ -38,10 +42,13 @@ final readonly class SendUserPhoneConfirmSmsService implements SendUserPhoneConf
             return;
         }
 
-        // TODO: add anti-spam logic
-        $userPhoneVerificationTokenList = $this->phoneVerificationTokenQueryRepository->findByUserUuid($userUuid);
-        if (count($userPhoneVerificationTokenList) > 5) {
-            // throw
+        $since = DateTimeImmutable::createFromTimestamp(time() - 60 * 60);
+        $tokenCountForLastHour = $this->phoneVerificationTokenQueryRepository->countRecentTokensByUserUuid(
+            userUuid: $userUuid,
+            since: $since
+        );
+        if ($tokenCountForLastHour > 5) {
+             throw new UserPhoneConfirmTokenLimitException();
         }
 
         $newUserPhoneVerificationToken = PhoneVerificationToken::createNew(

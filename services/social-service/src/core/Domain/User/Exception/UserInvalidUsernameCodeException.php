@@ -11,6 +11,6 @@ class UserInvalidUsernameCodeException extends AppException
 {
     public function __construct()
     {
-        parent::__construct(AppExceptionStatus::INVALID_ARGUMENT, "user_profile.invalid.nickname_code");
+        parent::__construct(AppExceptionStatus::INVALID_ARGUMENT, "user.invalid.nickname_code");
     }
 }

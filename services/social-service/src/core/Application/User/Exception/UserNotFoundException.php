@@ -9,6 +9,6 @@ class UserNotFoundException extends AppException
 {
     public function __construct(string $uuid)
     {
-        parent::__construct(AppExceptionStatus::NOT_FOUND, 'user_profile.not_found', [$uuid]);
+        parent::__construct(AppExceptionStatus::NOT_FOUND, 'user.not_found', [$uuid]);
     }
 }

@@ -3,16 +3,11 @@
 namespace Core\Domain\PhoneVerificationToken\Repository;
 
 use Core\Domain\PhoneVerificationToken\Entity\PhoneVerificationToken;
+use DateTimeImmutable;
 
 interface PhoneVerificationTokenQueryRepository
 {
-    /**
-     * @return PhoneVerificationToken[]
-     */
-    public function findByUserUuid(string $userUuid): array;
+    public function findLastTokenByUserUuid(string $userUuid): ?PhoneVerificationToken;
 
-    /**
-     * @return PhoneVerificationToken[]
-     */
-    public function findByUserUuidAndPhoneNumber(string $userUuid, string $phoneCode, string $phoneNumber): array;
+    public function countRecentTokensByUserUuid(string $userUuid, DateTimeImmutable $since): int;
 }

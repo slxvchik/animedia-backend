@@ -12,19 +12,25 @@ final class PhoneVerificationToken
     public private(set) string $userUuid;
     public private(set) PhoneNumber $phoneNumber;
     public private(set) int $code;
-    public private(set) DateTimeImmutable $expireAt;
+    public private(set) int $attempts;
+    public private(set) bool $isUsed;
+    private DateTimeImmutable $expireAt;
 
     private function __construct(
-        string $uuid,
-        string $userUuid,
-        PhoneNumber $phoneNumber,
-        int $code,
+        string            $uuid,
+        string            $userUuid,
+        PhoneNumber       $phoneNumber,
+        int               $code,
+        int               $attempts,
+        bool              $isUsed,
         DateTimeImmutable $expireAt
     ) {
         $this->uuid = $uuid;
         $this->userUuid = $userUuid;
         $this->phoneNumber = $phoneNumber;
         $this->code = $code;
+        $this->attempts = $attempts;
+        $this->isUsed = $isUsed;
         $this->expireAt = $expireAt;
     }
 
@@ -37,15 +43,19 @@ final class PhoneVerificationToken
             userUuid: $userUuid,
             phoneNumber: $phoneNumber,
             code: $code,
+            attempts: 0,
+            isUsed: false,
             expireAt: new DateTimeImmutable('now')
         );
     }
 
     public static function fromDb(
-        string $uuid,
-        string $userUuid,
-        PhoneNumber $phoneNumber,
-        int $code,
+        string            $uuid,
+        string            $userUuid,
+        PhoneNumber       $phoneNumber,
+        int               $code,
+        int               $attempts,
+        bool              $isUsed,
         DateTimeImmutable $expireAt
     ): PhoneVerificationToken {
         return new self(
@@ -53,7 +63,24 @@ final class PhoneVerificationToken
             userUuid: $userUuid,
             phoneNumber: $phoneNumber,
             code: $code,
+            attempts: $attempts,
+            isUsed: $isUsed,
             expireAt: $expireAt
         );
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expireAt < new DateTimeImmutable('now');
+    }
+
+    public function increaseAttempts(): void
+    {
+        $this->attempts++;
+    }
+
+    public function deactivate(): void
+    {
+        $this->isUsed = true;
     }
 }

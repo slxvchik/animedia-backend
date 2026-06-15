@@ -2,7 +2,7 @@
 
 namespace Core\Application\User\Service\Command;
 
-use Core\Application\User\Exception\UserConfirmEmailException;
+use Core\Application\User\Exception\UserEmailConfirmException;
 use Core\Application\User\Exception\UserNotFoundException;
 use Core\Application\User\UseCase\Command\ConfirmUserEmailUseCase;
 use Core\Domain\User\Repository\UserCommandRepositoryInterface;
@@ -31,7 +31,7 @@ final readonly class ConfirmUserEmailService implements ConfirmUserEmailUseCase
         if ($user->email === $userEmail->email) {
             $user->confirmEmail();
         } else {
-            throw new UserConfirmEmailException(
+            throw new UserEmailConfirmException(
                 curEmail: $user->email,
                 tokenEmail: $userEmail->email
             );

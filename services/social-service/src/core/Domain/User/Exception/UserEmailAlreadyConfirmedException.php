@@ -11,6 +11,6 @@ class UserEmailAlreadyConfirmedException extends AppException
 {
     public function __construct(string $email)
     {
-        parent::__construct(AppExceptionStatus::BUSINESS_ERROR, 'user_profile.email.confirm', [$email]);
+        parent::__construct(AppExceptionStatus::BUSINESS_ERROR, 'user.email.confirm', [$email]);
     }
 }

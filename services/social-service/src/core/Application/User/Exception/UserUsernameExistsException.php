@@ -11,6 +11,6 @@ class UserUsernameExistsException extends AppException
 {
     public function __construct(string $username, string $usernameCode)
     {
-        parent::__construct(AppExceptionStatus::ALREADY_EXISTS, 'user_profile.username.exists', [$username, $usernameCode]);
+        parent::__construct(AppExceptionStatus::ALREADY_EXISTS, 'user.username.exists', [$username, $usernameCode]);
     }
 }

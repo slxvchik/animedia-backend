@@ -2,7 +2,7 @@
 
 namespace Core\Application\User\Service\Command;
 
-use Core\Application\User\Exception\UserConfirmEmailException;
+use Core\Application\User\Exception\UserEmailConfirmException;
 use Core\Application\User\Exception\UserNotFoundException;
 use Core\Application\User\UseCase\Command\SendUserEmailConfirmMailUseCase;
 use Core\Domain\Shared\Service\EmailSenderInterface;

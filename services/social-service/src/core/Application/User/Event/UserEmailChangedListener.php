@@ -3,7 +3,6 @@
 namespace Core\Application\User\Event;
 
 use Core\Application\User\UseCase\Command\SendUserEmailConfirmMailUseCase;
-use Core\Domain\User\ValueObject\UserEmail;
 
 final readonly class UserEmailChangedListener
 {
@@ -11,10 +10,10 @@ final readonly class UserEmailChangedListener
         private SendUserEmailConfirmMailUseCase $sendUserEmailConfirmMailUseCase
     ) {}
 
-    public function execute(UserEmail $userEmail): void
+    public function execute(string $userUuid): void
     {
         $this->sendUserEmailConfirmMailUseCase->execute(
-            userUuid: $userEmail->userUuid
+            userUuid: $userUuid
         );
     }
 }

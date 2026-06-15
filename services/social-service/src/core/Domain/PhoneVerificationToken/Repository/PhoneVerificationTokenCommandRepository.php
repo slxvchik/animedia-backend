@@ -9,6 +9,8 @@ interface PhoneVerificationTokenCommandRepository
 {
     public function create(PhoneVerificationToken $phoneVerificationToken): void;
 
+    public function update(PhoneVerificationToken $phoneVerificationToken): void;
+
     public function delete(string $uuid): void;
 
     public function deleteExpired(): void;

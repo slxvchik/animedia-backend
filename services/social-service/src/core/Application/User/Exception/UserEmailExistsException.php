@@ -11,6 +11,6 @@ class UserEmailExistsException extends AppException
 {
     public function __construct(string $email)
     {
-        parent::__construct(AppExceptionStatus::ALREADY_EXISTS, 'user_profile.email.exists', [$email]);
+        parent::__construct(AppExceptionStatus::ALREADY_EXISTS, 'user.email.exists', [$email]);
     }
 }
