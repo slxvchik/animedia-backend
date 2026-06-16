@@ -2,6 +2,11 @@
 
 namespace Core\Domain\PhoneVerificationToken\Entity;
 
+use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenAttemptsException;
+use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenConfirmException;
+use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenExpiredException;
+use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenInvalidCodeException;
+use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenUsedException;
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 use Core\Domain\Shared\ValueObject\PhoneNumber;
 use DateTimeImmutable;
@@ -74,13 +79,33 @@ final class PhoneVerificationToken
         return $this->expireAt < new DateTimeImmutable('now');
     }
 
-    public function increaseAttempts(): void
+    public function verify(PhoneNumber $userPhoneNumber, int $code): void
     {
-        $this->attempts++;
-    }
+        if ($this->isUsed) {
+            throw new PhoneVerificationTokenUsedException();
+        }
 
-    public function deactivate(): void
-    {
+        if ($this->isExpired()) {
+            throw new PhoneVerificationTokenExpiredException();
+        }
+
+        if ($this->attempts > 3) {
+            throw new PhoneVerificationTokenAttemptsException();
+        }
+
+        $this->attempts++;
+
+        if (!PhoneNumber::safeEquals($userPhoneNumber, $this->phoneNumber)) {
+            throw new PhoneVerificationTokenConfirmException(
+                curNumber: $userPhoneNumber,
+                requestedNumber: $this->phoneNumber
+            );
+        }
+
+        if ($this->code !== $code) {
+            throw new PhoneVerificationTokenInvalidCodeException();
+        }
+
         $this->isUsed = true;
     }
 }

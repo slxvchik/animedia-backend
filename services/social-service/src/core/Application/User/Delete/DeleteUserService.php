@@ -1,0 +1,26 @@
+<?php
+
+namespace Core\Application\User\Delete;
+
+use Core\Application\User\Shared\Exception\UserNotFoundException;
+use Core\Domain\User\Repository\UserCommandRepositoryInterface;
+use Core\Domain\User\Repository\UserQueryRepositoryInterface;
+
+final readonly class DeleteUserService implements DeleteUserUseCase
+{
+    public function __construct(
+        private UserQueryRepositoryInterface   $userQueryRepository,
+        private UserCommandRepositoryInterface $userCommandRepository
+    ) {}
+
+    #[\Override]
+    public function execute(string $userUuid): void
+    {
+        $user = $this->userQueryRepository->findByUserUuid($userUuid);
+        if ($user === null) {
+            throw new UserNotFoundException($userUuid);
+        }
+
+        $this->userCommandRepository->delete($user);
+    }
+}
