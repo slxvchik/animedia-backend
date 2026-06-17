@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Delete;
 
 use Core\Application\User\Shared\Exception\UserNotFoundException;

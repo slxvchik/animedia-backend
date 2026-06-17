@@ -11,8 +11,8 @@ use Core\Application\PhoneCode\UseCase\Query\GetAllPhoneCodeUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
 use Core\Domain\PhoneCode\Entity\PhoneCode;
 use Core\Domain\PhoneCode\Repository\PhoneCodeQueryRepositoryInterface;
-use Core\Domain\Shared\Pagination\Entity\Page;
-use Core\Domain\Shared\Pagination\Entity\Pageable;
+use Core\Domain\Shared\Pagination\Page;
+use Core\Domain\Shared\Pagination\Pageable;
 
 final readonly class GetAllPhoneCodeService implements GetAllPhoneCodeUseCase
 {

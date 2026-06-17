@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Core\Domain\Country\Repository;
 
 use Core\Domain\Country\Entity\Country;
-use Core\Domain\Shared\Pagination\Entity\Page;
-use Core\Domain\Shared\Pagination\Entity\Pageable;
+use Core\Domain\Shared\Pagination\Page;
+use Core\Domain\Shared\Pagination\Pageable;
 
 interface CountryQueryRepositoryInterface
 {
     /**
-     * @param Pageable<Country> $pageable
+     * @param Pageable $pageable
      * @return Page<Country>
      */
     public function findAll(Pageable $pageable): Page;

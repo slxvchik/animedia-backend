@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Email\Listener;
 
 use Core\Application\User\Email\SendConfirm\SendUserEmailConfirmMailUseCase;

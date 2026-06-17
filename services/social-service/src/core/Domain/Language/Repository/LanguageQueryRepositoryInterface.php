@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Core\Domain\Language\Repository;
 
 use Core\Domain\Language\Entity\Language;
-use Core\Domain\Shared\Pagination\Entity\Page;
-use Core\Domain\Shared\Pagination\Entity\Pageable;
+use Core\Domain\Shared\Pagination\Page;
+use Core\Domain\Shared\Pagination\Pageable;
 
 interface LanguageQueryRepositoryInterface
 {
     /**
-     * @param Pageable<Language> $pageable
+     * @param Pageable $pageable
      * @return Page<Language>
      */
     public function findAll(Pageable $pageable): Page;

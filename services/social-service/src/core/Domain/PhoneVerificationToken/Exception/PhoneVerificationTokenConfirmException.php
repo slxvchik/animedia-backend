@@ -6,7 +6,7 @@ namespace Core\Domain\PhoneVerificationToken\Exception;
 
 use Core\Domain\Shared\Exception\AppException;
 use Core\Domain\Shared\Exception\AppExceptionStatus;
-use Core\Domain\Shared\ValueObject\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneNumber;
 
 class PhoneVerificationTokenConfirmException extends AppException
 {

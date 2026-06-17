@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\Shared\Service;
 
-use Core\Domain\Shared\ValueObject\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneNumber;
 
 interface SmsSenderInterface
 {

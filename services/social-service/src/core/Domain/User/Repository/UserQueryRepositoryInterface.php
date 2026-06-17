@@ -5,10 +5,18 @@ declare(strict_types=1);
 namespace Core\Domain\User\Repository;
 
 
+use Core\Domain\Shared\Pagination\Page;
+use Core\Domain\Shared\Pagination\Pageable;
 use Core\Domain\User\Entity\User;
 
 interface UserQueryRepositoryInterface
 {
+    /**
+     * @param Pageable $pageable
+     * @return Page<User>
+     */
+    public function findAll(Pageable $pageable): Page;
+
     public function findByUserUuid(string $userUuid): ?User;
 
     /**
@@ -24,8 +32,6 @@ interface UserQueryRepositoryInterface
     public function existsByEmail(string $email): bool;
 
     public function existsByEmailExcludeUserUuid(string $email, string $userUuid): bool;
-
-    public function existsByPhoneAndPhoneNumber(string $phoneCode, string $phoneNumber): bool;
 
     public function existsByPhoneAndPhoneNumberExcludeUserUuid(string $phoneCode, string $phoneNumber, string $userUuid): bool;
 }

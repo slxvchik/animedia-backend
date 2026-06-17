@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Phone\Change;
 
 
@@ -9,8 +11,8 @@ use Core\Application\User\Shared\Exception\UserNotFoundException;
 use Core\Application\User\Shared\Exception\UserPhoneNumberExistsException;
 use Core\Domain\PhoneCode\Repository\PhoneCodeQueryRepositoryInterface;
 use Core\Domain\Shared\Event\EventDispatcherInterface;
-use Core\Domain\Shared\Service\PhoneValidatorInterface;
-use Core\Domain\Shared\ValueObject\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneValidatorInterface;
 use Core\Domain\User\Repository\UserCommandRepositoryInterface;
 use Core\Domain\User\Repository\UserQueryRepositoryInterface;
 

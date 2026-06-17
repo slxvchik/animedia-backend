@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Domain\Shared\Pagination\Entity;
+namespace Core\Domain\Shared\Pagination;
 
 /**
  * @template T
@@ -21,6 +21,19 @@ final readonly class Page
         public bool $hasPrev,
         public bool $hasNext
     ) {}
+
+    public static function empty(): self
+    {
+        return new self(
+            content: [],
+            pageNumber: 0,
+            pageSize: 0,
+            totalPages: 0,
+            totalCount: 0,
+            hasPrev: false,
+            hasNext: false
+        );
+    }
 
     /**
      * @param T[] $newContent

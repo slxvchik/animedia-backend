@@ -1,6 +1,8 @@
 <?php
 
-namespace Core\Application\User\ChangeEmail\Confirm;
+declare(strict_types=1);
+
+namespace Core\Application\User\Email\Confirm;
 
 use Core\Application\User\Email\Confirm\ConfirmUserEmailUseCase;
 use Core\Application\User\Email\Shared\Exception\UserEmailConfirmException;

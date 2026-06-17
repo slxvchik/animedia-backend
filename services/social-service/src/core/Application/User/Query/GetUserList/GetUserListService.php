@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Query\GetUserList;
 
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
@@ -38,9 +40,9 @@ final readonly class GetUserListService implements GetUserListUseCase
             throw new UsersNotFoundException(array_values($notFoundIdList));
         }
 
-        $allCountryIsoCodeList = array_unique(array_filter(
-            array_map(static fn ($user) => $user->countryIsoCode, $users)
-        ));
+        $allCountryIsoCodeList = array_map(static fn ($user) => $user->countryIsoCode, $users)
+            |> array_filter(...)
+            |> array_unique(...);
         $countryDtoMap = [];
         if (!empty($allCountryIsoCodeList)) {
             $foundCountryList = $this->countryQueryRepository->findByIsoCodeList(
@@ -53,12 +55,10 @@ final readonly class GetUserListService implements GetUserListUseCase
             }
         }
 
-//        $allLanguageIsoCodeList = array_map(static fn($user) => $user->languageIsoCodeList, $users)
-//            |> (fn($x) => array_filter($x, static fn($languageIsoCode) => $languageIsoCode !== null))
-//            |> array_unique(...);
-        $allLanguageIsoCodeList = array_unique(array_merge(
-            ...array_filter(array_map(static fn($user) => $user->languageIsoCodeList, $users))
-        ));
+        $allLanguageIsoCodeList = array_map(static fn($user) => $user->languageIsoCodeList, $users)
+            |> (fn($array) => array_filter($array, static fn($languageIsoCode) => $languageIsoCode !== null))
+            |> (fn($array) => array_merge(...$array))
+            |> array_unique(...);
         $languageDtoMap = [];
         if (!empty($allLanguageIsoCodeList)) {
             $foundLanguageList = $this->languageQueryRepository->findByIsoCodeList(

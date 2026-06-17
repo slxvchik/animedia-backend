@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Core\Domain\Shared\ValueObject;
+namespace Core\Domain\Shared\PhoneNumber;
 
-use Core\Domain\Shared\Service\PhoneValidatorInterface;
 use Core\Domain\User\Exception\UserInvalidPhoneNumberException;
 
 readonly class PhoneNumber

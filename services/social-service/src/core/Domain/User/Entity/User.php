@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Core\Domain\User\Entity;
 
 use Core\Domain\Shared\Event\Eventable;
-use Core\Domain\Shared\IdentityGenerator\AssertUuidField;
+use Core\Domain\Shared\IdentityGenerator\Uuid;
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
-use Core\Domain\Shared\ValueObject\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneNumber;
 use Core\Domain\User\Event\UserEmailChangedEvent;
 use Core\Domain\User\Event\UserPhoneChangedEvent;
 use Core\Domain\User\Exception\UserEmailAlreadyConfirmedException;
@@ -15,34 +15,35 @@ use Core\Domain\User\Exception\UserInvalidEmailException;
 use Core\Domain\User\Exception\UserInvalidLanguageException;
 use Core\Domain\User\Exception\UserInvalidUsernameCodeException;
 use Core\Domain\User\Exception\UserInvalidUsernameException;
-use Core\Domain\User\ValueObject\UserEmail;
 use DateTimeImmutable;
 
 final class User
 {
     use Eventable;
-    use AssertUuidField;
 
-    public readonly string $uuid;
-    public private(set) string $username
-    {
+    public readonly Uuid $uuid;
+    public private(set) string $username {
         set {
+            if (empty($value) || mb_strlen($value) > 32) {
+                throw new UserInvalidUsernameException();
+            }
             $this->username = trim($value);
-            $this->assertUsername($this->username);
         }
     }
-    public private(set) string $usernameCode
-    {
+    public private(set) string $usernameCode {
         set {
+            if (empty($value) || mb_strlen($value) > 10) {
+                throw new UserInvalidUsernameCodeException();
+            }
             $this->usernameCode = trim($value);
-            $this->assertUsernameCode($this->usernameCode);
         }
     }
-    public private(set) string $email
-    {
+    public private(set) string $email {
         set {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                throw new UserInvalidEmailException($value);
+            }
             $this->email = trim($value);
-            $this->assertEmail($this->email);
         }
     }
     public private(set) bool $emailConfirmed;
@@ -57,11 +58,9 @@ final class User
     /**
      * @var string[]|null
      */
-    public private(set) ?array $languageIsoCodeList
-    {
+    public private(set) ?array $languageIsoCodeList {
         set {
             $this->languageIsoCodeList = $value;
-            $this->assertLanguageIsoCodes($this->languageIsoCodeList);
         }
     }
     public private(set) ?string $countryIsoCode;
@@ -92,8 +91,7 @@ final class User
         ?string           $color = null,
         ?string           $description = null
     ) {
-        $this->assertUuid($uuid);
-        $this->uuid = $uuid;
+        $this->uuid = new Uuid($uuid);
 
         // required fields
         $this->username = $username;
@@ -123,8 +121,7 @@ final class User
         bool                       $emailConfirmed,
         string                     $localeLanguageIsoCode,
         IdentityGeneratorInterface $identityGenerator
-    ): User
-    {
+    ): User {
         $uuid = $identityGenerator->generate();
         return new self(
             uuid: $uuid,
@@ -157,8 +154,7 @@ final class User
         ?string           $imageUuid = null,
         ?string           $color = null,
         ?string           $description = null
-    ): User
-    {
+    ): User {
         return new self(
             uuid: $uuid,
             username: $username,
@@ -181,46 +177,12 @@ final class User
         );
     }
 
-    private function assertUsername(string $username): void
-    {
-        if (empty($username) || mb_strlen($username) > 32) {
-            throw new UserInvalidUsernameException();
-        }
-    }
-
-    private function assertUsernameCode(string $usernameCode): void
-    {
-        if (empty($usernameCode) || mb_strlen($usernameCode) > 10) {
-            throw new UserInvalidUsernameCodeException();
-        }
-    }
-
-    private function assertEmail(string $email): void
-    {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new UserInvalidEmailException($email);
-        }
-    }
-
-    /**
-     * @param string[]|null $languageIsoCodeList
-     */
-    private function assertLanguageIsoCodes(?array $languageIsoCodeList): void
-    {
-        if ($languageIsoCodeList === null) {
-            return;
-        }
-        foreach ($languageIsoCodeList as $language) {
-            if (!is_string($language)) {
-                throw new UserInvalidLanguageException();
-            }
-        }
-    }
-
     /**
      * @param string[]|null $languageIsoCodeList
      */
     public function update(
+        string  $username,
+        string  $usernameCode,
         string  $localeLanguageIsoCode,
         ?string $firstName,
         ?string $lastName,
@@ -230,9 +192,9 @@ final class User
         ?string $imageUuid,
         ?string $color,
         ?string $description
-    ): void
-    {
-        $this->assertLanguageIsoCodes($languageIsoCodeList);
+    ): void {
+        $this->username = $username;
+        $this->usernameCode = $usernameCode;
 
         $this->localeLanguageIsoCode = $localeLanguageIsoCode;
         $this->firstName = $firstName;
@@ -249,8 +211,6 @@ final class User
 
     public function updateEmail(string $newEmail, bool $emailConfirmed = false): void
     {
-        $this->assertEmail($newEmail);
-
         if ($this->email === $newEmail) {
             return;
         }
@@ -274,7 +234,7 @@ final class User
 
         $this->recordEvent(
             new UserEmailChangedEvent(
-                userUuid: $this->uuid
+                userUuid: $this->uuid->value
             )
         );
     }
@@ -305,7 +265,7 @@ final class User
 
         $this->recordEvent(
             new UserPhoneChangedEvent(
-                userUuid: $this->uuid
+                userUuid: $this->uuid->value
             )
         );
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Email\SendConfirm;
 
 use Core\Application\User\Shared\Exception\UserNotFoundException;
@@ -29,7 +31,7 @@ final readonly class SendUserEmailConfirmMailService implements SendUserEmailCon
         }
 
         $userEmail = new UserEmail(
-            userUuid: $user->uuid,
+            userUuid: $user->uuid->value,
             email: $user->email
         );
 

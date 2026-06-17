@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Phone\Confirm;
 
 use Core\Application\User\Phone\Shared\Exception\UserPhoneAbsentException;

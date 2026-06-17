@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Application\User\Update;
 
 use Core\Application\PhoneCode\Exception\PhoneCodeNotFoundException;
 use Core\Application\User\Shared\Exception\UserEmailExistsException;
 use Core\Application\User\Shared\Exception\UserNotFoundException;
 use Core\Application\User\Shared\Exception\UserPhoneNumberExistsException;
+use Core\Application\User\Shared\Exception\UserUsernameExistsException;
 use Core\Domain\PhoneCode\Repository\PhoneCodeQueryRepositoryInterface;
 use Core\Domain\Shared\Event\EventDispatcherInterface;
-use Core\Domain\Shared\Service\PhoneValidatorInterface;
-use Core\Domain\Shared\ValueObject\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneNumber;
+use Core\Domain\Shared\PhoneNumber\PhoneValidatorInterface;
 use Core\Domain\User\Entity\User;
 use Core\Domain\User\Repository\UserCommandRepositoryInterface;
 use Core\Domain\User\Repository\UserQueryRepositoryInterface;
@@ -46,7 +49,21 @@ final readonly class UpdateUserService implements UpdateUserUseCase
             userDto: $userDto
         );
 
+        $usernameExists = $this->userQueryRepository->existsByUsernameAndUsernameCodeExcludeUserUuid(
+            username: $userDto->username,
+            usernameCode: $userDto->usernameCode,
+            userUuid: $userDto->userUuid
+        );
+        if ($usernameExists) {
+            throw new UserUsernameExistsException(
+                username: $userDto->username,
+                usernameCode: $userDto->usernameCode,
+            );
+        }
+
         $user->update(
+            username: $userDto->username,
+            usernameCode: $userDto->usernameCode,
             localeLanguageIsoCode: $userDto->localeLanguageIsoCode,
             firstName: $userDto->firstName,
             lastName: $userDto->lastName,
@@ -75,7 +92,7 @@ final readonly class UpdateUserService implements UpdateUserUseCase
             return;
         }
 
-        $emailExists = $this->userQueryRepository->existsByEmailExcludeUserUuid($userDto->email, $user->uuid);
+        $emailExists = $this->userQueryRepository->existsByEmailExcludeUserUuid($userDto->email, $user->uuid->value);
         if ($emailExists) {
             throw new UserEmailExistsException(
                 email: $userDto->email
@@ -116,7 +133,7 @@ final readonly class UpdateUserService implements UpdateUserUseCase
         $phoneExists = $this->userQueryRepository->existsByPhoneAndPhoneNumberExcludeUserUuid(
             phoneCode: $newPhoneNumber->phoneCode,
             phoneNumber: $newPhoneNumber->phoneNumber,
-            userUuid: $user->uuid
+            userUuid: $user->uuid->value
         );
         if ($phoneExists) {
             throw new UserPhoneNumberExistsException(

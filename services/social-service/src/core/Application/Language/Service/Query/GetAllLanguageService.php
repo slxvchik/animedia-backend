@@ -8,8 +8,8 @@ use Core\Application\Language\DTO\LanguageResponseDto;
 use Core\Application\Language\Mapper\LanguageApplicationMapperInterface;
 use Core\Application\Language\UseCase\Query\GetAllLanguageUseCase;
 use Core\Domain\Language\Repository\LanguageQueryRepositoryInterface;
-use Core\Domain\Shared\Pagination\Entity\Page;
-use Core\Domain\Shared\Pagination\Entity\Pageable;
+use Core\Domain\Shared\Pagination\Page;
+use Core\Domain\Shared\Pagination\Pageable;
 
 final readonly class GetAllLanguageService implements GetAllLanguageUseCase
 {

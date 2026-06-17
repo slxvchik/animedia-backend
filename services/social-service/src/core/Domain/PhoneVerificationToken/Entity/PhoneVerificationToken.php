@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Domain\PhoneVerificationToken\Entity;
 
 use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenAttemptsException;
@@ -8,12 +10,13 @@ use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenExpiredEx
 use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenInvalidCodeException;
 use Core\Domain\PhoneVerificationToken\Exception\PhoneVerificationTokenUsedException;
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
-use Core\Domain\Shared\ValueObject\PhoneNumber;
+use Core\Domain\Shared\IdentityGenerator\Uuid;
+use Core\Domain\Shared\PhoneNumber\PhoneNumber;
 use DateTimeImmutable;
 
 final class PhoneVerificationToken
 {
-    public readonly string $uuid;
+    public readonly Uuid $uuid;
     public private(set) string $userUuid;
     public private(set) PhoneNumber $phoneNumber;
     public private(set) int $code;
@@ -30,7 +33,7 @@ final class PhoneVerificationToken
         bool              $isUsed,
         DateTimeImmutable $expireAt
     ) {
-        $this->uuid = $uuid;
+        $this->uuid = new Uuid($uuid);
         $this->userUuid = $userUuid;
         $this->phoneNumber = $phoneNumber;
         $this->code = $code;

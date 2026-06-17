@@ -40,7 +40,7 @@ final readonly class PhoneCodeApplicationMapper implements PhoneCodeApplicationM
     {
         if ($phoneCode === null) { return null; }
         return new PhoneCodeResponseDto(
-            uuid: $phoneCode->uuid,
+            uuid: $phoneCode->uuid->value,
             phoneCode: $phoneCode->code,
             isActive: $phoneCode->active,
             country: $countryResponseDto

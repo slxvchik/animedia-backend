@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Core\Domain\PhoneCode\Entity;
 
 use Core\Domain\PhoneCode\Exception\InvalidPhoneCodeException;
-use Core\Domain\Shared\IdentityGenerator\AssertUuidField;
+use Core\Domain\Shared\IdentityGenerator\Uuid;
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 
 final class PhoneCode
 {
-    use AssertUuidField;
-
-    public readonly string $uuid;
+    public readonly Uuid $uuid;
     public readonly string $countryIsoCode;
     public readonly string $code;
     public private(set) bool $active;
@@ -23,8 +21,7 @@ final class PhoneCode
         string $phoneCode,
         bool $active = false,
     ) {
-        $this->assertUuid($uuid);
-        $this->uuid = $uuid;
+        $this->uuid = new Uuid($uuid);
 
         $this->assertPhoneCode($phoneCode);
         $this->code = $phoneCode;

@@ -34,12 +34,8 @@ final readonly class GetPhoneCodeListService implements GetPhoneCodeListUseCase
             return $phoneCodes;
         }
 
-        $countryIsoCodes = array_unique(
-            array_map(
-                static fn (PhoneCode $code) => $code->countryIsoCode,
-                $phoneCodes
-            )
-        );
+        $countryIsoCodes = array_map(static fn (PhoneCode $code) => $code->countryIsoCode, $phoneCodes)
+            |> array_unique(...);
 
         $countries = $this->countryQueryRepository->findByIsoCodeList(
             isoCodeList: $countryIsoCodes

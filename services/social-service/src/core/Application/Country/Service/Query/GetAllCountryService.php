@@ -8,8 +8,8 @@ use Core\Application\Country\DTO\CountryResponseDto;
 use Core\Application\Country\Mapper\CountryApplicationMapperInterface;
 use Core\Application\Country\UseCase\Query\GetAllCountryUseCase;
 use Core\Domain\Country\Repository\CountryQueryRepositoryInterface;
-use Core\Domain\Shared\Pagination\Entity\Page;
-use Core\Domain\Shared\Pagination\Entity\Pageable;
+use Core\Domain\Shared\Pagination\Page;
+use Core\Domain\Shared\Pagination\Pageable;
 
 final readonly class GetAllCountryService implements GetAllCountryUseCase
 {

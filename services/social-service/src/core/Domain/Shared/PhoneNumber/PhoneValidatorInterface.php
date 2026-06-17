@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Domain\Shared\Service;
+namespace Core\Domain\Shared\PhoneNumber;
 
 interface PhoneValidatorInterface
 {
