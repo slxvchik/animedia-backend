@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Application\PhoneCode\Exception;
 
-use Core\Domain\Shared\Exception\AppException;
-use Core\Domain\Shared\Exception\AppExceptionStatus;
+use Core\Domain\Shared\AppException\AppException;
+use Core\Domain\Shared\AppException\AppExceptionStatus;
 
 class PhoneCodeNotFoundException extends AppException
 {

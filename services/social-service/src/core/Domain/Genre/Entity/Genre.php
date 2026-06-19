@@ -4,19 +4,39 @@ declare(strict_types=1);
 
 namespace Core\Domain\Genre\Entity;
 
+use Core\Domain\Shared\Exception\FieldRequiredException;
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 use Core\Domain\Shared\SlugAlias\SlugAlias;
 
 final class Genre
 {
-    public readonly string $uuid;
+    public readonly string $uuid {
+        set {
+            $cleanValue = trim($value);
+            if (empty($cleanValue)) {
+                throw new FieldRequiredException(
+                    entity: self::class,
+                    field: 'uuid'
+                );
+            }
+            $this->uuid = $cleanValue;
+        }
+    }
     public private(set) SlugAlias $slugAlias;
-    public private(set) int $sortOrder;
+    public private(set) int $sortOrder {
+        set {
+            $this->sortOrder = $value < 0 ? 0 : $value;
+        }
+    }
     public private(set) bool $active;
     /**
      * @var GenreTranslation[]|null
      */
-    public private(set) ?array $translationList;
+    public private(set) ?array $translationList {
+        set {
+            $this->translationList = $value !== null && count($value) === 0 ? null : $value;
+        }
+    }
 
     /**
      * @param string $uuid
@@ -45,7 +65,7 @@ final class Genre
     public static function fromDatabase(string $uuid, string $slugAlias, int $sortOrder, bool $active, ?array $translationList): self
     {
         return new self(
-            uuid:$uuid,
+            uuid: $uuid,
             slugAlias: $slugAlias,
             sortOrder: $sortOrder,
             active: $active,
@@ -68,7 +88,7 @@ final class Genre
     ): self {
         $uuid = $identityGenerator->generate();
         return new self(
-            uuid:$uuid,
+            uuid: $uuid,
             slugAlias: $slugAlias,
             sortOrder: $sortOrder,
             active: $active,
@@ -92,6 +112,6 @@ final class Genre
         $this->slugAlias = $slugAlias;
         $this->sortOrder = $sortOrder;
         $this->active = $active;
-
+        $this->translationList = $translationList;
     }
 }

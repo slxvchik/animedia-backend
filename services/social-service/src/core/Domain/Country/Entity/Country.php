@@ -5,11 +5,34 @@ declare(strict_types=1);
 namespace Core\Domain\Country\Entity;
 
 use Core\Domain\Country\Exception\InvalidCountryIsoCodeException;
+use Core\Domain\Shared\Exception\FieldRequiredException;
 
 final class Country
 {
-    public readonly string $isoCode;
-    public private(set) string $name;
+    public readonly string $isoCode {
+        set {
+            $cleanValue = trim($value);
+            if (empty($cleanValue)) {
+                throw new FieldRequiredException(
+                    entity: self::class,
+                    field: 'isoCode'
+                );
+            }
+            $this->isoCode = $cleanValue;
+        }
+    }
+    public private(set) string $name {
+        set {
+            $cleanValue = trim($value);
+            if (empty($cleanValue)) {
+                throw new FieldRequiredException(
+                    entity: self::class,
+                    field: 'name'
+                );
+            }
+            $this->name = $cleanValue;
+        }
+    }
     public private(set) bool $active;
 
     public function __construct(

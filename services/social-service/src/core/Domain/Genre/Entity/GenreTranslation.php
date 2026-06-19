@@ -4,14 +4,46 @@ declare(strict_types=1);
 
 namespace Core\Domain\Genre\Entity;
 
+use Core\Domain\Shared\Exception\FieldRequiredException;
 use Core\Domain\Shared\IdentityGenerator\IdentityGeneratorInterface;
 
 final class GenreTranslation
 {
-    public readonly string $uuid;
-    public readonly string $languageIsoCode;
+    public readonly string $uuid {
+        set {
+            $cleanValue = trim($value);
+            if (empty($cleanValue)) {
+                throw new FieldRequiredException(
+                    entity: self::class,
+                    field: 'uuid'
+                );
+            }
+            $this->uuid = $cleanValue;
+        }
+    }
+    public readonly string $languageIsoCode {
+        set {
+            $cleanValue = trim($value);
+            if (empty($cleanValue)) {
+                throw new FieldRequiredException(
+                    entity: self::class,
+                    field: 'languageIsoCode'
+                );
+            }
+            $this->languageIsoCode = $cleanValue;
+        }
+    }
     public private(set) string $name {
-        set => trim($value);
+        set {
+            $cleanValue = trim($value);
+            if (empty($cleanValue)) {
+                throw new FieldRequiredException(
+                    entity: GenreTranslation::class,
+                    field: 'name'
+                );
+            }
+            $this->name = $cleanValue;
+        }
     }
     public private(set) ?string $description;
 

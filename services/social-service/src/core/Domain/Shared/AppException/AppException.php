@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Domain\Shared\Exception;
+namespace Core\Domain\Shared\AppException;
 
 use RuntimeException;
 
