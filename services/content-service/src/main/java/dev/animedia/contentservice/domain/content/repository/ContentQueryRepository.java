@@ -2,14 +2,29 @@ package dev.animedia.contentservice.domain.content.repository;
 
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.model.ContentType;
+import dev.animedia.contentservice.domain.shared.pagination.Page;
+import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface ContentQueryRepository {
-    Optional<Content> find(UUID id, @Nullable String languageCode, @Nullable Boolean active);
-    Optional<Content> find(String alias, ContentType type, int season, @Nullable String languageCode, @Nullable Boolean active);
+	Optional<Content> find(
+		UUID id,
+		@Nullable
+		String languageCode
+	);
 
-    boolean exists(String alias, ContentType type, int season);
+	Optional<Content> find(
+		String alias,
+		ContentType type,
+		int season,
+		@Nullable
+		String languageCode
+	);
+
+	Page<Content> findAll(Pageable pageable);
+
+	boolean exists(String alias, ContentType type, int season);
 }

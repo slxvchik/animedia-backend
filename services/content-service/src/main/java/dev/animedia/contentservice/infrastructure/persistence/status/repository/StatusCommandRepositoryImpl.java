@@ -28,14 +28,14 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 	}
 
 	@Override
-	public Status create(Status status) {
+	public UUID create(Status status) {
 		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(status);
 		StatusEntity saved = jpaStatusRepository.save(statusEntity);
-		return statusPersistenceMapper.toStatus(saved);
+		return saved.getId();
 	}
 
 	@Override
-	public Status update(Status status) {
+	public void update(Status status) {
 		StatusEntity statusEntity = jpaStatusRepository.findById(status.getId())
 			.orElseThrow(EntityNotFoundException::new);
 
@@ -47,9 +47,7 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 
 		statusEntity.syncTranslationSet(newTranslationEntitySet);
 
-		StatusEntity saved = jpaStatusRepository.save(statusEntity);
-
-		return statusPersistenceMapper.toStatus(saved);
+		jpaStatusRepository.save(statusEntity);
 	}
 
 	@Override

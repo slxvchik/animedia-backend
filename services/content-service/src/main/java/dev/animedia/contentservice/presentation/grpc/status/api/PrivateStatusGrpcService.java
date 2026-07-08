@@ -3,6 +3,10 @@ package dev.animedia.contentservice.presentation.grpc.status.api;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.usecase.*;
+import dev.animedia.contentservice.application.status.usecase.admin.GetStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.CreateStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.DeleteStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.UpdateStatusUseCase;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.ProtoPaginationMapper;
@@ -24,7 +28,7 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 	private final ProtoPaginationMapper protoPaginationMapper;
 	private final PrivateStatusGrpcMapper privateStatusGrpcMapper;
 
-	private final SearchStatusUseCase searchStatusUseCase;
+	private final GetAllStatusUseCase searchStatusUseCase;
 	private final GetStatusUseCase getStatusUseCase;
 	private final CreateStatusUseCase createStatusUseCase;
 	private final UpdateStatusUseCase updateStatusUseCase;
@@ -34,7 +38,7 @@ public class PrivateStatusGrpcService extends PrivateContentStatusServiceGrpc.Pr
 	public PrivateStatusGrpcService(
 		ProtoPaginationMapper protoPaginationMapper,
 		PrivateStatusGrpcMapper privateStatusGrpcMapper,
-		SearchStatusUseCase searchStatusUseCase,
+		GetAllStatusUseCase searchStatusUseCase,
 		GetStatusUseCase getStatusUseCase,
 		CreateStatusUseCase createStatusUseCase,
 		UpdateStatusUseCase updateStatusUseCase,

@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.infrastructure.persistence.content.exception;
 
-import dev.animedia.contentservice.domain.shared.exception.AppException;
-import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
+import dev.animedia.contentservice.domain.shared.appexception.AppException;
+import dev.animedia.contentservice.domain.shared.appexception.AppExceptionStatus;
 
 public class ContentCreateException extends AppException {
 	public ContentCreateException() {

@@ -2,8 +2,8 @@ package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.dto.ContentSearchDto;
-import dev.animedia.contentservice.application.content.usecase.GetContentByDetailsUseCase;
-import dev.animedia.contentservice.application.content.usecase.SearchContentUseCase;
+import dev.animedia.contentservice.application.content.usecase.user.GetContentByDetailsUseCase;
+import dev.animedia.contentservice.application.content.usecase.admin.GetAllContentUseCase;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
@@ -29,7 +29,7 @@ public class PublicContentGrpcService extends PublicContentServiceGrpc.PublicCon
 	private final PublicContentGrpcMapper publicContentGrpcMapper;
 	private final ContentTypeGrpcMapper contentTypeGrpcMapper;
 
-    private final SearchContentUseCase searchContentUseCase;
+    private final GetAllContentUseCase getAllContentUseCase;
     private final GetContentByDetailsUseCase getContentByDetailsUseCase;
 
 	@Autowired
@@ -37,13 +37,13 @@ public class PublicContentGrpcService extends PublicContentServiceGrpc.PublicCon
         ProtoPaginationMapper protoPaginationMapper,
 	    PublicContentGrpcMapper publicContentGrpcMapper,
 		ContentTypeGrpcMapper contentTypeGrpcMapper,
-	    SearchContentUseCase searchContentUseCase,
+	    GetAllContentUseCase getAllContentUseCase,
 	    GetContentByDetailsUseCase getContentByDetailsUseCase
 	) {
         this.protoPaginationMapper = protoPaginationMapper;
 	    this.publicContentGrpcMapper = publicContentGrpcMapper;
 		this.contentTypeGrpcMapper = contentTypeGrpcMapper;
-		this.searchContentUseCase = searchContentUseCase;
+		this.getAllContentUseCase = getAllContentUseCase;
 	    this.getContentByDetailsUseCase = getContentByDetailsUseCase;
 	}
 
@@ -63,8 +63,7 @@ public class PublicContentGrpcService extends PublicContentServiceGrpc.PublicCon
 		    Set.of("alias", "season", "releaseDate", "sortOrder", "translations.title")
 	    );
 
-		Page<ContentDto> contentDtoPage = searchContentUseCase.search(
-			contentSearchDto,
+		Page<ContentDto> contentDtoPage = getAllContentUseCase.get(
 			domainPageable
 		);
 

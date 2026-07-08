@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.grpc.server.GlobalServerInterceptor;
 
-import dev.animedia.contentservice.presentation.exception.AppExceptionMessageService;
-import dev.animedia.contentservice.presentation.exception.AppExceptionStatusMapper;
+import dev.animedia.contentservice.presentation.appexception.AppExceptionMessageService;
+import dev.animedia.contentservice.presentation.appexception.AppExceptionStatusMapper;
 import io.grpc.ServerInterceptor;
 
 @Configuration

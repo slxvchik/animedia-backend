@@ -1,8 +1,10 @@
 package dev.animedia.contentservice.infrastructure.transactional.genre;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.usecase.CreateGenreUseCase;
+import dev.animedia.contentservice.application.genre.usecase.admin.CreateGenreUseCase;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 public class CreateGenreTransactionalDecorator implements CreateGenreUseCase {
 	private final CreateGenreUseCase createGenreUseCase;
@@ -13,7 +15,7 @@ public class CreateGenreTransactionalDecorator implements CreateGenreUseCase {
 
 	@Transactional
 	@Override
-	public GenreDto create(GenreDto genreDto) {
+	public UUID create(GenreDto genreDto) {
 		return createGenreUseCase.create(genreDto);
 	}
 }

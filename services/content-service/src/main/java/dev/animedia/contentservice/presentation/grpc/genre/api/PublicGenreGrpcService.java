@@ -2,7 +2,6 @@ package dev.animedia.contentservice.presentation.grpc.genre.api;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.genre.dto.GenreSearchDto;
-import dev.animedia.contentservice.application.genre.usecase.SearchGenreUseCase;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;

@@ -1,10 +1,8 @@
 package dev.animedia.contentservice.application.status.mapper;
 
 import dev.animedia.contentservice.application.status.dto.StatusDto;
-import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusTranslationDto;
 import dev.animedia.contentservice.domain.status.model.Status;
-import dev.animedia.contentservice.domain.status.model.StatusSearchCriteria;
 import dev.animedia.contentservice.domain.status.model.StatusTranslation;
 
 import java.util.stream.Collectors;
@@ -53,15 +51,6 @@ public class StatusApplicationMapper {
             statusTranslation.getId(),
             statusTranslation.getLanguageCode(),
             statusTranslation.getName()
-        );
-    }
-
-    public StatusSearchCriteria toStatusSearchCriteria(StatusSearchDto searchStatusDto) {
-        return new StatusSearchCriteria(
-            searchStatusDto.active(),
-            searchStatusDto.alias(),
-            searchStatusDto.name(),
-            searchStatusDto.languageCode()
         );
     }
 }

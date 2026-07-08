@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public record ContentUpdate(
 	Status status,
-	UUID coverImageId,
-	UUID trailerVideoId,
+	String coverImageId,
+	String trailerVideoId,
 	LocalDate releaseDate,
 	boolean active,
 	int sort,

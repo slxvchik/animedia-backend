@@ -2,7 +2,14 @@ package dev.animedia.contentservice.infrastructure.config.status;
 
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.application.status.service.*;
+import dev.animedia.contentservice.application.status.service.admin.CreateStatusService;
+import dev.animedia.contentservice.application.status.service.admin.DeleteStatusService;
+import dev.animedia.contentservice.application.status.service.admin.UpdateStatusService;
 import dev.animedia.contentservice.application.status.usecase.*;
+import dev.animedia.contentservice.application.status.usecase.admin.GetStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.CreateStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.DeleteStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.UpdateStatusUseCase;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import dev.animedia.contentservice.infrastructure.transactional.status.CreateStatusTransactionalDecorator;
@@ -71,11 +78,11 @@ public class StatusUseCaseConfig {
 	}
 
 	@Bean
-	public GetStatusListUseCase getStatusListUseCase(
+	public UserGetStatusListUseCase getStatusListUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository
 	) {
-		return new GetStatusListService(
+		return new UserGetStatusListService(
 			statusApplicationMapper,
 			statusQueryRepository
 		);
@@ -86,18 +93,18 @@ public class StatusUseCaseConfig {
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository
 	) {
-		return new GetStatusService(
+		return new AdminGetUserStatusService(
 			statusApplicationMapper,
 			statusQueryRepository
 		);
 	}
 
 	@Bean
-	public SearchStatusUseCase searchStatusUseCase(
+	public GetAllStatusUseCase searchStatusUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository
 	) {
-		return new SearchStatusService(
+		return new GetAllStatusService(
 			statusApplicationMapper,
 			statusQueryRepository
 		);

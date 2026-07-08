@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.domain.genre.model;
 
-import dev.animedia.contentservice.domain.genre.exception.GenreTranslationNameRequiredException;
+import dev.animedia.contentservice.domain.shared.exception.FieldRequiredException;
 import dev.animedia.contentservice.domain.shared.translation.model.BaseTranslation;
 
 import java.util.UUID;
@@ -37,6 +37,6 @@ public class GenreTranslation extends BaseTranslation {
     }
 
     public void validateName(String name) {
-        if (name == null || name.isBlank()) throw new GenreTranslationNameRequiredException();
+        if (name == null || name.isBlank()) throw new FieldRequiredException("genre translation: name");
     }
 }

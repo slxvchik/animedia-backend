@@ -3,7 +3,6 @@ package dev.animedia.contentservice.infrastructure.persistence.status.repository
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.domain.status.model.Status;
-import dev.animedia.contentservice.domain.status.model.StatusSearchCriteria;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import dev.animedia.contentservice.infrastructure.persistence.shared.mapper.PaginationPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.status.mapper.StatusPersistenceMapper;
@@ -50,21 +49,13 @@ public class StatusQueryRepositoryImpl implements StatusQueryRepository {
 	}
 
 	@Override
-	public Page<Status> search(StatusSearchCriteria criteria, Pageable pageable) {
+	public Page<Status> findAll(Pageable pageable) {
 		org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(
 			pageable.page(),
-			pageable.size(),
-			pageable.sortField(),
-			pageable.sortDirection()
+			pageable.size()
 		);
 
-		org.springframework.data.domain.Page<StatusEntity> statusEntitySpringPage = jpaStatusRepository.search(
-			criteria.active(),
-			criteria.alias(),
-			criteria.name(),
-			criteria.languageCode(),
-			springPageable
-		);
+		org.springframework.data.domain.Page<StatusEntity> statusEntitySpringPage = jpaStatusRepository.findAll(springPageable);
 
 		List<Status> statusList = statusEntitySpringPage.getContent()
 			.stream()

@@ -1,8 +1,8 @@
 package dev.animedia.contentservice.presentation.grpc.config;
 
-import dev.animedia.contentservice.domain.shared.exception.AppException;
-import dev.animedia.contentservice.presentation.exception.AppExceptionMessageService;
-import dev.animedia.contentservice.presentation.exception.AppExceptionStatusMapper;
+import dev.animedia.contentservice.domain.shared.appexception.AppException;
+import dev.animedia.contentservice.presentation.appexception.AppExceptionMessageService;
+import dev.animedia.contentservice.presentation.appexception.AppExceptionStatusMapper;
 import io.grpc.*;
 
 import java.nio.charset.StandardCharsets;

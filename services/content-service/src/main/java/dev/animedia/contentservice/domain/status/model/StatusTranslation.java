@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.domain.status.model;
 
+import dev.animedia.contentservice.domain.shared.exception.FieldRequiredException;
 import dev.animedia.contentservice.domain.shared.translation.model.BaseTranslation;
-import dev.animedia.contentservice.domain.status.exception.StatusTranslationNameRequiredException;
 
 import java.util.UUID;
 
@@ -30,6 +30,6 @@ public class StatusTranslation extends BaseTranslation {
 	}
 
 	private void validateName(String name) {
-		if (name == null || name.isBlank()) throw new StatusTranslationNameRequiredException();
+		if (name == null || name.isBlank()) throw new FieldRequiredException("status translation: name");
 	}
 }

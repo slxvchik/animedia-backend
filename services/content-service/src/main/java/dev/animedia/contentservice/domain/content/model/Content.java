@@ -17,8 +17,8 @@ public class Content {
 	private final ContentType type;
 	private final int season;
 	private Status status;
-	private UUID coverImageId;
-	private UUID trailerVideoId;
+	private String coverImageId;
+	private String trailerVideoId;
 	private LocalDate releaseDate;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
@@ -81,11 +81,11 @@ public class Content {
 		return status;
 	}
 
-	public UUID getCoverImageId() {
+	public String getCoverImageId() {
 		return coverImageId;
 	}
 
-	public UUID getTrailerVideoId() {
+	public String getTrailerVideoId() {
 		return trailerVideoId;
 	}
 
@@ -186,8 +186,8 @@ public class Content {
 		private ContentType type;
 		private int season;
 		private Status status;
-		private UUID coverUrl;
-		private UUID trailerUrl;
+		private String coverUrl;
+		private String trailerUrl;
 		private LocalDate releaseDate;
 		private LocalDateTime createdAt;
 		private LocalDateTime updatedAt;
@@ -237,12 +237,12 @@ public class Content {
 			return this;
 		}
 
-		public Builder coverUrl(UUID coverUrl) {
+		public Builder coverUrl(String coverUrl) {
 			this.coverUrl = coverUrl;
 			return this;
 		}
 
-		public Builder trailerUrl(UUID trailerUrl) {
+		public Builder trailerUrl(String trailerUrl) {
 			this.trailerUrl = trailerUrl;
 			return this;
 		}

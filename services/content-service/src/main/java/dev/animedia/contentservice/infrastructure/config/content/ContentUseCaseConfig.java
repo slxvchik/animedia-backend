@@ -3,8 +3,10 @@ package dev.animedia.contentservice.infrastructure.config.content;
 import dev.animedia.contentservice.application.content.mapper.ContentApplicationMapper;
 import dev.animedia.contentservice.application.content.resolver.GenreDomainResolver;
 import dev.animedia.contentservice.application.content.resolver.StatusDomainResolver;
-import dev.animedia.contentservice.application.content.service.*;
-import dev.animedia.contentservice.application.content.usecase.*;
+import dev.animedia.contentservice.application.content.service.admin.*;
+import dev.animedia.contentservice.application.content.service.user.GetContentByDetailsService;
+import dev.animedia.contentservice.application.content.usecase.admin.*;
+import dev.animedia.contentservice.application.content.usecase.user.GetContentByDetailsUseCase;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
@@ -142,15 +144,14 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public SearchContentUseCase searchContentUseCase(
+	public GetAllContentUseCase searchContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		ContentSearchRepository contentSearchRepository,
 		StatusApplicationMapper statusApplicationMapper,
 		GenreApplicationMapper genreApplicationMapper
 	) {
-		return new SearchContentService(
+		return new GetAllContentService(
 			contentApplicationMapper,
-			contentSearchRepository,
 			statusApplicationMapper,
 			genreApplicationMapper
 		);

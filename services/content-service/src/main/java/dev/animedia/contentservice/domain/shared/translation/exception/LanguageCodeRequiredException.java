@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.domain.shared.translation.exception;
 
-import dev.animedia.contentservice.domain.shared.exception.AppException;
-import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
+import dev.animedia.contentservice.domain.shared.appexception.AppException;
+import dev.animedia.contentservice.domain.shared.appexception.AppExceptionStatus;
 
 public class LanguageCodeRequiredException extends AppException {
 	public LanguageCodeRequiredException() {

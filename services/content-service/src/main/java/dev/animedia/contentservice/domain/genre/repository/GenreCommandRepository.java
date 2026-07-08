@@ -5,7 +5,7 @@ import dev.animedia.contentservice.domain.genre.model.Genre;
 import java.util.UUID;
 
 public interface GenreCommandRepository {
-    Genre create(Genre genre);
-    Genre update(Genre genre);
+    UUID create(Genre genre);
+    void update(Genre genre);
     void delete(UUID id);
 }

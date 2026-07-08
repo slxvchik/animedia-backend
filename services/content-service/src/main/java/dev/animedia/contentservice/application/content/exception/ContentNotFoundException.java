@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.application.content.exception;
 
-import dev.animedia.contentservice.domain.shared.exception.AppException;
-import dev.animedia.contentservice.domain.shared.exception.AppExceptionStatus;
+import dev.animedia.contentservice.domain.shared.appexception.AppException;
+import dev.animedia.contentservice.domain.shared.appexception.AppExceptionStatus;
 
 import java.util.UUID;
 

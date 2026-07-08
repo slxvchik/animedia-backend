@@ -2,7 +2,7 @@ package dev.animedia.contentservice.presentation.grpc.status.api;
 
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
-import dev.animedia.contentservice.application.status.usecase.SearchStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.GetAllStatusUseCase;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.presentation.grpc.config.LanguageInterceptor;
@@ -23,13 +23,13 @@ import java.util.Set;
 @GrpcService
 public class PublicStatusGrpcService extends PublicContentStatusServiceGrpc.PublicContentStatusServiceImplBase {
 	private final ProtoPaginationMapper protoPaginationMapper;
-	private final SearchStatusUseCase searchStatusUseCase;
+	private final GetAllStatusUseCase searchStatusUseCase;
 	private final PublicStatusGrpcMapper publicStatusGrpcMapper;
 
 	@Autowired
 	public PublicStatusGrpcService(
 		ProtoPaginationMapper protoPaginationMapper,
-		SearchStatusUseCase searchStatusUseCase,
+		GetAllStatusUseCase searchStatusUseCase,
 		PublicStatusGrpcMapper publicStatusGrpcMapper
 	) {
 		this.protoPaginationMapper = protoPaginationMapper;

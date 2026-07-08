@@ -27,35 +27,26 @@ public interface JpaGenreRepository extends JpaRepository<GenreEntity, UUID> {
         @Param("active") @Nullable Boolean active
     );
 
-    @Query("SELECT ge " +
+    @Query(
+        "SELECT ge " +
         "FROM GenreEntity ge " +
         "LEFT JOIN FETCH ge.translations gte " +
         "WHERE (ge.id IN :idList) " +
         "AND (:lang IS NULL OR gte.languageCode = :lang) " +
-        "AND (:active IS NULL OR :active = ge.active) " +
-        "ORDER BY ge.sortOrder DESC")
+        "AND (:active IS NULL OR :active = ge.active)"
+    )
     List<GenreEntity> findByIdList(
         @Param("idList") List<UUID> idList,
         @Param("lang") @Nullable String languageCode,
         @Param("active") @Nullable Boolean active
     );
 
-    @Query("SELECT ge " +
+    @Query(
+        "SELECT ge " +
         "FROM GenreEntity ge " +
-        "JOIN FETCH ge.translations gte " +
-        "WHERE (:alias IS NULL OR :alias LIKE CONCAT('%', ge.alias, '%')) " +
-        "AND (:name IS NULL OR :name LIKE CONCAT('%', gte.name, '%')) " +
-        "AND (:desc IS NULL OR :desc LIKE CONCAT('%', gte.description, '%')) " +
-        "AND (:lang IS NULL OR :lang = gte.languageCode) " +
-        "AND (:active IS NULL OR :active = ge.active)")
-    Page<GenreEntity> search(
-        @Param("active") @Nullable Boolean active,
-        @Param("alias") @Nullable String alias,
-        @Param("name") @Nullable String name,
-        @Param("desc") @Nullable String description,
-        @Param("lang") @Nullable String languageCode,
-        Pageable pageable
-    );
+        "JOIN FETCH ge.translations gte"
+    )
+    Page<GenreEntity> findAll(Pageable pageable);
 
     boolean existsByAlias(String alias);
 }

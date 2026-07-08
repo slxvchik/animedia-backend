@@ -8,20 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaginationPersistenceMapper {
-	public org.springframework.data.domain.Pageable toPageable(int page, int size, String sortField, Pageable.SortDirection sortDirection) {
-		if (sortField == null || sortField.isBlank()) {
-			return toPageable(page, size);
-		}
-
-		Sort.Direction direction = (sortDirection == null || sortDirection == Pageable.SortDirection.DESC)
-			? Sort.Direction.DESC
-			: Sort.Direction.ASC;
-
-		Sort sort = Sort.by(direction, sortField);
-
-		return PageRequest.of(page, size, sort);
-	}
-
 	public org.springframework.data.domain.Pageable toPageable(int page, int size) {
 		return PageRequest.of(page, size);
 	}

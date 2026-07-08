@@ -15,21 +15,25 @@ import java.util.UUID;
 @Repository
 public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>, JpaSpecificationExecutor<ContentEntity> {
 
-	@Query("SELECT ce " +
+	@Query(
+		"SELECT ce " +
 		"FROM ContentEntity ce " +
 		"LEFT JOIN FETCH ce.statusEntity se " +
 		"LEFT JOIN FETCH ce.genres g " +
 		"LEFT JOIN FETCH ce.translations t " +
 		"WHERE ce.id = :id " +
-		"AND (:lang IS NULL OR t.languageCode = :lang) " +
-		"AND (:active IS NULL OR :active = ce.active)")
+		"AND (:lang IS NULL OR t.languageCode = :lang)"
+	)
 	Optional<ContentEntity> findById(
-		@Param("id") UUID id,
-		@Param("lang") @Nullable String languageCode,
-		@Param("active") @Nullable Boolean active
+		@Param("id")
+		UUID id,
+		@Param("lang")
+		@Nullable
+		String languageCode
 	);
 
-	@Query("SELECT ce " +
+	@Query(
+		"SELECT ce " +
 		"FROM ContentEntity ce " +
 		"LEFT JOIN FETCH ce.statusEntity se " +
 		"LEFT JOIN FETCH ce.genres g " +
@@ -37,14 +41,18 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 		"WHERE ce.alias = :alias " +
 		"AND ce.contentType = :type " +
 		"AND ce.season = :season " +
-		"AND (:lang IS NULL OR t.languageCode = :lang) " +
-		"AND (:active IS NULL OR :active = ce.active)")
+		"AND (:lang IS NULL OR t.languageCode = :lang)"
+	)
 	Optional<ContentEntity> findByAliasAndTypeAndSeason(
-		@Param("alias") String alias,
-		@Param("type") ContentType type,
-		@Param("season") int season,
-		@Param("lang") @Nullable String languageCode,
-		@Param("active") @Nullable Boolean active
+		@Param("alias")
+		String alias,
+		@Param("type")
+		ContentType type,
+		@Param("season")
+		int season,
+		@Param("lang")
+		@Nullable
+		String languageCode
 	);
 
 	boolean existsByAliasAndContentTypeAndSeason(String alias, ContentType type, int season);

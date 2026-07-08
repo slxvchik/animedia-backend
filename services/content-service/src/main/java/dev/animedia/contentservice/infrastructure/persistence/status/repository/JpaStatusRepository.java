@@ -42,16 +42,8 @@ public interface JpaStatusRepository extends JpaRepository<StatusEntity, UUID> {
 
 	@Query("SELECT DISTINCT se " +
 		"FROM StatusEntity se " +
-		"JOIN FETCH se.translations ste " +
-		"WHERE (CAST(:alias AS string) IS NULL OR LOWER(CAST(:alias AS string)) LIKE CONCAT('%', LOWER(se.alias), '%')) " +
-		"AND (CAST(:name AS string) IS NULL OR LOWER(CAST(:name AS string)) LIKE CONCAT('%', LOWER(ste.name), '%')) " +
-		"AND (CAST(:lang AS string) IS NULL OR LOWER(CAST(:lang AS string)) = LOWER(ste.languageCode)) " +
-		"AND (:active IS NULL OR :active = se.active)")
-	Page<StatusEntity> search(
-		@Param("active") @Nullable Boolean active,
-		@Param("alias") @Nullable String alias,
-		@Param("name") @Nullable String name,
-		@Param("lang") @Nullable String languageCode,
+		"JOIN FETCH se.translations ste")
+	Page<StatusEntity> findAll(
 		Pageable pageable
 	);
 

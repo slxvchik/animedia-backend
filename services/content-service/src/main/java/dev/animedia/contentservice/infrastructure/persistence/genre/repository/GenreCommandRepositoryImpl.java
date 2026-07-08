@@ -28,14 +28,14 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
     }
 
     @Override
-    public Genre create(Genre genre) {
+    public UUID create(Genre genre) {
         GenreEntity genreEntity = genrePersistenceMapper.toGenreEntity(genre);
         GenreEntity saved = jpaGenreRepository.save(genreEntity);
-        return genrePersistenceMapper.toGenre(saved);
+        return saved.getId();
     }
 
     @Override
-    public Genre update(Genre genre) {
+    public void update(Genre genre) {
         GenreEntity genreEntity = jpaGenreRepository.findById(genre.getId())
             .orElseThrow(EntityNotFoundException::new);
 
@@ -48,9 +48,7 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
 
         genreEntity.syncTranslationSet(newTranslationSet);
 
-        GenreEntity saved = jpaGenreRepository.save(genreEntity);
-
-        return genrePersistenceMapper.toGenre(saved);
+        jpaGenreRepository.save(genreEntity);
     }
 
     @Override

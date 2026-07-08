@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.infrastructure.persistence.genre.repository;
 
 import dev.animedia.contentservice.domain.genre.model.Genre;
-import dev.animedia.contentservice.domain.genre.model.GenreSearchCriteria;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
@@ -50,22 +49,13 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
     }
 
     @Override
-    public Page<Genre> search(GenreSearchCriteria genreSearchCriteria, Pageable pageable) {
+    public Page<Genre> findAll(Pageable pageable) {
         org.springframework.data.domain.Pageable springPageable = paginationPersistenceMapper.toPageable(
             pageable.page(),
-            pageable.size(),
-            pageable.sortField(),
-            pageable.sortDirection()
+            pageable.size()
         );
 
-        org.springframework.data.domain.Page<GenreEntity> genreEntitySpringPage = jpaGenreRepository.search(
-            genreSearchCriteria.active(),
-            genreSearchCriteria.alias(),
-            genreSearchCriteria.name(),
-            genreSearchCriteria.description(),
-            genreSearchCriteria.languageCode(),
-            springPageable
-        );
+        org.springframework.data.domain.Page<GenreEntity> genreEntitySpringPage = jpaGenreRepository.findAll(springPageable);
 
         List<Genre> genreList = genreEntitySpringPage.getContent()
             .stream()

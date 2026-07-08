@@ -56,10 +56,10 @@ public class ContentEntity {
     private StatusEntity statusEntity;
 
     @Column(name = "cover_image_id", length = 512)
-    private UUID coverImageId;
+    private String coverImageId;
 
     @Column(name = "trailer_video_id", length = 512)
-    private UUID trailerVideoId;
+    private String trailerVideoId;
 
     @Column(name = "release_date")
     private LocalDate releaseDate;
@@ -145,19 +145,19 @@ public class ContentEntity {
         this.statusEntity = statusEntity;
     }
 
-    public UUID getCoverImageId() {
+    public String getCoverImageId() {
         return coverImageId;
     }
 
-    public void setCoverImageId(UUID coverImageId) {
+    public void setCoverImageId(String coverImageId) {
         this.coverImageId = coverImageId;
     }
 
-    public UUID getTrailerVideoId() {
+    public String getTrailerVideoId() {
         return trailerVideoId;
     }
 
-    public void setTrailerVideoId(UUID trailerVideoId) {
+    public void setTrailerVideoId(String trailerVideoId) {
         this.trailerVideoId = trailerVideoId;
     }
 

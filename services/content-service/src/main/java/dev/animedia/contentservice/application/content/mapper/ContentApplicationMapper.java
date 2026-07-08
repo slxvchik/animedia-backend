@@ -1,12 +1,10 @@
 package dev.animedia.contentservice.application.content.mapper;
 
 import dev.animedia.contentservice.application.content.dto.ContentDto;
-import dev.animedia.contentservice.application.content.dto.ContentSearchDto;
 import dev.animedia.contentservice.application.content.dto.ContentTranslationDto;
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
 import dev.animedia.contentservice.application.status.dto.StatusDto;
 import dev.animedia.contentservice.domain.content.model.Content;
-import dev.animedia.contentservice.domain.content.model.ContentSearchCriteria;
 import dev.animedia.contentservice.domain.content.model.ContentTranslation;
 import dev.animedia.contentservice.domain.content.model.ContentUpdate;
 import dev.animedia.contentservice.domain.genre.model.Genre;
@@ -115,30 +113,6 @@ public class ContentApplicationMapper {
             contentDto.translationSet().stream()
                 .map(this::toContentTranslation)
                 .collect(Collectors.toSet())
-        );
-    }
-
-    public ContentSearchCriteria toContentSearchCriteria(ContentSearchDto contentSearchDto) {
-        if (contentSearchDto == null) {
-            return new ContentSearchCriteria(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-        }
-        return new ContentSearchCriteria(
-            contentSearchDto.uuid(),
-            contentSearchDto.aliasList(),
-            contentSearchDto.titleList(),
-            contentSearchDto.typeList(),
-            contentSearchDto.seasonList(),
-            contentSearchDto.statusIdList(),
-            contentSearchDto.releaseDateFrom(),
-            contentSearchDto.releaseDateTo(),
-            contentSearchDto.createdAtFrom(),
-            contentSearchDto.createdAtTo(),
-            contentSearchDto.updatedAtFrom(),
-            contentSearchDto.updatedAtTo(),
-            contentSearchDto.active(),
-            contentSearchDto.languageCodeList(),
-            contentSearchDto.genreIdList(),
-            contentSearchDto.translateLanguageCode()
         );
     }
 }

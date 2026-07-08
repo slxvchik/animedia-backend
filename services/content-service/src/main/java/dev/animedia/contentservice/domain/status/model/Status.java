@@ -1,24 +1,19 @@
 package dev.animedia.contentservice.domain.status.model;
 
-import dev.animedia.contentservice.domain.status.exception.StatusAliasRequiredException;
-import dev.animedia.contentservice.domain.status.exception.StatusInvalidAliasException;
+import dev.animedia.contentservice.domain.shared.slugalias.SlugAlias;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Status {
 	private final UUID id;
-	private final String alias;
+	private final SlugAlias alias;
 	private int sortOrder;
 	private boolean active;
 	private final Set<StatusTranslation> translationSet = new HashSet<>();
 
-	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
-
 	public Status(UUID id, String alias, int sortOrder, boolean active, Set<StatusTranslation> translationSet) {
-		validateAlias(alias);
 		this.id = id;
-		this.alias = alias;
+		this.alias = new SlugAlias(alias);
 		setSortOrder(sortOrder);
 		this.active = active;
 		setTranslationSet(translationSet);
@@ -29,7 +24,7 @@ public class Status {
 	}
 
 	public String getAlias() {
-		return alias;
+		return alias.getValue();
 	}
 
 	public int getSortOrder() {
@@ -48,11 +43,6 @@ public class Status {
 		setSortOrder(sortOrder);
 		this.active = active;
 		setTranslationSet(translationSet);
-	}
-
-	private void validateAlias(String alias) {
-		if (alias == null || alias.isBlank()) throw new StatusAliasRequiredException();
-		if (!ALIAS_PATTERN.matcher(alias).matches()) throw new StatusInvalidAliasException();
 	}
 
 	private void setTranslationSet(Set<StatusTranslation> translationSet) {

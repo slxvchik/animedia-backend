@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.infrastructure.transactional.genre;
 
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.usecase.UpdateGenreUseCase;
+import dev.animedia.contentservice.application.genre.usecase.admin.UpdateGenreUseCase;
 import org.springframework.transaction.annotation.Transactional;
 
 public class UpdateGenreTransactionalDecorator implements UpdateGenreUseCase {
@@ -13,7 +13,7 @@ public class UpdateGenreTransactionalDecorator implements UpdateGenreUseCase {
 
 	@Transactional
 	@Override
-	public GenreDto update(GenreDto genreDto) {
-		return updateGenreUseCase.update(genreDto);
+	public void update(GenreDto genreDto) {
+		updateGenreUseCase.update(genreDto);
 	}
 }

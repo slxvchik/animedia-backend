@@ -2,7 +2,7 @@ package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.dto.ContentSearchDto;
-import dev.animedia.contentservice.application.content.usecase.*;
+import dev.animedia.contentservice.application.content.usecase.admin.*;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import dev.animedia.contentservice.presentation.grpc.content.mapper.PrivateContentCommandGrpcMapper;
@@ -31,7 +31,7 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
     private final PrivateContentQueryGrpcMapper privateContentQueryGrpcMapper;
     private final PrivateContentCommandGrpcMapper privateContentCommandGrpcMapper;
 
-    private final SearchContentUseCase searchContentUseCase;
+    private final GetAllContentUseCase getAllContentUseCase;
     private final GetContentByIdUseCase getContentByIdUseCase;
     private final CreateContentUseCase createContentUseCase;
     private final UpdateContentUseCase updateContentUseCase;
@@ -44,7 +44,7 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
 		PrivateContentQueryGrpcMapper privateContentQueryGrpcMapper,
 		PrivateContentCommandGrpcMapper privateContentCommandGrpcMapper,
 
-		SearchContentUseCase searchContentUseCase,
+		GetAllContentUseCase getAllContentUseCase,
 		GetContentByIdUseCase getContentByIdUseCase,
 		CreateContentUseCase createContentUseCase,
 		UpdateContentUseCase updateContentUseCase,
@@ -55,7 +55,7 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
 		this.privateContentQueryGrpcMapper = privateContentQueryGrpcMapper;
 		this.privateContentCommandGrpcMapper = privateContentCommandGrpcMapper;
 
-		this.searchContentUseCase = searchContentUseCase;
+		this.getAllContentUseCase = getAllContentUseCase;
 		this.getContentByIdUseCase = getContentByIdUseCase;
 		this.createContentUseCase = createContentUseCase;
 		this.updateContentUseCase = updateContentUseCase;
@@ -76,7 +76,7 @@ public class PrivateContentGrpcService extends PrivateContentServiceGrpc.Private
             Set.of("alias", "season", "releaseDate", "createdAt", "updatedAt", "active", "sortOrder", "translations.title")
         );
 
-        Page<ContentDto> contentDtoPage = searchContentUseCase.search(contentSearchDto, domainPageable);
+        Page<ContentDto> contentDtoPage = getAllContentUseCase.get(domainPageable);
 
         PaginationResponse paginationResponse = protoPaginationMapper.toProtoPaginationResponse(contentDtoPage);
         List<PrivateContentResponse> contentResponseList = contentDtoPage.content()

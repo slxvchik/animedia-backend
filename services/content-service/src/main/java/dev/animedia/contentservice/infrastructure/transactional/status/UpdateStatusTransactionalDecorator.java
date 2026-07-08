@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.infrastructure.transactional.status;
 
 import dev.animedia.contentservice.application.status.dto.StatusDto;
-import dev.animedia.contentservice.application.status.usecase.UpdateStatusUseCase;
+import dev.animedia.contentservice.application.status.usecase.admin.UpdateStatusUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ public class UpdateStatusTransactionalDecorator implements UpdateStatusUseCase {
 
 	@Transactional
 	@Override
-	public StatusDto update(StatusDto statusDto) {
-		return updateStatusUseCase.update(statusDto);
+	public void update(StatusDto statusDto) {
+		updateStatusUseCase.update(statusDto);
 	}
 }

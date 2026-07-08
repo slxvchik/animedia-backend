@@ -1,24 +1,19 @@
 package dev.animedia.contentservice.domain.genre.model;
 
-import dev.animedia.contentservice.domain.genre.exception.GenreAliasRequiredException;
-import dev.animedia.contentservice.domain.genre.exception.GenreInvalidAliasException;
+import dev.animedia.contentservice.domain.shared.slugalias.SlugAlias;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Genre {
     private final UUID id;
-    private final String alias;
+    private final SlugAlias alias;
     private int sortOrder;
     private boolean active;
     private final Set<GenreTranslation> translationSet = new HashSet<>();
 
-    private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
-
     public Genre(UUID id, String alias, int sortOrder, boolean active, Set<GenreTranslation> translationSet) {
-        validateAlias(alias);
         this.id = id;
-        this.alias = alias;
+        this.alias = new SlugAlias(alias);
         setSortOrder(sortOrder);
         this.active = active;
         setTranslationSet(translationSet);
@@ -29,7 +24,7 @@ public class Genre {
     }
 
     public String getAlias() {
-        return alias;
+        return alias.getValue();
     }
 
     public int getSortOrder() {
@@ -48,11 +43,6 @@ public class Genre {
         setSortOrder(sortOrder);
         this.active = active;
         setTranslationSet(translationSet);
-    }
-
-    private void validateAlias(String alias) {
-        if (alias == null || alias.isBlank()) throw new GenreAliasRequiredException();
-        if (!ALIAS_PATTERN.matcher(alias).matches()) throw new GenreInvalidAliasException();
     }
 
     private void setTranslationSet(Set<GenreTranslation> translationSet) {
