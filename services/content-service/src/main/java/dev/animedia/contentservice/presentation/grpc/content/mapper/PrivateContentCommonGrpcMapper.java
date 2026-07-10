@@ -4,7 +4,7 @@ import dev.animedia.contentservice.application.content.dto.ContentDto;
 import dev.animedia.contentservice.application.content.dto.ContentTranslationDto;
 import dev.animedia.contentservice.presentation.grpc.genre.mapper.PrivateGenreGrpcMapper;
 import dev.animedia.contentservice.presentation.grpc.shared.mapper.DateMapper;
-import dev.animedia.contentservice.presentation.grpc.status.mapper.PrivateStatusGrpcMapper;
+import dev.animedia.contentservice.presentation.grpc.status.mapper.StatusAdminMapperGrpc;
 import dev.animedia.grpc.core.PrivateContentProto.PrivateContentResponse;
 import dev.animedia.grpc.core.PrivateContentProto.PrivateContentTranslationResponse;
 import dev.animedia.grpc.genre.PrivateGenreProto.PrivateGenreResponse;
@@ -19,19 +19,19 @@ public class PrivateContentCommonGrpcMapper {
 
 	private final ContentTypeGrpcMapper contentTypeGrpcMapper;
 	private final DateMapper dateMapper;
-	private final PrivateStatusGrpcMapper privateStatusGrpcMapper;
+	private final StatusAdminMapperGrpc statusAdminMapperGrpc;
 	private final PrivateGenreGrpcMapper privateGenreGrpcMapper;
 
 	@Autowired
 	public PrivateContentCommonGrpcMapper(
 		ContentTypeGrpcMapper contentTypeGrpcMapper,
 		DateMapper dateMapper,
-		PrivateStatusGrpcMapper privateStatusGrpcMapper,
+		StatusAdminMapperGrpc statusAdminMapperGrpc,
 		PrivateGenreGrpcMapper privateGenreGrpcMapper
 	) {
 		this.contentTypeGrpcMapper = contentTypeGrpcMapper;
 		this.dateMapper = dateMapper;
-		this.privateStatusGrpcMapper = privateStatusGrpcMapper;
+		this.statusAdminMapperGrpc = statusAdminMapperGrpc;
 		this.privateGenreGrpcMapper = privateGenreGrpcMapper;
 	}
 
@@ -51,7 +51,7 @@ public class PrivateContentCommonGrpcMapper {
 			)
 			.setSeason(contentDto.season())
 			.setStatus(
-				privateStatusGrpcMapper.toPrivateStatusResponse(contentDto.status())
+				statusAdminMapperGrpc.toPrivateStatusResponse(contentDto.status())
 			)
 			.setActive(contentDto.active());
 

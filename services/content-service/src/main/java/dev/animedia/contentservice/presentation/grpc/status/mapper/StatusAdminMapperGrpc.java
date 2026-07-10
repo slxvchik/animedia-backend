@@ -5,6 +5,8 @@ import dev.animedia.contentservice.application.status.dto.StatusSearchDto;
 import dev.animedia.contentservice.application.status.dto.StatusTranslationDto;
 import dev.animedia.grpc.common.CommonProto.PaginationResponse;
 import dev.animedia.grpc.status.PrivateContentStatusProto.*;
+import dev.animedia.grpc.status.admin.v1.StatusAdminProto;
+import dev.animedia.grpc.status.admin.v1.StatusAdminProtoApi;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,21 +16,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class PrivateStatusGrpcMapper {
-	public StatusSearchDto toPrivateStatusSearchDto(
-		PrivateSearchStatusRequest request
-	) {
-		if (request == null) return new StatusSearchDto(null, null, null, null);
-		return new StatusSearchDto(
-			request.hasActive() ? request.getActive() : null,
-			request.hasAlias() ? request.getAlias() : null,
-			request.hasName() ? request.getName() : null,
-			request.hasLanguageCode() ? request.getLanguageCode() : null
-		);
-	}
+public class StatusAdminMapperGrpc {
 
 	public StatusDto toStatusDto(
-		CreateStatusRequest request
+		StatusAdminProtoApi.CreateStatusRequest request
 	) {
 		if (request == null) return null;
 
@@ -48,7 +39,7 @@ public class PrivateStatusGrpcMapper {
 	}
 
 	private StatusTranslationDto toStatusTranslationDto(
-		CreateStatusTranslationRequest request
+		StatusAdminProtoApi.CreateStatusTranslationRequest request
 	) {
 		if (request == null) return null;
 
@@ -60,7 +51,7 @@ public class PrivateStatusGrpcMapper {
 	}
 
 	public StatusDto toStatusDto(
-		UpdateStatusRequest request
+		StatusAdminProtoApi.UpdateStatusRequest request
 	) {
 		if (request == null) return null;
 
@@ -80,7 +71,7 @@ public class PrivateStatusGrpcMapper {
 	}
 
 	private StatusTranslationDto toStatusTranslationDto(
-		UpdateStatusTranslationRequest request
+		StatusAdminProtoApi.UpdateStatusTranslationRequest request
 	) {
 		if (request == null) return null;
 
@@ -91,23 +82,12 @@ public class PrivateStatusGrpcMapper {
 		);
 	}
 
-	public PrivateSearchStatusResponse toPrivateSearchStatusResponse(
-		List<PrivateStatusResponse> statusResponseList,
-		PaginationResponse paginationResponse
-	) {
-		return PrivateSearchStatusResponse
-			.newBuilder()
-			.addAllStatuses(statusResponseList)
-			.setPagination(paginationResponse)
-			.build();
-	}
-
-	public PrivateStatusResponse toPrivateStatusResponse(
+	public StatusAdminProto.StatusResponse toPrivateStatusResponse(
 		StatusDto statusDto
 	) {
 		if (statusDto == null) return null;
 
-		List<PrivateStatusTranslationResponse> translations =
+		List<StatusAdminProto.StatusTranslationResponse> translations =
 			statusDto.translationSet() != null
 			? statusDto.translationSet()
 				.stream()
@@ -116,7 +96,7 @@ public class PrivateStatusGrpcMapper {
 				.toList()
 			: List.of();
 
-		return PrivateStatusResponse
+		return StatusAdminProto.StatusResponse
 			.newBuilder()
 			.setUuid(String.valueOf(statusDto.id()))
 			.setAlias(statusDto.alias())
@@ -126,13 +106,13 @@ public class PrivateStatusGrpcMapper {
 			.build();
 	}
 
-	private PrivateStatusTranslationResponse toPrivateStatusTranslationResponse(
+	private StatusAdminProto.StatusTranslationResponse toPrivateStatusTranslationResponse(
 		StatusTranslationDto statusTranslationDto,
 		UUID statusId
 	) {
 		if (statusTranslationDto == null) return null;
 
-		return PrivateStatusTranslationResponse
+		return StatusAdminProto.StatusTranslationResponse
 			.newBuilder()
 			.setUuid(String.valueOf(statusTranslationDto.id()))
 			.setContentStatusUuid(String.valueOf(statusId))

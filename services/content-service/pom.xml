@@ -114,10 +114,14 @@
 						</binaryMavenPlugin>
 					</binaryMavenPlugins>
 					<includes>
-						<include>common/*.proto</include>
-						<include>dev/content/core/*.proto</include>
-						<include>dev/content/genre/*.proto</include>
-						<include>dev/content/status/*.proto</include>
+						<include>common/v1/*.proto</include>
+						<include>dev/animedia/content/shared/v1/*.proto</include>
+						<include>dev/animedia/content/user/v1/*.proto</include>
+						<include>dev/animedia/content/admin/v1/*.proto</include>
+						<include>dev/animedia/genre/admin/v1/*.proto</include>
+						<include>dev/animedia/genre/user/v1/*.proto</include>
+						<include>dev/animedia/status/admin/v1/*.proto</include>
+						<include>dev/animedia/status/user/v1/*.proto</include>
 					</includes>
 				</configuration>
 				<executions>

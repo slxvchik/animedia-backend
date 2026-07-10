@@ -22,6 +22,14 @@ public class ProtoPaginationMapper {
 	}
 
 	public Pageable toDomainPageable(
+		CommonProto.PaginationRequest paginationRequest
+	) {
+		int page = paginationRequest.getPage() >= 0 ? paginationRequest.getPage() : 0;
+		int size = paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10;
+		return Pageable.of(page, size);
+	}
+
+	public Pageable toDomainPageable(
 		CommonProto.PaginationRequest paginationRequest,
 		Set<String> allowedFields
 	) {
@@ -29,7 +37,7 @@ public class ProtoPaginationMapper {
 		int size = paginationRequest.getSize() >= 1 ? paginationRequest.getSize() : 10;
 
 		if (!paginationRequest.hasSort()) {
-			return new Pageable(page, size, null, null);
+			return Pageable.of(page, size, null, null);
 		}
 
 		CommonProto.Sort sortRequest = paginationRequest.getSort();
@@ -43,6 +51,6 @@ public class ProtoPaginationMapper {
 			? Pageable.SortDirection.DESC
 			: Pageable.SortDirection.ASC;
 
-		return new Pageable(page, size, field, direction);
+		return Pageable.of(page, size, field, direction);
 	}
 }
