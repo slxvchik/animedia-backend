@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package dev.animedia.content.user.v1;
+
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+import "dev/animedia/content/shared/v1/common.proto";
+import "dev/animedia/status/user/v1/user.proto";
+import "dev/animedia/genre/user/v1/user.proto";
+
+option java_package="dev.animedia.grpc.content.user.v1";
+option java_outer_classname="ContentUserProto";
+
+message ContentResponse {
+  string alias = 1;
+  dev.animedia.content.shared.v1.Type type = 2;
+  int32 season = 3;
+  dev.animedia.status.user.v1.StatusResponse status = 4;
+  optional string cover_image_uuid = 5;
+  optional string trailer_video_uuid = 6;
+  optional common.v1.Date release_date = 7;
+  repeated string language_codes = 8;
+  repeated dev.animedia.genre.user.v1.GenreResponse genres = 9;
+  repeated ContentTranslationResponse translations = 10;
+}
+
+message ContentTranslationResponse {
+  string title = 1;
+  string description = 2;
+}

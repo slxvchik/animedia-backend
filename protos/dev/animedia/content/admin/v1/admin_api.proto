@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package dev.animedia.content.admin.v1;
+
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+import "dev/animedia/content/shared/v1/common.proto";
+import "dev/animedia/content/admin/v1/admin.proto";
+
+option java_package="dev.animedia.grpc.content.admin.v1";
+option java_outer_classname="ContentAdminProtoApi";
+
+service ContentAdminService {
+  rpc GetAll(common.v1.PaginationRequest) returns (GetAllContentResponse);
+  rpc Get(GetContentRequest) returns (ContentResponse);
+  rpc Create(CreateContentRequest) returns (ContentResponse);
+  rpc Update(UpdateContentRequest) returns (ContentResponse);
+  rpc Delete(DeleteContentRequest) returns (common.v1.EmptyResponse);
+}
+
+message GetAllContentResponse {
+  repeated ContentResponse contents = 1;
+  common.v1.PaginationResponse pagination = 2;
+}
+
+message GetContentRequest {
+  string id = 1;
+}
+
+message CreateContentRequest {
+  string alias = 1;
+  dev.animedia.content.shared.v1.Type type = 2;
+  int32 season = 3;
+  string status_id = 4;
+  optional string cover_image_id = 5;
+  optional string trailer_video_id = 6;
+  optional common.v1.Date release_date = 7;
+  bool active = 10;
+  int32 sort_order = 11;
+  repeated string language_codes = 12;
+  repeated string genre_ids = 13;
+  repeated CreateContentTranslationRequest translations = 14;
+}
+
+message CreateContentTranslationRequest {
+  string language_code = 1;
+  string title = 2;
+  optional string description = 3;
+}
+
+message UpdateContentRequest {
+  string id = 1;
+  string status_id = 2;
+  optional string cover_image_id = 3;
+  optional string trailer_video_id = 4;
+  optional common.v1.Date release_date = 5;
+  bool active = 6;
+  int32 sort_order = 7;
+  repeated string language_codes = 8;
+  repeated string genre_ids = 9;
+  repeated UpdateContentTranslationRequest translations = 10;
+}
+
+message UpdateContentTranslationRequest {
+  optional string id = 1;
+  string language_code = 2;
+  string title = 3;
+  optional string description = 4;
+}
+
+message DeleteContentRequest {
+  string id = 1;
+}

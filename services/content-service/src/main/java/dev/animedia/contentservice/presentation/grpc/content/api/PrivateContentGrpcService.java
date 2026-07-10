@@ -1,7 +1,6 @@
 package dev.animedia.contentservice.presentation.grpc.content.api;
 
 import dev.animedia.contentservice.application.content.dto.ContentDto;
-import dev.animedia.contentservice.application.content.dto.ContentSearchDto;
 import dev.animedia.contentservice.application.content.usecase.admin.*;
 import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;

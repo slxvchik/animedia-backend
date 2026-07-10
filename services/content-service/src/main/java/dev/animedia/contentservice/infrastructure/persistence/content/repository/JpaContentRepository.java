@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,8 +19,6 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 	@Query(
 		"SELECT ce " +
 		"FROM ContentEntity ce " +
-		"LEFT JOIN FETCH ce.statusEntity se " +
-		"LEFT JOIN FETCH ce.genres g " +
 		"LEFT JOIN FETCH ce.translations t " +
 		"WHERE ce.id = :id " +
 		"AND (:lang IS NULL OR t.languageCode = :lang)"
@@ -35,8 +34,6 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 	@Query(
 		"SELECT ce " +
 		"FROM ContentEntity ce " +
-		"LEFT JOIN FETCH ce.statusEntity se " +
-		"LEFT JOIN FETCH ce.genres g " +
 		"LEFT JOIN FETCH ce.translations t " +
 		"WHERE ce.alias = :alias " +
 		"AND ce.contentType = :type " +
@@ -50,6 +47,14 @@ public interface JpaContentRepository extends JpaRepository<ContentEntity, UUID>
 		ContentType type,
 		@Param("season")
 		int season,
+		@Param("lang")
+		@Nullable
+		String languageCode
+	);
+
+	List<ContentEntity> findByIdListAndLanguageCode(
+		@Param("ids")
+		List<UUID> idList,
 		@Param("lang")
 		@Nullable
 		String languageCode

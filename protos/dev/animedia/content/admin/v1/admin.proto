@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package dev.animedia.content.admin.v1;
+
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+import "dev/animedia/content/shared/v1/common.proto";
+import "dev/animedia/status/admin/v1/admin.proto";
+import "dev/animedia/genre/admin/v1/admin.proto";
+
+option java_package="dev.animedia.grpc.content.admin.v1";
+option java_outer_classname="ContentAdminProto";
+
+message ContentResponse {
+  string id = 1;
+  string alias = 2;
+  dev.animedia.content.shared.v1.Type type = 3;
+  int32 season = 4;
+  dev.animedia.status.admin.v1.StatusResponse status = 5;
+  optional string cover_image_id = 6;
+  optional string trailer_video_id = 7;
+  optional common.v1.Date release_date = 8;
+  google.protobuf.Timestamp created_at = 9;
+  optional google.protobuf.Timestamp updated_at = 10;
+  bool active = 11;
+  repeated string language_codes = 12;
+  repeated dev.animedia.genre.admin.v1.GenreResponse genres = 13;
+  repeated ContentTranslationResponse translations = 14;
+}
+
+message ContentTranslationResponse {
+  string id = 1;
+  string content_id = 2;
+  string language_code = 3;
+  string title = 4;
+  optional string description = 5;
+}

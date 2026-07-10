@@ -10,6 +10,7 @@ import dev.animedia.contentservice.infrastructure.persistence.genre.model.GenreE
 import dev.animedia.contentservice.infrastructure.persistence.status.model.StatusEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ import java.util.stream.Collectors;
 public class ContentPersistenceMapper {
     public Content toContent(
         ContentEntity ce,
-        Function<StatusEntity, Status> statusMapper,
-        Function<GenreEntity, Genre> genreMapper
+        Status status,
+        Set<Genre> genreSet
     ) {
         if (ce == null) return null;
         return Content.builder()
@@ -26,10 +27,7 @@ public class ContentPersistenceMapper {
             .alias(ce.getAlias())
             .type(ce.getContentType())
             .season(ce.getSeason())
-            .status(
-                ce.getStatusEntity() == null ? null
-                : statusMapper.apply(ce.getStatusEntity())
-            )
+            .status(status)
             .coverUrl(ce.getCoverImageId())
             .trailerUrl(ce.getTrailerVideoId())
             .releaseDate(ce.getReleaseDate())
@@ -38,13 +36,7 @@ public class ContentPersistenceMapper {
             .active(ce.getActive())
             .sort(ce.getSortOrder())
             .languageCodeSet(ce.getLanguageCodes())
-            .genreSet(
-                ce.getGenres() == null ? null
-                : ce.getGenres()
-                    .stream()
-                    .map(genreMapper)
-                    .collect(Collectors.toSet())
-            )
+            .genreSet(genreSet)
             .translationSet(
                 ce.getTranslations() == null ? null
                 : ce.getTranslations()
@@ -67,8 +59,8 @@ public class ContentPersistenceMapper {
 
     public ContentEntity toContentEntity(
         Content content,
-        Function<Status, StatusEntity> statusMapper,
-        Function<Genre, GenreEntity> genreMapper
+        StatusEntity statusEntity,
+        Set<GenreEntity> genreEntitySet
     ) {
         if (content == null) return null;
 
@@ -77,10 +69,7 @@ public class ContentPersistenceMapper {
         ce.setAlias(content.getAlias());
         ce.setContentType(content.getType());
         ce.setSeason(content.getSeason());
-        ce.setStatusEntity(
-            content.getStatus() == null ? null
-            : statusMapper.apply(content.getStatus())
-        );
+        ce.setStatusEntity(statusEntity);
         ce.setCoverImageId(content.getCoverImageId());
         ce.setTrailerVideoId(content.getTrailerVideoId());
         ce.setReleaseDate(content.getReleaseDate());
@@ -90,13 +79,7 @@ public class ContentPersistenceMapper {
         ce.setSortOrder(content.getSort());
 
         ce.setLanguageCodes(content.getLanguageCodeSet());
-        ce.setGenres(
-            content.getGenreSet() == null ? null
-            : content.getGenreSet()
-                .stream()
-                .map(genreMapper)
-                .collect(Collectors.toSet())
-        );
+        ce.setGenres(genreEntitySet);
 
         ce.setTranslations(
             content.getTranslationSet() == null ? null

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package dev.animedia.genre.admin.v1;
+
+option java_package="dev.animedia.grpc.genre.admin.v1";
+option java_outer_classname="GenreAdminProto";
+
+message GenreResponse {
+  string uuid = 1;
+  string alias = 2;
+  int32 sort_order = 3;
+  bool active = 4;
+  repeated GenreTranslationResponse translations = 5;
+}
+
+message GenreTranslationResponse {
+  string uuid = 1;
+  string genre_uuid = 2;
+  string language_code = 3;
+  string name = 4;
+  optional string description = 5;
+}

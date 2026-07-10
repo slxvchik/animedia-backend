@@ -115,9 +115,9 @@
 					</binaryMavenPlugins>
 					<includes>
 						<include>common/*.proto</include>
-						<include>services/content/core/*.proto</include>
-						<include>services/content/genre/*.proto</include>
-						<include>services/content/status/*.proto</include>
+						<include>dev/content/core/*.proto</include>
+						<include>dev/content/genre/*.proto</include>
+						<include>dev/content/status/*.proto</include>
 					</includes>
 				</configuration>
 				<executions>

@@ -5,7 +5,7 @@ import dev.animedia.contentservice.domain.content.model.Content;
 import java.util.UUID;
 
 public interface ContentCommandRepository {
-    Content create(Content content);
-    Content update(Content content);
+    UUID create(Content content);
+    void update(Content content);
     void delete(UUID id);
 }

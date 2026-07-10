@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package dev.animedia.content.user.v1;
+
+import "google/protobuf/timestamp.proto";
+import "common/v1/common.proto";
+import "dev/animedia/content/shared/v1/common.proto";
+import "dev/animedia/content/user/v1/user.proto";
+import "dev/animedia/status/user/v1/user.proto";
+import "dev/animedia/genre/user/v1/user.proto";
+
+option java_package="dev.animedia.grpc.content.user.v1";
+option java_outer_classname="ContentUserProtoApi";
+
+service ContentUserService {
+  rpc GetDetail(GetDetailRequest) returns (GetDetailResponse);
+  rpc GetList(GetListRequest) returns (GetListResponse);
+}
+
+message GetDetailRequest {
+  string alias = 1;
+  dev.animedia.content.shared.v1.Type type = 2;
+  int32 season = 3;
+}
+
+message GetDetailResponse {
+  repeated ContentResponse contents = 1;
+}
+
+message GetListRequest {
+  repeated string ids = 1;
+}
+
+message GetListResponse {
+  repeated ContentResponse contents = 1;
+}

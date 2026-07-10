@@ -16,13 +16,13 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class GetContentByIdService implements GetContentByIdUseCase {
+public class GetContentDetailService implements GetContentByIdUseCase {
     private final ContentApplicationMapper contentApplicationMapper;
     private final ContentQueryRepository contentQueryRepository;
     private final StatusApplicationMapper statusApplicationMapper;
     private final GenreApplicationMapper genreApplicationMapper;
 
-    public GetContentByIdService(
+    public GetContentDetailService(
         ContentApplicationMapper contentApplicationMapper,
         ContentQueryRepository contentQueryRepository,
         StatusApplicationMapper statusApplicationMapper,
@@ -35,8 +35,8 @@ public class GetContentByIdService implements GetContentByIdUseCase {
     }
 
     @Override
-    public ContentDto get(UUID uuid, @Nullable String languageCode, @Nullable Boolean active) {
-        Content content = contentQueryRepository.find(uuid, languageCode, active)
+    public ContentDto get(UUID uuid, @Nullable String languageCode) {
+        Content content = contentQueryRepository.find(uuid, languageCode)
             .orElseThrow(() -> new ContentNotFoundException(uuid));
 
         StatusDto statusDto = statusApplicationMapper.toStatusDto(content.getStatus());

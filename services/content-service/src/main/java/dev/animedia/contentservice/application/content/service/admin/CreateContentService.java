@@ -7,9 +7,6 @@ import dev.animedia.contentservice.application.content.resolver.GenreDomainResol
 import dev.animedia.contentservice.application.content.resolver.StatusDomainResolver;
 import dev.animedia.contentservice.application.content.usecase.admin.CreateContentUseCase;
 import dev.animedia.contentservice.application.genre.dto.GenreDto;
-import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
-import dev.animedia.contentservice.application.status.dto.StatusDto;
-import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
@@ -22,8 +19,6 @@ import java.util.stream.Collectors;
 
 public class CreateContentService implements CreateContentUseCase {
     private final ContentApplicationMapper contentApplicationMapper;
-    private final StatusApplicationMapper statusApplicationMapper;
-    private final GenreApplicationMapper genreApplicationMapper;
 
 	private final StatusDomainResolver statusDomainResolver;
 	private final GenreDomainResolver genreDomainResolver;
@@ -33,16 +28,12 @@ public class CreateContentService implements CreateContentUseCase {
 
     public CreateContentService(
         ContentApplicationMapper contentApplicationMapper,
-	    StatusApplicationMapper statusApplicationMapper,
-	    GenreApplicationMapper genreApplicationMapper,
 	    StatusDomainResolver statusDomainResolver,
 	    GenreDomainResolver genreDomainResolver,
         ContentQueryRepository contentQueryRepository,
         ContentCommandRepository contentCommandRepository
     ) {
         this.contentApplicationMapper = contentApplicationMapper;
-	    this.statusApplicationMapper = statusApplicationMapper;
-	    this.genreApplicationMapper = genreApplicationMapper;
 	    this.statusDomainResolver = statusDomainResolver;
 	    this.genreDomainResolver = genreDomainResolver;
 	    this.contentQueryRepository = contentQueryRepository;
@@ -50,7 +41,7 @@ public class CreateContentService implements CreateContentUseCase {
     }
 
     @Override
-    public ContentDto create(ContentDto contentDto) {
+    public UUID create(ContentDto contentDto) {
 
 	    UUID statusId = contentDto.status().id();
 	    Status status = statusDomainResolver.resolve(statusId);
@@ -71,17 +62,6 @@ public class CreateContentService implements CreateContentUseCase {
 
         Content saved = contentCommandRepository.create(content);
 
-	    StatusDto savedStatusDto = statusApplicationMapper.toStatusDto(saved.getStatus());
-		Set<GenreDto> savedGenreDtoSet = saved.getGenreSet() != null
-	        ? saved.getGenreSet().stream()
-				.map(genreApplicationMapper::toGenreDto)
-				.collect(Collectors.toSet())
-			: Set.of();
-
-        return contentApplicationMapper.toContentDto(
-            saved,
-	        savedStatusDto,
-	        savedGenreDtoSet
-        );
+        return saved.getId();
     }
 }

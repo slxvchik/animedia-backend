@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package protos.services.content.core;
+package dev.animedia.content.shared.v1;
 
-option java_package="dev.animedia.grpc.core";
+option java_package="dev.animedia.grpc.content.shared.v1";
 option java_outer_classname="ContentCommonProto";
 
 enum Type {

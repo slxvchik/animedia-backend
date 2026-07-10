@@ -77,33 +77,11 @@ public class GenreUseCaseConfig {
 	}
 
 	@Bean
-	public GetGenreListUseCase getGenreListUseCase(
-		GenreApplicationMapper genreApplicationMapper,
-		GenreQueryRepository genreQueryRepository
-	) {
-		return new GetGenreListService(
-			genreApplicationMapper,
-			genreQueryRepository
-		);
-	}
-
-	@Bean
 	public GetGenreUseCase getGenreUseCase(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository
 	) {
 		return new GetGenreService(
-			genreApplicationMapper,
-			genreQueryRepository
-		);
-	}
-
-	@Bean
-	public SearchGenreUseCase searchGenreUseCase(
-		GenreApplicationMapper genreApplicationMapper,
-		GenreQueryRepository genreQueryRepository
-	) {
-		return new SearchGenreService(
 			genreApplicationMapper,
 			genreQueryRepository
 		);

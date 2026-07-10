@@ -79,20 +79,20 @@ public class ContentEntity {
     private Integer sortOrder;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_uuid"))
+    @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_id"))
     @Column(name = "language_code")
     private Set<String> languageCodes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "content_genres",
-        joinColumns = @JoinColumn(name = "content_uuid"),
+        joinColumns = @JoinColumn(name = "content_id"),
         inverseJoinColumns = @JoinColumn(name = "genre_id"),
         uniqueConstraints = {
-            @UniqueConstraint(name = "uidx_content_genres_content_uuid_genre_id", columnNames = {"content_uuid", "genre_id"})
+            @UniqueConstraint(name = "uidx_content_genres_content_id_genre_id", columnNames = {"content_id", "genre_id"})
         },
         indexes = {
-            @Index(name = "idx_content_languages_content_uuid_genre_id", columnList = "content_uuid,genre_id"),
+            @Index(name = "idx_content_languages_content_id_genre_id", columnList = "content_id,genre_id"),
             @Index(name = "idx_content_languages_genre_id", columnList = "genre_id")
         }
     )

@@ -2,7 +2,6 @@ package dev.animedia.contentservice.infrastructure.persistence.content.repositor
 
 import dev.animedia.contentservice.domain.content.model.Content;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
-import dev.animedia.contentservice.infrastructure.persistence.content.exception.ContentCreateException;
 import dev.animedia.contentservice.infrastructure.persistence.content.mapper.ContentPersistenceMapper;
 import dev.animedia.contentservice.infrastructure.persistence.content.model.ContentEntity;
 import dev.animedia.contentservice.infrastructure.persistence.content.model.ContentTranslationEntity;
@@ -39,29 +38,27 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 	}
 
 	@Override
-	public Content create(Content content) {
+	public UUID create(Content content) {
+		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());
+
+		Set<GenreEntity> genreEntitySet = content.getGenreSet().stream()
+			.map(genrePersistenceMapper::toGenreEntity)
+			.collect(Collectors.toSet());
+
 		ContentEntity ce = contentPersistenceMapper.toContentEntity(
 			content,
-			statusPersistenceMapper::toStatusEntity,
-			genrePersistenceMapper::toGenreEntity
+			statusEntity,
+			genreEntitySet
 		);
 
 		ContentEntity saved = jpaContentRepository.saveAndFlush(ce);
 
-		// fetch with all relations
-		ContentEntity savedResponse = jpaContentRepository.findById(saved.getId(), null, null)
-			.orElseThrow(ContentCreateException::new);
-
-		return contentPersistenceMapper.toContent(
-			savedResponse,
-			statusPersistenceMapper::toStatus,
-			genrePersistenceMapper::toGenre
-		);
+		return saved.getId();
 	}
 
 	@Override
-	public Content update(Content content) {
-		ContentEntity contentEntity = jpaContentRepository.findById(content.getId(), null, null)
+	public void update(Content content) {
+		ContentEntity contentEntity = jpaContentRepository.findById(content.getId(), null)
 			.orElseThrow(EntityNotFoundException::new);
 
 		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());
@@ -89,13 +86,7 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 				.collect(Collectors.toSet());
 		contentEntity.syncTranslationSet(contentTranslationEntitySet);
 
-		ContentEntity updated = jpaContentRepository.saveAndFlush(contentEntity);
-
-		return contentPersistenceMapper.toContent(
-			updated,
-			statusPersistenceMapper::toStatus,
-			genrePersistenceMapper::toGenre
-		);
+		jpaContentRepository.saveAndFlush(contentEntity);
 	}
 
 	@Override

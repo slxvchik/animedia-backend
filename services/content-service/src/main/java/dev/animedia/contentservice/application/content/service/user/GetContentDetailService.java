@@ -16,13 +16,13 @@ import jakarta.annotation.Nullable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GetContentByDetailsService implements GetContentByDetailsUseCase {
+public class GetContentDetailService implements GetContentByDetailsUseCase {
 	private final ContentApplicationMapper contentApplicationMapper;
 	private final ContentQueryRepository contentQueryRepository;
 	private final StatusApplicationMapper statusApplicationMapper;
 	private final GenreApplicationMapper genreApplicationMapper;
 
-	public GetContentByDetailsService(
+	public GetContentDetailService(
 		ContentApplicationMapper contentApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
 		StatusApplicationMapper statusApplicationMapper,
@@ -36,8 +36,10 @@ public class GetContentByDetailsService implements GetContentByDetailsUseCase {
 
 	@Override
 	public ContentDto get(String alias, ContentType type, int season, @Nullable String languageCode,  @Nullable Boolean active) {
-		Content content = contentQueryRepository.find(alias, type, season, languageCode, active)
+		Content content = contentQueryRepository.find(alias, type, season, languageCode)
 			.orElseThrow(ContentNotFoundException::new);
+
+		if (!content.getActive()) throw new ContentNotFoundException();
 
 		StatusDto statusDto = statusApplicationMapper.toStatusDto(content.getStatus());
 		Set<GenreDto> genreDtoSet = content.getGenreSet() != null

@@ -1,15 +1,8 @@
 package dev.animedia.contentservice.infrastructure.config.status;
 
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
-import dev.animedia.contentservice.application.status.service.*;
-import dev.animedia.contentservice.application.status.service.admin.CreateStatusService;
-import dev.animedia.contentservice.application.status.service.admin.DeleteStatusService;
-import dev.animedia.contentservice.application.status.service.admin.UpdateStatusService;
-import dev.animedia.contentservice.application.status.usecase.*;
-import dev.animedia.contentservice.application.status.usecase.admin.GetStatusUseCase;
-import dev.animedia.contentservice.application.status.usecase.admin.CreateStatusUseCase;
-import dev.animedia.contentservice.application.status.usecase.admin.DeleteStatusUseCase;
-import dev.animedia.contentservice.application.status.usecase.admin.UpdateStatusUseCase;
+import dev.animedia.contentservice.application.status.service.admin.*;
+import dev.animedia.contentservice.application.status.usecase.admin.*;
 import dev.animedia.contentservice.domain.status.repository.StatusCommandRepository;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import dev.animedia.contentservice.infrastructure.transactional.status.CreateStatusTransactionalDecorator;
@@ -78,29 +71,18 @@ public class StatusUseCaseConfig {
 	}
 
 	@Bean
-	public UserGetStatusListUseCase getStatusListUseCase(
-		StatusApplicationMapper statusApplicationMapper,
-		StatusQueryRepository statusQueryRepository
-	) {
-		return new UserGetStatusListService(
-			statusApplicationMapper,
-			statusQueryRepository
-		);
-	}
-
-	@Bean
 	public GetStatusUseCase getStatusUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository
 	) {
-		return new AdminGetUserStatusService(
+		return new GetStatusService(
 			statusApplicationMapper,
 			statusQueryRepository
 		);
 	}
 
 	@Bean
-	public GetAllStatusUseCase searchStatusUseCase(
+	public GetAllStatusUseCase getAllStatusUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository
 	) {

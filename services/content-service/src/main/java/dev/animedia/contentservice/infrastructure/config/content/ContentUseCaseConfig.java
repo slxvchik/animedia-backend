@@ -4,14 +4,12 @@ import dev.animedia.contentservice.application.content.mapper.ContentApplication
 import dev.animedia.contentservice.application.content.resolver.GenreDomainResolver;
 import dev.animedia.contentservice.application.content.resolver.StatusDomainResolver;
 import dev.animedia.contentservice.application.content.service.admin.*;
-import dev.animedia.contentservice.application.content.service.user.GetContentByDetailsService;
 import dev.animedia.contentservice.application.content.usecase.admin.*;
 import dev.animedia.contentservice.application.content.usecase.user.GetContentByDetailsUseCase;
 import dev.animedia.contentservice.application.genre.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.application.status.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.domain.content.repository.ContentCommandRepository;
 import dev.animedia.contentservice.domain.content.repository.ContentQueryRepository;
-import dev.animedia.contentservice.domain.content.repository.ContentSearchRepository;
 import dev.animedia.contentservice.domain.genre.repository.GenreQueryRepository;
 import dev.animedia.contentservice.domain.status.repository.StatusQueryRepository;
 import dev.animedia.contentservice.infrastructure.transactional.content.CreateContentTransactionalDecorator;
@@ -25,8 +23,6 @@ public class ContentUseCaseConfig {
 	@Bean("createContentUseCase")
 	public CreateContentUseCase createContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper,
 		StatusDomainResolver statusDomainResolver,
 		GenreDomainResolver genreDomainResolver,
 		ContentQueryRepository contentQueryRepository,
@@ -34,8 +30,6 @@ public class ContentUseCaseConfig {
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
-			statusApplicationMapper,
-			genreApplicationMapper,
 			statusDomainResolver,
 			genreDomainResolver,
 			contentQueryRepository,
@@ -56,8 +50,6 @@ public class ContentUseCaseConfig {
 	@Bean("updateContentUseCase")
 	public UpdateContentUseCase updateContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper,
 		StatusDomainResolver statusDomainResolver,
 		GenreDomainResolver genreDomainResolver,
 		ContentQueryRepository contentQueryRepository,
@@ -65,8 +57,6 @@ public class ContentUseCaseConfig {
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
-			statusApplicationMapper,
-			genreApplicationMapper,
 			statusDomainResolver,
 			genreDomainResolver,
 			contentQueryRepository,
@@ -120,7 +110,7 @@ public class ContentUseCaseConfig {
 		StatusApplicationMapper statusApplicationMapper,
 		GenreApplicationMapper genreApplicationMapper
 	) {
-		return new GetContentByDetailsService(
+		return new dev.animedia.contentservice.application.content.service.user.GetContentDetailService(
 			contentApplicationMapper,
 			contentQueryRepository,
 			statusApplicationMapper,
@@ -135,7 +125,7 @@ public class ContentUseCaseConfig {
 		StatusApplicationMapper statusApplicationMapper,
 		GenreApplicationMapper genreApplicationMapper
 	) {
-		return new GetContentByIdService(
+		return new GetContentDetailService(
 			contentApplicationMapper,
 			contentQueryRepository,
 			statusApplicationMapper,
@@ -144,16 +134,17 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public GetAllContentUseCase searchContentUseCase(
+	public GetAllContentUseCase getAllContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		ContentSearchRepository contentSearchRepository,
 		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
+		GenreApplicationMapper genreApplicationMapper,
+		ContentQueryRepository contentQueryRepository
 	) {
 		return new GetAllContentService(
 			contentApplicationMapper,
 			statusApplicationMapper,
-			genreApplicationMapper
+			genreApplicationMapper,
+			contentQueryRepository
 		);
 	}
 }

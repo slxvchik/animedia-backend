@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package dev.animedia.status.admin.v1;
+
+option java_package="dev.animedia.grpc.status.admin.v1";
+option java_outer_classname="StatusAdminProto";
+
+message StatusResponse {
+  string id = 1;
+  string alias = 2;
+  int32 sort_order = 3;
+  bool active = 4;
+  repeated StatusTranslationResponse translations = 5;
+}
+
+message StatusTranslationResponse {
+  string id = 1;
+  string status_id = 2;
+  string language_code = 3;
+  string name = 4;
+}

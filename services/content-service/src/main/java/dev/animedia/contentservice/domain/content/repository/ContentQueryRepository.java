@@ -6,6 +6,7 @@ import dev.animedia.contentservice.domain.shared.pagination.Page;
 import dev.animedia.contentservice.domain.shared.pagination.Pageable;
 import jakarta.annotation.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +21,12 @@ public interface ContentQueryRepository {
 		String alias,
 		ContentType type,
 		int season,
+		@Nullable
+		String languageCode
+	);
+
+	List<Content> find(
+		List<UUID> idList,
 		@Nullable
 		String languageCode
 	);
