@@ -1,8 +1,8 @@
 package dev.animedia.contentservice.content.infrastracture.config;
 
 import dev.animedia.contentservice.content.application.mapper.ContentApplicationMapper;
-import dev.animedia.contentservice.content.application.resolver.GenreDomainResolver;
-import dev.animedia.contentservice.content.application.resolver.StatusDomainResolver;
+import dev.animedia.contentservice.content.application.resolver.GenreResolverInterface;
+import dev.animedia.contentservice.content.application.resolver.StatusResolverInterface;
 import dev.animedia.contentservice.content.application.service.IndexAllContentService;
 import dev.animedia.contentservice.content.application.service.admin.CreateContentService;
 import dev.animedia.contentservice.content.application.service.admin.DeleteContentService;
@@ -32,18 +32,18 @@ public class ContentUseCaseConfig {
 	@Bean("createContentUseCase")
 	public CreateContentUseCase createContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		StatusDomainResolver statusDomainResolver,
+		StatusResolverInterface statusResolverInterface,
 		StatusApplicationMapper statusApplicationMapper,
-		GenreDomainResolver genreDomainResolver,
+		GenreResolverInterface genreResolverInterface,
 		GenreApplicationMapper genreApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
-			statusDomainResolver,
+			statusResolverInterface,
 			statusApplicationMapper,
-			genreDomainResolver,
+			genreResolverInterface,
 			genreApplicationMapper,
 			contentQueryRepository,
 			contentCommandRepository
@@ -63,18 +63,18 @@ public class ContentUseCaseConfig {
 	@Bean("updateContentUseCase")
 	public UpdateContentUseCase updateContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		StatusDomainResolver statusDomainResolver,
+		StatusResolverInterface statusResolverInterface,
 		StatusApplicationMapper statusApplicationMapper,
-		GenreDomainResolver genreDomainResolver,
+		GenreResolverInterface genreResolverInterface,
 		GenreApplicationMapper genreApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
-			statusDomainResolver,
+			statusResolverInterface,
 			statusApplicationMapper,
-			genreDomainResolver,
+			genreResolverInterface,
 			genreApplicationMapper,
 			contentQueryRepository,
 			contentCommandRepository
@@ -92,19 +92,19 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public StatusDomainResolver statusDomainResolver(
+	public StatusResolverInterface statusDomainResolver(
 		StatusQueryRepository statusQueryRepository
 	) {
-		return new StatusDomainResolver(
+		return new StatusResolverInterface(
 			statusQueryRepository
 		);
 	}
 
 	@Bean
-	public GenreDomainResolver genreDomainResolver(
+	public GenreResolverInterface genreDomainResolver(
 		GenreQueryRepository genreQueryRepository
 	) {
-		return new GenreDomainResolver(
+		return new GenreResolverInterface(
 			genreQueryRepository
 		);
 	}

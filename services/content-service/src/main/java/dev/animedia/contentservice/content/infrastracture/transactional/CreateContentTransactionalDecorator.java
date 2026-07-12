@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.infrastracture.transactional;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.usecase.admin.CreateContentUseCase;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ public class CreateContentTransactionalDecorator implements CreateContentUseCase
 
 	@Transactional
 	@Override
-	public UUID create(ContentDto contentDto) {
-		return createContentUseCase.create(contentDto);
+	public UUID create(ContentRequestDto contentRequestDto) {
+		return createContentUseCase.create(contentRequestDto);
 	}
 }

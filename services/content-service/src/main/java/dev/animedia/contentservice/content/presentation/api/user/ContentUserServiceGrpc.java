@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.presentation.api.user;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentDetailUseCase;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentListUseCase;
 import dev.animedia.contentservice.shared.presentation.grpc.config.LanguageInterceptor;
@@ -41,13 +41,13 @@ public class ContentUserServiceGrpc extends dev.animedia.grpc.content.user.v1.Co
 		ContentUserProtoApi.GetDetailRequest request,
 		StreamObserver<ContentUserProtoApi.GetDetailResponse> responseObserver
 	) {
-		ContentDto contentDto = getContentDetailUseCase.get(
+		ContentRequestDto contentRequestDto = getContentDetailUseCase.get(
 			request.getAlias(),
 			contentTypeMapperGrpc.toContentType(request.getType()),
 			request.getSeason(),
 			LanguageInterceptor.getLanguageCode()
 		);
-		ContentUserProto.ContentResponse contentResponse = contentUserMapperGrpc.toContentGrpcResponse(contentDto);
+		ContentUserProto.ContentResponse contentResponse = contentUserMapperGrpc.toContentGrpcResponse(contentRequestDto);
 		responseObserver.onNext(
 			ContentUserProtoApi.GetDetailResponse.newBuilder()
 				.setContent(contentResponse)
@@ -61,11 +61,11 @@ public class ContentUserServiceGrpc extends dev.animedia.grpc.content.user.v1.Co
 		ContentUserProtoApi.GetListRequest request,
 		StreamObserver<ContentUserProtoApi.GetListResponse> responseObserver
 	) {
-		List<ContentDto> contentDtoList = getContentListUseCase.get(
+		List<ContentRequestDto> contentRequestDtoList = getContentListUseCase.get(
 			request.getIdsList().stream().map(UUID::fromString).toList(),
 			LanguageInterceptor.getLanguageCode()
 		);
-		List<ContentUserProto.ContentResponse> contentResponseList = contentDtoList.stream()
+		List<ContentUserProto.ContentResponse> contentResponseList = contentRequestDtoList.stream()
 			.map(contentUserMapperGrpc::toContentGrpcResponse)
 			.toList();
 		responseObserver.onNext(

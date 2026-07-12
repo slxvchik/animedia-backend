@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.content.presentation.mapper.admin;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
-import dev.animedia.contentservice.content.application.dto.ContentTranslationDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentTranslationDto;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
 import dev.animedia.contentservice.genre.presentation.mapper.admin.GenreAdminMapperGrpc;
 import dev.animedia.contentservice.shared.presentation.grpc.mapper.DateMapper;
@@ -36,50 +36,50 @@ public class ContentResponseAdminMapperGrpc {
 	}
 
 	public ContentAdminProto.ContentResponse toContentGrpcResponse(
-		ContentDto contentDto
+		ContentRequestDto contentRequestDto
 	) {
-		if (contentDto == null) return null;
+		if (contentRequestDto == null) return null;
 
-		String contentId = String.valueOf(contentDto.id());
+		String contentId = String.valueOf(contentRequestDto.id());
 
 		var content = ContentAdminProto.ContentResponse
 			.newBuilder()
 			.setId(contentId)
-			.setAlias(contentDto.alias())
+			.setAlias(contentRequestDto.alias())
 			.setType(
-				contentTypeMapperGrpc.toProtoContentType(contentDto.type())
+				contentTypeMapperGrpc.toProtoContentType(contentRequestDto.type())
 			)
-			.setSeason(contentDto.season())
+			.setSeason(contentRequestDto.season())
 			.setStatus(
-				statusAdminMapperGrpc.toStatusGrpcResponse(contentDto.status())
+				statusAdminMapperGrpc.toStatusGrpcResponse(contentRequestDto.statusId())
 			)
-			.setActive(contentDto.active());
+			.setActive(contentRequestDto.active());
 
-		Optional.ofNullable(contentDto.coverImageId())
+		Optional.ofNullable(contentRequestDto.coverImageId())
 			.ifPresent(content::setCoverImageId);
-		Optional.ofNullable(contentDto.trailerVideoId())
+		Optional.ofNullable(contentRequestDto.trailerVideoId())
 			.ifPresent(content::setTrailerVideoId);
-		Optional.ofNullable(contentDto.releaseDate())
+		Optional.ofNullable(contentRequestDto.releaseDate())
 			.ifPresent(date -> content.setReleaseDate(dateMapper.toGrpcDate(date)));
-		Optional.ofNullable(contentDto.createdAt())
+		Optional.ofNullable(contentRequestDto.createdAt())
 			.ifPresent(time -> content.setCreatedAt(dateMapper.toGrpcTimestamp(time)));
-		Optional.ofNullable(contentDto.updatedAt())
+		Optional.ofNullable(contentRequestDto.updatedAt())
 			.ifPresent(time -> content.setUpdatedAt(dateMapper.toGrpcTimestamp(time)));
 
-		List<String> languages = contentDto.languageCodeSet() != null
-			? List.copyOf(contentDto.languageCodeSet())
+		List<String> languages = contentRequestDto.languageCodeSet() != null
+			? List.copyOf(contentRequestDto.languageCodeSet())
 			: List.of();
 
-		List<GenreAdminProto.GenreResponse> genres = contentDto.genreSet() != null
-			? contentDto.genreSet()
+		List<GenreAdminProto.GenreResponse> genres = contentRequestDto.genreIdSet() != null
+			? contentRequestDto.genreIdSet()
 				.stream()
 				.map(genreAdminMapperGrpc::toGenreGrpcResponse)
 				.toList()
 			: List.of();
 
 		List<ContentAdminProto.ContentTranslationResponse> translations =
-			contentDto.translationSet() != null
-			? contentDto.translationSet()
+			contentRequestDto.translationSet() != null
+			? contentRequestDto.translationSet()
 				.stream()
 				.map(ctd -> toContentTranslationGrpcResponse(ctd, contentId))
 				.toList()

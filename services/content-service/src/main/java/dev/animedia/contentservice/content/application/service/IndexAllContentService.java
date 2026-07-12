@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.mapper.ContentApplicationMapper;
 import dev.animedia.contentservice.content.application.usecase.IndexAllContentUseCase;
 import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
@@ -32,13 +32,13 @@ public class IndexAllContentService implements IndexAllContentUseCase {
     }
 
     @Override
-    public Page<ContentDto> index(Pageable pageable) {
+    public Page<ContentRequestDto> index(Pageable pageable) {
         Page<Content> contentPage = contentQueryRepository.findAll(pageable);
-        return contentPage.changeContent(content -> contentApplicationMapper.toContentDto(
+        return contentPage.changeContent(content -> contentApplicationMapper.toContentResponseDto(
             content,
-            statusApplicationMapper.toStatusDto(content.getStatus()),
-            content.getGenreSet() != null
-                ? content.getGenreSet().stream()
+            statusApplicationMapper.toStatusDto(content.getStatusId()),
+            content.getGenreIdSet() != null
+                ? content.getGenreIdSet().stream()
                     .map(genreApplicationMapper::toGenreDto)
                     .collect(Collectors.toSet())
                 : Set.of()

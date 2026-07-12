@@ -1,9 +1,9 @@
 package dev.animedia.contentservice.content.application.usecase.admin;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 
 import java.util.UUID;
 
 public interface GetContentDetailUseCase {
-	ContentDto get(UUID id);
+	ContentRequestDto get(UUID id);
 }

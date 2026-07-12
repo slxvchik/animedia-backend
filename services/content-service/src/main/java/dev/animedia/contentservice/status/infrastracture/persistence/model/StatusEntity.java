@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(
-    name = "status",
+    name = "statusId",
     indexes = {
         @Index(name = "idx_status_alias", columnList = "alias")
     }

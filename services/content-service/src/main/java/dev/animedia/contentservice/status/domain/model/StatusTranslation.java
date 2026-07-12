@@ -30,6 +30,6 @@ public class StatusTranslation extends BaseTranslation {
 	}
 
 	private void validateName(String name) {
-		if (name == null || name.isBlank()) throw new FieldRequiredException("status translation: name");
+		if (name == null || name.isBlank()) throw new FieldRequiredException("statusId translation: name");
 	}
 }

@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.content.presentation.mapper.admin;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
-import dev.animedia.contentservice.content.application.dto.ContentTranslationDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentTranslationDto;
 import dev.animedia.contentservice.genre.application.dto.GenreDto;
 import dev.animedia.contentservice.status.application.dto.StatusDto;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
@@ -26,10 +26,10 @@ public class ContentCommandAdminMapperGrpc {
 		this.dateMapper = dateMapper;
 	}
 
-	public ContentDto toContentDto(
+	public ContentRequestDto toContentDto(
 		ContentAdminProtoApi.CreateContentRequest request
 	) {
-		return new ContentDto(
+		return new ContentRequestDto(
 			null,
 			request.getAlias(),
 			contentTypeMapperGrpc.toContentType(
@@ -61,10 +61,10 @@ public class ContentCommandAdminMapperGrpc {
 		);
 	}
 
-	public ContentDto toContentDto(
+	public ContentRequestDto toContentDto(
 		ContentAdminProtoApi.UpdateContentRequest request
 	) {
-		return new ContentDto(
+		return new ContentRequestDto(
 			UUID.fromString(request.getId()),
 			null,
 			null,

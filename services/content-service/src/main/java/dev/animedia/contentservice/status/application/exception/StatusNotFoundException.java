@@ -7,9 +7,9 @@ import java.util.UUID;
 
 public class StatusNotFoundException extends AppException {
     public StatusNotFoundException() {
-        super(AppExceptionStatus.NOT_FOUND, "status.not_found");
+        super(AppExceptionStatus.NOT_FOUND, "statusId.not_found");
     }
     public StatusNotFoundException(UUID statusId) {
-        super(AppExceptionStatus.NOT_FOUND, "status.not_found.extra", String.valueOf(statusId));
+        super(AppExceptionStatus.NOT_FOUND, "statusId.not_found.extra", String.valueOf(statusId));
     }
 }

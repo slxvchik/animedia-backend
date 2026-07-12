@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service.user;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.mapper.ContentApplicationMapper;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentListUseCase;
 import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
@@ -32,13 +32,13 @@ public class GetContentListService implements GetContentListUseCase {
     }
 
     @Override
-    public List<ContentDto> get(List<UUID> contentIdList, String languageCode) {
+    public List<ContentRequestDto> get(List<UUID> contentIdList, String languageCode) {
         List<Content> contentList = contentQueryRepository.find(contentIdList, languageCode);
-        return contentList.stream().map(content -> contentApplicationMapper.toContentDto(
+        return contentList.stream().map(content -> contentApplicationMapper.toContentResponseDto(
             content,
-            statusApplicationMapper.toStatusDto(content.getStatus()),
-            content.getGenreSet() != null
-                ? content.getGenreSet().stream()
+            statusApplicationMapper.toStatusDto(content.getStatusId()),
+            content.getGenreIdSet() != null
+                ? content.getGenreIdSet().stream()
                     .map(genreApplicationMapper::toGenreDto)
                     .collect(Collectors.toSet())
                 : Set.of()

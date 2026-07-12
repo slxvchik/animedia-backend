@@ -1,8 +1,6 @@
 package dev.animedia.contentservice.content.infrastracture.persistence.model;
 
 import dev.animedia.contentservice.content.domain.model.ContentType;
-import dev.animedia.contentservice.genre.infrastracture.persistence.model.GenreEntity;
-import dev.animedia.contentservice.status.infrastracture.persistence.model.StatusEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,7 +11,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /// TODO: create unique index in flywawy migration: ALTER TABLE content ADD CONSTRAINT uidx_content_alias_type_season UNIQUE NULLS NOT DISTINCT (alias, type, season);
 
@@ -51,9 +48,8 @@ public class ContentEntity {
     @Column(name = "season", nullable = false, updatable = false)
     private Integer season;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id", nullable = false)
-    private StatusEntity statusEntity;
+    @Column(name = "status_id", length = 512)
+    private String statusId;
 
     @Column(name = "cover_image_id", length = 512)
     private String coverImageId;
@@ -83,20 +79,10 @@ public class ContentEntity {
     @Column(name = "language_code")
     private Set<String> languageCodes = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "content_genres",
-        joinColumns = @JoinColumn(name = "content_id"),
-        inverseJoinColumns = @JoinColumn(name = "genre_id"),
-        uniqueConstraints = {
-            @UniqueConstraint(name = "uidx_content_genres_content_id_genre_id", columnNames = {"content_id", "genre_id"})
-        },
-        indexes = {
-            @Index(name = "idx_content_languages_content_id_genre_id", columnList = "content_id,genre_id"),
-            @Index(name = "idx_content_languages_genre_id", columnList = "genre_id")
-        }
-    )
-    private Set<GenreEntity> genres = new HashSet<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "content_genres", joinColumns = @JoinColumn(name = "content_id"))
+    @Column(name = "genre_id")
+    private Set<String> genreIds = new HashSet<>();
 
     @OneToMany(
         mappedBy = "contentEntity",
@@ -137,12 +123,12 @@ public class ContentEntity {
         this.season = season;
     }
 
-    public StatusEntity getStatusEntity() {
-        return statusEntity;
+    public String getStatusId() {
+        return statusId;
     }
 
-    public void setStatusEntity(StatusEntity statusEntity) {
-        this.statusEntity = statusEntity;
+    public void setStatusId(String statusEntity) {
+        this.statusId = statusEntity;
     }
 
     public String getCoverImageId() {
@@ -209,12 +195,12 @@ public class ContentEntity {
         this.languageCodes = languageCodeSet;
     }
 
-    public Set<GenreEntity> getGenres() {
-        return genres;
+    public Set<String> getGenreIds() {
+        return genreIds;
     }
 
-    public void setGenres(Set<GenreEntity> genreSet) {
-        this.genres = genreSet;
+    public void setGenres(Set<String> genreIdSet) {
+        this.genreIds = genreIdSet;
     }
 
     public Set<ContentTranslationEntity> getTranslations() {
@@ -234,21 +220,16 @@ public class ContentEntity {
         this.languageCodes.addAll(newLanguageCodeSet);
     }
 
-    public void syncGenreSet(Set<GenreEntity> newGenreSet) {
-        if (newGenreSet == null || newGenreSet.isEmpty()) {
-            this.genres.clear();
+    public void syncGenreSet(Set<String> newGenreIdSet) {
+        if (newGenreIdSet == null || newGenreIdSet.isEmpty()) {
+            this.genreIds.clear();
             return;
         }
 
-        Set<UUID> newGenreIds = newGenreSet.stream()
-            .map(GenreEntity::getId)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
+        this.genreIds.removeIf(existing -> !newGenreIdSet.contains(existing));
 
-        this.genres.removeIf(existing -> !newGenreIds.contains(existing.getId()));
-
-        for (GenreEntity newGe : newGenreSet) {
-            if (newGe.getId() != null) this.genres.add(newGe);
+        for (String newGenreId : newGenreIdSet) {
+            if (newGenreId != null) this.genreIds.add(newGenreId);
         }
     }
 

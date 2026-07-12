@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 public class StatusPersistenceMapper {
 
 	/**
-	 * To domain status from jpa status entity
-	 * @param se jpa status
-	 * @return domain status
+	 * To domain statusId from jpa statusId entity
+	 * @param se jpa statusId
+	 * @return domain statusId
 	 */
 	public Status toStatus(StatusEntity se) {
 		if (se == null) return null;
@@ -30,9 +30,9 @@ public class StatusPersistenceMapper {
 	}
 
 	/**
-	 * To domain status translation from jpa status translation entity
-	 * @param ste jpa status translation entity
-	 * @return domain status translation
+	 * To domain statusId translation from jpa statusId translation entity
+	 * @param ste jpa statusId translation entity
+	 * @return domain statusId translation
 	 */
 	public StatusTranslation toStatusTranslation(StatusTranslationEntity ste) {
 		if (ste == null) return null;
@@ -44,9 +44,9 @@ public class StatusPersistenceMapper {
 	}
 
 	/**
-	 * To jpa status entity from domain status
-	 * @param status domain status
-	 * @return jpa status entity
+	 * To jpa statusId entity from domain statusId
+	 * @param status domain statusId
+	 * @return jpa statusId entity
 	 */
 	public StatusEntity toStatusEntity(Status status) {
 		if (status == null) return null;
@@ -67,10 +67,10 @@ public class StatusPersistenceMapper {
 	}
 
 	/**
-	 * To jpa status translation entity from domain status translation
-	 * @param statusTranslation domain status translation
-	 * @param statusEntity jpa status entity
-	 * @return jpa status translation entity
+	 * To jpa statusId translation entity from domain statusId translation
+	 * @param statusTranslation domain statusId translation
+	 * @param statusEntity jpa statusId entity
+	 * @return jpa statusId translation entity
 	 */
 	public StatusTranslationEntity toStatusTranslationEntity(StatusTranslation statusTranslation, StatusEntity statusEntity) {
 		if (statusTranslation == null) return null;

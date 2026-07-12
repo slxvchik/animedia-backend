@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.content.application.usecase.admin;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 
 public interface UpdateContentUseCase {
-	void update(ContentDto contentDto);
+	void update(ContentRequestDto contentRequestDto);
 }

@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @Repository
 public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	private final JpaContentRepository jpaContentRepository;
-	private final JpaStatusRepository jpaStatusRepository;
-	private final JpaGenreRepository jpaGenreRepository;
 
 	private final ContentPersistenceMapper contentPersistenceMapper;
 	private final StatusPersistenceMapper statusPersistenceMapper;
@@ -38,16 +36,12 @@ public class ContentQueryRepositoryImpl implements ContentQueryRepository {
 	@Autowired
 	public ContentQueryRepositoryImpl(
 		JpaContentRepository jpaContentRepository,
-		JpaStatusRepository jpaStatusRepository,
-		JpaGenreRepository jpaGenreRepository,
 		ContentPersistenceMapper contentPersistenceMapper,
 		StatusPersistenceMapper statusPersistenceMapper,
 		GenrePersistenceMapper genrePersistenceMapper,
 		PaginationPersistenceMapper paginationPersistenceMapper
 	) {
 		this.jpaContentRepository = jpaContentRepository;
-		this.jpaStatusRepository = jpaStatusRepository;
-		this.jpaGenreRepository = jpaGenreRepository;
 		this.contentPersistenceMapper = contentPersistenceMapper;
 		this.statusPersistenceMapper = statusPersistenceMapper;
 		this.genrePersistenceMapper = genrePersistenceMapper;

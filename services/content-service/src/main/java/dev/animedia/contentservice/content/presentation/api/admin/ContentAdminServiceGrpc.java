@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.presentation.api.admin;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.usecase.IndexAllContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.CreateContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.DeleteContentUseCase;
@@ -61,7 +61,7 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		StreamObserver<ContentAdminProtoApi.GetAllContentResponse> responseObserver
 	) {
 		Pageable domainPageable = protoPaginationMapper.toDomainPageable(request);
-		Page<ContentDto> contentDtoDomainPage = indexAllContentUseCase.index(domainPageable);
+		Page<ContentRequestDto> contentDtoDomainPage = indexAllContentUseCase.index(domainPageable);
 		var responseContent = contentDtoDomainPage.content().stream()
 			.map(contentResponseAdminMapperGrpc::toContentGrpcResponse)
 			.toList();
@@ -80,11 +80,11 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		ContentAdminProtoApi.GetContentRequest request,
 		StreamObserver<ContentAdminProto.ContentResponse> responseObserver
 	) {
-		ContentDto contentDto = getContentDetailUseCase.get(
+		ContentRequestDto contentRequestDto = getContentDetailUseCase.get(
 			UUID.fromString(request.getId())
 		);
 		responseObserver.onNext(
-			contentResponseAdminMapperGrpc.toContentGrpcResponse(contentDto)
+			contentResponseAdminMapperGrpc.toContentGrpcResponse(contentRequestDto)
 		);
 		responseObserver.onCompleted();
 	}
@@ -94,7 +94,7 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		ContentAdminProtoApi.CreateContentRequest request,
 		StreamObserver<ContentAdminProtoApi.CreateContentResponse> responseObserver
 	) {
-		ContentDto createDto = contentCommandAdminMapperGrpc.toContentDto(request);
+		ContentRequestDto createDto = contentCommandAdminMapperGrpc.toContentDto(request);
 		UUID createdId = createContentUseCase.create(createDto);
 		responseObserver.onNext(
 			ContentAdminProtoApi.CreateContentResponse.newBuilder()
@@ -109,7 +109,7 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		ContentAdminProtoApi.UpdateContentRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
-		ContentDto updateDto = contentCommandAdminMapperGrpc.toContentDto(request);
+		ContentRequestDto updateDto = contentCommandAdminMapperGrpc.toContentDto(request);
 		updateContentUseCase.update(updateDto);
 		responseObserver.onNext(
 			CommonProto.EmptyResponse.newBuilder().build()

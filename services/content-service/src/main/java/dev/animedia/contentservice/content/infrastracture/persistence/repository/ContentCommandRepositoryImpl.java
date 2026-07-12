@@ -39,9 +39,9 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 
 	@Override
 	public UUID create(Content content) {
-		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());
+		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatusId());
 
-		Set<GenreEntity> genreEntitySet = content.getGenreSet().stream()
+		Set<GenreEntity> genreEntitySet = content.getGenreIdSet().stream()
 			.map(genrePersistenceMapper::toGenreEntity)
 			.collect(Collectors.toSet());
 
@@ -61,7 +61,7 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 		ContentEntity contentEntity = jpaContentRepository.findById(content.getId(), null)
 			.orElseThrow(EntityNotFoundException::new);
 
-		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatus());
+		StatusEntity statusEntity = statusPersistenceMapper.toStatusEntity(content.getStatusId());
 		contentEntity.setStatusEntity(statusEntity);
 
 		contentEntity.setCoverImageId(content.getCoverImageId());
@@ -70,8 +70,8 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 		contentEntity.setActive(content.getActive());
 		contentEntity.setSortOrder(content.getSort());
 
-		Set<GenreEntity> genreEntitySet = content.getGenreSet() == null ? null
-			: content.getGenreSet()
+		Set<GenreEntity> genreEntitySet = content.getGenreIdSet() == null ? null
+			: content.getGenreIdSet()
 				.stream()
 				.map(genrePersistenceMapper::toGenreEntity)
 				.collect(Collectors.toSet());

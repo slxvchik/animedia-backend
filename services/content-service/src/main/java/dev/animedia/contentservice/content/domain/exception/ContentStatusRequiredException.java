@@ -5,6 +5,6 @@ import dev.animedia.contentservice.shared.domain.appexception.AppExceptionStatus
 
 public class ContentStatusRequiredException extends AppException {
     public ContentStatusRequiredException() {
-        super(AppExceptionStatus.INVALID_ARGUMENT, "content.status.required");
+        super(AppExceptionStatus.INVALID_ARGUMENT, "content.statusId.required");
     }
 }

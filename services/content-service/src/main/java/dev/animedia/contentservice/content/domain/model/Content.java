@@ -1,22 +1,19 @@
 package dev.animedia.contentservice.content.domain.model;
 
-import dev.animedia.contentservice.content.domain.exception.ContentInvalidAliasException;
 import dev.animedia.contentservice.content.domain.exception.ContentStatusRequiredException;
 import dev.animedia.contentservice.content.domain.exception.ContentTypeRequiredException;
-import dev.animedia.contentservice.genre.domain.model.Genre;
-import dev.animedia.contentservice.status.domain.model.Status;
+import dev.animedia.contentservice.shared.domain.slugalias.SlugAlias;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Content {
 	private final UUID id;
-	private final String alias;
+	private final SlugAlias alias;
 	private final ContentType type;
 	private final int season;
-	private Status status;
+	private String statusId;
 	private String coverImageId;
 	private String trailerVideoId;
 	private LocalDate releaseDate;
@@ -25,21 +22,15 @@ public class Content {
 	private boolean active;
 	private int sort;
 	private Set<String> languageCodeSet = new HashSet<>();
-	private Set<Genre> genreSet = new HashSet<>();
+	private Set<String> genreIdSet = new HashSet<>();
 	private Set<ContentTranslation> translationSet = new HashSet<>();
-
-	private static final Pattern ALIAS_PATTERN = Pattern.compile("^[a-z]{2,10}(?:-[a-z]{1,10}){0,8}$");
-
-	private static void validateAlias(String alias) {
-		if (!ALIAS_PATTERN.matcher(alias).matches()) throw new ContentInvalidAliasException();
-	}
 
 	private static void validateType(ContentType type) {
 		if (type == null) throw new ContentTypeRequiredException();
 	}
 
-	private static void validateStatus(Status status) {
-		if (status == null) throw new ContentStatusRequiredException();
+	private static void validateStatus(String statusId) {
+		if (statusId == null || statusId.isBlank()) throw new ContentStatusRequiredException();
 	}
 
 	private Content(Builder builder) {
@@ -47,17 +38,16 @@ public class Content {
 		this.alias = builder.alias;
 		this.type = builder.type;
 		this.season = Math.max(builder.season, 0);
-
-		this.status = builder.status;
-		this.coverImageId = builder.coverUrl;
-		this.trailerVideoId = builder.trailerUrl;
+		this.statusId = builder.statusId;
+		this.coverImageId = builder.coverUrlId;
+		this.trailerVideoId = builder.trailerUrlId;
 		this.releaseDate = builder.releaseDate;
 		this.createdAt = builder.createdAt;
 		this.updatedAt = builder.updatedAt;
 		this.active = builder.active;
 		setSort(builder.sort);
 		this.languageCodeSet = builder.languageCodeSet;
-		this.genreSet = builder.genreSet;
+		this.genreIdSet = builder.genreIdSet;
 		this.translationSet = builder.translationSet;
 	}
 
@@ -66,7 +56,7 @@ public class Content {
 	}
 
 	public String getAlias() {
-		return alias;
+		return alias.getValue();
 	}
 
 	public ContentType getType() {
@@ -77,8 +67,8 @@ public class Content {
 		return season;
 	}
 
-	public Status getStatus() {
-		return status;
+	public String getStatusId() {
+		return statusId;
 	}
 
 	public String getCoverImageId() {
@@ -113,8 +103,8 @@ public class Content {
 		return Collections.unmodifiableSet(languageCodeSet);
 	}
 
-	public Set<Genre> getGenreSet() {
-		return Collections.unmodifiableSet(genreSet);
+	public Set<String> getGenreIdSet() {
+		return Collections.unmodifiableSet(genreIdSet);
 	}
 
 	public Set<ContentTranslation> getTranslationSet() {
@@ -124,7 +114,7 @@ public class Content {
 	public void update(
 		ContentUpdate contentUpdate
 	) {
-		this.status = contentUpdate.status();
+		this.statusId = contentUpdate.statusId();
 		this.coverImageId = contentUpdate.coverImageId();
 		this.trailerVideoId = contentUpdate.trailerVideoId();
 		this.releaseDate = contentUpdate.releaseDate();
@@ -132,7 +122,7 @@ public class Content {
 		this.active = contentUpdate.active();
 		setSort(contentUpdate.sort());
 		setLanguageCodeSet(contentUpdate.languageCodeSet());
-		setGenreSet(contentUpdate.genreSet());
+		setGenreIdSet(contentUpdate.genreIdSet());
 		setTranslationSet(contentUpdate.translationSet());
 	}
 
@@ -149,12 +139,12 @@ public class Content {
 		}
 	}
 
-	private void setGenreSet(Set<Genre> genreSet) {
-		if (genreSet != null) {
-			this.genreSet.retainAll(genreSet);
-			this.genreSet.addAll(genreSet);
+	private void setGenreIdSet(Set<String> genreIdSet) {
+		if (genreIdSet != null) {
+			this.genreIdSet.retainAll(genreIdSet);
+			this.genreIdSet.addAll(genreIdSet);
 		} else {
-			this.genreSet.clear();
+			this.genreIdSet.clear();
 		}
 	}
 
@@ -182,31 +172,27 @@ public class Content {
 
 	public static class Builder {
 		private UUID id;
-		private String alias;
+		private SlugAlias alias;
 		private ContentType type;
 		private int season;
-		private Status status;
-		private String coverUrl;
-		private String trailerUrl;
+		private String statusId;
+		private String coverUrlId;
+		private String trailerUrlId;
 		private LocalDate releaseDate;
 		private LocalDateTime createdAt;
 		private LocalDateTime updatedAt;
 		private boolean active;
 		private int sort;
 		private Set<String> languageCodeSet;
-		private Set<Genre> genreSet;
+		private Set<String> genreIdSet;
 		private Set<ContentTranslation> translationSet;
 
 		public Content build() {
-			Content.validateAlias(this.alias);
-			Content.validateStatus(this.status);
+			Content.validateStatus(this.statusId);
 			Content.validateType(this.type);
 
 			if (this.createdAt == null) {
 				this.createdAt = LocalDateTime.now();
-			}
-			if (this.updatedAt == null) {
-				this.updatedAt = LocalDateTime.now();
 			}
 
 			return new Content(this);
@@ -218,7 +204,7 @@ public class Content {
 		}
 
 		public Builder alias(String alias) {
-			this.alias = alias;
+			this.alias = new SlugAlias(alias);
 			return this;
 		}
 
@@ -232,18 +218,18 @@ public class Content {
 			return this;
 		}
 
-		public Builder status(Status status) {
-			this.status = status;
+		public Builder statusId(String statusId) {
+			this.statusId = statusId;
 			return this;
 		}
 
-		public Builder coverUrl(String coverUrl) {
-			this.coverUrl = coverUrl;
+		public Builder coverUrlId(String coverUrlId) {
+			this.coverUrlId = coverUrlId;
 			return this;
 		}
 
-		public Builder trailerUrl(String trailerUrl) {
-			this.trailerUrl = trailerUrl;
+		public Builder trailerUrlId(String trailerUrlId) {
+			this.trailerUrlId = trailerUrlId;
 			return this;
 		}
 
@@ -277,8 +263,8 @@ public class Content {
 			return this;
 		}
 
-		public Builder genreSet(Set<Genre> genreSet) {
-			this.genreSet = genreSet != null ? genreSet : Set.of();
+		public Builder genreIdSet(Set<String> genreIdSet) {
+			this.genreIdSet = genreIdSet != null ? genreIdSet : Set.of();
 			return this;
 		}
 

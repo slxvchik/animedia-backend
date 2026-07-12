@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service.user;
 
-import dev.animedia.contentservice.content.application.dto.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.exception.ContentNotFoundException;
 import dev.animedia.contentservice.content.application.mapper.ContentApplicationMapper;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentDetailUseCase;
@@ -34,20 +34,20 @@ public class GetContentDetailService implements GetContentDetailUseCase {
 	}
 
 	@Override
-	public ContentDto get(String alias, ContentType type, int season, String languageCode) {
+	public ContentRequestDto get(String alias, ContentType type, int season, String languageCode) {
 		Content content = contentQueryRepository.find(alias, type, season, languageCode)
 			.orElseThrow(ContentNotFoundException::new);
 
 		if (!content.getActive()) throw new ContentNotFoundException();
 
-		StatusDto statusDto = statusApplicationMapper.toStatusDto(content.getStatus());
-		Set<GenreDto> genreDtoSet = content.getGenreSet() != null
-			? content.getGenreSet().stream()
+		StatusDto statusDto = statusApplicationMapper.toStatusDto(content.getStatusId());
+		Set<GenreDto> genreDtoSet = content.getGenreIdSet() != null
+			? content.getGenreIdSet().stream()
 				.map(genreApplicationMapper::toGenreDto)
 				.collect(Collectors.toSet())
 			: Set.of();
 
-		return contentApplicationMapper.toContentDto(
+		return contentApplicationMapper.toContentResponseDto(
 			content,
 			statusDto,
 			genreDtoSet
