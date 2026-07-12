@@ -37,8 +37,8 @@ final readonly class ChangeUserEmailService implements ChangeUserEmailUseCase
 
         $this->userCommandRepository->update($user);
 
-        foreach ($user->releaseEvents() as $event) {
-            $this->eventDispatcher->dispatch($event);
+        foreach ($user->releaseEvents() as $eventInterface) {
+            $this->eventDispatcher->dispatch($eventInterface);
         }
     }
 }

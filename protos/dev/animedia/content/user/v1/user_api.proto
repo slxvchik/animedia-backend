@@ -24,7 +24,7 @@ message GetDetailRequest {
 }
 
 message GetDetailResponse {
-  repeated ContentResponse contents = 1;
+  ContentResponse content = 1;
 }
 
 message GetListRequest {

@@ -79,9 +79,9 @@ final readonly class UpdateUserService implements UpdateUserUseCase
             user: $user
         );
 
-        foreach ($user->releaseEvents() as $event) {
+        foreach ($user->releaseEvents() as $eventInterface) {
             $this->eventDispatcher->dispatch(
-                event: $event
+                eventInterface: $eventInterface
             );
         }
     }

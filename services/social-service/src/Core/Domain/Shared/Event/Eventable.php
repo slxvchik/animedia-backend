@@ -8,9 +8,9 @@ trait Eventable
 {
     private array $events = [];
 
-    public function recordEvent(object $event): void
+    public function recordEvent(object $eventInterface): void
     {
-        $this->events[] = $event;
+        $this->events[] = $eventInterface;
     }
 
     /**

@@ -11,8 +11,8 @@ option java_outer_classname="GenreAdminProtoApi";
 service GenreAdminService {
     rpc GetAll(common.v1.PaginationRequest) returns (GetAllGenreResponse);
     rpc Get(GetGenreRequest) returns (GenreResponse);
-    rpc Create(CreateGenreRequest) returns (GenreResponse);
-    rpc Update(UpdateGenreRequest) returns (GenreResponse);
+    rpc Create(CreateGenreRequest) returns (CreateGenreResponse);
+    rpc Update(UpdateGenreRequest) returns (common.v1.EmptyResponse);
     rpc Delete(DeleteGenreRequest) returns (common.v1.EmptyResponse);
 }
 
@@ -22,7 +22,7 @@ message GetAllGenreResponse {
 }
 
 message GetGenreRequest {
-    string uuid = 1;
+    string id = 1;
 }
 
 message CreateGenreRequest {
@@ -38,20 +38,24 @@ message CreateGenreTranslationRequest {
     optional string description = 3;
 }
 
+message CreateGenreResponse {
+    string id = 1;
+}
+
 message UpdateGenreRequest {
-    string uuid = 1;
+    string id = 1;
     int32 sort_order = 3;
     bool active = 4;
     repeated UpdateGenreTranslationRequest translations = 5;
 }
 
 message UpdateGenreTranslationRequest {
-    optional string uuid = 1;
+    optional string id = 1;
     string language_code = 2;
     string name = 3;
     optional string description = 4;
 }
 
 message DeleteGenreRequest {
-    string uuid = 1;
+    string id = 1;
 }

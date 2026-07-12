@@ -51,8 +51,8 @@ final readonly class CreateUserService implements CreateUserUseCase
         $createdUuid = $this->userCommandRepository->create($newUser);
 
         // send email confirmation
-        foreach ($newUser->releaseEvents() as $event) {
-            $this->eventDispatcher->dispatch($event);
+        foreach ($newUser->releaseEvents() as $eventInterface) {
+            $this->eventDispatcher->dispatch($eventInterface);
         }
 
         return $createdUuid;

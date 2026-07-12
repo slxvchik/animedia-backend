@@ -1,0 +1,44 @@
+package dev.animedia.contentservice.content.application.resolver;
+
+import dev.animedia.contentservice.genre.application.exception.GenreNotFoundException;
+import dev.animedia.contentservice.genre.domain.model.Genre;
+import dev.animedia.contentservice.genre.domain.repository.GenreQueryRepository;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+public class GenreDomainResolver {
+	private final GenreQueryRepository genreQueryRepository;
+
+	public GenreDomainResolver(GenreQueryRepository genreQueryRepository) {
+		this.genreQueryRepository = genreQueryRepository;
+	}
+
+	public Set<Genre> resolve(Set<UUID> requestedGenreIds) {
+		if (requestedGenreIds == null || requestedGenreIds.isEmpty()) {
+			return Set.of();
+		}
+
+		List<Genre> genreList = genreQueryRepository.findByIdList(
+			List.copyOf(requestedGenreIds),
+			null
+		);
+
+		if (genreList.size() != requestedGenreIds.size()) {
+			Set<UUID> foundGenreIds = genreList.stream()
+				.map(Genre::getId)
+				.collect(Collectors.toSet());
+
+			List<UUID> notFoundIds = requestedGenreIds.stream()
+				.filter(id -> !foundGenreIds.contains(id))
+				.toList();
+
+			throw new GenreNotFoundException(notFoundIds);
+		}
+
+		return Set.copyOf(genreList);
+	}
+
+}

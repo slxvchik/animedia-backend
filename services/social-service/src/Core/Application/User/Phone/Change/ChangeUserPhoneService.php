@@ -84,8 +84,8 @@ final readonly class ChangeUserPhoneService implements ChangeUserPhoneUseCase
 
         $this->userCommandRepository->update($user);
 
-        foreach ($user->releaseEvents() as $event) {
-            $this->eventDispatcher->dispatch($event);
+        foreach ($user->releaseEvents() as $eventInterface) {
+            $this->eventDispatcher->dispatch($eventInterface);
         }
     }
 }

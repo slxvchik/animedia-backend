@@ -13,8 +13,8 @@ option java_outer_classname="ContentAdminProtoApi";
 service ContentAdminService {
   rpc GetAll(common.v1.PaginationRequest) returns (GetAllContentResponse);
   rpc Get(GetContentRequest) returns (ContentResponse);
-  rpc Create(CreateContentRequest) returns (ContentResponse);
-  rpc Update(UpdateContentRequest) returns (ContentResponse);
+  rpc Create(CreateContentRequest) returns (CreateContentResponse);
+  rpc Update(UpdateContentRequest) returns (common.v1.EmptyResponse);
   rpc Delete(DeleteContentRequest) returns (common.v1.EmptyResponse);
 }
 
@@ -46,6 +46,10 @@ message CreateContentTranslationRequest {
   string language_code = 1;
   string title = 2;
   optional string description = 3;
+}
+
+message CreateContentResponse {
+  string id = 1;
 }
 
 message UpdateContentRequest {

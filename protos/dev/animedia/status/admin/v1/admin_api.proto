@@ -11,8 +11,8 @@ option java_outer_classname="StatusAdminProtoApi";
 service StatusAdminService {
   rpc GetAll(common.v1.PaginationRequest) returns (GetAllStatusResponse);
   rpc Get(GetStatusRequest) returns (StatusResponse);
-  rpc Create(CreateStatusRequest) returns (StatusResponse);
-  rpc Update(UpdateStatusRequest) returns (StatusResponse);
+  rpc Create(CreateStatusRequest) returns (CreateStatusResponse);
+  rpc Update(UpdateStatusRequest) returns (common.v1.EmptyResponse);
   rpc Delete(DeleteStatusRequest) returns (common.v1.EmptyResponse);
 }
 message GetAllStatusResponse {
@@ -34,6 +34,10 @@ message CreateStatusRequest {
 message CreateStatusTranslationRequest {
   string language_code = 1;
   string name = 2;
+}
+
+message CreateStatusResponse {
+  string id = 1;
 }
 
 message UpdateStatusRequest {
