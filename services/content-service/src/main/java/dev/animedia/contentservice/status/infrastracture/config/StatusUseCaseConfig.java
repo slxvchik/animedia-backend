@@ -1,11 +1,14 @@
 package dev.animedia.contentservice.status.infrastracture.config;
 
+import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
 import dev.animedia.contentservice.status.application.mapper.StatusApplicationMapper;
+import dev.animedia.contentservice.status.application.service.GetStatusListService;
 import dev.animedia.contentservice.status.application.service.IndexAllStatusService;
 import dev.animedia.contentservice.status.application.service.admin.CreateStatusService;
 import dev.animedia.contentservice.status.application.service.admin.DeleteStatusService;
 import dev.animedia.contentservice.status.application.service.admin.GetStatusDetailService;
 import dev.animedia.contentservice.status.application.service.admin.UpdateStatusService;
+import dev.animedia.contentservice.status.application.usecase.GetStatusListUseCase;
 import dev.animedia.contentservice.status.application.usecase.IndexAllStatusUseCase;
 import dev.animedia.contentservice.status.domain.repository.StatusCommandRepository;
 import dev.animedia.contentservice.status.domain.repository.StatusQueryRepository;
@@ -25,12 +28,14 @@ public class StatusUseCaseConfig {
 	public CreateStatusUseCase createStatusUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusCommandRepository statusCommandRepository,
-		StatusQueryRepository statusQueryRepository
+		StatusQueryRepository statusQueryRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new CreateStatusService(
 			statusApplicationMapper,
 			statusCommandRepository,
-			statusQueryRepository
+			statusQueryRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -48,12 +53,14 @@ public class StatusUseCaseConfig {
 	public UpdateStatusUseCase updateStatusUseCase(
 		StatusApplicationMapper statusApplicationMapper,
 		StatusQueryRepository statusQueryRepository,
-		StatusCommandRepository statusCommandRepository
+		StatusCommandRepository statusCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new UpdateStatusService(
 			statusApplicationMapper,
 			statusQueryRepository,
-			statusCommandRepository
+			statusCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -70,11 +77,13 @@ public class StatusUseCaseConfig {
 	@Bean
 	public DeleteStatusUseCase deleteStatusUseCase(
 		StatusQueryRepository statusQueryRepository,
-		StatusCommandRepository statusCommandRepository
+		StatusCommandRepository statusCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new DeleteStatusService(
 			statusQueryRepository,
-			statusCommandRepository
+			statusCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -95,6 +104,17 @@ public class StatusUseCaseConfig {
 		StatusQueryRepository statusQueryRepository
 	) {
 		return new IndexAllStatusService(
+			statusApplicationMapper,
+			statusQueryRepository
+		);
+	}
+
+	@Bean
+	public GetStatusListUseCase getStatusListUseCase(
+		StatusApplicationMapper statusApplicationMapper,
+		StatusQueryRepository statusQueryRepository
+	) {
+		return new GetStatusListService(
 			statusApplicationMapper,
 			statusQueryRepository
 		);

@@ -53,6 +53,7 @@ public class CreateContentService implements CreateContentUseCase {
 	    List<StatusDto> statusDtoList = statusResolverInterface.resolve(
 			Set.of(contentRequestDto.statusId())
 	    );
+		StatusDto statusDto = statusDtoList.isEmpty() ? null : statusDtoList.getFirst();
 
 	    // Check if genres exists
 	    List<GenreDto> genreDtoList = genreResolverInterface.resolve(contentRequestDto.genreIdSet());
@@ -73,7 +74,7 @@ public class CreateContentService implements CreateContentUseCase {
 			new ContentCreateEvent(
 				contentApplicationMapper.toContentResponseDto(
 					created,
-					statusDtoList.getFirst(),
+					statusDto,
 					Set.copyOf(genreDtoList)
 				)
 			)

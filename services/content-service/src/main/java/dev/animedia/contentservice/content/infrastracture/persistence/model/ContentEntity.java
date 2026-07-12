@@ -199,7 +199,7 @@ public class ContentEntity {
         return genreIds;
     }
 
-    public void setGenres(Set<String> genreIdSet) {
+    public void setGenreIds(Set<String> genreIdSet) {
         this.genreIds = genreIdSet;
     }
 

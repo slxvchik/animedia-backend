@@ -1,6 +1,7 @@
 package dev.animedia.contentservice.content.presentation.api.admin;
 
 import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
+import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
 import dev.animedia.contentservice.content.application.usecase.IndexAllContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.CreateContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.DeleteContentUseCase;
@@ -80,11 +81,11 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		ContentAdminProtoApi.GetContentRequest request,
 		StreamObserver<ContentAdminProto.ContentResponse> responseObserver
 	) {
-		ContentRequestDto contentRequestDto = getContentDetailUseCase.get(
+		ContentResponseDto contentResponseDtoDto = getContentDetailUseCase.get(
 			UUID.fromString(request.getId())
 		);
 		responseObserver.onNext(
-			contentResponseAdminMapperGrpc.toContentGrpcResponse(contentRequestDto)
+			contentResponseAdminMapperGrpc.toContentGrpcResponse(contentResponseDtoDto)
 		);
 		responseObserver.onCompleted();
 	}

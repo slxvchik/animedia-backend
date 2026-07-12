@@ -1,11 +1,13 @@
 package dev.animedia.contentservice.genre.infrastracture.config;
 
 import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
+import dev.animedia.contentservice.genre.application.service.GetGenreListService;
 import dev.animedia.contentservice.genre.application.service.IndexAllGenreService;
 import dev.animedia.contentservice.genre.application.service.admin.CreateGenreService;
 import dev.animedia.contentservice.genre.application.service.admin.DeleteGenreService;
 import dev.animedia.contentservice.genre.application.service.admin.GetGenreDetailService;
 import dev.animedia.contentservice.genre.application.service.admin.UpdateGenreService;
+import dev.animedia.contentservice.genre.application.usecase.GetGenreListUseCase;
 import dev.animedia.contentservice.genre.application.usecase.IndexAllGenreUseCase;
 import dev.animedia.contentservice.genre.domain.repository.GenreCommandRepository;
 import dev.animedia.contentservice.genre.domain.repository.GenreQueryRepository;
@@ -15,6 +17,7 @@ import dev.animedia.contentservice.genre.application.usecase.admin.GetGenreDetai
 import dev.animedia.contentservice.genre.application.usecase.admin.UpdateGenreUseCase;
 import dev.animedia.contentservice.genre.infrastracture.transactional.CreateGenreTransactionalDecorator;
 import dev.animedia.contentservice.genre.infrastracture.transactional.UpdateGenreTransactionalDecorator;
+import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,12 +28,14 @@ public class GenreUseCaseConfig {
 	public CreateGenreUseCase createGenreUseCase(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository,
-		GenreCommandRepository commandRepository
+		GenreCommandRepository commandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new CreateGenreService(
 			genreApplicationMapper,
 			genreQueryRepository,
-			commandRepository
+			commandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -48,12 +53,14 @@ public class GenreUseCaseConfig {
 	public UpdateGenreUseCase updateGenreUseCase(
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository,
-		GenreCommandRepository genreCommandRepository
+		GenreCommandRepository genreCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new UpdateGenreService(
 			genreApplicationMapper,
 			genreQueryRepository,
-			genreCommandRepository
+			genreCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -70,11 +77,13 @@ public class GenreUseCaseConfig {
 	@Bean
 	public DeleteGenreUseCase deleteGenreUseCase(
 		GenreQueryRepository genreQueryRepository,
-		GenreCommandRepository genreCommandRepository
+		GenreCommandRepository genreCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new DeleteGenreService(
 			genreQueryRepository,
-			genreCommandRepository
+			genreCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -95,6 +104,17 @@ public class GenreUseCaseConfig {
 		GenreQueryRepository genreQueryRepository
 	) {
 		return new IndexAllGenreService(
+			genreApplicationMapper,
+			genreQueryRepository
+		);
+	}
+
+	@Bean
+	public GetGenreListUseCase getGenreListUseCase(
+		GenreApplicationMapper genreApplicationMapper,
+		GenreQueryRepository genreQueryRepository
+	) {
+		return new GetGenreListService(
 			genreApplicationMapper,
 			genreQueryRepository
 		);

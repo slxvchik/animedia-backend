@@ -13,13 +13,20 @@ import dev.animedia.contentservice.content.application.usecase.admin.CreateConte
 import dev.animedia.contentservice.content.application.usecase.admin.DeleteContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.UpdateContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentListUseCase;
+import dev.animedia.contentservice.content.infrastracture.resolver.genre.GenreResolver;
+import dev.animedia.contentservice.content.infrastracture.resolver.genre.GenreResolverMapper;
+import dev.animedia.contentservice.content.infrastracture.resolver.status.StatusResolver;
+import dev.animedia.contentservice.content.infrastracture.resolver.status.StatusResolverMapper;
 import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
+import dev.animedia.contentservice.genre.application.usecase.GetGenreListUseCase;
+import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
 import dev.animedia.contentservice.status.application.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.content.application.service.user.GetContentDetailService;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentDetailUseCase;
 import dev.animedia.contentservice.content.domain.repository.ContentCommandRepository;
 import dev.animedia.contentservice.content.domain.repository.ContentQueryRepository;
 import dev.animedia.contentservice.genre.domain.repository.GenreQueryRepository;
+import dev.animedia.contentservice.status.application.usecase.GetStatusListUseCase;
 import dev.animedia.contentservice.status.domain.repository.StatusQueryRepository;
 import dev.animedia.contentservice.content.infrastracture.transactional.CreateContentTransactionalDecorator;
 import dev.animedia.contentservice.content.infrastracture.transactional.UpdateContentTransactionalDecorator;
@@ -33,20 +40,18 @@ public class ContentUseCaseConfig {
 	public CreateContentUseCase createContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		StatusResolverInterface statusResolverInterface,
-		StatusApplicationMapper statusApplicationMapper,
 		GenreResolverInterface genreResolverInterface,
-		GenreApplicationMapper genreApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository
+		ContentCommandRepository contentCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
 			statusResolverInterface,
-			statusApplicationMapper,
 			genreResolverInterface,
-			genreApplicationMapper,
 			contentQueryRepository,
-			contentCommandRepository
+			contentCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -64,20 +69,18 @@ public class ContentUseCaseConfig {
 	public UpdateContentUseCase updateContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		StatusResolverInterface statusResolverInterface,
-		StatusApplicationMapper statusApplicationMapper,
 		GenreResolverInterface genreResolverInterface,
-		GenreApplicationMapper genreApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository
+		ContentCommandRepository contentCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
 			statusResolverInterface,
-			statusApplicationMapper,
 			genreResolverInterface,
-			genreApplicationMapper,
 			contentQueryRepository,
-			contentCommandRepository
+			contentCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -92,31 +95,37 @@ public class ContentUseCaseConfig {
 	}
 
 	@Bean
-	public StatusResolverInterface statusDomainResolver(
-		StatusQueryRepository statusQueryRepository
+	public StatusResolverInterface statusResolverInterface(
+		GetStatusListUseCase getStatusListUseCase,
+		StatusResolverMapper statusResolverMapper
 	) {
-		return new StatusResolverInterface(
-			statusQueryRepository
+		return new StatusResolver(
+			getStatusListUseCase,
+			statusResolverMapper
 		);
 	}
 
 	@Bean
-	public GenreResolverInterface genreDomainResolver(
-		GenreQueryRepository genreQueryRepository
+	public GenreResolverInterface genreResolverInterface(
+		GetGenreListUseCase getGenreListUseCase,
+		GenreResolverMapper genreResolverMapper
 	) {
-		return new GenreResolverInterface(
-			genreQueryRepository
+		return new GenreResolver(
+			getGenreListUseCase,
+			genreResolverMapper
 		);
 	}
 
 	@Bean
 	public DeleteContentUseCase deleteContentUseCase(
 		ContentQueryRepository contentQueryRepository,
-		ContentCommandRepository contentCommandRepository
+		ContentCommandRepository contentCommandRepository,
+		EventDispatcherInterface eventDispatcherInterface
 	) {
 		return new DeleteContentService(
 			contentQueryRepository,
-			contentCommandRepository
+			contentCommandRepository,
+			eventDispatcherInterface
 		);
 	}
 
@@ -124,29 +133,29 @@ public class ContentUseCaseConfig {
 	public dev.animedia.contentservice.content.application.usecase.admin.GetContentDetailUseCase getContentByIdUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
+		StatusResolverInterface statusResolverInterface,
+		GenreResolverInterface genreResolverInterface
 	) {
 		return new dev.animedia.contentservice.content.application.service.admin.GetContentDetailService(
 			contentApplicationMapper,
 			contentQueryRepository,
-			statusApplicationMapper,
-			genreApplicationMapper
+			statusResolverInterface,
+			genreResolverInterface
 		);
 	}
 
 	@Bean
-	public IndexAllContentUseCase getAllContentUseCase(
+	public IndexAllContentUseCase indexAllContentUseCase(
 		ContentApplicationMapper contentApplicationMapper,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper,
-		ContentQueryRepository contentQueryRepository
+		ContentQueryRepository contentQueryRepository,
+		StatusResolverInterface statusResolverInterface,
+		GenreResolverInterface genreResolverInterface
 	) {
 		return new IndexAllContentService(
 			contentApplicationMapper,
-			statusApplicationMapper,
-			genreApplicationMapper,
-			contentQueryRepository
+			contentQueryRepository,
+			statusResolverInterface,
+			genreResolverInterface
 		);
 	}
 
@@ -154,14 +163,14 @@ public class ContentUseCaseConfig {
 	public GetContentListUseCase getContentListUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
+		StatusResolverInterface statusResolverInterface,
+		GenreResolverInterface genreResolverInterface
 	) {
 		return new GetContentListService(
 			contentApplicationMapper,
 			contentQueryRepository,
-			statusApplicationMapper,
-			genreApplicationMapper
+			statusResolverInterface,
+			genreResolverInterface
 		);
 	}
 
@@ -169,14 +178,14 @@ public class ContentUseCaseConfig {
 	public GetContentDetailUseCase getContentByDetailsUseCase(
 		ContentApplicationMapper contentApplicationMapper,
 		ContentQueryRepository contentQueryRepository,
-		StatusApplicationMapper statusApplicationMapper,
-		GenreApplicationMapper genreApplicationMapper
+		StatusResolverInterface statusResolverInterface,
+		GenreResolverInterface genreResolverInterface
 	) {
 		return new GetContentDetailService(
 			contentApplicationMapper,
 			contentQueryRepository,
-			statusApplicationMapper,
-			genreApplicationMapper
+			statusResolverInterface,
+			genreResolverInterface
 		);
 	}
 }
