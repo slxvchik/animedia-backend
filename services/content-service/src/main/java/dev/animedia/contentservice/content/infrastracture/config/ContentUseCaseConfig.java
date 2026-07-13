@@ -7,29 +7,25 @@ import dev.animedia.contentservice.content.application.service.IndexAllContentSe
 import dev.animedia.contentservice.content.application.service.admin.CreateContentService;
 import dev.animedia.contentservice.content.application.service.admin.DeleteContentService;
 import dev.animedia.contentservice.content.application.service.admin.UpdateContentService;
+import dev.animedia.contentservice.content.application.service.user.GetContentDetailService;
 import dev.animedia.contentservice.content.application.service.user.GetContentListService;
 import dev.animedia.contentservice.content.application.usecase.IndexAllContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.CreateContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.DeleteContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.UpdateContentUseCase;
+import dev.animedia.contentservice.content.application.usecase.user.GetContentDetailUseCase;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentListUseCase;
+import dev.animedia.contentservice.content.domain.repository.ContentCommandRepository;
+import dev.animedia.contentservice.content.domain.repository.ContentQueryRepository;
 import dev.animedia.contentservice.content.infrastracture.resolver.genre.GenreResolver;
 import dev.animedia.contentservice.content.infrastracture.resolver.genre.GenreResolverMapper;
 import dev.animedia.contentservice.content.infrastracture.resolver.status.StatusResolver;
 import dev.animedia.contentservice.content.infrastracture.resolver.status.StatusResolverMapper;
-import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
-import dev.animedia.contentservice.genre.application.usecase.GetGenreListUseCase;
-import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
-import dev.animedia.contentservice.status.application.mapper.StatusApplicationMapper;
-import dev.animedia.contentservice.content.application.service.user.GetContentDetailService;
-import dev.animedia.contentservice.content.application.usecase.user.GetContentDetailUseCase;
-import dev.animedia.contentservice.content.domain.repository.ContentCommandRepository;
-import dev.animedia.contentservice.content.domain.repository.ContentQueryRepository;
-import dev.animedia.contentservice.genre.domain.repository.GenreQueryRepository;
-import dev.animedia.contentservice.status.application.usecase.GetStatusListUseCase;
-import dev.animedia.contentservice.status.domain.repository.StatusQueryRepository;
 import dev.animedia.contentservice.content.infrastracture.transactional.CreateContentTransactionalDecorator;
 import dev.animedia.contentservice.content.infrastracture.transactional.UpdateContentTransactionalDecorator;
+import dev.animedia.contentservice.genre.application.usecase.GetGenreListUseCase;
+import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
+import dev.animedia.contentservice.status.application.usecase.GetStatusListUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -43,7 +39,7 @@ public class ContentUseCaseConfig {
 		GenreResolverInterface genreResolverInterface,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		return new CreateContentService(
 			contentApplicationMapper,
@@ -51,7 +47,7 @@ public class ContentUseCaseConfig {
 			genreResolverInterface,
 			contentQueryRepository,
 			contentCommandRepository,
-			eventDispatcherInterface
+			eventDispatcher
 		);
 	}
 
@@ -72,7 +68,7 @@ public class ContentUseCaseConfig {
 		GenreResolverInterface genreResolverInterface,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		return new UpdateContentService(
 			contentApplicationMapper,
@@ -80,7 +76,7 @@ public class ContentUseCaseConfig {
 			genreResolverInterface,
 			contentQueryRepository,
 			contentCommandRepository,
-			eventDispatcherInterface
+			eventDispatcher
 		);
 	}
 
@@ -120,12 +116,12 @@ public class ContentUseCaseConfig {
 	public DeleteContentUseCase deleteContentUseCase(
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		return new DeleteContentService(
 			contentQueryRepository,
 			contentCommandRepository,
-			eventDispatcherInterface
+			eventDispatcher
 		);
 	}
 

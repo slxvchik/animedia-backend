@@ -1,12 +1,9 @@
-package dev.animedia.contentservice.content.presentation.mapper.admin;
+package dev.animedia.contentservice.content.presentation.mapper.admin.response;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
 import dev.animedia.contentservice.content.application.dto.content.ContentTranslationDto;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
-import dev.animedia.contentservice.genre.presentation.mapper.admin.GenreAdminMapperGrpc;
 import dev.animedia.contentservice.shared.presentation.grpc.mapper.DateMapper;
-import dev.animedia.contentservice.status.presentation.mapper.admin.StatusAdminMapperGrpc;
 import dev.animedia.grpc.content.admin.v1.ContentAdminProto;
 import dev.animedia.grpc.genre.admin.v1.GenreAdminProto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +17,23 @@ public class ContentResponseAdminMapperGrpc {
 
 	private final ContentTypeMapperGrpc contentTypeMapperGrpc;
 	private final DateMapper dateMapper;
-	private final StatusAdminMapperGrpc statusAdminMapperGrpc;
-	private final GenreAdminMapperGrpc genreAdminMapperGrpc;
+	private final StatusResponseAdminMapperGrpc statusResponseAdminMapperGrpc;
+	private final GenreResponseAdminMapperGrpc genreResponseAdminMapperGrpc;
 
 	@Autowired
 	public ContentResponseAdminMapperGrpc(
 		ContentTypeMapperGrpc contentTypeMapperGrpc,
 		DateMapper dateMapper,
-		StatusAdminMapperGrpc statusAdminMapperGrpc,
-		GenreAdminMapperGrpc genreAdminMapperGrpc
+		StatusResponseAdminMapperGrpc statusResponseAdminMapperGrpc,
+		GenreResponseAdminMapperGrpc genreResponseAdminMapperGrpc
 	) {
 		this.contentTypeMapperGrpc = contentTypeMapperGrpc;
 		this.dateMapper = dateMapper;
-		this.statusAdminMapperGrpc = statusAdminMapperGrpc;
-		this.genreAdminMapperGrpc = genreAdminMapperGrpc;
+		this.statusResponseAdminMapperGrpc = statusResponseAdminMapperGrpc;
+		this.genreResponseAdminMapperGrpc = genreResponseAdminMapperGrpc;
 	}
 
-	public ContentAdminProto.ContentResponse toContentGrpcResponse(
+	public ContentAdminProto.ContentResponse toContentResponseGrpc(
 		ContentResponseDto contentResponseDto
 	) {
 		if (contentResponseDto == null) return null;
@@ -52,7 +49,7 @@ public class ContentResponseAdminMapperGrpc {
 			)
 			.setSeason(contentResponseDto.season())
 			.setStatus(
-				statusAdminMapperGrpc.toStatusGrpcResponse(contentResponseDto.status())
+				statusResponseAdminMapperGrpc.toStatusResponseGrpc(contentResponseDto.status())
 			)
 			.setActive(contentResponseDto.active());
 
@@ -74,7 +71,7 @@ public class ContentResponseAdminMapperGrpc {
 		List<GenreAdminProto.GenreResponse> genres = contentResponseDto.genreDtoSet() != null
 			? contentResponseDto.genreDtoSet()
 				.stream()
-				.map(genreAdminMapperGrpc::toGenreGrpcResponse)
+				.map(genreResponseAdminMapperGrpc::toGenreResponseGrpc)
 				.toList()
 			: List.of();
 
@@ -82,7 +79,7 @@ public class ContentResponseAdminMapperGrpc {
 			contentResponseDto.translationSet() != null
 			? contentResponseDto.translationSet()
 				.stream()
-				.map(ctd -> toContentTranslationGrpcResponse(ctd, contentId))
+				.map(ctd -> toContentTranslationResponseGrpc(ctd, contentId))
 				.toList()
 			: List.of();
 
@@ -93,7 +90,7 @@ public class ContentResponseAdminMapperGrpc {
 			.build();
 	}
 
-	private ContentAdminProto.ContentTranslationResponse toContentTranslationGrpcResponse(
+	private ContentAdminProto.ContentTranslationResponse toContentTranslationResponseGrpc(
 		ContentTranslationDto contentTranslationDto,
 		String contentId
 	) {

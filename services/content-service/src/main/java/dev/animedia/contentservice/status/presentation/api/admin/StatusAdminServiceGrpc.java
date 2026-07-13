@@ -61,7 +61,7 @@ public class StatusAdminServiceGrpc extends dev.animedia.grpc.status.admin.v1.St
 
 		var responseContent = domainStatusDtoPage.content()
 			.stream()
-			.map(statusAdminMapperGrpc::toStatusGrpcResponse)
+			.map(statusAdminMapperGrpc::toStatusResponseGrpc)
 			.toList();
 		var responsePagination = protoPaginationMapper.toProtoPaginationResponse(domainStatusDtoPage);
 		responseObserver.onNext(
@@ -83,7 +83,7 @@ public class StatusAdminServiceGrpc extends dev.animedia.grpc.status.admin.v1.St
 			LanguageInterceptor.getLanguageCode()
 		);
 		responseObserver.onNext(
-			statusAdminMapperGrpc.toStatusGrpcResponse(statusDto)
+			statusAdminMapperGrpc.toStatusResponseGrpc(statusDto)
 		);
 		responseObserver.onCompleted();
 	}

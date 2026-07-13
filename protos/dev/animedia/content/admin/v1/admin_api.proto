@@ -11,16 +11,10 @@ option java_package="dev.animedia.grpc.content.admin.v1";
 option java_outer_classname="ContentAdminProtoApi";
 
 service ContentAdminService {
-  rpc GetAll(common.v1.PaginationRequest) returns (GetAllContentResponse);
   rpc Get(GetContentRequest) returns (ContentResponse);
   rpc Create(CreateContentRequest) returns (CreateContentResponse);
   rpc Update(UpdateContentRequest) returns (common.v1.EmptyResponse);
   rpc Delete(DeleteContentRequest) returns (common.v1.EmptyResponse);
-}
-
-message GetAllContentResponse {
-  repeated ContentResponse contents = 1;
-  common.v1.PaginationResponse pagination = 2;
 }
 
 message GetContentRequest {

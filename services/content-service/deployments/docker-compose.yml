@@ -1,6 +1,6 @@
 services:
   db_content:
-    container_name: animedia_content_service_database
+    container_name: animedia_backend_service_database
     image: postgres:18.0
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

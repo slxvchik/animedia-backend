@@ -74,12 +74,12 @@ public class ContentEntity {
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "content_languages", joinColumns = @JoinColumn(name = "content_id"))
     @Column(name = "language_code")
     private Set<String> languageCodes = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "content_genres", joinColumns = @JoinColumn(name = "content_id"))
     @Column(name = "genre_id")
     private Set<String> genreIds = new HashSet<>();

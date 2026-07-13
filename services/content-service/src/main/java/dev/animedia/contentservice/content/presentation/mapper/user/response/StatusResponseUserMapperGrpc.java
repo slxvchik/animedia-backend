@@ -1,7 +1,7 @@
-package dev.animedia.contentservice.status.presentation.mapper.user;
+package dev.animedia.contentservice.content.presentation.mapper.user.response;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
-import dev.animedia.contentservice.status.application.dto.StatusTranslationDto;
+import dev.animedia.contentservice.content.application.dto.status.StatusDto;
+import dev.animedia.contentservice.content.application.dto.status.StatusTranslationDto;
 import dev.animedia.grpc.status.user.v1.StatusUserProto;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class StatusUserMapperGrpc {
+public class StatusResponseUserMapperGrpc {
 	public StatusUserProto.StatusResponse toStatusResponseGrpc(
 		StatusDto statusDto
 	) {

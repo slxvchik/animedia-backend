@@ -13,7 +13,7 @@ import dev.animedia.contentservice.content.domain.model.Content;
 import dev.animedia.contentservice.content.domain.model.ContentUpdate;
 import dev.animedia.contentservice.content.domain.repository.ContentCommandRepository;
 import dev.animedia.contentservice.content.domain.repository.ContentQueryRepository;
-import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
+import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
 
 import java.util.List;
 import java.util.Set;
@@ -27,7 +27,7 @@ public class UpdateContentService implements UpdateContentUseCase {
     private final ContentQueryRepository contentQueryRepository;
     private final ContentCommandRepository contentCommandRepository;
 
-	private final EventDispatcherInterface eventDispatcherInterface;
+	private final EventDispatcher eventDispatcher;
 
 	public UpdateContentService(
 		ContentApplicationMapper contentApplicationMapper,
@@ -35,14 +35,14 @@ public class UpdateContentService implements UpdateContentUseCase {
 		GenreResolverInterface genreResolverInterface,
 		ContentQueryRepository contentQueryRepository,
 		ContentCommandRepository contentCommandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		this.contentApplicationMapper = contentApplicationMapper;
 		this.statusResolverInterface = statusResolverInterface;
 		this.genreResolverInterface = genreResolverInterface;
 		this.contentQueryRepository = contentQueryRepository;
 		this.contentCommandRepository = contentCommandRepository;
-		this.eventDispatcherInterface = eventDispatcherInterface;
+		this.eventDispatcher = eventDispatcher;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class UpdateContentService implements UpdateContentUseCase {
 		Content created = contentQueryRepository.find(content.getId(), null)
 			.orElseThrow(() -> new ContentNotFoundException(content.getId()));
 
-		eventDispatcherInterface.dispatch(
+		eventDispatcher.dispatch(
 			new ContentUpdateEvent(
 				contentApplicationMapper.toContentResponseDto(
 					created,

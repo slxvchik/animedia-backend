@@ -79,7 +79,7 @@ public class StatusAdminMapperGrpc {
 		);
 	}
 
-	public StatusAdminProto.StatusResponse toStatusGrpcResponse(
+	public StatusAdminProto.StatusResponse toStatusResponseGrpc(
 		StatusDto statusDto
 	) {
 		if (statusDto == null) return null;
@@ -88,7 +88,7 @@ public class StatusAdminMapperGrpc {
 			statusDto.translationSet() != null
 			? statusDto.translationSet()
 				.stream()
-				.map(std -> toStatusTranslationGrpcResponse(std, statusDto.id()))
+				.map(std -> toStatusTranslationResponseGrpc(std, statusDto.id()))
 				.filter(Objects::nonNull)
 				.toList()
 			: List.of();
@@ -103,7 +103,7 @@ public class StatusAdminMapperGrpc {
 			.build();
 	}
 
-	private StatusAdminProto.StatusTranslationResponse toStatusTranslationGrpcResponse(
+	private StatusAdminProto.StatusTranslationResponse toStatusTranslationResponseGrpc(
 		StatusTranslationDto statusTranslationDto,
 		UUID statusId
 	) {

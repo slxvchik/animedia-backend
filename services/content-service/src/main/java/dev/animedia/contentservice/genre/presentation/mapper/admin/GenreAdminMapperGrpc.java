@@ -82,7 +82,7 @@ public class GenreAdminMapperGrpc {
 		);
 	}
 
-	public GenreAdminProto.GenreResponse toGenreGrpcResponse(
+	public GenreAdminProto.GenreResponse toGenreResponseGrpc(
 		GenreDto genreDto
 	) {
 		if (genreDto == null) return null;
@@ -90,7 +90,7 @@ public class GenreAdminMapperGrpc {
 		List<GenreAdminProto.GenreTranslationResponse> translations = genreDto.translationSet() != null
 			? genreDto.translationSet()
 				.stream()
-				.map(gtd -> toGenreTranslationGrpcResponse(gtd, genreDto.id()))
+				.map(gtd -> toGenreTranslationResponseGrpc(gtd, genreDto.id()))
 				.filter(Objects::nonNull)
 				.toList()
 			: List.of();
@@ -105,7 +105,7 @@ public class GenreAdminMapperGrpc {
 			.build();
 	}
 
-	private GenreAdminProto.GenreTranslationResponse toGenreTranslationGrpcResponse(
+	private GenreAdminProto.GenreTranslationResponse toGenreTranslationResponseGrpc(
 		GenreTranslationDto genreTranslationDto,
 		UUID genreId
 	) {

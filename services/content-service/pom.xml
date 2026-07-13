@@ -30,7 +30,7 @@
 		<java.version>25</java.version>
 		<grpc.version>1.77.1</grpc.version>
 		<protobuf.version>4.33.4</protobuf.version>
-		<spring-grpc.version>1.0.2</spring-grpc.version>
+		<spring-grpc.version>1.0.3</spring-grpc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -79,6 +79,14 @@
 		<dependency>
 			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
+			<version>3.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>4.3.1</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 

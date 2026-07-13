@@ -1,9 +1,7 @@
-package dev.animedia.contentservice.content.presentation.mapper.admin;
+package dev.animedia.contentservice.content.presentation.mapper.admin.request;
 
 import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.dto.content.ContentTranslationDto;
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
-import dev.animedia.contentservice.status.application.dto.StatusDto;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
 import dev.animedia.contentservice.shared.presentation.grpc.mapper.DateMapper;
 import dev.animedia.grpc.content.admin.v1.ContentAdminProtoApi;
@@ -11,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 public class ContentCommandAdminMapperGrpc {
-
 	private final ContentTypeMapperGrpc contentTypeMapperGrpc;
 	private final DateMapper dateMapper;
 
@@ -26,7 +24,7 @@ public class ContentCommandAdminMapperGrpc {
 		this.dateMapper = dateMapper;
 	}
 
-	public ContentRequestDto toContentDto(
+	public ContentRequestDto toContentRequestDto(
 		ContentAdminProtoApi.CreateContentRequest request
 	) {
 		return new ContentRequestDto(
@@ -36,7 +34,7 @@ public class ContentCommandAdminMapperGrpc {
 				request.getType()
 			),
 			request.getSeason(),
-			toStatusDto(UUID.fromString(request.getStatusId())),
+			request.getStatusId(),
 			request.hasCoverImageId() ? request.getCoverImageId() : null,
 			request.hasTrailerVideoId() ? request.getTrailerVideoId() : null,
 			request.hasReleaseDate() ? dateMapper.toLocalDate(request.getReleaseDate()) : null,
@@ -45,7 +43,7 @@ public class ContentCommandAdminMapperGrpc {
 			request.getActive(),
 			request.getSortOrder(),
 			request.getLanguageCodesCount() > 0 ? new HashSet<>(request.getLanguageCodesList()) : null,
-			request.getGenreIdsCount() > 0 ? request.getGenreIdsList().stream().map(id -> toGenreDto(UUID.fromString(id))).collect(Collectors.toSet()) : null,
+			request.getGenreIdsCount() > 0 ? Set.copyOf(request.getGenreIdsList()) : null,
 			request.getTranslationsCount() > 0 ? request.getTranslationsList().stream().map(this::toContentTranslationDto).collect(Collectors.toSet()) : null
 		);
 	}
@@ -61,7 +59,7 @@ public class ContentCommandAdminMapperGrpc {
 		);
 	}
 
-	public ContentRequestDto toContentDto(
+	public ContentRequestDto toContentRequestDto(
 		ContentAdminProtoApi.UpdateContentRequest request
 	) {
 		return new ContentRequestDto(
@@ -69,7 +67,7 @@ public class ContentCommandAdminMapperGrpc {
 			null,
 			null,
 			null,
-			toStatusDto(UUID.fromString(request.getStatusId())),
+			request.getStatusId(),
 			request.hasCoverImageId() ? request.getCoverImageId() : null,
 			request.hasTrailerVideoId() ? request.getTrailerVideoId() : null,
 			request.hasReleaseDate() ? dateMapper.toLocalDate(request.getReleaseDate()) : null,
@@ -78,7 +76,7 @@ public class ContentCommandAdminMapperGrpc {
 			request.getActive(),
 			request.getSortOrder(),
 			request.getLanguageCodesCount() > 0 ? new HashSet<>(request.getLanguageCodesList()) : null,
-			request.getGenreIdsCount() > 0 ? request.getGenreIdsList().stream().map(uuid -> toGenreDto(UUID.fromString(uuid))).collect(Collectors.toSet()) : null,
+			request.getGenreIdsCount() > 0 ? Set.copyOf(request.getGenreIdsList()) : null,
 			request.getTranslationsCount() > 0 ? request.getTranslationsList().stream().map(this::toContentTranslationDto).collect(Collectors.toSet()) : null
 		);
 	}
@@ -91,26 +89,6 @@ public class ContentCommandAdminMapperGrpc {
 			request.getLanguageCode(),
 			request.getTitle(),
 			request.hasDescription() ? request.getDescription() : null
-		);
-	}
-
-	private StatusDto toStatusDto(UUID statusId) {
-		return new StatusDto(
-			statusId,
-			null,
-			null,
-			null,
-			null
-		);
-	}
-
-	private GenreDto toGenreDto(UUID genreId) {
-		return new GenreDto(
-			genreId,
-			null,
-			null,
-			null,
-			null
 		);
 	}
 }

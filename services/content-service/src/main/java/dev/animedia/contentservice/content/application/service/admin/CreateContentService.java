@@ -13,7 +13,7 @@ import dev.animedia.contentservice.content.application.usecase.admin.CreateConte
 import dev.animedia.contentservice.content.domain.model.Content;
 import dev.animedia.contentservice.content.domain.repository.ContentCommandRepository;
 import dev.animedia.contentservice.content.domain.repository.ContentQueryRepository;
-import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
+import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
 
 import java.util.List;
 import java.util.Set;
@@ -28,7 +28,7 @@ public class CreateContentService implements CreateContentUseCase {
     private final ContentQueryRepository contentQueryRepository;
     private final ContentCommandRepository contentCommandRepository;
 
-	private final EventDispatcherInterface eventDispatcherInterface;
+	private final EventDispatcher eventDispatcher;
 
     public CreateContentService(
         ContentApplicationMapper contentApplicationMapper,
@@ -36,14 +36,14 @@ public class CreateContentService implements CreateContentUseCase {
 	    GenreResolverInterface genreResolverInterface,
         ContentQueryRepository contentQueryRepository,
         ContentCommandRepository contentCommandRepository,
-	    EventDispatcherInterface eventDispatcherInterface
+	    EventDispatcher eventDispatcher
     ) {
         this.contentApplicationMapper = contentApplicationMapper;
 	    this.statusResolverInterface = statusResolverInterface;
 	    this.genreResolverInterface = genreResolverInterface;
 	    this.contentQueryRepository = contentQueryRepository;
         this.contentCommandRepository = contentCommandRepository;
-	    this.eventDispatcherInterface = eventDispatcherInterface;
+	    this.eventDispatcher = eventDispatcher;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class CreateContentService implements CreateContentUseCase {
 		Content created = contentQueryRepository.find(createdId, null)
 			.orElseThrow(() -> new ContentNotFoundException(createdId));
 
-		eventDispatcherInterface.dispatch(
+		eventDispatcher.dispatch(
 			new ContentCreateEvent(
 				contentApplicationMapper.toContentResponseDto(
 					created,

@@ -58,7 +58,7 @@ public class GenreAdminServiceGrpc extends dev.animedia.grpc.genre.admin.v1.Genr
 		Pageable domainPageable = protoPaginationMapper.toDomainPageable(request);
 		Page<GenreDto> genreDtoPage = indexAllGenreUseCase.index(domainPageable);
 		var responseContent = genreDtoPage.content().stream()
-			.map(genreAdminMapperGrpc::toGenreGrpcResponse)
+			.map(genreAdminMapperGrpc::toGenreResponseGrpc)
 			.toList();
 		var responsePagination = protoPaginationMapper.toProtoPaginationResponse(genreDtoPage);
 		responseObserver.onNext(
@@ -80,7 +80,7 @@ public class GenreAdminServiceGrpc extends dev.animedia.grpc.genre.admin.v1.Genr
 			LanguageInterceptor.getLanguageCode()
 		);
 		responseObserver.onNext(
-			genreAdminMapperGrpc.toGenreGrpcResponse(genreDto)
+			genreAdminMapperGrpc.toGenreResponseGrpc(genreDto)
 		);
 		responseObserver.onCompleted();
 	}

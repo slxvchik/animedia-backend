@@ -1,7 +1,7 @@
-package dev.animedia.contentservice.genre.presentation.mapper.user;
+package dev.animedia.contentservice.content.presentation.mapper.user.response;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
-import dev.animedia.contentservice.genre.application.dto.GenreTranslationDto;
+import dev.animedia.contentservice.content.application.dto.genre.GenreDto;
+import dev.animedia.contentservice.content.application.dto.genre.GenreTranslationDto;
 import dev.animedia.grpc.genre.user.v1.GenreUserProto;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class GenreUserMapperGrpc {
+public class GenreResponseUserMapperGrpc {
 	public GenreUserProto.GenreResponse toGenreResponseGrpc(
 		GenreDto genreDto
 	) {

@@ -2,16 +2,12 @@ package dev.animedia.contentservice.content.presentation.api.admin;
 
 import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
-import dev.animedia.contentservice.content.application.usecase.IndexAllContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.CreateContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.DeleteContentUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.GetContentDetailUseCase;
 import dev.animedia.contentservice.content.application.usecase.admin.UpdateContentUseCase;
-import dev.animedia.contentservice.shared.domain.pagination.Page;
-import dev.animedia.contentservice.shared.domain.pagination.Pageable;
-import dev.animedia.contentservice.content.presentation.mapper.admin.ContentCommandAdminMapperGrpc;
-import dev.animedia.contentservice.content.presentation.mapper.admin.ContentResponseAdminMapperGrpc;
-import dev.animedia.contentservice.shared.presentation.grpc.mapper.ProtoPaginationMapper;
+import dev.animedia.contentservice.content.presentation.mapper.admin.request.ContentCommandAdminMapperGrpc;
+import dev.animedia.contentservice.content.presentation.mapper.admin.response.ContentResponseAdminMapperGrpc;
 import dev.animedia.grpc.common.CommonProto;
 import dev.animedia.grpc.content.admin.v1.ContentAdminProto;
 import dev.animedia.grpc.content.admin.v1.ContentAdminProtoApi;
@@ -23,11 +19,9 @@ import java.util.UUID;
 
 @GrpcService
 public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.ContentAdminServiceGrpc.ContentAdminServiceImplBase {
-    private final ProtoPaginationMapper protoPaginationMapper;
     private final ContentResponseAdminMapperGrpc contentResponseAdminMapperGrpc;
     private final ContentCommandAdminMapperGrpc contentCommandAdminMapperGrpc;
 
-    private final IndexAllContentUseCase indexAllContentUseCase;
     private final GetContentDetailUseCase getContentDetailUseCase;
     private final CreateContentUseCase createContentUseCase;
     private final UpdateContentUseCase updateContentUseCase;
@@ -35,45 +29,21 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 
     @Autowired
 	public ContentAdminServiceGrpc(
-		ProtoPaginationMapper protoPaginationMapper,
 		ContentResponseAdminMapperGrpc contentResponseAdminMapperGrpc,
 		ContentCommandAdminMapperGrpc contentCommandAdminMapperGrpc,
 
-		IndexAllContentUseCase indexAllContentUseCase,
 		GetContentDetailUseCase getContentDetailUseCase,
 		CreateContentUseCase createContentUseCase,
 		UpdateContentUseCase updateContentUseCase,
 		DeleteContentUseCase deleteContentUseCase
 	) {
-		this.protoPaginationMapper = protoPaginationMapper;
 		this.contentResponseAdminMapperGrpc = contentResponseAdminMapperGrpc;
 		this.contentCommandAdminMapperGrpc = contentCommandAdminMapperGrpc;
 
-		this.indexAllContentUseCase = indexAllContentUseCase;
 		this.getContentDetailUseCase = getContentDetailUseCase;
 		this.createContentUseCase = createContentUseCase;
 		this.updateContentUseCase = updateContentUseCase;
 		this.deleteContentUseCase = deleteContentUseCase;
-	}
-
-	@Override
-	public void getAll(
-		CommonProto.PaginationRequest request,
-		StreamObserver<ContentAdminProtoApi.GetAllContentResponse> responseObserver
-	) {
-		Pageable domainPageable = protoPaginationMapper.toDomainPageable(request);
-		Page<ContentRequestDto> contentDtoDomainPage = indexAllContentUseCase.index(domainPageable);
-		var responseContent = contentDtoDomainPage.content().stream()
-			.map(contentResponseAdminMapperGrpc::toContentGrpcResponse)
-			.toList();
-		var responsePagination = protoPaginationMapper.toProtoPaginationResponse(contentDtoDomainPage);
-		responseObserver.onNext(
-			ContentAdminProtoApi.GetAllContentResponse.newBuilder()
-				.addAllContents(responseContent)
-				.setPagination(responsePagination)
-				.build()
-		);
-		responseObserver.onCompleted();
 	}
 
 	@Override
@@ -85,7 +55,7 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 			UUID.fromString(request.getId())
 		);
 		responseObserver.onNext(
-			contentResponseAdminMapperGrpc.toContentGrpcResponse(contentResponseDtoDto)
+			contentResponseAdminMapperGrpc.toContentResponseGrpc(contentResponseDtoDto)
 		);
 		responseObserver.onCompleted();
 	}
@@ -95,7 +65,7 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		ContentAdminProtoApi.CreateContentRequest request,
 		StreamObserver<ContentAdminProtoApi.CreateContentResponse> responseObserver
 	) {
-		ContentRequestDto createDto = contentCommandAdminMapperGrpc.toContentDto(request);
+		ContentRequestDto createDto = contentCommandAdminMapperGrpc.toContentRequestDto(request);
 		UUID createdId = createContentUseCase.create(createDto);
 		responseObserver.onNext(
 			ContentAdminProtoApi.CreateContentResponse.newBuilder()
@@ -110,7 +80,7 @@ public class ContentAdminServiceGrpc extends dev.animedia.grpc.content.admin.v1.
 		ContentAdminProtoApi.UpdateContentRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
-		ContentRequestDto updateDto = contentCommandAdminMapperGrpc.toContentDto(request);
+		ContentRequestDto updateDto = contentCommandAdminMapperGrpc.toContentRequestDto(request);
 		updateContentUseCase.update(updateDto);
 		responseObserver.onNext(
 			CommonProto.EmptyResponse.newBuilder().build()

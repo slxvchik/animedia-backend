@@ -1,12 +1,11 @@
 package dev.animedia.contentservice.content.presentation.api.user;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
 import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentDetailUseCase;
 import dev.animedia.contentservice.content.application.usecase.user.GetContentListUseCase;
 import dev.animedia.contentservice.shared.presentation.grpc.config.LanguageInterceptor;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
-import dev.animedia.contentservice.content.presentation.mapper.user.ContentUserMapperGrpc;
+import dev.animedia.contentservice.content.presentation.mapper.user.response.ContentResponseUserMapperGrpc;
 import dev.animedia.grpc.content.user.v1.ContentUserProto;
 import dev.animedia.grpc.content.user.v1.ContentUserProtoApi;
 import io.grpc.stub.StreamObserver;
@@ -18,7 +17,7 @@ import java.util.UUID;
 
 @GrpcService
 public class ContentUserServiceGrpc extends dev.animedia.grpc.content.user.v1.ContentUserServiceGrpc.ContentUserServiceImplBase {
-	private final ContentUserMapperGrpc contentUserMapperGrpc;
+	private final ContentResponseUserMapperGrpc contentResponseUserMapperGrpc;
 	private final ContentTypeMapperGrpc contentTypeMapperGrpc;
 
     private final GetContentListUseCase getContentListUseCase;
@@ -26,12 +25,12 @@ public class ContentUserServiceGrpc extends dev.animedia.grpc.content.user.v1.Co
 
 	@Autowired
 	public ContentUserServiceGrpc(
-	    ContentUserMapperGrpc contentUserMapperGrpc,
+	    ContentResponseUserMapperGrpc contentResponseUserMapperGrpc,
 		ContentTypeMapperGrpc contentTypeMapperGrpc,
 		GetContentListUseCase getContentListUseCase,
 	    GetContentDetailUseCase getContentDetailUseCase
 	) {
-	    this.contentUserMapperGrpc = contentUserMapperGrpc;
+	    this.contentResponseUserMapperGrpc = contentResponseUserMapperGrpc;
 		this.contentTypeMapperGrpc = contentTypeMapperGrpc;
 		this.getContentListUseCase = getContentListUseCase;
 	    this.getContentDetailUseCase = getContentDetailUseCase;
@@ -48,7 +47,7 @@ public class ContentUserServiceGrpc extends dev.animedia.grpc.content.user.v1.Co
 			request.getSeason(),
 			LanguageInterceptor.getLanguageCode()
 		);
-		ContentUserProto.ContentResponse contentResponse = contentUserMapperGrpc.toContentGrpcResponse(contentResponseDto);
+		ContentUserProto.ContentResponse contentResponse = contentResponseUserMapperGrpc.toContentResponseGrpc(contentResponseDto);
 		responseObserver.onNext(
 			ContentUserProtoApi.GetDetailResponse.newBuilder()
 				.setContent(contentResponse)
@@ -67,7 +66,7 @@ public class ContentUserServiceGrpc extends dev.animedia.grpc.content.user.v1.Co
 			LanguageInterceptor.getLanguageCode()
 		);
 		List<ContentUserProto.ContentResponse> contentResponseList = contentResponseDtoList.stream()
-			.map(contentUserMapperGrpc::toContentGrpcResponse)
+			.map(contentResponseUserMapperGrpc::toContentResponseGrpc)
 			.toList();
 		responseObserver.onNext(
 			ContentUserProtoApi.GetListResponse.newBuilder()

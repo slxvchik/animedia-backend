@@ -9,15 +9,15 @@ import dev.animedia.contentservice.genre.application.service.admin.GetGenreDetai
 import dev.animedia.contentservice.genre.application.service.admin.UpdateGenreService;
 import dev.animedia.contentservice.genre.application.usecase.GetGenreListUseCase;
 import dev.animedia.contentservice.genre.application.usecase.IndexAllGenreUseCase;
-import dev.animedia.contentservice.genre.domain.repository.GenreCommandRepository;
-import dev.animedia.contentservice.genre.domain.repository.GenreQueryRepository;
 import dev.animedia.contentservice.genre.application.usecase.admin.CreateGenreUseCase;
 import dev.animedia.contentservice.genre.application.usecase.admin.DeleteGenreUseCase;
 import dev.animedia.contentservice.genre.application.usecase.admin.GetGenreDetailUseCase;
 import dev.animedia.contentservice.genre.application.usecase.admin.UpdateGenreUseCase;
+import dev.animedia.contentservice.genre.domain.repository.GenreCommandRepository;
+import dev.animedia.contentservice.genre.domain.repository.GenreQueryRepository;
 import dev.animedia.contentservice.genre.infrastracture.transactional.CreateGenreTransactionalDecorator;
 import dev.animedia.contentservice.genre.infrastracture.transactional.UpdateGenreTransactionalDecorator;
-import dev.animedia.contentservice.shared.domain.event.EventDispatcherInterface;
+import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -29,13 +29,13 @@ public class GenreUseCaseConfig {
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository,
 		GenreCommandRepository commandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		return new CreateGenreService(
 			genreApplicationMapper,
 			genreQueryRepository,
 			commandRepository,
-			eventDispatcherInterface
+			eventDispatcher
 		);
 	}
 
@@ -54,13 +54,13 @@ public class GenreUseCaseConfig {
 		GenreApplicationMapper genreApplicationMapper,
 		GenreQueryRepository genreQueryRepository,
 		GenreCommandRepository genreCommandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		return new UpdateGenreService(
 			genreApplicationMapper,
 			genreQueryRepository,
 			genreCommandRepository,
-			eventDispatcherInterface
+			eventDispatcher
 		);
 	}
 
@@ -78,12 +78,12 @@ public class GenreUseCaseConfig {
 	public DeleteGenreUseCase deleteGenreUseCase(
 		GenreQueryRepository genreQueryRepository,
 		GenreCommandRepository genreCommandRepository,
-		EventDispatcherInterface eventDispatcherInterface
+		EventDispatcher eventDispatcher
 	) {
 		return new DeleteGenreService(
 			genreQueryRepository,
 			genreCommandRepository,
-			eventDispatcherInterface
+			eventDispatcher
 		);
 	}
 

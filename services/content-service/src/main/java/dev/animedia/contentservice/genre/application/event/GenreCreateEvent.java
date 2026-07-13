@@ -1,7 +1,16 @@
 package dev.animedia.contentservice.genre.application.event;
 
 import dev.animedia.contentservice.genre.application.dto.GenreDto;
-import dev.animedia.contentservice.shared.domain.event.EventInterface;
+import dev.animedia.contentservice.shared.domain.event.Event;
 
-public record GenreCreateEvent(GenreDto genre) implements EventInterface {
+public class GenreCreateEvent extends Event {
+	private final GenreDto genreDto;
+
+	public GenreCreateEvent(GenreDto genreDto) {
+		this.genreDto = genreDto;
+	}
+
+	public GenreDto getGenreDto() {
+		return genreDto;
+	}
 }
