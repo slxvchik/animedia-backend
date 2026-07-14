@@ -12,7 +12,7 @@ public class SlugAlias {
 	}
 
 	private void validate(String value) {
-		if (value == null || !ALIAS_PATTERN.matcher(value).hasMatch()) {
+		if (value == null || !ALIAS_PATTERN.matcher(value).matches()) {
 			throw new SlugAliasPatternException(value);
 		}
 	}

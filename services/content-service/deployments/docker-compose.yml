@@ -9,12 +9,12 @@ services:
     ports:
       - "${DB_PORT}:5432"
     volumes:
-      - db_data_content:/var/lib/postgresql
+      - animedia_backend_db_data:/var/lib/postgresql
     networks:
-      - animedia_content_service
+      - animedia_backend_service
 
 volumes:
-  db_data_content:
+  animedia_backend_db_data:
 
 networks:
-  animedia_content_service:
+  animedia_backend_service:

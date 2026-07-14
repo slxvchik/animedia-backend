@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.status.infrastracture.dispatcher;
+package dev.animedia.contentservice.content.infrastracture.event;
 
 import dev.animedia.contentservice.shared.domain.event.Event;
 import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
@@ -7,11 +7,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StatusDispatcher implements EventDispatcher {
+public class ContentEventDispatcher implements EventDispatcher {
 	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@Autowired
-	public StatusDispatcher(ApplicationEventPublisher applicationEventPublisher) {
+	public ContentEventDispatcher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
 

@@ -100,7 +100,7 @@ public class StatusAdminServiceGrpc extends dev.animedia.grpc.status.admin.v1.St
 				.setId(createdId.toString())
 				.build()
 		);
-		super.create(request, responseObserver);
+		responseObserver.onCompleted();
 	}
 
 	@Override
