@@ -1,7 +1,11 @@
 package dev.animedia.contentservice.genre.application.mapper;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
-import dev.animedia.contentservice.genre.application.dto.GenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreTranslationDto;
 import dev.animedia.contentservice.genre.domain.model.Genre;
 import dev.animedia.contentservice.genre.domain.model.GenreTranslation;
 
@@ -16,7 +20,7 @@ public class GenreApplicationMapper {
 			genre.getAlias(),
 			genre.getSortOrder(),
 			genre.getActive(),
-			genre.getTranslationSet().stream()
+			genre.getTranslations().stream()
 				.map(this::toGenreTranslationDto)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet())
@@ -33,10 +37,10 @@ public class GenreApplicationMapper {
 		);
 	}
 
-	public Genre toGenre(GenreDto genreDto) {
+	public Genre toGenre(CreateGenreDto genreDto) {
 		if (genreDto == null) return null;
 		return new Genre(
-			genreDto.id(),
+			null,
 			genreDto.alias(),
 			genreDto.sortOrder(),
 			genreDto.active(),
@@ -47,7 +51,31 @@ public class GenreApplicationMapper {
 		);
 	}
 
-	public GenreTranslation toGenreTranslation(GenreTranslationDto genreTranslationDto) {
+	public GenreTranslation toGenreTranslation(CreateGenreTranslationDto genreTranslationDto) {
+		if (genreTranslationDto == null) return null;
+		return new GenreTranslation(
+			null,
+			genreTranslationDto.languageCode(),
+			genreTranslationDto.name(),
+			genreTranslationDto.description()
+		);
+	}
+
+	public Genre toGenre(UpdateGenreDto genreDto) {
+		if (genreDto == null) return null;
+		return new Genre(
+			genreDto.id(),
+			null,
+			genreDto.sortOrder(),
+			genreDto.active(),
+			genreDto.translationSet().stream()
+				.map(this::toGenreTranslation)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet())
+		);
+	}
+
+	public GenreTranslation toGenreTranslation(UpdateGenreTranslationDto genreTranslationDto) {
 		if (genreTranslationDto == null) return null;
 		return new GenreTranslation(
 			genreTranslationDto.id(),

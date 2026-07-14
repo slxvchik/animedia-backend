@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.status.application.service;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusDto;
 import dev.animedia.contentservice.status.application.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.status.application.usecase.IndexAllStatusUseCase;
 import dev.animedia.contentservice.shared.domain.pagination.Page;

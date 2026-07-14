@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.genre.application.service.admin;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreDto;
 import dev.animedia.contentservice.genre.application.event.GenreUpdateEvent;
 import dev.animedia.contentservice.genre.application.exception.GenreNotFoundException;
 import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
@@ -31,7 +31,7 @@ public class UpdateGenreService implements UpdateGenreUseCase {
 	}
 
 	@Override
-	public void update(GenreDto genreDto) {
+	public void update(UpdateGenreDto genreDto) {
 		Genre genre = genreQueryRepository.findById(genreDto.id(), null)
 			.orElseThrow(GenreNotFoundException::new);
 

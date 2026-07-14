@@ -49,11 +49,11 @@ public class ContentCommandRepositoryImpl implements ContentCommandRepository {
 		contentEntity.setActive(content.getActive());
 		contentEntity.setSortOrder(content.getSort());
 
-		contentEntity.syncLanguageCodeSet(content.getLanguageCodeSet());
-		contentEntity.syncGenreSet(content.getGenreIdSet());
+		contentEntity.syncLanguageCodeSet(content.getLanguageCodes());
+		contentEntity.syncGenreSet(content.getGenreIds());
 
-		Set<ContentTranslationEntity> contentTranslationEntitySet = content.getTranslationSet() == null ? null
-			: content.getTranslationSet()
+		Set<ContentTranslationEntity> contentTranslationEntitySet = content.getTranslations() == null ? null
+			: content.getTranslations()
 				.stream()
 				.map(ct -> contentPersistenceMapper.toContentTranslationEntity(ct, contentEntity))
 				.collect(Collectors.toSet());

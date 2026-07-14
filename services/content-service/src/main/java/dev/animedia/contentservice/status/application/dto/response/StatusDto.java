@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.status.application.dto;
+package dev.animedia.contentservice.status.application.dto.response;
 
 import java.util.Set;
 import java.util.UUID;

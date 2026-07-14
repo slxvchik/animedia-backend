@@ -9,14 +9,14 @@ public class Status {
 	private final SlugAlias alias;
 	private int sortOrder;
 	private boolean active;
-	private final Set<StatusTranslation> translationSet = new HashSet<>();
+	private final Set<StatusTranslation> translations = new HashSet<>();
 
-	public Status(UUID id, String alias, int sortOrder, boolean active, Set<StatusTranslation> translationSet) {
+	public Status(UUID id, String alias, int sortOrder, boolean active, Set<StatusTranslation> translations) {
 		this.id = id;
 		this.alias = new SlugAlias(alias);
 		setSortOrder(sortOrder);
 		this.active = active;
-		setTranslationSet(translationSet);
+		setTranslations(translations);
 	}
 
 	public UUID getId() {
@@ -35,33 +35,22 @@ public class Status {
 		return active;
 	}
 
-	public Set<StatusTranslation> getTranslationSet() {
-		return Collections.unmodifiableSet(translationSet);
+	public Set<StatusTranslation> getTranslations() {
+		return Collections.unmodifiableSet(translations);
 	}
 
 	public void update(int sortOrder, boolean active, Set<StatusTranslation> translationSet) {
 		setSortOrder(sortOrder);
 		this.active = active;
-		setTranslationSet(translationSet);
+		setTranslations(translationSet);
 	}
 
-	private void setTranslationSet(Set<StatusTranslation> translationSet) {
-		this.translationSet.clear();
-		this.translationSet.addAll(translationSet);
+	private void setTranslations(Set<StatusTranslation> translations) {
+		this.translations.clear();
+		this.translations.addAll(translations);
 	}
 
 	private void setSortOrder(int sortOrder) {
 		this.sortOrder = Math.max(sortOrder, 0);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof Status status)) return false;
-        return alias.equals(status.alias);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(alias);
 	}
 }

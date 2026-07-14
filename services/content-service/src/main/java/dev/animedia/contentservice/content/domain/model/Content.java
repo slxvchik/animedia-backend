@@ -21,9 +21,9 @@ public class Content {
 	private LocalDateTime updatedAt;
 	private boolean active;
 	private int sort;
-	private Set<String> languageCodeSet = new HashSet<>();
-	private Set<String> genreIdSet = new HashSet<>();
-	private Set<ContentTranslation> translationSet = new HashSet<>();
+	private Set<String> languageCodes = new HashSet<>();
+	private Set<String> genreIds = new HashSet<>();
+	private Set<ContentTranslation> translations = new HashSet<>();
 
 	private static void validateType(ContentType type) {
 		if (type == null) throw new ContentTypeRequiredException();
@@ -46,9 +46,9 @@ public class Content {
 		this.updatedAt = builder.updatedAt;
 		this.active = builder.active;
 		setSort(builder.sort);
-		this.languageCodeSet = builder.languageCodeSet;
-		this.genreIdSet = builder.genreIdSet;
-		this.translationSet = builder.translationSet;
+		this.languageCodes = builder.languageCodeSet;
+		this.genreIds = builder.genreIdSet;
+		this.translations = builder.translationSet;
 	}
 
 	public UUID getId() {
@@ -99,16 +99,16 @@ public class Content {
 		return sort;
 	}
 
-	public Set<String> getLanguageCodeSet() {
-		return Collections.unmodifiableSet(languageCodeSet);
+	public Set<String> getLanguageCodes() {
+		return Collections.unmodifiableSet(languageCodes);
 	}
 
-	public Set<String> getGenreIdSet() {
-		return Collections.unmodifiableSet(genreIdSet);
+	public Set<String> getGenreIds() {
+		return Collections.unmodifiableSet(genreIds);
 	}
 
-	public Set<ContentTranslation> getTranslationSet() {
-		return Collections.unmodifiableSet(translationSet);
+	public Set<ContentTranslation> getTranslations() {
+		return Collections.unmodifiableSet(translations);
 	}
 
 	public void update(
@@ -121,36 +121,32 @@ public class Content {
 		this.updatedAt = LocalDateTime.now();
 		this.active = contentUpdate.active();
 		setSort(contentUpdate.sort());
-		setLanguageCodeSet(contentUpdate.languageCodeSet());
-		setGenreIdSet(contentUpdate.genreIdSet());
-		setTranslationSet(contentUpdate.translationSet());
+		setLanguageCodes(contentUpdate.languageCodeSet());
+		setGenreIds(contentUpdate.genreIdSet());
+		setTranslations(contentUpdate.translationSet());
 	}
 
 	private void setSort(int sort) {
 		this.sort = Math.max(sort, 0);
 	}
 
-	private void setLanguageCodeSet(Set<String> languageCodeSet) {
-		if (languageCodeSet != null) {
-			this.languageCodeSet.retainAll(languageCodeSet);
-			this.languageCodeSet.addAll(languageCodeSet);
-		} else {
-			this.languageCodeSet.clear();
+	private void setLanguageCodes(Set<String> languageCodes) {
+		this.languageCodes.clear();
+		if (languageCodes != null) {
+			this.languageCodes.addAll(languageCodes);
 		}
 	}
 
-	private void setGenreIdSet(Set<String> genreIdSet) {
-		if (genreIdSet != null) {
-			this.genreIdSet.retainAll(genreIdSet);
-			this.genreIdSet.addAll(genreIdSet);
-		} else {
-			this.genreIdSet.clear();
+	private void setGenreIds(Set<String> genreIds) {
+		this.genreIds.clear();
+		if (genreIds != null) {
+			this.genreIds.addAll(genreIds);
 		}
 	}
 
-	private void setTranslationSet(Set<ContentTranslation> translationSet) {
-		this.translationSet.clear();
-		this.translationSet.addAll(translationSet);
+	private void setTranslations(Set<ContentTranslation> translations) {
+		this.translations.clear();
+		this.translations.addAll(translations);
 	}
 
 	@Override

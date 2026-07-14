@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.genre.application.service.admin;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreDto;
 import dev.animedia.contentservice.genre.application.event.GenreCreateEvent;
 import dev.animedia.contentservice.genre.application.exception.GenreAliasExistsException;
 import dev.animedia.contentservice.genre.application.exception.GenreNotFoundException;
@@ -33,7 +33,7 @@ public class CreateGenreService implements CreateGenreUseCase {
 
 
 	@Override
-	public UUID create(GenreDto genreDto) {
+	public UUID create(CreateGenreDto genreDto) {
 		Genre genre = genreApplicationMapper.toGenre(genreDto);
 
 		boolean aliasExists = genreQueryRepository.existsByAlias(genreDto.alias());

@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.status.application.service.admin;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusDto;
 import dev.animedia.contentservice.status.application.exception.StatusNotFoundException;
 import dev.animedia.contentservice.status.application.mapper.StatusApplicationMapper;
 import dev.animedia.contentservice.status.application.usecase.admin.GetStatusDetailUseCase;

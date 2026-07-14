@@ -58,7 +58,7 @@ public class StatusPersistenceMapper {
 		se.setSortOrder(status.getSortOrder());
 
 		se.setTranslations(
-			status.getTranslationSet().stream()
+			status.getTranslations().stream()
 				.map(ste -> toStatusTranslationEntity(ste, se))
 				.collect(Collectors.toSet())
 		);

@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.genre.application.service;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
 import dev.animedia.contentservice.genre.application.mapper.GenreApplicationMapper;
 import dev.animedia.contentservice.genre.application.usecase.GetGenreListUseCase;
 import dev.animedia.contentservice.genre.domain.model.Genre;

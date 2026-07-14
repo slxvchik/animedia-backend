@@ -68,12 +68,12 @@ public class ContentPersistenceMapper {
         ce.setActive(content.getActive());
         ce.setSortOrder(content.getSort());
 
-        ce.setLanguageCodes(content.getLanguageCodeSet());
-        ce.setGenreIds(content.getGenreIdSet());
+        ce.setLanguageCodes(content.getLanguageCodes());
+        ce.setGenreIds(content.getGenreIds());
 
         ce.setTranslations(
-            content.getTranslationSet() == null ? null
-            : content.getTranslationSet().stream()
+            content.getTranslations() == null ? null
+            : content.getTranslations().stream()
                 .map(ct -> toContentTranslationEntity(ct, ce))
                 .collect(Collectors.toSet())
         );

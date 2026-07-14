@@ -41,7 +41,7 @@ public class StatusCommandRepositoryImpl implements StatusCommandRepository {
 
 		statusEntity.setSortOrder(status.getSortOrder());
 
-		Set<StatusTranslationEntity> newTranslationEntitySet = status.getTranslationSet().stream()
+		Set<StatusTranslationEntity> newTranslationEntitySet = status.getTranslations().stream()
 			.map(dto -> statusPersistenceMapper.toStatusTranslationEntity(dto, statusEntity))
 			.collect(Collectors.toSet());
 

@@ -39,7 +39,7 @@ public class GetContentListService implements GetContentListUseCase {
         Set<String> genreIdSet = new HashSet<>();
         for (Content c : contentList) {
             statusIdSet.add(c.getStatusId());
-            genreIdSet.addAll(c.getGenreIdSet());
+            genreIdSet.addAll(c.getGenreIds());
         }
 
         Map<String, StatusDto> statusDtoMap = statusResolverInterface.resolve(statusIdSet)
@@ -51,7 +51,7 @@ public class GetContentListService implements GetContentListUseCase {
 
         return contentList.stream().map(content -> {
             StatusDto statusDto = statusDtoMap.getOrDefault(content.getStatusId(), null);
-            Set<GenreDto> genreDtoSet = content.getGenreIdSet().stream()
+            Set<GenreDto> genreDtoSet = content.getGenreIds().stream()
                 .map(genreId -> genreDtoMap.getOrDefault(genreId, null))
                 .collect(Collectors.toSet());
 

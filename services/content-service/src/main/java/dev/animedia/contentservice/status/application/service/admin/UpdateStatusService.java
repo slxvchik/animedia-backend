@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.status.application.service.admin;
 
 import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
-import dev.animedia.contentservice.status.application.dto.StatusDto;
+import dev.animedia.contentservice.status.application.dto.request.UpdateStatusDto;
 import dev.animedia.contentservice.status.application.event.StatusUpdateEvent;
 import dev.animedia.contentservice.status.application.exception.StatusNotFoundException;
 import dev.animedia.contentservice.status.application.mapper.StatusApplicationMapper;
@@ -31,7 +31,7 @@ public class UpdateStatusService implements UpdateStatusUseCase {
     }
 
     @Override
-    public void update(StatusDto statusDto) {
+    public void update(UpdateStatusDto statusDto) {
         Status status = statusQueryRepository.findById(statusDto.id(), null)
             .orElseThrow(() -> new StatusNotFoundException(statusDto.id()));
 

@@ -43,7 +43,7 @@ public class IndexAllContentService implements IndexAllContentUseCase {
         Set<String> genreIdSet = new HashSet<>();
         for (Content c : contentPage.content()) {
             statusIdSet.add(c.getStatusId());
-            genreIdSet.addAll(c.getGenreIdSet());
+            genreIdSet.addAll(c.getGenreIds());
         }
 
         Map<String, StatusDto> statusDtoMap = statusResolverInterface.resolve(statusIdSet)
@@ -55,7 +55,7 @@ public class IndexAllContentService implements IndexAllContentUseCase {
 
         return contentPage.changeContent(content -> {
             StatusDto statusDto = statusDtoMap.getOrDefault(content.getStatusId(), null);
-            Set<GenreDto> genreDtoSet = content.getGenreIdSet().stream()
+            Set<GenreDto> genreDtoSet = content.getGenreIds().stream()
                 .map(genreId -> genreDtoMap.getOrDefault(genreId, null))
                 .collect(Collectors.toSet());
 

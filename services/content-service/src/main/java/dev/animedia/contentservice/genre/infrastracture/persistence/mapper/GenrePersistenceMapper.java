@@ -43,7 +43,7 @@ public class GenrePersistenceMapper {
         ge.setSortOrder(genre.getSortOrder());
 
         ge.setTranslations(
-            genre.getTranslationSet().stream()
+            genre.getTranslations().stream()
                 .map(gt -> toGenreTranslationEntity(gt, ge))
                 .collect(Collectors.toSet())
         );

@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.genre.application.usecase.admin;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreDto;
 
 public interface UpdateGenreUseCase {
-	void update(GenreDto genreDto);
+	void update(UpdateGenreDto genreDto);
 }

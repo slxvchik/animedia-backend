@@ -17,8 +17,14 @@ import java.util.UUID;
 )
 public class GenreTranslationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @PrePersist
+    private void generateId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false, updatable = false)

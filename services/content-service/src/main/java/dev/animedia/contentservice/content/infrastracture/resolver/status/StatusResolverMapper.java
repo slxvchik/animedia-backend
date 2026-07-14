@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class StatusResolverMapper {
-	public StatusDto toContentStatusDto(dev.animedia.contentservice.status.application.dto.StatusDto statusDto) {
+	public StatusDto toContentStatusDto(dev.animedia.contentservice.status.application.dto.response.StatusDto statusDto) {
 		if (statusDto == null) return null;
 		return new StatusDto(
 			statusDto.id(),
@@ -19,7 +19,7 @@ public class StatusResolverMapper {
 		);
 	}
 
-	public StatusTranslationDto toContentStatusTranslationDto(dev.animedia.contentservice.status.application.dto.StatusTranslationDto statusTranslationDto) {
+	public StatusTranslationDto toContentStatusTranslationDto(dev.animedia.contentservice.status.application.dto.response.StatusTranslationDto statusTranslationDto) {
 		if (statusTranslationDto == null) return null;
 		return new StatusTranslationDto(
 			statusTranslationDto.id(),

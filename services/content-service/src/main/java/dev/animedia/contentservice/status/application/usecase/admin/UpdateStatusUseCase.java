@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.status.application.usecase.admin;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
+import dev.animedia.contentservice.status.application.dto.request.UpdateStatusDto;
 
 public interface UpdateStatusUseCase {
-    void update(StatusDto statusDto);
+    void update(UpdateStatusDto statusDto);
 }

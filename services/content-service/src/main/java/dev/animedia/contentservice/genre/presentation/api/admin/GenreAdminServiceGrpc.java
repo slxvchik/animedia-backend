@@ -1,6 +1,8 @@
 package dev.animedia.contentservice.genre.presentation.api.admin;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
 import dev.animedia.contentservice.genre.application.usecase.IndexAllGenreUseCase;
 import dev.animedia.contentservice.shared.domain.pagination.Page;
 import dev.animedia.contentservice.shared.domain.pagination.Pageable;
@@ -90,7 +92,7 @@ public class GenreAdminServiceGrpc extends dev.animedia.grpc.genre.admin.v1.Genr
 		GenreAdminProtoApi.CreateGenreRequest request,
 		StreamObserver<GenreAdminProtoApi.CreateGenreResponse> responseObserver
 	) {
-		GenreDto createDto = genreAdminMapperGrpc.toGenreDto(request);
+		CreateGenreDto createDto = genreAdminMapperGrpc.toGenreDto(request);
 		UUID createdId = createGenreUseCase.create(createDto);
 		responseObserver.onNext(
 			GenreAdminProtoApi.CreateGenreResponse.newBuilder()
@@ -105,7 +107,7 @@ public class GenreAdminServiceGrpc extends dev.animedia.grpc.genre.admin.v1.Genr
 		GenreAdminProtoApi.UpdateGenreRequest request,
 		StreamObserver<CommonProto.EmptyResponse> responseObserver
 	) {
-		GenreDto updateDto = genreAdminMapperGrpc.toGenreDto(request);
+		UpdateGenreDto updateDto = genreAdminMapperGrpc.toGenreDto(request);
 		updateGenreUseCase.update(updateDto);responseObserver.onNext(
 			CommonProto.EmptyResponse.newBuilder().build()
 		);

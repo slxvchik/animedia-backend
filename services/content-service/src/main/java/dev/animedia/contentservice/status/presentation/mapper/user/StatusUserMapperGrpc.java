@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.status.presentation.mapper.user;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
-import dev.animedia.contentservice.status.application.dto.StatusTranslationDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusTranslationDto;
 import dev.animedia.grpc.status.user.v1.StatusUserProto;
 import org.springframework.stereotype.Component;
 

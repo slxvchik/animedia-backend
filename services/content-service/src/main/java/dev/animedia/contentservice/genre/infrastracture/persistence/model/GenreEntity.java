@@ -105,19 +105,4 @@ public class GenreEntity {
                 );
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GenreEntity that)) return false;
-
-        if (this.id == null || that.id == null) return false;
-
-        return this.id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(this.id);
-    }
 }

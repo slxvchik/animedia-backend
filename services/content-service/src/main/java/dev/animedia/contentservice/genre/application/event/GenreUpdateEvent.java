@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.genre.application.event;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
 import dev.animedia.contentservice.shared.domain.event.Event;
 
 public class GenreUpdateEvent extends Event {

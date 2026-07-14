@@ -1,7 +1,11 @@
 package dev.animedia.contentservice.status.presentation.mapper.admin;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
-import dev.animedia.contentservice.status.application.dto.StatusTranslationDto;
+import dev.animedia.contentservice.status.application.dto.request.CreateStatusDto;
+import dev.animedia.contentservice.status.application.dto.request.CreateStatusTranslationDto;
+import dev.animedia.contentservice.status.application.dto.request.UpdateStatusDto;
+import dev.animedia.contentservice.status.application.dto.request.UpdateStatusTranslationDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusTranslationDto;
 import dev.animedia.grpc.status.admin.v1.StatusAdminProto;
 import dev.animedia.grpc.status.admin.v1.StatusAdminProtoApi;
 import org.springframework.stereotype.Component;
@@ -15,19 +19,18 @@ import java.util.stream.Collectors;
 @Component
 public class StatusAdminMapperGrpc {
 
-	public StatusDto toStatusDto(
+	public CreateStatusDto toStatusDto(
 		StatusAdminProtoApi.CreateStatusRequest request
 	) {
 		if (request == null) return null;
 
-		Set<StatusTranslationDto> translations = request.getTranslationsList()
+		Set<CreateStatusTranslationDto> translations = request.getTranslationsList()
 			.stream()
 			.map(this::toStatusTranslationDto)
 			.filter(Objects::nonNull)
 			.collect(Collectors.toSet());
 
-		return new StatusDto(
-			null,
+		return new CreateStatusDto(
 			request.getAlias(),
 			request.getSortOrder(),
 			request.getActive(),
@@ -35,30 +38,29 @@ public class StatusAdminMapperGrpc {
 		);
 	}
 
-	private StatusTranslationDto toStatusTranslationDto(
+	private CreateStatusTranslationDto toStatusTranslationDto(
 		StatusAdminProtoApi.CreateStatusTranslationRequest request
 	) {
 		if (request == null) return null;
 
-		return new StatusTranslationDto(
-			null,
+		return new CreateStatusTranslationDto(
 			request.getLanguageCode(),
 			request.getName()
 		);
 	}
 
-	public StatusDto toStatusDto(
+	public UpdateStatusDto toStatusDto(
 		StatusAdminProtoApi.UpdateStatusRequest request
 	) {
 		if (request == null) return null;
 
-		Set<StatusTranslationDto> translations = request.getTranslationsList()
+		Set<UpdateStatusTranslationDto> translations = request.getTranslationsList()
 			.stream()
 			.map(this::toStatusTranslationDto)
 			.filter(Objects::nonNull)
 			.collect(Collectors.toSet());
 
-		return new StatusDto(
+		return new UpdateStatusDto(
 			UUID.fromString(request.getId()),
 			null,
 			request.getSortOrder(),
@@ -67,12 +69,12 @@ public class StatusAdminMapperGrpc {
 		);
 	}
 
-	private StatusTranslationDto toStatusTranslationDto(
+	private UpdateStatusTranslationDto toStatusTranslationDto(
 		StatusAdminProtoApi.UpdateStatusTranslationRequest request
 	) {
 		if (request == null) return null;
 
-		return new StatusTranslationDto(
+		return new UpdateStatusTranslationDto(
 			request.hasId() ? UUID.fromString(request.getId()) : null,
 			request.getLanguageCode(),
 			request.getName()

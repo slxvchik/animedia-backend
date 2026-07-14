@@ -1,16 +1,18 @@
 package dev.animedia.contentservice.status.presentation.api.admin;
 
-import dev.animedia.contentservice.status.application.dto.StatusDto;
-import dev.animedia.contentservice.status.application.usecase.IndexAllStatusUseCase;
 import dev.animedia.contentservice.shared.domain.pagination.Page;
 import dev.animedia.contentservice.shared.domain.pagination.Pageable;
 import dev.animedia.contentservice.shared.presentation.grpc.config.LanguageInterceptor;
 import dev.animedia.contentservice.shared.presentation.grpc.mapper.ProtoPaginationMapper;
-import dev.animedia.contentservice.status.presentation.mapper.admin.StatusAdminMapperGrpc;
+import dev.animedia.contentservice.status.application.dto.request.CreateStatusDto;
+import dev.animedia.contentservice.status.application.dto.request.UpdateStatusDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusDto;
+import dev.animedia.contentservice.status.application.usecase.IndexAllStatusUseCase;
 import dev.animedia.contentservice.status.application.usecase.admin.CreateStatusUseCase;
 import dev.animedia.contentservice.status.application.usecase.admin.DeleteStatusUseCase;
 import dev.animedia.contentservice.status.application.usecase.admin.GetStatusDetailUseCase;
 import dev.animedia.contentservice.status.application.usecase.admin.UpdateStatusUseCase;
+import dev.animedia.contentservice.status.presentation.mapper.admin.StatusAdminMapperGrpc;
 import dev.animedia.grpc.common.CommonProto.EmptyResponse;
 import dev.animedia.grpc.common.CommonProto.PaginationRequest;
 import dev.animedia.grpc.status.admin.v1.StatusAdminProto;
@@ -93,7 +95,7 @@ public class StatusAdminServiceGrpc extends dev.animedia.grpc.status.admin.v1.St
 		StatusAdminProtoApi.CreateStatusRequest request,
 		StreamObserver<StatusAdminProtoApi.CreateStatusResponse> responseObserver
 	) {
-		StatusDto createDto = statusAdminMapperGrpc.toStatusDto(request);
+		CreateStatusDto createDto = statusAdminMapperGrpc.toStatusDto(request);
 		UUID createdId = createStatusUseCase.create(createDto);
 		responseObserver.onNext(
 			StatusAdminProtoApi.CreateStatusResponse.newBuilder()
@@ -108,7 +110,7 @@ public class StatusAdminServiceGrpc extends dev.animedia.grpc.status.admin.v1.St
 		StatusAdminProtoApi.UpdateStatusRequest request,
 		StreamObserver<EmptyResponse> responseObserver
 	) {
-		StatusDto updateDto = statusAdminMapperGrpc.toStatusDto(request);
+		UpdateStatusDto updateDto = statusAdminMapperGrpc.toStatusDto(request);
 		updateStatusUseCase.update(updateDto);
 		responseObserver.onNext(
 			EmptyResponse.newBuilder().build()

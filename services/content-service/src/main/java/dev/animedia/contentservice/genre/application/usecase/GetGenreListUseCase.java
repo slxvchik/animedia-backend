@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.genre.application.usecase;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
 import jakarta.annotation.Nullable;
 
 import java.util.List;

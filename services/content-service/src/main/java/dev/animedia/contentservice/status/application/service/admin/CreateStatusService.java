@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.status.application.service.admin;
 
 import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
-import dev.animedia.contentservice.status.application.dto.StatusDto;
+import dev.animedia.contentservice.status.application.dto.request.CreateStatusDto;
 import dev.animedia.contentservice.status.application.event.StatusCreateEvent;
 import dev.animedia.contentservice.status.application.exception.StatusAliasExistsException;
 import dev.animedia.contentservice.status.application.exception.StatusNotFoundException;
@@ -32,7 +32,7 @@ public class CreateStatusService implements CreateStatusUseCase {
     }
 
     @Override
-    public UUID create(StatusDto statusDto) {
+    public UUID create(CreateStatusDto statusDto) {
         boolean aliasExists = statusQueryRepository.existsByAlias(statusDto.alias());
         if (aliasExists) {
             throw new StatusAliasExistsException(statusDto.alias());

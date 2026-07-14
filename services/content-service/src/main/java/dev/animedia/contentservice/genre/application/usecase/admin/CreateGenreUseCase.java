@@ -1,9 +1,9 @@
 package dev.animedia.contentservice.genre.application.usecase.admin;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreDto;
 
 import java.util.UUID;
 
 public interface CreateGenreUseCase {
-	UUID create(GenreDto genreDto);
+	UUID create(CreateGenreDto genreDto);
 }

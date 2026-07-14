@@ -79,9 +79,9 @@ public class ContentApplicationMapper {
             content.getUpdatedAt(),
             content.getActive(),
             content.getSort(),
-            content.getLanguageCodeSet(),
+            content.getLanguageCodes(),
             genreDtoSet,
-            content.getTranslationSet().stream()
+            content.getTranslations().stream()
                 .map(this::toContentTranslationDto)
                 .collect(Collectors.toUnmodifiableSet())
         );

@@ -1,5 +1,6 @@
 package dev.animedia.contentservice.shared.domain.slugalias;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class SlugAlias {
@@ -24,5 +25,17 @@ public class SlugAlias {
 	public void setValue(String value) {
 		validate(value);
 		this.value = value;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		SlugAlias slugAlias = (SlugAlias) o;
+		return Objects.equals(value, slugAlias.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(value);
 	}
 }

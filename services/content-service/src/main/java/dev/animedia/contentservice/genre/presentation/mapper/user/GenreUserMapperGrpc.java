@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.genre.presentation.mapper.user;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
-import dev.animedia.contentservice.genre.application.dto.GenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreTranslationDto;
 import dev.animedia.grpc.genre.user.v1.GenreUserProto;
 import org.springframework.stereotype.Component;
 

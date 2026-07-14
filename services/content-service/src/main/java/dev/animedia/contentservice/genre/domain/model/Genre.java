@@ -9,14 +9,14 @@ public class Genre {
     private final SlugAlias alias;
     private int sortOrder;
     private boolean active;
-    private final Set<GenreTranslation> translationSet = new HashSet<>();
+    private final Set<GenreTranslation> translations = new HashSet<>();
 
-    public Genre(UUID id, String alias, int sortOrder, boolean active, Set<GenreTranslation> translationSet) {
+    public Genre(UUID id, String alias, int sortOrder, boolean active, Set<GenreTranslation> translations) {
         this.id = id;
         this.alias = new SlugAlias(alias);
         setSortOrder(sortOrder);
         this.active = active;
-        setTranslationSet(translationSet);
+        setTranslations(translations);
     }
 
     public UUID getId() {
@@ -35,33 +35,22 @@ public class Genre {
         return active;
     }
 
-    public Set<GenreTranslation> getTranslationSet() {
-        return Collections.unmodifiableSet(translationSet);
+    public Set<GenreTranslation> getTranslations() {
+        return Collections.unmodifiableSet(translations);
     }
 
     public void update(int sortOrder, boolean active, Set<GenreTranslation> translationSet) {
         setSortOrder(sortOrder);
         this.active = active;
-        setTranslationSet(translationSet);
+        setTranslations(translationSet);
     }
 
-    private void setTranslationSet(Set<GenreTranslation> translationSet) {
-        this.translationSet.clear();
-        this.translationSet.addAll(translationSet);
+    private void setTranslations(Set<GenreTranslation> translations) {
+        this.translations.clear();
+        this.translations.addAll(translations);
     }
 
     private void setSortOrder(int sortOrder) {
         this.sortOrder = Math.max(sortOrder, 0);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Genre genre)) return false;
-        return alias.equals(genre.alias);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(alias);
     }
 }

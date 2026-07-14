@@ -1,7 +1,11 @@
 package dev.animedia.contentservice.genre.presentation.mapper.admin;
 
-import dev.animedia.contentservice.genre.application.dto.GenreDto;
-import dev.animedia.contentservice.genre.application.dto.GenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.CreateGenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreDto;
+import dev.animedia.contentservice.genre.application.dto.request.UpdateGenreTranslationDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreDto;
+import dev.animedia.contentservice.genre.application.dto.response.GenreTranslationDto;
 import dev.animedia.grpc.genre.admin.v1.GenreAdminProto;
 import dev.animedia.grpc.genre.admin.v1.GenreAdminProtoApi;
 import org.springframework.stereotype.Component;
@@ -14,21 +18,19 @@ import java.util.stream.Collectors;
 
 @Component
 public class GenreAdminMapperGrpc {
-
-	public GenreDto toGenreDto(
+	public CreateGenreDto toGenreDto(
 		GenreAdminProtoApi.CreateGenreRequest request
 	) {
 		if (request == null) return null;
 
-		Set<GenreTranslationDto> translations =
+		Set<CreateGenreTranslationDto> translations =
 			request.getTranslationsList()
 				.stream()
 				.map(this::toGenreTranslationDto)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet());
 
-		return new GenreDto(
-			null,
+		return new CreateGenreDto(
 			request.getAlias(),
 			request.getSortOrder(),
 			request.getActive(),
@@ -36,45 +38,43 @@ public class GenreAdminMapperGrpc {
 		);
 	}
 
-	private GenreTranslationDto toGenreTranslationDto(
+	private CreateGenreTranslationDto toGenreTranslationDto(
 		GenreAdminProtoApi.CreateGenreTranslationRequest request
 	) {
 		if (request == null) return null;
 
-		return new GenreTranslationDto(
-			null,
+		return new CreateGenreTranslationDto(
 			request.getLanguageCode(),
 			request.getName(),
 			request.getDescription()
 		);
 	}
 
-	public GenreDto toGenreDto(
+	public UpdateGenreDto toGenreDto(
 		GenreAdminProtoApi.UpdateGenreRequest request
 	) {
 		if (request == null) return null;
 
-		Set<GenreTranslationDto> translations =
+		Set<UpdateGenreTranslationDto> translations =
 			request.getTranslationsList()
 				.stream()
 				.map(this::toGenreTranslationDto)
 				.collect(Collectors.toSet());
 
-		return new GenreDto(
+		return new UpdateGenreDto(
 			UUID.fromString(request.getId()),
-			null,
 			request.getSortOrder(),
 			request.getActive(),
 			translations
 		);
 	}
 
-	private GenreTranslationDto toGenreTranslationDto(
+	private UpdateGenreTranslationDto toGenreTranslationDto(
 		GenreAdminProtoApi.UpdateGenreTranslationRequest request
 	) {
 		if (request == null) return null;
 
-		return new GenreTranslationDto(
+		return new UpdateGenreTranslationDto(
 			request.hasId() ? UUID.fromString(request.getId()) : null,
 			request.getLanguageCode(),
 			request.getName(),

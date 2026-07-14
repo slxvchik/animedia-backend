@@ -43,7 +43,7 @@ public class GetContentDetailService implements GetContentDetailUseCase {
 		List<StatusDto> statusDtoList = statusResolverInterface.resolve(Set.of(content.getStatusId()));
 		StatusDto statusDto = statusDtoList.isEmpty() ? null : statusDtoList.getFirst();
 
-		List<GenreDto> genreDtoList = genreResolverInterface.resolve(content.getGenreIdSet());
+		List<GenreDto> genreDtoList = genreResolverInterface.resolve(content.getGenreIds());
 
 		return contentApplicationMapper.toContentResponseDto(
 			content,
