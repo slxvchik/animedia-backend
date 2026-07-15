@@ -38,7 +38,7 @@ public class GenreAdminMapperGrpc {
 		);
 	}
 
-	private CreateGenreTranslationDto toGenreTranslationDto(
+	public CreateGenreTranslationDto toGenreTranslationDto(
 		GenreAdminProtoApi.CreateGenreTranslationRequest request
 	) {
 		if (request == null) return null;
@@ -69,7 +69,7 @@ public class GenreAdminMapperGrpc {
 		);
 	}
 
-	private UpdateGenreTranslationDto toGenreTranslationDto(
+	public UpdateGenreTranslationDto toGenreTranslationDto(
 		GenreAdminProtoApi.UpdateGenreTranslationRequest request
 	) {
 		if (request == null) return null;
@@ -87,8 +87,8 @@ public class GenreAdminMapperGrpc {
 	) {
 		if (genreDto == null) return null;
 
-		List<GenreAdminProto.GenreTranslationResponse> translations = genreDto.translationSet() != null
-			? genreDto.translationSet()
+		List<GenreAdminProto.GenreTranslationResponse> translations = genreDto.translations() != null
+			? genreDto.translations()
 				.stream()
 				.map(gtd -> toGenreTranslationResponseGrpc(gtd, genreDto.id()))
 				.filter(Objects::nonNull)
@@ -105,7 +105,7 @@ public class GenreAdminMapperGrpc {
 			.build();
 	}
 
-	private GenreAdminProto.GenreTranslationResponse toGenreTranslationResponseGrpc(
+	public GenreAdminProto.GenreTranslationResponse toGenreTranslationResponseGrpc(
 		GenreTranslationDto genreTranslationDto,
 		UUID genreId
 	) {

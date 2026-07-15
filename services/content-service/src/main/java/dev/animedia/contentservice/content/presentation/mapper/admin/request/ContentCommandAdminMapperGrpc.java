@@ -1,7 +1,9 @@
 package dev.animedia.contentservice.content.presentation.mapper.admin.request;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
-import dev.animedia.contentservice.content.application.dto.content.ContentTranslationDto;
+import dev.animedia.contentservice.content.application.dto.content.request.CreateContentDto;
+import dev.animedia.contentservice.content.application.dto.content.request.CreateContentTranslationDto;
+import dev.animedia.contentservice.content.application.dto.content.request.UpdateContentDto;
+import dev.animedia.contentservice.content.application.dto.content.request.UpdateContentTranslationDto;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
 import dev.animedia.contentservice.shared.presentation.grpc.mapper.DateMapper;
 import dev.animedia.grpc.content.admin.v1.ContentAdminProtoApi;
@@ -24,11 +26,10 @@ public class ContentCommandAdminMapperGrpc {
 		this.dateMapper = dateMapper;
 	}
 
-	public ContentRequestDto toContentRequestDto(
+	public CreateContentDto toContentRequestDto(
 		ContentAdminProtoApi.CreateContentRequest request
 	) {
-		return new ContentRequestDto(
-			null,
+		return new CreateContentDto(
 			request.getAlias(),
 			contentTypeMapperGrpc.toContentType(
 				request.getType()
@@ -38,8 +39,6 @@ public class ContentCommandAdminMapperGrpc {
 			request.hasCoverImageId() ? request.getCoverImageId() : null,
 			request.hasTrailerVideoId() ? request.getTrailerVideoId() : null,
 			request.hasReleaseDate() ? dateMapper.toLocalDate(request.getReleaseDate()) : null,
-			null,
-			null,
 			request.getActive(),
 			request.getSortOrder(),
 			request.getLanguageCodesCount() > 0 ? new HashSet<>(request.getLanguageCodesList()) : null,
@@ -48,31 +47,25 @@ public class ContentCommandAdminMapperGrpc {
 		);
 	}
 
-	public ContentTranslationDto toContentTranslationDto(
+	public CreateContentTranslationDto toContentTranslationDto(
 		ContentAdminProtoApi.CreateContentTranslationRequest request
 	) {
-		return new ContentTranslationDto(
-			null,
+		return new CreateContentTranslationDto(
 			request.getLanguageCode(),
 			request.getTitle(),
 			request.hasDescription() ? request.getDescription() : null
 		);
 	}
 
-	public ContentRequestDto toContentRequestDto(
+	public UpdateContentDto toContentRequestDto(
 		ContentAdminProtoApi.UpdateContentRequest request
 	) {
-		return new ContentRequestDto(
+		return new UpdateContentDto(
 			UUID.fromString(request.getId()),
-			null,
-			null,
-			null,
 			request.getStatusId(),
 			request.hasCoverImageId() ? request.getCoverImageId() : null,
 			request.hasTrailerVideoId() ? request.getTrailerVideoId() : null,
 			request.hasReleaseDate() ? dateMapper.toLocalDate(request.getReleaseDate()) : null,
-			null,
-			null,
 			request.getActive(),
 			request.getSortOrder(),
 			request.getLanguageCodesCount() > 0 ? new HashSet<>(request.getLanguageCodesList()) : null,
@@ -81,10 +74,10 @@ public class ContentCommandAdminMapperGrpc {
 		);
 	}
 
-	public ContentTranslationDto toContentTranslationDto(
+	public UpdateContentTranslationDto toContentTranslationDto(
 		ContentAdminProtoApi.UpdateContentTranslationRequest request
 	) {
-		return new ContentTranslationDto(
+		return new UpdateContentTranslationDto(
 			request.hasId() ? UUID.fromString(request.getId()) : null,
 			request.getLanguageCode(),
 			request.getTitle(),

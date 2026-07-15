@@ -44,7 +44,7 @@ public class GenreApplicationMapper {
 			genreDto.alias(),
 			genreDto.sortOrder(),
 			genreDto.active(),
-			genreDto.translationSet().stream()
+			genreDto.translations().stream()
 				.map(this::toGenreTranslation)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toSet())
@@ -58,20 +58,6 @@ public class GenreApplicationMapper {
 			genreTranslationDto.languageCode(),
 			genreTranslationDto.name(),
 			genreTranslationDto.description()
-		);
-	}
-
-	public Genre toGenre(UpdateGenreDto genreDto) {
-		if (genreDto == null) return null;
-		return new Genre(
-			genreDto.id(),
-			null,
-			genreDto.sortOrder(),
-			genreDto.active(),
-			genreDto.translationSet().stream()
-				.map(this::toGenreTranslation)
-				.filter(Objects::nonNull)
-				.collect(Collectors.toSet())
 		);
 	}
 

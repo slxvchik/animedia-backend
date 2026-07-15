@@ -27,9 +27,9 @@ public class ContentPersistenceMapper {
             .updatedAt(ce.getUpdatedAt())
             .active(ce.getActive())
             .sort(ce.getSortOrder())
-            .languageCodeSet(ce.getLanguageCodes())
-            .genreIdSet(ce.getGenreIds())
-            .translationSet(
+            .languageCodes(ce.getLanguageCodes())
+            .genreIds(ce.getGenreIds())
+            .translation(
                 ce.getTranslations() == null ? null
                 : ce.getTranslations()
                     .stream()

@@ -42,11 +42,11 @@ public class GenreCommandRepositoryImpl implements GenreCommandRepository {
         genreEntity.setAlias(genre.getAlias());
         genreEntity.setSortOrder(genre.getSortOrder());
 
-        Set<GenreTranslationEntity> newTranslationSet = genre.getTranslations().stream()
+        Set<GenreTranslationEntity> newTranslations = genre.getTranslations().stream()
             .map(gt -> genrePersistenceMapper.toGenreTranslationEntity(gt, genreEntity))
             .collect(Collectors.toSet());
 
-        genreEntity.syncTranslationSet(newTranslationSet);
+        genreEntity.syncTranslations(newTranslations);
 
         jpaGenreRepository.save(genreEntity);
     }

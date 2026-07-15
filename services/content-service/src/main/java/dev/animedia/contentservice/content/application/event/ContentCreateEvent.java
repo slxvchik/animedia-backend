@@ -1,16 +1,16 @@
 package dev.animedia.contentservice.content.application.event;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
+import dev.animedia.contentservice.content.application.dto.content.response.ContentDto;
 import dev.animedia.contentservice.shared.domain.event.Event;
 
 public class ContentCreateEvent extends Event {
-	private final ContentResponseDto content;
+	private final ContentDto content;
 
-	public ContentCreateEvent(ContentResponseDto content) {
+	public ContentCreateEvent(ContentDto content) {
 		this.content = content;
 	}
 
-	public ContentResponseDto getContent() {
+	public ContentDto getContent() {
 		return content;
 	}
 }

@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service.admin;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
+import dev.animedia.contentservice.content.application.dto.content.request.UpdateContentDto;
 import dev.animedia.contentservice.content.application.dto.genre.GenreDto;
 import dev.animedia.contentservice.content.application.dto.status.StatusDto;
 import dev.animedia.contentservice.content.application.event.ContentUpdateEvent;
@@ -10,7 +10,7 @@ import dev.animedia.contentservice.content.application.resolver.GenreResolverInt
 import dev.animedia.contentservice.content.application.resolver.StatusResolverInterface;
 import dev.animedia.contentservice.content.application.usecase.admin.UpdateContentUseCase;
 import dev.animedia.contentservice.content.domain.model.Content;
-import dev.animedia.contentservice.content.domain.model.ContentUpdate;
+import dev.animedia.contentservice.content.domain.model.UpdateContent;
 import dev.animedia.contentservice.content.domain.repository.ContentCommandRepository;
 import dev.animedia.contentservice.content.domain.repository.ContentQueryRepository;
 import dev.animedia.contentservice.shared.domain.event.EventDispatcher;
@@ -46,7 +46,7 @@ public class UpdateContentService implements UpdateContentUseCase {
 	}
 
 	@Override
-    public void update(ContentRequestDto contentRequestDto) {
+    public void update(UpdateContentDto contentRequestDto) {
         Content content = contentQueryRepository.find(contentRequestDto.id(), null)
             .orElseThrow(() -> new ContentNotFoundException(contentRequestDto.id()));
 
@@ -57,12 +57,12 @@ public class UpdateContentService implements UpdateContentUseCase {
 		StatusDto statusDto = statusDtoList.isEmpty() ? null : statusDtoList.getFirst();
 
 		// Check if genres exists
-		List<GenreDto> genreDtoList = genreResolverInterface.resolve(contentRequestDto.genreIdSet());
+		List<GenreDto> genreDtoList = genreResolverInterface.resolve(contentRequestDto.genreIds());
 
-        ContentUpdate contentUpdate = contentApplicationMapper.toContentUpdate(
+        UpdateContent updateContent = contentApplicationMapper.toContentUpdate(
 	        contentRequestDto
         );
-        content.update(contentUpdate);
+        content.update(updateContent);
         contentCommandRepository.update(content);
 
 		Content created = contentQueryRepository.find(content.getId(), null)

@@ -23,8 +23,8 @@ public class GetGenreListService implements GetGenreListUseCase {
 	}
 
 	@Override
-	public List<GenreDto> get(List<UUID> idList, @Nullable String languageCode) {
-		List<UUID> distinctIdList = idList.stream().distinct().toList();
+	public List<GenreDto> get(List<UUID> ids, @Nullable String languageCode) {
+		List<UUID> distinctIdList = ids.stream().distinct().toList();
 		List<Genre> genreList = genreQueryRepository.findByIdList(distinctIdList, languageCode);
 		return genreList.stream()
 			.map(genreApplicationMapper::toGenreDto)

@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service.user;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
+import dev.animedia.contentservice.content.application.dto.content.response.ContentDto;
 import dev.animedia.contentservice.content.application.dto.genre.GenreDto;
 import dev.animedia.contentservice.content.application.dto.status.StatusDto;
 import dev.animedia.contentservice.content.application.exception.ContentNotFoundException;
@@ -34,21 +34,21 @@ public class GetContentDetailService implements GetContentDetailUseCase {
 	}
 
 	@Override
-	public ContentResponseDto get(String alias, ContentType type, int season, String languageCode) {
+	public ContentDto get(String alias, ContentType type, int season, String languageCode) {
 		Content content = contentQueryRepository.find(alias, type, season, languageCode)
 			.orElseThrow(ContentNotFoundException::new);
 
 		if (!content.getActive()) throw new ContentNotFoundException();
 
-		List<StatusDto> statusDtoList = statusResolverInterface.resolve(Set.of(content.getStatusId()));
-		StatusDto statusDto = statusDtoList.isEmpty() ? null : statusDtoList.getFirst();
+		List<StatusDto> statusesDto = statusResolverInterface.resolve(Set.of(content.getStatusId()));
+		StatusDto statusDto = statusesDto.isEmpty() ? null : statusesDto.getFirst();
 
-		List<GenreDto> genreDtoList = genreResolverInterface.resolve(content.getGenreIds());
+		List<GenreDto> genresDto = genreResolverInterface.resolve(content.getGenreIds());
 
 		return contentApplicationMapper.toContentResponseDto(
 			content,
 			statusDto,
-			Set.copyOf(genreDtoList)
+			Set.copyOf(genresDto)
 		);
 	}
 }

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface GetGenreListUseCase {
-	List<GenreDto> get(List<UUID> idList, @Nullable String languageCode);
+	List<GenreDto> get(List<UUID> ids, @Nullable String languageCode);
 }

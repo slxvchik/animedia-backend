@@ -3,7 +3,6 @@ package dev.animedia.contentservice.genre.infrastracture.persistence.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -77,21 +76,21 @@ public class GenreEntity {
         return translations;
     }
 
-    public void setTranslations(Set<GenreTranslationEntity> translationSet) {
-        this.translations = translationSet;
+    public void setTranslations(Set<GenreTranslationEntity> translations) {
+        this.translations = translations;
     }
 
-    public void syncTranslationSet(Set<GenreTranslationEntity> newGenreTranslationEntitySet) {
-        if (newGenreTranslationEntitySet == null || newGenreTranslationEntitySet.isEmpty()) {
+    public void syncTranslations(Set<GenreTranslationEntity> newGenreTranslationEntity) {
+        if (newGenreTranslationEntity == null || newGenreTranslationEntity.isEmpty()) {
             this.translations.clear();
             return;
         }
 
         // delete translations
-        this.translations.removeIf(existing -> !newGenreTranslationEntitySet.contains(existing));
+        this.translations.removeIf(existing -> !newGenreTranslationEntity.contains(existing));
 
         // save new && update old translations
-        for (GenreTranslationEntity newGte : newGenreTranslationEntitySet) {
+        for (GenreTranslationEntity newGte : newGenreTranslationEntity) {
             this.translations.stream()
                 .filter(existing -> existing.equals(newGte))
                 .findFirst()

@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.content.application.dto.content;
+package dev.animedia.contentservice.content.application.dto.content.response;
 
 import java.util.UUID;
 

@@ -17,8 +17,8 @@ public class StatusResponseAdminMapperGrpc {
 		if (statusDto == null) return null;
 
 		List<StatusAdminProto.StatusTranslationResponse> translations =
-			statusDto.translationSet() != null
-			? statusDto.translationSet()
+			statusDto.translations() != null
+			? statusDto.translations()
 				.stream()
 				.map(std -> toStatusTranslationResponseGrpc(std, statusDto.id()))
 				.filter(Objects::nonNull)
@@ -35,7 +35,7 @@ public class StatusResponseAdminMapperGrpc {
 			.build();
 	}
 
-	private StatusAdminProto.StatusTranslationResponse toStatusTranslationResponseGrpc(
+	public StatusAdminProto.StatusTranslationResponse toStatusTranslationResponseGrpc(
 		StatusTranslationDto statusTranslationDto,
 		UUID statusId
 	) {

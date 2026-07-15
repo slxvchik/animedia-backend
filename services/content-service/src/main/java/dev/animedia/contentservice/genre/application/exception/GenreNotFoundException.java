@@ -11,11 +11,11 @@ public class GenreNotFoundException extends AppException {
 	public GenreNotFoundException() {
 		super(AppExceptionStatus.NOT_FOUND, "genre.not_found");
 	}
-	public GenreNotFoundException(List<UUID> idList) {
+	public GenreNotFoundException(List<UUID> ids) {
 		super(
 			AppExceptionStatus.NOT_FOUND,
 			"genre.not_found.extra",
-			idList == null ? "" : idList.stream().map(String::valueOf).collect(Collectors.joining(", "))
+			ids == null ? "" : ids.stream().map(String::valueOf).collect(Collectors.joining(", "))
 		);
 	}
 	public GenreNotFoundException(UUID id) {

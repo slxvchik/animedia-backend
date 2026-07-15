@@ -1,7 +1,7 @@
 package dev.animedia.contentservice.content.presentation.mapper.user.response;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
-import dev.animedia.contentservice.content.application.dto.content.ContentTranslationDto;
+import dev.animedia.contentservice.content.application.dto.content.response.ContentDto;
+import dev.animedia.contentservice.content.application.dto.content.response.ContentTranslationDto;
 import dev.animedia.contentservice.content.presentation.mapper.ContentTypeMapperGrpc;
 import dev.animedia.contentservice.shared.presentation.grpc.mapper.DateMapper;
 import dev.animedia.grpc.content.user.v1.ContentUserProto;
@@ -33,46 +33,46 @@ public class ContentResponseUserMapperGrpc {
 	}
 
 	public ContentUserProto.ContentResponse toContentResponseGrpc(
-		ContentResponseDto contentResponseDto
+		ContentDto contentDto
 	) {
-		if (contentResponseDto == null) return null;
+		if (contentDto == null) return null;
 
 		var contentResponse = ContentUserProto.ContentResponse.newBuilder()
-			.setAlias(contentResponseDto.alias())
+			.setAlias(contentDto.alias())
 			.setType(
-				contentTypeMapperGrpc.toProtoContentType(contentResponseDto.type())
+				contentTypeMapperGrpc.toProtoContentType(contentDto.type())
 			)
-			.setSeason(contentResponseDto.season())
+			.setSeason(contentDto.season())
 			.setStatus(
 				statusResponseUserMapperGrpc.toStatusResponseGrpc(
-					contentResponseDto.status()
+					contentDto.status()
 				)
 			);
 
-		if (contentResponseDto.coverImageId() != null)
+		if (contentDto.coverImageId() != null)
 			contentResponse.setCoverImageUuid(
-				contentResponseDto.coverImageId()
+				contentDto.coverImageId()
 			);
 
-		if (contentResponseDto.trailerVideoId() != null)
+		if (contentDto.trailerVideoId() != null)
 			contentResponse.setTrailerVideoUuid(
-				contentResponseDto.trailerVideoId()
+				contentDto.trailerVideoId()
 			);
 
-		if (contentResponseDto.releaseDate() != null)
+		if (contentDto.releaseDate() != null)
 			contentResponse.setReleaseDate(
-				dateMapper.toGrpcDate(contentResponseDto.releaseDate())
+				dateMapper.toGrpcDate(contentDto.releaseDate())
 			);
 
-		List<String> languages = contentResponseDto.languageCodeSet() != null
-			? List.copyOf(contentResponseDto.languageCodeSet())
+		List<String> languages = contentDto.languageCodes() != null
+			? List.copyOf(contentDto.languageCodes())
 			: List.of();
 
 		contentResponse.addAllLanguageCodes(languages);
 
 		List<GenreUserProto.GenreResponse> genres =
-			contentResponseDto.genreDtoSet() != null
-			? contentResponseDto.genreDtoSet()
+			contentDto.genres() != null
+			? contentDto.genres()
 				.stream()
 				.map(genreResponseUserMapperGrpc::toGenreResponseGrpc)
 				.filter(Objects::nonNull)
@@ -82,8 +82,8 @@ public class ContentResponseUserMapperGrpc {
 		contentResponse.addAllGenres(genres);
 
 		List<ContentUserProto.ContentTranslationResponse> translations =
-			contentResponseDto.translationSet() != null
-			? contentResponseDto.translationSet()
+			contentDto.translations() != null
+			? contentDto.translations()
 				.stream()
 				.map(this::toContentTranslationResponseGrpc)
 				.filter(Objects::nonNull)
@@ -96,7 +96,7 @@ public class ContentResponseUserMapperGrpc {
 			.build();
 	}
 
-	private ContentUserProto.ContentTranslationResponse toContentTranslationResponseGrpc(
+	public ContentUserProto.ContentTranslationResponse toContentTranslationResponseGrpc(
 		ContentTranslationDto contentTranslationDto
 	) {
 		if (contentTranslationDto == null) return null;

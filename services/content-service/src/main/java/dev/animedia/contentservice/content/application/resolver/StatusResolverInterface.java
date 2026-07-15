@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface StatusResolverInterface {
-	List<StatusDto> resolve(Set<String> statusIdSet);
+	List<StatusDto> resolve(Set<String> statusIds);
 }

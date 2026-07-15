@@ -42,8 +42,8 @@ public class GenreQueryRepositoryImpl implements GenreQueryRepository {
 
     @Override
     public List<Genre> findByIdList(List<UUID> idList, @Nullable String languageCode) {
-        List<GenreEntity> genreEntityList = jpaGenreRepository.findByIdList(idList, languageCode);
-        return genreEntityList.stream()
+        List<GenreEntity> genreEntities = jpaGenreRepository.findByIdList(idList, languageCode);
+        return genreEntities.stream()
             .map(genrePersistenceMapper::toGenre)
             .toList();
     }

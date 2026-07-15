@@ -1,11 +1,10 @@
 package dev.animedia.contentservice.status.application.mapper;
 
-import dev.animedia.contentservice.status.application.dto.response.StatusDto;
-import dev.animedia.contentservice.status.application.dto.response.StatusTranslationDto;
 import dev.animedia.contentservice.status.application.dto.request.CreateStatusDto;
 import dev.animedia.contentservice.status.application.dto.request.CreateStatusTranslationDto;
-import dev.animedia.contentservice.status.application.dto.request.UpdateStatusDto;
 import dev.animedia.contentservice.status.application.dto.request.UpdateStatusTranslationDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusDto;
+import dev.animedia.contentservice.status.application.dto.response.StatusTranslationDto;
 import dev.animedia.contentservice.status.domain.model.Status;
 import dev.animedia.contentservice.status.domain.model.StatusTranslation;
 
@@ -32,20 +31,6 @@ public class StatusApplicationMapper {
             null,
             statusTranslationDto.languageCode(),
             statusTranslationDto.name()
-        );
-    }
-
-    public Status toStatus(UpdateStatusDto statusDto) {
-        if (statusDto == null) return null;
-        return new Status(
-            statusDto.id(),
-            statusDto.alias(),
-            statusDto.sortOrder(),
-            statusDto.active(),
-            statusDto.translationSet()
-                .stream()
-                .map(this::toStatusTranslation)
-                .collect(Collectors.toSet())
         );
     }
 

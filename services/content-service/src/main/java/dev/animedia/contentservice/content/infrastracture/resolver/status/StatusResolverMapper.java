@@ -15,7 +15,7 @@ public class StatusResolverMapper {
 			statusDto.alias(),
 			statusDto.sortOrder(),
 			statusDto.active(),
-			statusDto.translationSet().stream().map(this::toContentStatusTranslationDto).collect(Collectors.toSet())
+			statusDto.translations().stream().map(this::toContentStatusTranslationDto).collect(Collectors.toSet())
 		);
 	}
 

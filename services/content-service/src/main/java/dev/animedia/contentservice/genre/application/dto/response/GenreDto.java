@@ -8,5 +8,5 @@ public record GenreDto(
 	String alias,
 	Integer sortOrder,
 	Boolean active,
-	Set<GenreTranslationDto> translationSet
+	Set<GenreTranslationDto> translations
 ) {}

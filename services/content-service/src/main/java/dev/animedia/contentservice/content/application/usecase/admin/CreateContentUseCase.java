@@ -1,9 +1,9 @@
 package dev.animedia.contentservice.content.application.usecase.admin;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
+import dev.animedia.contentservice.content.application.dto.content.request.CreateContentDto;
 
 import java.util.UUID;
 
 public interface CreateContentUseCase {
-	UUID create(ContentRequestDto contentRequestDto);
+	UUID create(CreateContentDto createContentDto);
 }

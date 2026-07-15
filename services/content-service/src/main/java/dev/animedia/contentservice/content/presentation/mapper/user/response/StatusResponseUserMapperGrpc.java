@@ -16,8 +16,8 @@ public class StatusResponseUserMapperGrpc {
 		if (statusDto == null) return null;
 
 		List<StatusUserProto.StatusTranslationResponse> translations =
-			statusDto.translationSet() != null
-			? statusDto.translationSet()
+			statusDto.translations() != null
+			? statusDto.translations()
 				.stream()
 				.map(this::toStatusTranslationResponseGrpc)
 				.filter(Objects::nonNull)
@@ -32,7 +32,7 @@ public class StatusResponseUserMapperGrpc {
 			.build();
 	}
 
-	private StatusUserProto.StatusTranslationResponse toStatusTranslationResponseGrpc(
+	public StatusUserProto.StatusTranslationResponse toStatusTranslationResponseGrpc(
 		StatusTranslationDto statusTranslationDto
 	) {
 		if (statusTranslationDto == null) return null;

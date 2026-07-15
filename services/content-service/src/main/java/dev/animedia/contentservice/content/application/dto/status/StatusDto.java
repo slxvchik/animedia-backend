@@ -8,5 +8,5 @@ public record StatusDto(
     String alias,
     Integer sortOrder,
 	Boolean active,
-    Set<StatusTranslationDto> translationSet
+    Set<StatusTranslationDto> translations
 ) {}

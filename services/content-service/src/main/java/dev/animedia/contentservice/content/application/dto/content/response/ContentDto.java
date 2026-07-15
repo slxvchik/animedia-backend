@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.content.application.dto.content;
+package dev.animedia.contentservice.content.application.dto.content.response;
 
 import dev.animedia.contentservice.content.application.dto.genre.GenreDto;
 import dev.animedia.contentservice.content.application.dto.status.StatusDto;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-public record ContentResponseDto(
+public record ContentDto(
 	UUID id,
 	String alias,
 	ContentType type,
@@ -22,7 +22,7 @@ public record ContentResponseDto(
 	LocalDateTime updatedAt,
 	Boolean active,
 	Integer sortOrder,
-	Set<String> languageCodeSet,
-	Set<GenreDto> genreDtoSet,
-	Set<ContentTranslationDto> translationSet
+	Set<String> languageCodes,
+	Set<GenreDto> genres,
+	Set<ContentTranslationDto> translations
 ) {}

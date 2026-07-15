@@ -38,7 +38,7 @@ public class UpdateGenreService implements UpdateGenreUseCase {
 		genre.update(
 			genreDto.sortOrder(),
 			genreDto.active(),
-			genreDto.translationSet()
+			genreDto.translations()
 				.stream()
 				.map(genreApplicationMapper::toGenreTranslation)
 				.collect(Collectors.toSet())

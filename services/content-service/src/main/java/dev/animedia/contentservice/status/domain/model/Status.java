@@ -7,15 +7,15 @@ import java.util.*;
 public class Status {
 	private final UUID id;
 	private final SlugAlias alias;
-	private int sortOrder;
-	private boolean active;
+	private Integer sortOrder;
+	private Boolean active;
 	private final Set<StatusTranslation> translations = new HashSet<>();
 
-	public Status(UUID id, String alias, int sortOrder, boolean active, Set<StatusTranslation> translations) {
+	public Status(UUID id, String alias, Integer sortOrder, Boolean active, Set<StatusTranslation> translations) {
 		this.id = id;
 		this.alias = new SlugAlias(alias);
 		setSortOrder(sortOrder);
-		this.active = active;
+		setActive(active);
 		setTranslations(translations);
 	}
 
@@ -27,11 +27,11 @@ public class Status {
 		return alias.getValue();
 	}
 
-	public int getSortOrder() {
+	public Integer getSortOrder() {
 		return sortOrder;
 	}
 
-	public boolean getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
@@ -39,9 +39,9 @@ public class Status {
 		return Collections.unmodifiableSet(translations);
 	}
 
-	public void update(int sortOrder, boolean active, Set<StatusTranslation> translationSet) {
+	public void update(Integer sortOrder, Boolean active, Set<StatusTranslation> translationSet) {
 		setSortOrder(sortOrder);
-		this.active = active;
+		setActive(active);
 		setTranslations(translationSet);
 	}
 
@@ -50,7 +50,11 @@ public class Status {
 		this.translations.addAll(translations);
 	}
 
-	private void setSortOrder(int sortOrder) {
-		this.sortOrder = Math.max(sortOrder, 0);
+	private void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder != null ? Math.max(sortOrder, 0) : 0;
+	}
+
+	private void setActive(Boolean active) {
+		this.active = active != null && active;
 	}
 }

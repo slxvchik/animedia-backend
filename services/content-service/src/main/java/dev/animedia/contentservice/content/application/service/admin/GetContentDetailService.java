@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service.admin;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentResponseDto;
+import dev.animedia.contentservice.content.application.dto.content.response.ContentDto;
 import dev.animedia.contentservice.content.application.dto.genre.GenreDto;
 import dev.animedia.contentservice.content.application.dto.status.StatusDto;
 import dev.animedia.contentservice.content.application.exception.ContentNotFoundException;
@@ -35,7 +35,7 @@ public class GetContentDetailService implements GetContentDetailUseCase {
     }
 
     @Override
-    public ContentResponseDto get(UUID id) {
+    public ContentDto get(UUID id) {
         Content content = contentQueryRepository.find(id, null)
             .orElseThrow(() -> new ContentNotFoundException(id));
 

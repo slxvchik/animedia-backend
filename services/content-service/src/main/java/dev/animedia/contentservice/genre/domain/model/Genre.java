@@ -7,15 +7,15 @@ import java.util.*;
 public class Genre {
     private final UUID id;
     private final SlugAlias alias;
-    private int sortOrder;
-    private boolean active;
+    private Integer sortOrder;
+    private Boolean active;
     private final Set<GenreTranslation> translations = new HashSet<>();
 
-    public Genre(UUID id, String alias, int sortOrder, boolean active, Set<GenreTranslation> translations) {
+    public Genre(UUID id, String alias, Integer sortOrder, Boolean active, Set<GenreTranslation> translations) {
         this.id = id;
         this.alias = new SlugAlias(alias);
         setSortOrder(sortOrder);
-        this.active = active;
+        setActive(active);
         setTranslations(translations);
     }
 
@@ -27,11 +27,11 @@ public class Genre {
         return alias.getValue();
     }
 
-    public int getSortOrder() {
+    public Integer getSortOrder() {
         return sortOrder;
     }
 
-    public boolean getActive() {
+    public Boolean getActive() {
         return active;
     }
 
@@ -39,10 +39,10 @@ public class Genre {
         return Collections.unmodifiableSet(translations);
     }
 
-    public void update(int sortOrder, boolean active, Set<GenreTranslation> translationSet) {
+    public void update(Integer sortOrder, Boolean active, Set<GenreTranslation> translations) {
         setSortOrder(sortOrder);
-        this.active = active;
-        setTranslations(translationSet);
+        setActive(active);
+        setTranslations(translations);
     }
 
     private void setTranslations(Set<GenreTranslation> translations) {
@@ -50,7 +50,11 @@ public class Genre {
         this.translations.addAll(translations);
     }
 
-    private void setSortOrder(int sortOrder) {
-        this.sortOrder = Math.max(sortOrder, 0);
+    private void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder != null ? Math.max(sortOrder, 0) : 0;
+    }
+
+    private void setActive(Boolean active) {
+        this.active = active != null && active;
     }
 }

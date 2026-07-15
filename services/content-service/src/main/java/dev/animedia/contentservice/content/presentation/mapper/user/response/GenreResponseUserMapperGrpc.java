@@ -15,8 +15,8 @@ public class GenreResponseUserMapperGrpc {
 	) {
 		if (genreDto == null) return null;
 
-		List<GenreUserProto.GenreTranslationResponse> translations = genreDto.translationSet() != null
-			? genreDto.translationSet()
+		List<GenreUserProto.GenreTranslationResponse> translations = genreDto.translations() != null
+			? genreDto.translations()
 				.stream()
 				.map(this::toGenreTranslationResponseGrpc)
 				.filter(Objects::nonNull)
@@ -31,7 +31,7 @@ public class GenreResponseUserMapperGrpc {
 			.build();
 	}
 
-	private GenreUserProto.GenreTranslationResponse toGenreTranslationResponseGrpc(
+	public GenreUserProto.GenreTranslationResponse toGenreTranslationResponseGrpc(
 		GenreTranslationDto genreTranslationDto
 	) {
 		if (genreTranslationDto == null) return null;

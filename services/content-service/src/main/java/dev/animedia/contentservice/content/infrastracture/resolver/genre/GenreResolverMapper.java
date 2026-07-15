@@ -15,7 +15,7 @@ public class GenreResolverMapper {
 			genreDto.alias(),
 			genreDto.sortOrder(),
 			genreDto.active(),
-			genreDto.translationSet().stream().map(this::toContentGenreTranslationDto).collect(Collectors.toSet())
+			genreDto.translations().stream().map(this::toContentGenreTranslationDto).collect(Collectors.toSet())
 		);
 	}
 

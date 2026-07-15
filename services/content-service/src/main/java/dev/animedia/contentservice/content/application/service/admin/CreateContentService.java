@@ -1,6 +1,6 @@
 package dev.animedia.contentservice.content.application.service.admin;
 
-import dev.animedia.contentservice.content.application.dto.content.ContentRequestDto;
+import dev.animedia.contentservice.content.application.dto.content.request.CreateContentDto;
 import dev.animedia.contentservice.content.application.dto.genre.GenreDto;
 import dev.animedia.contentservice.content.application.dto.status.StatusDto;
 import dev.animedia.contentservice.content.application.event.ContentCreateEvent;
@@ -47,19 +47,19 @@ public class CreateContentService implements CreateContentUseCase {
     }
 
     @Override
-    public UUID create(ContentRequestDto contentRequestDto) {
+    public UUID create(CreateContentDto createContentDto) {
 
 	    // Check if statuses exists
-	    List<StatusDto> statusDtoList = statusResolverInterface.resolve(
-			Set.of(contentRequestDto.statusId())
+	    List<StatusDto> statusesDto = statusResolverInterface.resolve(
+			Set.of(createContentDto.statusId())
 	    );
-		StatusDto statusDto = statusDtoList.isEmpty() ? null : statusDtoList.getFirst();
+		StatusDto statusDto = statusesDto.isEmpty() ? null : statusesDto.getFirst();
 
 	    // Check if genres exists
-	    List<GenreDto> genreDtoList = genreResolverInterface.resolve(contentRequestDto.genreIdSet());
+	    List<GenreDto> genresDto = genreResolverInterface.resolve(createContentDto.genreIds());
 
         Content content = contentApplicationMapper.toContent(
-	        contentRequestDto
+	        createContentDto
         );
 
         boolean contentExists = contentQueryRepository.exists(content.getAlias(), content.getType(), content.getSeason());
@@ -75,7 +75,7 @@ public class CreateContentService implements CreateContentUseCase {
 				contentApplicationMapper.toContentResponseDto(
 					created,
 					statusDto,
-					Set.copyOf(genreDtoList)
+					Set.copyOf(genresDto)
 				)
 			)
 		);

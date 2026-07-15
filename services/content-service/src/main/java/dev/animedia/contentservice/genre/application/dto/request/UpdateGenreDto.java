@@ -7,5 +7,5 @@ public record UpdateGenreDto(
 	UUID id,
 	Integer sortOrder,
 	Boolean active,
-	Set<UpdateGenreTranslationDto> translationSet
+	Set<UpdateGenreTranslationDto> translations
 ) {}

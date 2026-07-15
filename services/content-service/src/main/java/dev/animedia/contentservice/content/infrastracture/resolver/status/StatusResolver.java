@@ -23,12 +23,12 @@ public class StatusResolver implements StatusResolverInterface {
 	}
 
 	@Override
-	public List<StatusDto> resolve(Set<String> statusIdSet) {
-		if (statusIdSet == null || statusIdSet.isEmpty()) {
+	public List<StatusDto> resolve(Set<String> statusIds) {
+		if (statusIds == null || statusIds.isEmpty()) {
 			return List.of();
 		}
 
-		Set<UUID> requestedStatusUuidSet = statusIdSet.stream().map(UUID::fromString).collect(Collectors.toSet());
+		Set<UUID> requestedStatusUuidSet = statusIds.stream().map(UUID::fromString).collect(Collectors.toSet());
 
 		List<StatusDto> statusDtoList = getStatusListUseCase.get(
 			List.copyOf(requestedStatusUuidSet),
