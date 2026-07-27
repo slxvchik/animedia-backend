@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.shared.domain.exception;
+package dev.animedia.shared.domain.appexception;
 
 public enum AppExceptionStatus {
     NOT_FOUND,

@@ -71,3 +71,5 @@ Create your first gRPC service
 JDBC for Flyway migrations
 
 Reactive pg client for App
+
+on server\pc must be installed ffmpeg

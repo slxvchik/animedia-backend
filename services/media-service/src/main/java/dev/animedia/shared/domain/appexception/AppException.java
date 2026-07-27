@@ -1,4 +1,4 @@
-package dev.animedia.contentservice.shared.domain.exception;
+package dev.animedia.shared.domain.appexception;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

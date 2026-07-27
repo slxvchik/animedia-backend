@@ -34,3 +34,26 @@ compileJava {
 compileTestJava {
     options.encoding = 'UTF-8'
 }
+
+tasks.register('prepareLocalProtos', Copy) {
+    from(file("../../protos/")) {
+        include "common/v1/*.proto"
+        include "dev/animedia/video/**/v1/*.proto"
+    }
+    into layout.buildDirectory.dir("tmp-protos")
+}
+
+quarkus {
+    quarkusBuildProperties.put(
+        "quarkus.grpc.codegen.proto-directory",
+        layout.buildDirectory.dir("tmp-protos").get().asFile.absolutePath
+    )
+}
+
+tasks.named('quarkusGenerateCode') {
+    dependsOn 'prepareLocalProtos'
+}
+
+quarkusGenerateCode {
+    inputs.dir(file("../../protos/"))
+}
