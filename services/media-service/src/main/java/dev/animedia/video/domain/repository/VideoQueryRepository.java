@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface VideoQueryRepository {
 	Optional<Video> findById(UUID id);
-	boolean existsByDirPath(String dirPath);
 }

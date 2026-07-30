@@ -1,7 +1,7 @@
 package dev.animedia.video.domain.model;
 
 public enum VideoStatus {
-	PRICESSING,
+	PROCESSING,
 	READY,
 	FAILED
 }
