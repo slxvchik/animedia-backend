@@ -3,7 +3,6 @@ package dev.animedia.video.application.dto;
 import dev.animedia.video.domain.model.UploadFileCommand;
 import dev.animedia.video.domain.model.VideoFormat;
 import dev.animedia.video.domain.model.VideoProcessingConfig;
-import dev.animedia.video.domain.model.VideoStatus;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
